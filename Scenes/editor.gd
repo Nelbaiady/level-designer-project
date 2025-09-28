@@ -6,6 +6,8 @@ const PLACEHOLDER = preload("uid://fowyuhehhfg2")
 var popupIsOpen = false
 var isSaving = false
 
+
+
 func _physics_process(delta: float) -> void:
 	if !popupIsOpen:
 		#place an object
@@ -21,6 +23,15 @@ func _physics_process(delta: float) -> void:
 			for i in level.get_children():
 				i.queue_free()
 			print('cleared and also delta is ',delta)
+			
+		#toggle between edit mode and play mode
+		if Input.is_action_just_pressed("toggleEditing"):
+			if globalEditor.isEditing:
+				globalEditor.isEditing = false
+			else:
+				globalEditor.resetStage.emit()
+				globalEditor.isEditing = true
+				
 		
 	if Input.is_action_just_pressed("save"):
 		popupIsOpen = true

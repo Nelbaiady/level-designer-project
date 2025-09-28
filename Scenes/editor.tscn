@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgavxi5l77ibl"]
+[gd_scene load_steps=6 format=3 uid="uid://bgavxi5l77ibl"]
 
 [ext_resource type="Script" uid="uid://buy227idb1d0c" path="res://Scenes/editor.gd" id="1_eyy8u"]
 [ext_resource type="Script" uid="uid://y0j4pcn25wfi" path="res://Scenes/level.gd" id="2_24ceq"]
+[ext_resource type="Script" uid="uid://p7hjdq8g24yk" path="res://Scenes/global_editor.gd" id="3_a7iym"]
+[ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Player.tscn" id="4_7wlcy"]
+[ext_resource type="PackedScene" uid="uid://fowyuhehhfg2" path="res://Scenes/Objects/Terrain/Placeholder.tscn" id="5_wkuwf"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -12,9 +15,19 @@ script = ExtResource("1_eyy8u")
 oversampling_override = 1.0
 position = Vector2i(255, 150)
 ok_button_text = "OK"
+root_subfolder = "savedLevels"
 
 [node name="Level" type="Node2D" parent="."]
 script = ExtResource("2_24ceq")
+
+[node name="globalEditor" type="Node" parent="."]
+script = ExtResource("3_a7iym")
+
+[node name="Player" parent="." instance=ExtResource("4_7wlcy")]
+position = Vector2(576, 8)
+
+[node name="Placeholder" parent="." instance=ExtResource("5_wkuwf")]
+position = Vector2(584, 344)
 
 [connection signal="canceled" from="FileDialog" to="Editor" method="_on_file_dialog_canceled"]
 [connection signal="confirmed" from="FileDialog" to="Editor" method="_on_file_dialog_confirmed"]

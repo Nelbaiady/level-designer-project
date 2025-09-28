@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://Scenes/level.gd" id="1_2luf4"]
+[ext_resource type="PackedScene" path="res://Scenes/Objects/Terrain/Placeholder.tscn" id="2_fbfw1"]
+
+[node name="Level" type="Node2D"]
+position = Vector2(20, 40)
+script = ExtResource("1_2luf4")
+
+[node name="Placeholder" type="Node2D" parent="." instance=ExtResource("2_fbfw1")]
+position = Vector2(81, 378)
+
+[node name="@Node2D@125" type="Node2D" parent="." instance=ExtResource("2_fbfw1")]
+position = Vector2(333, 298)
+
+[node name="@Node2D@126" type="Node2D" parent="." instance=ExtResource("2_fbfw1")]
+position = Vector2(123, 580)
+
+[node name="@Node2D@127" type="Node2D" parent="." instance=ExtResource("2_fbfw1")]
+position = Vector2(180, 529)
+
+[node name="@Node2D@128" type="Node2D" parent="." instance=ExtResource("2_fbfw1")]
+position = Vector2(231, 501)
+
+[node name="@Node2D@129" type="Node2D" parent="." instance=ExtResource("2_fbfw1")]
+position = Vector2(306, 482)
+
+[node name="@Node2D@130" type="Node2D" parent="." instance=ExtResource("2_fbfw1")]
+position = Vector2(392, 487)
+
+[node name="@Node2D@131" type="Node2D" parent="." instance=ExtResource("2_fbfw1")]
+position = Vector2(456, 505)

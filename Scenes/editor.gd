@@ -1,29 +1,38 @@
 extends Node2D
 
-const PLACEHOLDER = preload("uid://fowyuhehhfg2")
 @onready var level: Node2D = $"../Level"
+@onready var tileMap: TileMapLayer = $"../Level/TileMapLayer"
 @onready var file_dialog: FileDialog = $"../FileDialog"
 var popupIsOpen = false
 var isSaving = false
 
-
+func _ready() -> void:
+	tileMap.owner = level
 
 func _physics_process(delta: float) -> void:
 	if !popupIsOpen:
-		#place an object
-		if Input.is_action_just_pressed("mouseClickLeft"):
-			print("hey, you just clicked at ", get_local_mouse_position())
-			var placeholderObject = PLACEHOLDER.instantiate()
-			level.add_child(placeholderObject)
-			placeholderObject.owner = level
-			placeholderObject.global_position = get_local_mouse_position()
-			
-		#clear all of the editor's children
-		if Input.is_action_just_pressed("clear"):
-			for i in level.get_children():
-				i.queue_free()
-			print('cleared and also delta is ',delta)
-			
+		if globalEditor.isEditing:
+			#place an object
+			if Input.is_action_just_pressed("mouseClickLeft"):
+				var placedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position()*4)
+				tileMap.set_cell(placedTilePosition,0,Vector2i(1,1))
+				var neighbors = [placedTilePosition,
+				placedTilePosition+Vector2i.LEFT,placedTilePosition-Vector2i.LEFT,
+				placedTilePosition+Vector2i.UP,placedTilePosition-Vector2i.UP,
+				placedTilePosition+Vector2i.UP+Vector2i.LEFT,placedTilePosition+Vector2i.UP-Vector2i.LEFT,
+				placedTilePosition-Vector2i.UP+Vector2i.LEFT,placedTilePosition-Vector2i.UP-Vector2i.LEFT]
+				var nonEmptyNeighbors = []
+				for i in neighbors:
+					if tileMap.get_cell_source_id(i) != -1:
+						nonEmptyNeighbors.append(i)
+				print(neighbors)
+				print(nonEmptyNeighbors)
+				tileMap.set_cells_terrain_connect(nonEmptyNeighbors,0,0)
+			#clear all of the editor's children
+			if Input.is_action_just_pressed("clear"):
+				tileMap.clear()
+		else:
+			pass
 		#toggle between edit mode and play mode
 		if Input.is_action_just_pressed("toggleEditing"):
 			if globalEditor.isEditing:
@@ -32,19 +41,19 @@ func _physics_process(delta: float) -> void:
 				globalEditor.resetStage.emit()
 				globalEditor.isEditing = true
 				
-		
-	if Input.is_action_just_pressed("save"):
-		popupIsOpen = true
-		isSaving = true
-		file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE 
-		file_dialog.show()
-		
-	if Input.is_action_just_pressed("load"):
-		popupIsOpen = true
-		isSaving = false
-		file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-		file_dialog.show()
-		
+	if globalEditor.isEditing:
+		if Input.is_action_just_pressed("save"):
+			popupIsOpen = true
+			isSaving = true
+			file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE 
+			file_dialog.show()
+			
+		if Input.is_action_just_pressed("load"):
+			popupIsOpen = true
+			isSaving = false
+			file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+			file_dialog.show()
+			
 
 func _on_file_dialog_confirmed() -> void:
 	print('confirmed')

@@ -1,12 +1,110 @@
-[gd_scene load_steps=6 format=3 uid="uid://bgavxi5l77ibl"]
+[gd_scene load_steps=9 format=4 uid="uid://bgavxi5l77ibl"]
 
+[ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
 [ext_resource type="Script" uid="uid://buy227idb1d0c" path="res://Scenes/editor.gd" id="1_eyy8u"]
 [ext_resource type="Script" uid="uid://y0j4pcn25wfi" path="res://Scenes/level.gd" id="2_24ceq"]
+[ext_resource type="Texture2D" uid="uid://bcys5tfxya4c3" path="res://Scenes/Objects/Terrain/placeholderTileset.png" id="3_8howc"]
 [ext_resource type="Script" uid="uid://p7hjdq8g24yk" path="res://Scenes/global_editor.gd" id="3_a7iym"]
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Player.tscn" id="4_7wlcy"]
-[ext_resource type="PackedScene" uid="uid://fowyuhehhfg2" path="res://Scenes/Objects/Terrain/Placeholder.tscn" id="5_wkuwf"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b78su"]
+texture = ExtResource("3_8howc")
+texture_region_size = Vector2i(256, 256)
+2:2/0 = 0
+2:2/0/terrain_set = 0
+2:2/0/terrain = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128)
+2:2/0/terrains_peering_bit/left_side = 0
+2:2/0/terrains_peering_bit/top_left_corner = 0
+2:2/0/terrains_peering_bit/top_side = 0
+0:2/0 = 0
+0:2/0/terrain_set = 0
+0:2/0/terrain = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128)
+0:2/0/terrains_peering_bit/right_side = 0
+0:2/0/terrains_peering_bit/top_side = 0
+0:2/0/terrains_peering_bit/top_right_corner = 0
+1:2/0 = 0
+1:2/0/terrain_set = 0
+1:2/0/terrain = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128)
+1:2/0/terrains_peering_bit/right_side = 0
+1:2/0/terrains_peering_bit/left_side = 0
+1:2/0/terrains_peering_bit/top_left_corner = 0
+1:2/0/terrains_peering_bit/top_side = 0
+1:2/0/terrains_peering_bit/top_right_corner = 0
+0:0/0 = 0
+0:0/0/terrain_set = 0
+0:0/0/terrain = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128)
+0:0/0/terrains_peering_bit/right_side = 0
+0:0/0/terrains_peering_bit/bottom_right_corner = 0
+0:0/0/terrains_peering_bit/bottom_side = 0
+1:0/0 = 0
+1:0/0/terrain_set = 0
+1:0/0/terrain = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128)
+1:0/0/terrains_peering_bit/right_side = 0
+1:0/0/terrains_peering_bit/bottom_right_corner = 0
+1:0/0/terrains_peering_bit/bottom_side = 0
+1:0/0/terrains_peering_bit/bottom_left_corner = 0
+1:0/0/terrains_peering_bit/left_side = 0
+2:0/0 = 0
+2:0/0/terrain_set = 0
+2:0/0/terrain = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128)
+2:0/0/terrains_peering_bit/bottom_side = 0
+2:0/0/terrains_peering_bit/bottom_left_corner = 0
+2:0/0/terrains_peering_bit/left_side = 0
+2:1/0 = 0
+2:1/0/terrain_set = 0
+2:1/0/terrain = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128)
+2:1/0/terrains_peering_bit/bottom_side = 0
+2:1/0/terrains_peering_bit/bottom_left_corner = 0
+2:1/0/terrains_peering_bit/left_side = 0
+2:1/0/terrains_peering_bit/top_left_corner = 0
+2:1/0/terrains_peering_bit/top_side = 0
+1:1/0 = 0
+1:1/0/terrain_set = 0
+1:1/0/terrain = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128)
+1:1/0/terrains_peering_bit/right_side = 0
+1:1/0/terrains_peering_bit/bottom_right_corner = 0
+1:1/0/terrains_peering_bit/bottom_side = 0
+1:1/0/terrains_peering_bit/bottom_left_corner = 0
+1:1/0/terrains_peering_bit/left_side = 0
+1:1/0/terrains_peering_bit/top_left_corner = 0
+1:1/0/terrains_peering_bit/top_side = 0
+1:1/0/terrains_peering_bit/top_right_corner = 0
+0:1/0 = 0
+0:1/0/terrain_set = 0
+0:1/0/terrain = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-128, -128, 128, -128, 128, 128, -128, 128)
+0:1/0/terrains_peering_bit/right_side = 0
+0:1/0/terrains_peering_bit/bottom_right_corner = 0
+0:1/0/terrains_peering_bit/bottom_side = 0
+0:1/0/terrains_peering_bit/top_side = 0
+0:1/0/terrains_peering_bit/top_right_corner = 0
+
+[sub_resource type="TileSet" id="TileSet_7fkqn"]
+tile_size = Vector2i(256, 256)
+physics_layer_0/collision_layer = 1
+terrain_set_0/mode = 0
+terrain_set_0/terrain_0/name = "Dirt"
+terrain_set_0/terrain_0/color = Color(0.78171426, 0, 0.17095065, 1)
+terrain_set_0/terrain_1/name = "Grass"
+terrain_set_0/terrain_1/color = Color(0.2527295, 0.50761116, 0.32676098, 1)
+sources/0 = SubResource("TileSetAtlasSource_b78su")
 
 [node name="Node2D" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 324)
+process_callback = 0
+position_smoothing_enabled = true
+position_smoothing_speed = 20.0
+script = ExtResource("1_8howc")
 
 [node name="Editor" type="Node2D" parent="."]
 script = ExtResource("1_eyy8u")
@@ -20,14 +118,16 @@ root_subfolder = "savedLevels"
 [node name="Level" type="Node2D" parent="."]
 script = ExtResource("2_24ceq")
 
+[node name="TileMapLayer" type="TileMapLayer" parent="Level"]
+scale = Vector2(0.25, 0.25)
+tile_map_data = PackedByteArray("AAAEAAQAAAAAAAAAAAAFAAQAAAABAAAAAAAGAAQAAAABAAAAAAAHAAQAAAABAAAAAAAIAAQAAAABAAAAAAAJAAQAAAABAAAAAAAKAAQAAAABAAAAAAALAAQAAAABAAAAAAAMAAQAAAABAAAAAAANAAQAAAACAAAAAAANAAUAAAACAAIAAAAMAAUAAAABAAIAAAALAAUAAAABAAIAAAAKAAUAAAABAAIAAAAJAAUAAAABAAIAAAAIAAUAAAABAAIAAAAHAAUAAAABAAIAAAAGAAUAAAABAAIAAAAFAAUAAAABAAIAAAAEAAUAAAAAAAIAAAAOAAEAAAACAAIAAAANAAEAAAABAAIAAAAMAAEAAAABAAIAAAALAAEAAAABAAIAAAAKAAEAAAABAAIAAAAHAAEAAAAAAAIAAAAIAAEAAAABAAIAAAAJAAEAAAABAAIAAAA=")
+tile_set = SubResource("TileSet_7fkqn")
+
 [node name="globalEditor" type="Node" parent="."]
 script = ExtResource("3_a7iym")
 
 [node name="Player" parent="." instance=ExtResource("4_7wlcy")]
 position = Vector2(576, 8)
-
-[node name="Placeholder" parent="." instance=ExtResource("5_wkuwf")]
-position = Vector2(584, 344)
 
 [connection signal="canceled" from="FileDialog" to="Editor" method="_on_file_dialog_canceled"]
 [connection signal="confirmed" from="FileDialog" to="Editor" method="_on_file_dialog_confirmed"]

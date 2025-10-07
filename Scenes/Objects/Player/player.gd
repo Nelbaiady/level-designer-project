@@ -5,9 +5,14 @@ const accelaration = 4000
 const jumpSpeed = 1000
 var gravityMult = 1
 var jumping = false
-var lastEditPosition = Vector2.ZERO
 
 var directionInput = Vector2.ZERO
+
+var lastEditPosition = Vector2.ZERO
+
+@onready var animationPlayer: AnimationPlayer = $AnimationPlayer
+@onready var sprite: Sprite2D = $Sprite2D
+
 
 func _ready() -> void:
 	globalEditor.connect("resetStage",resetPlayer)
@@ -39,7 +44,22 @@ func _physics_process(delta: float) -> void:
 			if !Input.is_action_pressed("jump"):
 				gravityMult = 1.5
 		move_and_slide()
+		manageAnimations()
 
 func resetPlayer():
 	position = lastEditPosition
 	velocity = Vector2.ZERO
+	animationPlayer.current_animation="idle"
+
+func manageAnimations():
+	if directionInput.x < 0: sprite.flip_h = true 
+	if directionInput.x > 0: sprite.flip_h = false
+	if !is_on_floor():
+		if velocity.y > 0:
+			animationPlayer.current_animation="jumped"
+		elif velocity.y < 0:
+			animationPlayer.current_animation="jumpUp"
+	elif abs(velocity.x) > 0:
+		animationPlayer.current_animation="run"
+	elif abs(velocity.x) < 0.1:
+		animationPlayer.current_animation="idle"

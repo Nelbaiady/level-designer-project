@@ -12,6 +12,8 @@ const holdThreshold = 0.3
 const holdStepThreshold = 0.08
 var nextHoldStepTarget = holdThreshold
 
+func _ready() -> void:
+	globalEditor.connect("resetStage",resetCamera)
 
 func _input(event: InputEvent) -> void:
 	if globalEditor.isEditing:
@@ -36,18 +38,21 @@ func _input(event: InputEvent) -> void:
 			heldDir = Vector2(tileSize,0)
 			transLateCamera(heldDir)
 
+func resetCamera():
+	position = Vector2(576,324)
+
 func _physics_process(delta: float) -> void:
 	if heldDirName != "":
 		holdTimer+=delta
-	if holdTimer>=holdThreshold:
-		if holdTimer >= nextHoldStepTarget:
-			nextHoldStepTarget += holdStepThreshold
-			transLateCamera(heldDir)
-	if Input.is_action_just_released(heldDirName):
-		holdTimer = 0
-		heldDirName = ""
-		heldDir = Vector2.ZERO
-		nextHoldStepTarget = holdThreshold
+		if holdTimer>=holdThreshold:
+			if holdTimer >= nextHoldStepTarget:
+				nextHoldStepTarget += holdStepThreshold
+				transLateCamera(heldDir)
+		if Input.is_action_just_released(heldDirName):
+			holdTimer = 0
+			heldDirName = ""
+			heldDir = Vector2.ZERO
+			nextHoldStepTarget = holdThreshold
 
 	if !globalEditor.isEditing:
 		position = player.position

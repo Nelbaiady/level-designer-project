@@ -13,22 +13,15 @@ func _physics_process(delta: float) -> void:
 	if !popupIsOpen:
 		if globalEditor.isEditing:
 			#place an object
-			if Input.is_action_just_pressed("mouseClickLeft"):
-				var placedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position()*4)
-				tileMap.set_cell(placedTilePosition,0,Vector2i(1,1))
-				var neighbors = [placedTilePosition,
-				placedTilePosition+Vector2i.LEFT,placedTilePosition-Vector2i.LEFT,
-				placedTilePosition+Vector2i.UP,placedTilePosition-Vector2i.UP,
-				placedTilePosition+Vector2i.UP+Vector2i.LEFT,placedTilePosition+Vector2i.UP-Vector2i.LEFT,
-				placedTilePosition-Vector2i.UP+Vector2i.LEFT,placedTilePosition-Vector2i.UP-Vector2i.LEFT]
-				var nonEmptyNeighbors = []
-				for i in neighbors:
-					if tileMap.get_cell_source_id(i) != -1:
-						nonEmptyNeighbors.append(i)
-				print(neighbors)
-				print(nonEmptyNeighbors)
-				tileMap.set_cells_terrain_connect(nonEmptyNeighbors,0,0)
-			#clear all of the editor's children
+			if Input.is_action_pressed("mouseClickLeft"):
+				var placedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
+				#tileMap.set_cell(placedTilePosition,0,Vector2i(1,1)) #IF WE WANTED TO PLACE A REGULAR TILE
+				tileMap.set_cells_terrain_connect([placedTilePosition],0,0,false)
+			if Input.is_action_pressed("erase"):
+				var erasedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
+				#tileMap.erase_cell(erasedTilePosition) #IF WE WANTED TO ERASE A REGULAR TILE
+				tileMap.set_cells_terrain_connect([erasedTilePosition],0,-1,false)
+				
 			if Input.is_action_just_pressed("clear"):
 				tileMap.clear()
 		else:

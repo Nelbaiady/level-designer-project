@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dh4haxp1xh35w"
-path="res://.godot/imported/player_jumpUp.png-4596d0869cadfbf03ff1f13a0981d1d3.ctex"
+uid="uid://dcwmwktlug1kv"
+path="res://.godot/imported/loweredResPlaceholderTiles.png-af4b9c91893cbbf9c2e65fcefe84eb54.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Objects/Player/player_jumpUp.png"
-dest_files=["res://.godot/imported/player_jumpUp.png-4596d0869cadfbf03ff1f13a0981d1d3.ctex"]
+source_file="res://Scenes/Items/Terrain/loweredResPlaceholderTiles.png"
+dest_files=["res://.godot/imported/loweredResPlaceholderTiles.png-af4b9c91893cbbf9c2e65fcefe84eb54.ctex"]
 
 [params]
 

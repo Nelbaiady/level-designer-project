@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ct3tpjr58vm1h"
-path="res://.godot/imported/player_run.png-8e9a321719685a5372f8591b4bd2a876.ctex"
+uid="uid://bmpv2scxavoir"
+path="res://.godot/imported/Spring.png-26973936c2d3cc996519e478ca6946ea.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Objects/Player/player_run.png"
-dest_files=["res://.godot/imported/player_run.png-8e9a321719685a5372f8591b4bd2a876.ctex"]
+source_file="res://Scenes/Items/Objects/Spring/Spring.png"
+dest_files=["res://.godot/imported/Spring.png-26973936c2d3cc996519e478ca6946ea.ctex"]
 
 [params]
 

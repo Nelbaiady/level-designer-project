@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://tva5cetmg7hj"
-path="res://.godot/imported/loweredResPlaceholderTiles.png-f46cf69e7f6930a38cc6867a7f9273b5.ctex"
+uid="uid://ct3tpjr58vm1h"
+path="res://.godot/imported/player_run.png-b638f50f989d0c1cf4757f77d7d69f0e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Objects/Terrain/loweredResPlaceholderTiles.png"
-dest_files=["res://.godot/imported/loweredResPlaceholderTiles.png-f46cf69e7f6930a38cc6867a7f9273b5.ctex"]
+source_file="res://Scenes/Items/Player/player_run.png"
+dest_files=["res://.godot/imported/player_run.png-b638f50f989d0c1cf4757f77d7d69f0e.ctex"]
 
 [params]
 

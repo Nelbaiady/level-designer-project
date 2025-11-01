@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 globalEditor="*res://Scenes/global_editor.gd"
 
+[global_group]
+
+player="any playable character"
+
 [input]
 
 mouseClickLeft={

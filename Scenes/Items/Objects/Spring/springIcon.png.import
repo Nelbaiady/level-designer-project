@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dcwmwktlug1kv"
-path="res://.godot/imported/loweredResPlaceholderTiles.png-af4b9c91893cbbf9c2e65fcefe84eb54.ctex"
+uid="uid://dycbcfmvewimq"
+path="res://.godot/imported/springIcon.png-cf9c7aa6c9ff8187b55557078ad4b0bd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Items/Terrain/loweredResPlaceholderTiles.png"
-dest_files=["res://.godot/imported/loweredResPlaceholderTiles.png-af4b9c91893cbbf9c2e65fcefe84eb54.ctex"]
+source_file="res://Scenes/Items/Objects/Spring/springIcon.png"
+dest_files=["res://.godot/imported/springIcon.png-cf9c7aa6c9ff8187b55557078ad4b0bd.ctex"]
 
 [params]
 

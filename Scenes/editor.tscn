@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://g7pdbfqfu3l5" path="res://Scenes/save_load_manager.gd" id="3_7fkqn"]
 [ext_resource type="Script" uid="uid://p7hjdq8g24yk" path="res://Scenes/global_editor.gd" id="3_a7iym"]
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/Player/Player.tscn" id="4_7wlcy"]
-[ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/loweredResPlaceholderTiles.png" id="4_8howc"]
+[ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="4_8howc"]
 [ext_resource type="Script" uid="uid://cy16eivwe3nt5" path="res://Scenes/tile_map_layer.gd" id="5_b78su"]
 [ext_resource type="PackedScene" uid="uid://dgecn3g6yiv5q" path="res://Scenes/Items/Objects/Spring/Spring.tscn" id="9_yl2l4"]
 
@@ -215,6 +215,8 @@ script = ExtResource("1_8howc")
 
 [node name="Editor" type="Node2D" parent="."]
 script = ExtResource("1_eyy8u")
+
+[node name="Cursor" type="Node2D" parent="Editor"]
 
 [node name="SaveLoadManager" type="Node2D" parent="."]
 script = ExtResource("3_7fkqn")

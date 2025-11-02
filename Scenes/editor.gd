@@ -2,7 +2,8 @@ extends Node2D
 
 @onready var level: Node2D = $"../Level"
 @onready var tileMap: TileMapLayer = $"../Level/TileMapLayer"
-
+@onready var objects: Node = $"../Level/Objects"
+var hotbar: Array[Item] = []
 
 
 func _ready() -> void:

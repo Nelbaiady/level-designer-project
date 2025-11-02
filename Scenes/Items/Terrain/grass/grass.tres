@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="terrainItem" load_steps=3 format=3 uid="uid://bs8fbynxqm6wr"]
+
+[ext_resource type="Script" uid="uid://b6cxu8cgi33t4" path="res://Scenes/Items/Terrain/terrain.gd" id="1_6nagl"]
+[ext_resource type="Texture2D" uid="uid://b8e50snng4jjw" path="res://Scenes/Items/Terrain/grass/grassIcon.png" id="2_oiy1a"]
+
+[resource]
+script = ExtResource("1_6nagl")
+texture = ExtResource("2_oiy1a")
+name = "grass"
+metadata/_custom_type_script = "uid://b6cxu8cgi33t4"

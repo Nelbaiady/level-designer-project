@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="object" load_steps=4 format=3 uid="uid://c2d008ix6upm5"]
+[gd_resource type="Resource" script_class="objectItem" load_steps=4 format=3 uid="uid://c2d008ix6upm5"]
 
 [ext_resource type="PackedScene" uid="uid://dgecn3g6yiv5q" path="res://Scenes/Items/Objects/Spring/Spring.tscn" id="1_a83kd"]
 [ext_resource type="Script" uid="uid://c6m2hjthmh1nv" path="res://Scenes/Items/Objects/object.gd" id="1_dime5"]
@@ -8,5 +8,6 @@
 script = ExtResource("1_dime5")
 objectReference = ExtResource("1_a83kd")
 texture = ExtResource("2_a83kd")
+textureOffset = Vector2(0, -12)
 name = "spring"
 metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

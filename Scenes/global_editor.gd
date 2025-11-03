@@ -1,5 +1,6 @@
 extends Node
 
-var isEditing = true
-var popupIsOpen = false
+var isEditing:bool = true
+var popupIsOpen:bool = false
 signal resetStage()
+var gridSize:int = 64

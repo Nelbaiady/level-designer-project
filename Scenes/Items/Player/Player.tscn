@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dh4haxp1xh35w" path="res://Scenes/Items/Player/player_jumpUp.png" id="5_kvi7n"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gntrk"]
-radius = 32.0
+radius = 31.9
 height = 80.0
 
 [sub_resource type="Animation" id="Animation_kvi7n"]

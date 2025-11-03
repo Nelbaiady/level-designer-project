@@ -172,9 +172,11 @@ _data = {
 size = Vector2(64, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3rwud"]
-size = Vector2(64, 8)
+size = Vector2(64, 24)
 
-[node name="Spring" type="Node2D"]
+[node name="Spring" type="RigidBody2D"]
+input_pickable = true
+freeze = true
 script = ExtResource("1_3rwud")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -190,15 +192,15 @@ libraries = {
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
 gravity_scale = 0.0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 48)
 shape = SubResource("RectangleShape2D_kccgo")
 
-[node name="Area2D" type="Area2D" parent="RigidBody2D"]
+[node name="Area2D" type="Area2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D/Area2D"]
-position = Vector2(0, 4)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_3rwud")
 
 [connection signal="animation_finished" from="Sprite2D/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
-[connection signal="body_entered" from="RigidBody2D/Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

@@ -1,14 +1,18 @@
-[gd_scene load_steps=12 format=4 uid="uid://bgavxi5l77ibl"]
+[gd_scene load_steps=15 format=4 uid="uid://bgavxi5l77ibl"]
 
 [ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
 [ext_resource type="Script" uid="uid://buy227idb1d0c" path="res://Scenes/editor.gd" id="1_eyy8u"]
 [ext_resource type="Script" uid="uid://y0j4pcn25wfi" path="res://Scenes/level.gd" id="2_24ceq"]
 [ext_resource type="Script" uid="uid://g7pdbfqfu3l5" path="res://Scenes/save_load_manager.gd" id="3_7fkqn"]
 [ext_resource type="Script" uid="uid://p7hjdq8g24yk" path="res://Scenes/global_editor.gd" id="3_a7iym"]
+[ext_resource type="Script" uid="uid://nex04i5f5a5f" path="res://Scenes/cursor.gd" id="3_eo2o7"]
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="4_8howc"]
+[ext_resource type="Texture2D" uid="uid://dycbcfmvewimq" path="res://Scenes/Items/Objects/Spring/springIcon.png" id="4_32ik4"]
 [ext_resource type="Script" uid="uid://cy16eivwe3nt5" path="res://Scenes/tile_map_layer.gd" id="5_b78su"]
 [ext_resource type="PackedScene" uid="uid://dgecn3g6yiv5q" path="res://Scenes/Items/Objects/Spring/Spring.tscn" id="9_yl2l4"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_eo2o7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b78su"]
 texture = ExtResource("4_8howc")
@@ -193,6 +197,10 @@ texture_region_size = Vector2i(64, 64)
 6:2/0/terrains_peering_bit/top_left_corner = 0
 6:2/0/terrains_peering_bit/top_side = 0
 6:2/0/terrains_peering_bit/top_right_corner = 0
+0:3/0 = 0
+0:3/0/terrain_set = 0
+0:3/0/terrain = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
 
 [sub_resource type="TileSet" id="TileSet_7fkqn"]
 tile_size = Vector2i(64, 64)
@@ -217,6 +225,28 @@ script = ExtResource("1_8howc")
 script = ExtResource("1_eyy8u")
 
 [node name="Cursor" type="Node2D" parent="Editor"]
+script = ExtResource("3_eo2o7")
+
+[node name="TextureRect" type="TextureRect" parent="Editor/Cursor"]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("PlaceholderTexture2D_eo2o7")
+
+[node name="cursorItemIcon" type="TextureRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.5019608)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 64.0
+offset_bottom = 76.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource("4_32ik4")
 
 [node name="SaveLoadManager" type="Node2D" parent="."]
 script = ExtResource("3_7fkqn")

@@ -1,3 +1,3 @@
 extends Item
-class_name object
+class_name objectItem
 @export var objectReference: PackedScene

@@ -1,9 +1,11 @@
 extends CharacterBody2D
-const gravity = 2400
-const maxMoveSpeed = 700
-const accelaration = 4000
-const jumpSpeed = 1000
-var gravityMult = 1
+@export var gravity : int = 2400
+@export var maxMoveSpeed : int = 700
+@export var accelaration : int = 4000
+@export var jumpSpeed : int = 1000
+@export var gravityMult : float = 1
+@export var fallingGravityMult : float = 1.5
+
 var jumping = false
 
 var directionInput = Vector2.ZERO
@@ -41,8 +43,9 @@ func _physics_process(delta: float) -> void:
 			jumping = false
 			gravityMult = 1
 		else:
-			if !Input.is_action_pressed("jump"):
-				gravityMult = 1.5
+			#faster falling
+			if Input.is_action_just_released("jump") or velocity.y > 0:
+				gravityMult = fallingGravityMult
 		move_and_slide()
 		manageAnimations()
 

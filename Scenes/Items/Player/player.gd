@@ -20,6 +20,7 @@ func _ready() -> void:
 	globalEditor.connect("resetStage",resetPlayer)
 
 func _physics_process(delta: float) -> void:
+	
 	#Either mode
 	directionInput = Vector2(Input.get_axis("left","right"),Input.get_axis("down","up"))
 	#Edit mode

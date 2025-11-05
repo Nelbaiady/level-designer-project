@@ -10,4 +10,5 @@ objectReference = ExtResource("1_a83kd")
 texture = ExtResource("2_a83kd")
 textureOffset = Vector2(0, -12)
 name = "spring"
+rosterID = 1
 metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

@@ -1,8 +1,10 @@
 extends Node2D
 @onready var file_dialog: FileDialog = $"../FileDialog"
+@onready var tileMap: TileMapLayer = $"../Level/TileMapLayer"
 
 var isSaving = false
-@onready var tileMap: TileMapLayer = $"../Level/TileMapLayer"
+
+var levelSaveStruct : Dictionary = { "tiles": [], "objects": []}
 
 func _input(event: InputEvent) -> void:
 	if globalEditor.isEditing:
@@ -34,9 +36,21 @@ func saveLevel(path):
 	var saveFile = FileAccess.open(path+".json", FileAccess.WRITE)
 	if(FileAccess.get_open_error() != OK):
 		return false
-	#saveFile.store_string(JSON.stringify(tileData))
-	#print("now saving "+str(globalEditor.levelStruct))
-	saveFile.store_string(JSON.stringify(globalEditor.levelStruct))
+	
+	levelSaveStruct.objects.clear()
+	levelSaveStruct.tiles.clear()
+	#ADD EVERYTHING TO THE LEVEL STRUCT
+	for vectorPos in tileMap.get_used_cells():
+		##var vectorPos = Vector2i(x, y)
+		var pos = [vectorPos.x,vectorPos.y]
+		var coords = [tileMap.get_cell_atlas_coords(vectorPos).x,tileMap.get_cell_atlas_coords(vectorPos).y]
+		var source : int = tileMap.get_cell_source_id(vectorPos)
+		var altTile : int = tileMap.get_cell_alternative_tile(vectorPos)
+		if source!=-1:
+			levelSaveStruct.tiles.append( { "pos": pos, "atlasCoords": coords, "sourceID": source, "altTile": altTile } )
+	for i in globalEditor.objectPosHash:
+		levelSaveStruct.objects.append({"pos":[i.x,i.y],"rosterID":globalEditor.objectPosHash[i].rosterID})
+	saveFile.store_string(JSON.stringify(levelSaveStruct))
 
 func loadLevel(path):
 	var levelFile = FileAccess.open(path, FileAccess.READ)

@@ -49,7 +49,7 @@ func _physics_process(delta: float) -> void:
 				if selectedItem is objectItem:
 					if globalEditor.objectPosHash.has(cursorCellCoords):
 						#selectedItem.objectReference.queue_free()
-						var objectToDelete = globalEditor.objectPosHash[cursorCellCoords]
+						var objectToDelete = globalEditor.objectPosHash[cursorCellCoords].object
 						globalEditor.objectPosHash.erase(cursorCellCoords)
 						if is_instance_valid(objectToDelete):
 							objectToDelete.queue_free()
@@ -101,4 +101,4 @@ func tweenCursorItemIcon():
 	cursorItemIconTween = create_tween()
 	cursorItemIconTween.set_trans(Tween.TRANS_CUBIC)
 	cursorItemIconTween.set_ease(Tween.EASE_OUT)
-	cursorItemIconTween.tween_property(cursorItemIcon,"position",Vector2(cursorCellCoords * globalEditor.gridSize) + selectedItem.textureOffset,0.2)
+	cursorItemIconTween.tween_property(cursorItemIcon,"position",Vector2(cursorCellCoords * globalEditor.gridSize) + selectedItem.textureOffset,0.1)

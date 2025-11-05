@@ -210,7 +210,7 @@ terrain_set_0/terrain_0/name = "Dirt"
 terrain_set_0/terrain_0/color = Color(0.78171426, 0, 0.17095065, 1)
 terrain_set_0/terrain_1/name = "Grass"
 terrain_set_0/terrain_1/color = Color(0.2527295, 0.50761116, 0.32676098, 1)
-sources/2 = SubResource("TileSetAtlasSource_b78su")
+sources/0 = SubResource("TileSetAtlasSource_b78su")
 
 [node name="Node2D" type="Node2D"]
 

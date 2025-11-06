@@ -10,8 +10,8 @@ var gridSize:int = 64
 
 var objectPosHash : Dictionary = {}
 
-func _ready() -> void:
-	tileMap = $"../Level/TileMapLayer"
+#func _ready() -> void:
+	#tileMap = $"../Level/TileMapLayer"
 
 #list of every possible object type
 #var objectRoster = ["res://Scenes/Items/Objects/Spring/Spring.tres"]

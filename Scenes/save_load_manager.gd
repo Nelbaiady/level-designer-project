@@ -60,7 +60,6 @@ func loadLevel(path):
 	var parsedData = JSON.new()
 	parsedData.parse(jsonData)
 	var loadedData : Dictionary = parsedData.get_data()
-	#print("now loading "+str(loadedData))
 	globalEditor.clearLevel()
 	for i in len( loadedData.tiles ):
 		tileMap.set_cell(Vector2i(loadedData.tiles[i].pos[0],loadedData.tiles[i].pos[1]) , loadedData.tiles[i].sourceID,Vector2i(loadedData.tiles[i].atlasCoords[0],loadedData.tiles[i].atlasCoords[1]) , loadedData.tiles[i].altTile)

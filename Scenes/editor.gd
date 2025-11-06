@@ -54,13 +54,13 @@ func _physics_process(delta: float) -> void:
 						if is_instance_valid(objectToDelete):
 							objectToDelete.queue_free()
 					
-					
 			if Input.is_action_just_released("clear"):
 				globalEditor.clearLevel()
 				#tileMap.clear()
 #				#I need to add code for clearing objects too
 		else:
 			pass
+			
 		#toggle between edit mode and play mode
 		if Input.is_action_just_pressed("toggleEditing"):
 			if globalEditor.isEditing:

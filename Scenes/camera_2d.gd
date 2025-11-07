@@ -42,7 +42,7 @@ func resetCamera():
 	position = Vector2(576,324)
 
 func _physics_process(delta: float) -> void:
-	transLateCamera(Input.get_vector("left","right","up","down")*25)
+	transLateCamera(Input.get_vector("rLeft","rRight","rUp","rDown")*25)
 	#if heldDirName != "":
 		#holdTimer+=delta
 		#if holdTimer>=holdThreshold:

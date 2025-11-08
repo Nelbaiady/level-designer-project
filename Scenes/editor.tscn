@@ -5,11 +5,11 @@
 [ext_resource type="Script" uid="uid://y0j4pcn25wfi" path="res://Scenes/level.gd" id="2_24ceq"]
 [ext_resource type="Script" uid="uid://g7pdbfqfu3l5" path="res://Scenes/save_load_manager.gd" id="3_7fkqn"]
 [ext_resource type="Script" uid="uid://p7hjdq8g24yk" path="res://Scenes/global_editor.gd" id="3_a7iym"]
-[ext_resource type="Script" uid="uid://nex04i5f5a5f" path="res://Scenes/cursor.gd" id="3_eo2o7"]
+[ext_resource type="Script" path="res://Scenes/cursor.gd" id="3_eo2o7"]
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="4_8howc"]
 [ext_resource type="Script" uid="uid://cy16eivwe3nt5" path="res://Scenes/tile_map_layer.gd" id="5_b78su"]
-[ext_resource type="Script" uid="uid://gbx72oygq3hy" path="res://Scenes/objects.gd" id="9_1k58v"]
+[ext_resource type="Script" path="res://Scenes/objects.gd" id="9_1k58v"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_eo2o7"]
 
@@ -384,6 +384,14 @@ texture_region_size = Vector2i(64, 64)
 2:4/0/terrains_peering_bit/left_side = 0
 2:4/0/terrains_peering_bit/top_side = 0
 2:4/0/terrains_peering_bit/top_right_corner = 0
+0:4/0 = 0
+0:4/0/terrain_set = 0
+0:4/0/terrain = 0
+0:4/0/physics_layer_0/polygon_0/points = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)
+0:4/0/terrains_peering_bit/right_side = 0
+0:4/0/terrains_peering_bit/bottom_side = 0
+0:4/0/terrains_peering_bit/left_side = 0
+0:4/0/terrains_peering_bit/top_side = 0
 
 [sub_resource type="TileSet" id="TileSet_7fkqn"]
 tile_size = Vector2i(64, 64)

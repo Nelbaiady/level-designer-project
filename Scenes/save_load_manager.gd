@@ -36,7 +36,6 @@ func saveLevel(path):
 	var saveFile = FileAccess.open(path+".json", FileAccess.WRITE)
 	if(FileAccess.get_open_error() != OK):
 		return false
-	
 	levelSaveStruct.objects.clear()
 	levelSaveStruct.tiles.clear()
 	#ADD EVERYTHING TO THE LEVEL STRUCT
@@ -51,7 +50,7 @@ func saveLevel(path):
 	for i in globalEditor.objectPosHash:
 		levelSaveStruct.objects.append({"pos":[i.x,i.y],"rosterID":globalEditor.objectPosHash[i].rosterID})
 	saveFile.store_string(JSON.stringify(levelSaveStruct))
-
+	
 func loadLevel(path):
 	var levelFile = FileAccess.open(path, FileAccess.READ)
 	if(FileAccess.get_open_error() != OK):

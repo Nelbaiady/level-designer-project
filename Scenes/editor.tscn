@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
 [ext_resource type="Script" uid="uid://buy227idb1d0c" path="res://Scenes/editor.gd" id="1_eyy8u"]
 [ext_resource type="Script" uid="uid://y0j4pcn25wfi" path="res://Scenes/level.gd" id="2_24ceq"]
+[ext_resource type="PackedScene" uid="uid://dgdnl8mwnjivp" path="res://Scenes/UI/hotbar.tscn" id="2_32ik4"]
 [ext_resource type="Script" uid="uid://g7pdbfqfu3l5" path="res://Scenes/save_load_manager.gd" id="3_7fkqn"]
-[ext_resource type="Script" uid="uid://p7hjdq8g24yk" path="res://Scenes/global_editor.gd" id="3_a7iym"]
 [ext_resource type="Script" path="res://Scenes/cursor.gd" id="3_eo2o7"]
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="4_8howc"]
@@ -403,7 +403,17 @@ terrain_set_0/terrain_1/name = "Grass"
 terrain_set_0/terrain_1/color = Color(0.2527295, 0.50761116, 0.32676098, 1)
 sources/0 = SubResource("TileSetAtlasSource_b78su")
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Hotbar" parent="." instance=ExtResource("2_32ik4")]
+layout_mode = 1
+size_flags_horizontal = 4
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 324)
@@ -426,6 +436,7 @@ texture = SubResource("PlaceholderTexture2D_eo2o7")
 
 [node name="cursorItemIcon" type="TextureRect" parent="."]
 self_modulate = Color(1, 1, 1, 0.5019608)
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -457,13 +468,8 @@ script = ExtResource("5_b78su")
 [node name="Objects" type="Node" parent="Level"]
 script = ExtResource("9_1k58v")
 
-[node name="globalEditor" type="Node" parent="."]
-script = ExtResource("3_a7iym")
-
 [node name="Player" parent="." instance=ExtResource("4_7wlcy")]
 position = Vector2(544, 280)
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Player"]
 
 [connection signal="canceled" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_canceled"]
 [connection signal="confirmed" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_confirmed"]

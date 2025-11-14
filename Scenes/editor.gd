@@ -7,9 +7,7 @@ extends Node2D
 
 
 #default hotbar: grass, spring
-var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
-var hotbarIndex: int = 0
-var selectedItem = hotbar[hotbarIndex]
+var selectedItem
 var selectedItemType = "terrain"
 var cursorCellCoords: Vector2i = Vector2i.ZERO
 var previousCursorCellCoords: Vector2i = cursorCellCoords
@@ -18,7 +16,9 @@ var previousCursorPos = Vector2.ZERO
 var cursorItemIconTween: Tween
 
 func _ready() -> void:
-	setSelectedItem(hotbar[hotbarIndex])
+	selectedItem = globalEditor.hotbar[globalEditor.hotbarIndex]
+	setSelectedItem(selectedItem)
+	globalEditor.setItem.connect(setSelectedItem)
 	
 func _physics_process(delta: float) -> void:
 	if delta: #just to get rid of the annoying warning for now
@@ -74,13 +74,12 @@ func _physics_process(delta: float) -> void:
 	#FINAL SECTION IN PHYSICS PROCESS
 	previousCursorPos = cursor.position
 	#END OF PHYSICS PROCESS
-func _input(event: InputEvent) -> void:
-	#selecting items in the hotbar using the number keys
-	for i in range(10):
-		if event.is_action_pressed(str(i)):
-			hotbarIndex = 10 if i==0 else i-1
-			if hotbarIndex < len(hotbar) and hotbar[hotbarIndex]:
-				setSelectedItem(hotbar[hotbarIndex])
+
+func tweenCursorItemIcon():
+	cursorItemIconTween = create_tween()
+	cursorItemIconTween.set_trans(Tween.TRANS_CUBIC)
+	cursorItemIconTween.set_ease(Tween.EASE_OUT)
+	cursorItemIconTween.tween_property(cursorItemIcon,"position",Vector2(cursorCellCoords * globalEditor.gridSize) + selectedItem.textureOffset,0.1)
 
 func setSelectedItem(newItem: Item):
 	selectedItem = newItem
@@ -96,9 +95,3 @@ func setSelectedItem(newItem: Item):
 		tweenCursorItemIcon()
 	else:
 		cursorItemIcon.position = Vector2(cursorCellCoords * globalEditor.gridSize) + selectedItem.textureOffset
-
-func tweenCursorItemIcon():
-	cursorItemIconTween = create_tween()
-	cursorItemIconTween.set_trans(Tween.TRANS_CUBIC)
-	cursorItemIconTween.set_ease(Tween.EASE_OUT)
-	cursorItemIconTween.tween_property(cursorItemIcon,"position",Vector2(cursorCellCoords * globalEditor.gridSize) + selectedItem.textureOffset,0.1)

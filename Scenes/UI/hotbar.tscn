@@ -1,0 +1,111 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgdnl8mwnjivp"]
+
+[ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/UItheme.tres" id="1_26udg"]
+[ext_resource type="Script" uid="uid://bre0ft12l6is3" path="res://Scenes/UI/hotbarButton.gd" id="2_sk345"]
+
+[node name="Hotbar" type="Control"]
+z_index = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+z_index = 1
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme = ExtResource("1_26udg")
+theme_type_variation = &"InventoryButton"
+icon_alignment = 1
+script = ExtResource("2_sk345")
+
+[node name="Button2" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme = ExtResource("1_26udg")
+theme_type_variation = &"InventoryButton"
+icon_alignment = 1
+script = ExtResource("2_sk345")
+index = 1
+
+[node name="Button3" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme = ExtResource("1_26udg")
+theme_type_variation = &"InventoryButton"
+icon_alignment = 1
+script = ExtResource("2_sk345")
+index = 2
+
+[node name="Button4" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme = ExtResource("1_26udg")
+theme_type_variation = &"InventoryButton"
+icon_alignment = 1
+script = ExtResource("2_sk345")
+index = 3
+
+[node name="Button5" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme = ExtResource("1_26udg")
+theme_type_variation = &"InventoryButton"
+icon_alignment = 1
+script = ExtResource("2_sk345")
+index = 4
+
+[node name="Button6" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme = ExtResource("1_26udg")
+theme_type_variation = &"InventoryButton"
+icon_alignment = 1
+script = ExtResource("2_sk345")
+index = 5
+
+[node name="Button7" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme = ExtResource("1_26udg")
+theme_type_variation = &"InventoryButton"
+icon_alignment = 1
+script = ExtResource("2_sk345")
+index = 6
+
+[node name="Button8" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme = ExtResource("1_26udg")
+theme_type_variation = &"InventoryButton"
+icon_alignment = 1
+script = ExtResource("2_sk345")
+index = 7
+
+[node name="Button9" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme = ExtResource("1_26udg")
+theme_type_variation = &"InventoryButton"
+icon_alignment = 1
+script = ExtResource("2_sk345")
+index = 8
+
+[node name="Button10" type="Button" parent="HBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+theme = ExtResource("1_26udg")
+theme_type_variation = &"InventoryButton"
+icon_alignment = 1
+script = ExtResource("2_sk345")
+index = 9

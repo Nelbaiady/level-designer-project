@@ -2,8 +2,16 @@ extends Node
 
 var isEditing:bool = true
 var popupIsOpen:bool = false
-signal resetStage()
 var gridSize:int = 64
+
+signal resetStage()
+signal updateHotbar(hotbarIndex, item)
+signal updateHotbarSelection(hotbarIndex)
+signal setItem(item)
+
+
+var hotbarIndex: int = 0
+var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
 
 @onready var objects
 @onready var tileMap: TileMapLayer
@@ -11,7 +19,7 @@ var gridSize:int = 64
 var objectPosHash : Dictionary = {}
 
 #func _ready() -> void:
-	#tileMap = $"../Level/TileMapLayer"
+	#pass
 
 #list of every possible object type
 #var objectRoster = ["res://Scenes/Items/Objects/Spring/Spring.tres"]
@@ -26,14 +34,24 @@ func placeObject(item:Item, cell:Vector2i):
 	var objectToPlace = item.objectReference.instantiate()
 	objectToPlace.global_position = placedObjectPosition
 	objects.add_child(objectToPlace)
-	
 	globalEditor.objectPosHash[cell] = {"object":objectToPlace,"rosterID":item.rosterID}
-	#globalEditor.levelSaveStruct.objects.append({"pos":[cell.x, cell.y], "rosterID":item.rosterID})
-	#if globalEditor.objectPosHash.has(Vector2i(10,5)):
-		#print(globalEditor.objectPosHash[Vector2i(10,5)].position)
 
 func clearLevel():
 	for i in objectPosHash:
 		objectPosHash[i].object.queue_free()
 	tileMap.clear()
 	objectPosHash.clear()
+
+func _input(event: InputEvent) -> void:
+	#selecting items in the hotbar using the number keys
+	for i in range(10):
+		if event.is_action_pressed(str(i)):
+			hotbarIndex = 10 if i==0 else i-1
+			if hotbarIndex < len(hotbar) and hotbar[hotbarIndex]:
+				setItem.emit(hotbar[hotbarIndex])
+				#updateHotbarUI()
+				updateHotbarSelection.emit(hotbarIndex)
+
+func updateHotbarUI():
+	for i in range(len(hotbar)):
+		updateHotbar.emit(i, hotbar[i])

@@ -403,17 +403,26 @@ terrain_set_0/terrain_1/name = "Grass"
 terrain_set_0/terrain_1/color = Color(0.2527295, 0.50761116, 0.32676098, 1)
 sources/0 = SubResource("TileSetAtlasSource_b78su")
 
-[node name="Node2D" type="Control"]
-layout_mode = 3
-anchors_preset = 15
+[node name="Node2D" type="Node"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Hotbar" parent="CanvasLayer" instance=ExtResource("2_32ik4")]
+anchors_preset = 10
+anchor_bottom = 0.0
+grow_vertical = 1
+size_flags_horizontal = 4
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+visible = false
+custom_minimum_size = Vector2(0, 64)
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -64.0
 grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Hotbar" parent="." instance=ExtResource("2_32ik4")]
-layout_mode = 1
-size_flags_horizontal = 4
+grow_vertical = 0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 324)
@@ -436,7 +445,6 @@ texture = SubResource("PlaceholderTexture2D_eo2o7")
 
 [node name="cursorItemIcon" type="TextureRect" parent="."]
 self_modulate = Color(1, 1, 1, 0.5019608)
-layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5

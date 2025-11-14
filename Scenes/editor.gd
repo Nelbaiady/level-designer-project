@@ -12,6 +12,7 @@ var selectedItemType = "terrain"
 var cursorCellCoords: Vector2i = Vector2i.ZERO
 var previousCursorCellCoords: Vector2i = cursorCellCoords
 var previousCursorPos = Vector2.ZERO
+var placeButtonIsHeld = false
 
 var cursorItemIconTween: Tween
 
@@ -31,15 +32,12 @@ func _physics_process(delta: float) -> void:
 				tweenCursorItemIcon()
 			
 			#place an object
-			if Input.is_action_just_pressed("mouseClickLeft") or (Input.is_action_pressed("mouseClickLeft") and cursorCellCoords!=previousCursorCellCoords):
-				if selectedItem is terrainItem:
-					#var placedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
-					#tileMap.set_cell(cursorCellCoords,0,Vector2i(1,1)) #IF WE WANTED TO PLACE A REGULAR TILE
-					globalEditor.placeTile(selectedItem,cursorCellCoords)
-					
-				if selectedItem is objectItem:
-					if !globalEditor.objectPosHash.has(cursorCellCoords):
-						globalEditor.placeObject(selectedItem,cursorCellCoords)
+			if Input.is_action_just_released("mouseClickLeft"):
+				placeButtonIsHeld = false
+			if placeButtonIsHeld:
+				placeItem()
+			#if Input.is_action_just_pressed("mouseClickLeft") or (Input.is_action_pressed("mouseClickLeft") and cursorCellCoords!=previousCursorCellCoords):
+				#placeItem()
 			#erase object at mouse
 			if Input.is_action_just_pressed("erase") or (Input.is_action_pressed("erase") and cursorCellCoords!=previousCursorCellCoords):
 				if selectedItem is terrainItem:
@@ -95,3 +93,19 @@ func setSelectedItem(newItem: Item):
 		tweenCursorItemIcon()
 	else:
 		cursorItemIcon.position = Vector2(cursorCellCoords * globalEditor.gridSize) + selectedItem.textureOffset
+		
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action("mouseClickLeft"):
+		placeItem()
+		placeButtonIsHeld = true
+
+func placeItem():
+	if selectedItem is terrainItem:
+		#var placedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
+		#tileMap.set_cell(cursorCellCoords,0,Vector2i(1,1)) #IF WE WANTED TO PLACE A REGULAR TILE
+		globalEditor.placeTile(selectedItem,cursorCellCoords)
+		
+	if selectedItem is objectItem:
+		if !globalEditor.objectPosHash.has(cursorCellCoords):
+			globalEditor.placeObject(selectedItem,cursorCellCoords)

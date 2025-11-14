@@ -1,3 +1,12 @@
-[gd_resource type="Theme" format=3 uid="uid://crsgo6pa7nv5x"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://crsgo6pa7nv5x"]
+
+[ext_resource type="StyleBox" uid="uid://2d8f8r0eokfr" path="res://Scenes/UI/theme/hotbarButton.tres" id="1_ten13"]
+
+[sub_resource type="FontVariation" id="FontVariation_1unef"]
+spacing_bottom = -12
 
 [resource]
+Button/font_sizes/font_size = 12
+Button/fonts/font = SubResource("FontVariation_1unef")
+Button/styles/normal = ExtResource("1_ten13")
+hotbarButton/base_type = &"Button"

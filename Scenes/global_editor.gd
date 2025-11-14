@@ -46,11 +46,18 @@ func _input(event: InputEvent) -> void:
 	#selecting items in the hotbar using the number keys
 	for i in range(10):
 		if event.is_action_pressed(str(i)):
-			hotbarIndex = 10 if i==0 else i-1
-			if hotbarIndex < len(hotbar) and hotbar[hotbarIndex]:
-				setItem.emit(hotbar[hotbarIndex])
-				#updateHotbarUI()
-				updateHotbarSelection.emit(hotbarIndex)
+			setHotbarIndex(10 if i==0 else i-1)
+			
+	if event.is_action_pressed("scrollUp"):
+		setHotbarIndex(posmod(hotbarIndex+1, len(hotbar)))
+	if event.is_action_pressed("scrollDown"):
+		setHotbarIndex(posmod(hotbarIndex-1, len(hotbar)))
+
+func setHotbarIndex(newIndex):
+	if newIndex < len(hotbar) and hotbar[newIndex]:
+		hotbarIndex = newIndex
+		setItem.emit(hotbar[hotbarIndex]) #Connected in editor.gd
+		updateHotbarSelection.emit(hotbarIndex) #Connected in hotbarButton.gd
 
 func updateHotbarUI():
 	for i in range(len(hotbar)):

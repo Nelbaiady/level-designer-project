@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://dgdnl8mwnjivp"]
+[gd_scene load_steps=5 format=3 uid="uid://dgdnl8mwnjivp"]
 
 [ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/UItheme.tres" id="1_26udg"]
+[ext_resource type="Texture2D" uid="uid://b8e50snng4jjw" path="res://Scenes/Items/Terrain/grass/grassIcon.png" id="2_26udg"]
 [ext_resource type="Script" uid="uid://bre0ft12l6is3" path="res://Scenes/UI/hotbarButton.gd" id="2_sk345"]
 [ext_resource type="Texture2D" uid="uid://de1p8l0t4qll7" path="res://Scenes/UI/emptyIcon.png" id="4_26udg"]
 
@@ -39,18 +40,21 @@ alignment = 1
 
 [node name="Button" type="Button" parent="Panel/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("1_26udg")
-theme_type_variation = &"InventoryButton"
-icon = ExtResource("4_26udg")
-autowrap_mode = 2
+theme_type_variation = &"hotbarButton"
+toggle_mode = true
+icon = ExtResource("2_26udg")
 icon_alignment = 1
 vertical_icon_alignment = 0
 script = ExtResource("2_sk345")
 
 [node name="Button2" type="Button" parent="Panel/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("1_26udg")
-theme_type_variation = &"InventoryButton"
+theme_type_variation = &"hotbarButton"
+toggle_mode = true
 icon = ExtResource("4_26udg")
 autowrap_mode = 2
 icon_alignment = 1
@@ -60,8 +64,10 @@ index = 1
 
 [node name="Button3" type="Button" parent="Panel/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("1_26udg")
-theme_type_variation = &"InventoryButton"
+theme_type_variation = &"hotbarButton"
+toggle_mode = true
 icon = ExtResource("4_26udg")
 autowrap_mode = 2
 icon_alignment = 1
@@ -71,8 +77,10 @@ index = 2
 
 [node name="Button4" type="Button" parent="Panel/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("1_26udg")
-theme_type_variation = &"InventoryButton"
+theme_type_variation = &"hotbarButton"
+toggle_mode = true
 icon = ExtResource("4_26udg")
 autowrap_mode = 2
 icon_alignment = 1
@@ -82,8 +90,10 @@ index = 3
 
 [node name="Button5" type="Button" parent="Panel/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("1_26udg")
-theme_type_variation = &"InventoryButton"
+theme_type_variation = &"hotbarButton"
+toggle_mode = true
 icon = ExtResource("4_26udg")
 autowrap_mode = 2
 icon_alignment = 1
@@ -93,8 +103,10 @@ index = 4
 
 [node name="Button6" type="Button" parent="Panel/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("1_26udg")
-theme_type_variation = &"InventoryButton"
+theme_type_variation = &"hotbarButton"
+toggle_mode = true
 icon = ExtResource("4_26udg")
 autowrap_mode = 2
 icon_alignment = 1
@@ -104,8 +116,10 @@ index = 5
 
 [node name="Button7" type="Button" parent="Panel/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("1_26udg")
-theme_type_variation = &"InventoryButton"
+theme_type_variation = &"hotbarButton"
+toggle_mode = true
 icon = ExtResource("4_26udg")
 autowrap_mode = 2
 icon_alignment = 1
@@ -115,8 +129,10 @@ index = 6
 
 [node name="Button8" type="Button" parent="Panel/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("1_26udg")
-theme_type_variation = &"InventoryButton"
+theme_type_variation = &"hotbarButton"
+toggle_mode = true
 icon = ExtResource("4_26udg")
 autowrap_mode = 2
 icon_alignment = 1
@@ -126,8 +142,10 @@ index = 7
 
 [node name="Button9" type="Button" parent="Panel/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("1_26udg")
-theme_type_variation = &"InventoryButton"
+theme_type_variation = &"hotbarButton"
+toggle_mode = true
 icon = ExtResource("4_26udg")
 autowrap_mode = 2
 icon_alignment = 1
@@ -137,8 +155,10 @@ index = 8
 
 [node name="Button10" type="Button" parent="Panel/HBoxContainer"]
 layout_mode = 2
+focus_mode = 0
 theme = ExtResource("1_26udg")
-theme_type_variation = &"InventoryButton"
+theme_type_variation = &"hotbarButton"
+toggle_mode = true
 icon = ExtResource("4_26udg")
 autowrap_mode = 2
 icon_alignment = 1

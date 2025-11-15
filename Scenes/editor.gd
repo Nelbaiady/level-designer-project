@@ -2,7 +2,7 @@ extends Node2D
 
 @onready var level: Node2D = $"../Level"
 @onready var tileMap: TileMapLayer = $"../Level/TileMapLayer"
-@onready var cursor: Node2D = $Cursor
+@onready var cursor: Node2D = $"../Cursor"
 @onready var cursorItemIcon: TextureRect = $"../cursorItemIcon"
 
 
@@ -21,9 +21,7 @@ func _ready() -> void:
 	setSelectedItem(selectedItem)
 	globalEditor.setItem.connect(setSelectedItem)
 	
-func _physics_process(delta: float) -> void:
-	if delta: #just to get rid of the annoying warning for now
-		pass
+func _physics_process(_delta: float) -> void:
 	if !globalEditor.popupIsOpen:
 		if globalEditor.isEditing:
 			previousCursorCellCoords = cursorCellCoords
@@ -34,7 +32,7 @@ func _physics_process(delta: float) -> void:
 			#place an object
 			if Input.is_action_just_released("mouseClickLeft"):
 				placeButtonIsHeld = false
-			if placeButtonIsHeld:
+			if placeButtonIsHeld and cursor.cursorOnScreen:
 				placeItem()
 			#if Input.is_action_just_pressed("mouseClickLeft") or (Input.is_action_pressed("mouseClickLeft") and cursorCellCoords!=previousCursorCellCoords):
 				#placeItem()
@@ -96,7 +94,7 @@ func setSelectedItem(newItem: Item):
 		
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action("mouseClickLeft"):
+	if event.is_action("mouseClickLeft") and cursor.cursorOnScreen:
 		placeItem()
 		placeButtonIsHeld = true
 

@@ -49,9 +49,9 @@ func _input(event: InputEvent) -> void:
 			setHotbarIndex(10 if i==0 else i-1)
 			
 	if event.is_action_pressed("scrollUp"):
-		setHotbarIndex(posmod(hotbarIndex+1, len(hotbar)))
-	if event.is_action_pressed("scrollDown"):
 		setHotbarIndex(posmod(hotbarIndex-1, len(hotbar)))
+	if event.is_action_pressed("scrollDown"):
+		setHotbarIndex(posmod(hotbarIndex+1, len(hotbar)))
 
 func setHotbarIndex(newIndex):
 	if newIndex < len(hotbar) and hotbar[newIndex]:

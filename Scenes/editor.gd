@@ -2,17 +2,18 @@ extends Node2D
 
 @onready var level: Node2D = $"../Level"
 @onready var tileMap: TileMapLayer = $"../Level/TileMapLayer"
-@onready var cursor: Node2D = $"../Cursor"
+@onready var cursor: Node2D =$"../CursorCanvas/Cursor"
+#@onready var cursor: Node2D =$"../Cursor"
 @onready var cursorItemIcon: TextureRect = $"../cursorItemIcon"
 
 
 #default hotbar: grass, spring
-var selectedItem
+var selectedItem:Item
 var selectedItemType = "terrain"
 var cursorCellCoords: Vector2i = Vector2i.ZERO
 var previousCursorCellCoords: Vector2i = cursorCellCoords
-var previousCursorPos = Vector2.ZERO
-var placeButtonIsHeld = false
+var previousCursorPos:Vector2 = Vector2.ZERO
+var placeButtonIsHeld:bool = false
 
 var cursorItemIconTween: Tween
 
@@ -20,12 +21,14 @@ func _ready() -> void:
 	selectedItem = globalEditor.hotbar[globalEditor.hotbarIndex]
 	setSelectedItem(selectedItem)
 	globalEditor.setItem.connect(setSelectedItem)
+	globalEditor.resetStage.connect(resetStage)
 	
 func _physics_process(_delta: float) -> void:
+			
 	if !globalEditor.popupIsOpen:
 		if globalEditor.isEditing:
 			previousCursorCellCoords = cursorCellCoords
-			cursorCellCoords = tileMap.local_to_map(Vector2i(cursor.position))
+			cursorCellCoords = tileMap.local_to_map(Vector2i(cursor.global_position))
 			if cursorCellCoords!=previousCursorCellCoords:
 				tweenCursorItemIcon()
 			
@@ -61,14 +64,13 @@ func _physics_process(_delta: float) -> void:
 		if Input.is_action_just_pressed("toggleEditing"):
 			if globalEditor.isEditing:
 				globalEditor.isEditing = false
-				cursorItemIcon.visible=false
 			else:
 				globalEditor.resetStage.emit()
-				globalEditor.isEditing = true
-				cursorItemIcon.visible= true
+
 			
-	#FINAL SECTION IN PHYSICS PROCESS
-	previousCursorPos = cursor.position
+	#COMMON CODE FOR EDIT AND PLAY MODE
+	cursorItemIcon.visible = cursor.visible
+	previousCursorPos = cursor.global_position
 	#END OF PHYSICS PROCESS
 
 func tweenCursorItemIcon():
@@ -107,3 +109,8 @@ func placeItem():
 	if selectedItem is objectItem:
 		if !globalEditor.objectPosHash.has(cursorCellCoords):
 			globalEditor.placeObject(selectedItem,cursorCellCoords)
+
+func resetStage():
+	globalEditor.isEditing = true
+	cursorItemIcon.visible = true
+	placeButtonIsHeld = false

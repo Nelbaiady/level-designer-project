@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bgavxi5l77ibl"]
+[gd_scene load_steps=18 format=3 uid="uid://bgavxi5l77ibl"]
 
 [ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
 [ext_resource type="Script" uid="uid://buy227idb1d0c" path="res://Scenes/editor.gd" id="1_eyy8u"]
@@ -8,10 +8,38 @@
 [ext_resource type="Script" uid="uid://nex04i5f5a5f" path="res://Scenes/cursor.gd" id="3_eo2o7"]
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="4_8howc"]
+[ext_resource type="Texture2D" uid="uid://c6aqx5rx3r48m" path="res://Cursor/cursor.png" id="4_32ik4"]
 [ext_resource type="Script" uid="uid://cy16eivwe3nt5" path="res://Scenes/tile_map_layer.gd" id="5_b78su"]
 [ext_resource type="Script" path="res://Scenes/objects.gd" id="9_1k58v"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_eo2o7"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_1k58v"]
+atlas = ExtResource("4_32ik4")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4kvy"]
+atlas = ExtResource("4_32ik4")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_exjlx"]
+atlas = ExtResource("4_32ik4")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nfgmo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1k58v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l4kvy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_exjlx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b78su"]
 texture = ExtResource("4_8howc")
@@ -405,6 +433,23 @@ sources/0 = SubResource("TileSetAtlasSource_b78su")
 
 [node name="Node2D" type="Node"]
 
+[node name="CursorCanvas" type="CanvasLayer" parent="."]
+layer = 10
+follow_viewport_enabled = true
+
+[node name="Cursor" type="Marker2D" parent="CursorCanvas"]
+top_level = true
+script = ExtResource("3_eo2o7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CursorCanvas/Cursor"]
+z_index = 215
+z_as_relative = false
+position = Vector2(6, 12)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_nfgmo")
+autoplay = "default"
+frame_progress = 0.9529415
+
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Hotbar" parent="CanvasLayer" instance=ExtResource("2_32ik4")]
@@ -430,17 +475,6 @@ process_callback = 0
 position_smoothing_enabled = true
 position_smoothing_speed = 20.0
 script = ExtResource("1_8howc")
-
-[node name="Cursor" type="Marker2D" parent="."]
-z_index = 1
-script = ExtResource("3_eo2o7")
-
-[node name="TextureRect" type="TextureRect" parent="Cursor"]
-offset_left = -8.0
-offset_top = -8.0
-offset_right = 8.0
-offset_bottom = 8.0
-texture = SubResource("PlaceholderTexture2D_eo2o7")
 
 [node name="Editor" type="Node2D" parent="."]
 script = ExtResource("1_eyy8u")

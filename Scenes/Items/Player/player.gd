@@ -51,8 +51,12 @@ func _physics_process(delta: float) -> void:
 		manageAnimations()
 
 func resetPlayer():
-	position = lastEditPosition
 	velocity = Vector2.ZERO
+	var resetPlayerTween = create_tween()
+	resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
+	resetPlayerTween.set_ease(Tween.EASE_OUT)
+	resetPlayerTween.tween_property(self,"position",lastEditPosition,0.3)
+	#position = lastEditPosition
 	animationPlayer.current_animation="idle"
 
 func manageAnimations():

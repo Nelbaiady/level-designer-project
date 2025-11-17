@@ -189,9 +189,6 @@ libraries = {
 &"": SubResource("AnimationLibrary_e7gxc")
 }
 
-[node name="RigidBody2D" type="RigidBody2D" parent="."]
-gravity_scale = 0.0
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 48)
 shape = SubResource("RectangleShape2D_kccgo")

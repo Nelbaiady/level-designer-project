@@ -48,9 +48,9 @@ func _input(event: InputEvent) -> void:
 		if event.is_action_pressed(str(i)):
 			setHotbarIndex(10 if i==0 else i-1)
 			
-	if event.is_action_pressed("scrollUp"):
+	if event.is_action_pressed("nextItem"):
 		setHotbarIndex(posmod(hotbarIndex-1, len(hotbar)))
-	if event.is_action_pressed("scrollDown"):
+	if event.is_action_pressed("previousItem"):
 		setHotbarIndex(posmod(hotbarIndex+1, len(hotbar)))
 
 func setHotbarIndex(newIndex):

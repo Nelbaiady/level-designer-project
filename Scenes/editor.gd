@@ -96,7 +96,7 @@ func setSelectedItem(newItem: Item):
 		
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action("mouseClickLeft") and cursor.cursorOnScreen:
+	if event.is_action("mouseClickLeft") and cursor.cursorOnScreen and globalEditor.isEditing:
 		placeItem()
 		placeButtonIsHeld = true
 

@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://dw4ojydnn8mlq"]
+
+[ext_resource type="Script" uid="uid://nex04i5f5a5f" path="res://Scenes/cursor.gd" id="1_nehsy"]
+[ext_resource type="Texture2D" uid="uid://c6aqx5rx3r48m" path="res://Cursor/cursor.png" id="2_8eho3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1k58v"]
+atlas = ExtResource("2_8eho3")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l4kvy"]
+atlas = ExtResource("2_8eho3")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_exjlx"]
+atlas = ExtResource("2_8eho3")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nfgmo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1k58v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l4kvy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_exjlx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Cursor" type="Marker2D"]
+top_level = true
+script = ExtResource("1_nehsy")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+z_index = 215
+z_as_relative = false
+position = Vector2(6, 12)
+scale = Vector2(0.5, 0.5)
+sprite_frames = SubResource("SpriteFrames_nfgmo")
+autoplay = "default"
+frame_progress = 0.9529415

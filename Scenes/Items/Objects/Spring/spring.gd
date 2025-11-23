@@ -1,6 +1,7 @@
 extends RigidBody2D
 
 @onready var animationPlayer: AnimationPlayer = $Sprite2D/AnimationPlayer
+
 var strength:int = 1100
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
@@ -16,3 +17,4 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name=="Spring_springing":
 		animationPlayer.current_animation="Spring_idle"
+		pass

@@ -2,7 +2,7 @@ extends Node2D
 
 var cursorMoveVector:Vector2 
 var mousePosition:Vector2 
-@export var cursorMoveSpeed: int = 5
+@export var cursorMoveSpeed: int = 13
 var mouseOnScreen: bool = false
 var cursorOnScreen: bool = false
 var prioritizeController:bool = false
@@ -14,6 +14,10 @@ func _ready() -> void:
 	pass
 	
 func _process(_delta: float) -> void:
+	if globalEditor.popupIsOpen:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	if globalEditor.isEditing:
 		#To make UI block controller input, we make the controller trigger a real mouse click
 		if Input.is_action_pressed("controllerClickLeft"):

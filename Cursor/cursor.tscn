@@ -1,18 +1,20 @@
 [gd_scene load_steps=7 format=3 uid="uid://dw4ojydnn8mlq"]
 
 [ext_resource type="Script" uid="uid://nex04i5f5a5f" path="res://Scenes/cursor.gd" id="1_nehsy"]
-[ext_resource type="Texture2D" uid="uid://c6aqx5rx3r48m" path="res://Cursor/cursor.png" id="2_8eho3"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yrxwg"]
+load_path = "res://.godot/imported/cursor.png-81b85aec819db670ac0e28f271710396.ctex"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1k58v"]
-atlas = ExtResource("2_8eho3")
+atlas = SubResource("CompressedTexture2D_yrxwg")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l4kvy"]
-atlas = ExtResource("2_8eho3")
+atlas = SubResource("CompressedTexture2D_yrxwg")
 region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_exjlx"]
-atlas = ExtResource("2_8eho3")
+atlas = SubResource("CompressedTexture2D_yrxwg")
 region = Rect2(0, 64, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nfgmo"]

@@ -19,7 +19,8 @@ func resetCamera():
 	position = Vector2(576,324)
 
 func _physics_process(_delta: float) -> void:
-	transLateCamera(Input.get_vector("rLeft","rRight","rUp","rDown")*25)
+	if !globalEditor.popupIsOpen:
+		transLateCamera(Input.get_vector("rLeft","rRight","rUp","rDown")*25)
 
 	if !globalEditor.isEditing:
 		position = player.position

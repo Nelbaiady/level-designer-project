@@ -6,7 +6,7 @@ var mousePosition:Vector2
 var mouseOnScreen: bool = false
 var cursorOnScreen: bool = false
 var prioritizeController:bool = false
-
+var popupWasOpen: bool = false
 #@onready var itemIcon: TextureRect = $"../../cursorItemIcon"
 
 func _ready() -> void:
@@ -14,10 +14,15 @@ func _ready() -> void:
 	pass
 	
 func _process(_delta: float) -> void:
-	if globalEditor.popupIsOpen:
+#	show the mouse if a popup opens
+	if globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	else:
+		popupWasOpen = true
+#	if the popup was just closed, hide the mouse	
+	elif popupWasOpen and !globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_HIDDEN:
 		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+		popupWasOpen = false
+		
 	if globalEditor.isEditing:
 		#To make UI block controller input, we make the controller trigger a real mouse click
 		if Input.is_action_pressed("controllerClickLeft"):
@@ -32,7 +37,7 @@ func _process(_delta: float) -> void:
 		if cursorMoveVector:
 			prioritizeController = true
 			cursorOnScreen = true
-		#code for moving the cursor with controlls
+		#code for moving the cursor with controllers
 		if prioritizeController:
 			position += cursorMoveVector * cursorMoveSpeed
 			#Make sure the cursor does not go off screen
@@ -44,7 +49,7 @@ func _process(_delta: float) -> void:
 		else:
 			position = get_global_mouse_position()
 			mousePosition = get_viewport().get_mouse_position()
-	visible = cursorOnScreen and globalEditor.isEditing
+	visible = cursorOnScreen and globalEditor.isEditing and !globalEditor.popupIsOpen
 func _notification(event):
 	#mouse enters the window
 	if event == NOTIFICATION_WM_MOUSE_ENTER:

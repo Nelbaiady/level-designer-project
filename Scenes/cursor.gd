@@ -2,7 +2,8 @@ extends Node2D
 
 var cursorMoveVector:Vector2 
 var mousePosition:Vector2 
-@export var cursorMoveSpeed: int = 13
+@export var cursorMoveSpeed: int = 10
+@export var cursorMoveSpeedMult: float = 1
 var mouseOnScreen: bool = false
 var cursorOnScreen: bool = false
 var prioritizeController:bool = false
@@ -15,18 +16,25 @@ func _ready() -> void:
 	
 func _process(_delta: float) -> void:
 #	show the mouse if a popup opens
+	#if globalEditor.popupIsOpen:
+	#print(Input.mouse_mode)
 	if globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		popupWasOpen = true
+		print('open')
 #	if the popup was just closed, hide the mouse	
 	elif popupWasOpen and !globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_HIDDEN:
+		print('close')
 		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 		popupWasOpen = false
-		
+	#if !globalEditor.popupIsOpen:
+		#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	if globalEditor.isEditing:
 		#To make UI block controller input, we make the controller trigger a real mouse click
-		if Input.is_action_pressed("controllerClickLeft"):
+		if Input.is_action_just_pressed("controllerClickLeft"):
 			click()
+		if Input.is_action_just_released("controllerClickLeft"):
+			unclick()
 		#Left stick input vector
 		cursorMoveVector = Vector2(Input.get_axis("LstickL","LstickR"),Input.get_axis("LstickU","LstickD"))
 		#If the mouse moved and is on screen, use mouse controls
@@ -39,7 +47,9 @@ func _process(_delta: float) -> void:
 			cursorOnScreen = true
 		#code for moving the cursor with controllers
 		if prioritizeController:
-			position += cursorMoveVector * cursorMoveSpeed
+			cursorMoveSpeedMult = 1-Input.get_action_strength("L2") + 0.2
+			print(cursorMoveSpeedMult)
+			position += cursorMoveVector * cursorMoveSpeed * cursorMoveSpeedMult
 			#Make sure the cursor does not go off screen
 			position.x = clamp(position.x, get_viewport().get_camera_2d().global_position.x - get_viewport_rect().size.x / 2,get_viewport().get_camera_2d().global_position.x + get_viewport_rect().size.x / 2 - 1)#-1 on the max of both clamps because the mouse otherwise goes off screen
 			position.y = clamp(position.y, get_viewport().get_camera_2d().global_position.y - get_viewport_rect().size.y / 2,get_viewport().get_camera_2d().global_position.y + get_viewport_rect().size.y / 2 - 1)
@@ -53,6 +63,7 @@ func _process(_delta: float) -> void:
 func _notification(event):
 	#mouse enters the window
 	if event == NOTIFICATION_WM_MOUSE_ENTER:
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 		mouseOnScreen = true
 		cursorOnScreen = true
 		prioritizeController = false
@@ -62,14 +73,24 @@ func _notification(event):
 		cursorOnScreen = false
 		prioritizeController = true
 
-# REFERENEC: https://forum.godotengine.org/t/how-can-i-simulate-a-mouse-click-with-controller-inputs/1644
+# REFERENCE: https://forum.godotengine.org/t/how-can-i-simulate-a-mouse-click-with-controller-inputs/1644
 func click():
 	var clickEvent = InputEventMouseButton.new()
-	#clickEvent.position = get_global_mouse_position()
-	clickEvent.position = position
+	clickEvent.position = get_viewport().canvas_transform * global_position
+	#clickEvent.position = position
 	clickEvent.button_index = MOUSE_BUTTON_LEFT
 	clickEvent.pressed = true
+	#get_viewport().push_input(clickEvent)
 	Input.parse_input_event(clickEvent)
-	await get_tree().process_frame
+	#await get_tree().process_frame
+	#clickEvent.pressed = true
+	#Input.parse_input_event(clickEvent)
+	
+func unclick():
+	var clickEvent = InputEventMouseButton.new()
+	clickEvent.position = get_viewport().canvas_transform * global_position
+	#clickEvent.position = position
+	clickEvent.button_index = MOUSE_BUTTON_LEFT
 	clickEvent.pressed = false
+	#get_viewport().push_input(clickEvent)
 	Input.parse_input_event(clickEvent)

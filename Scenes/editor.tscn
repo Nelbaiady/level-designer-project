@@ -1,14 +1,18 @@
-[gd_scene load_steps=13 format=3 uid="uid://bgavxi5l77ibl"]
+[gd_scene load_steps=17 format=3 uid="uid://bgavxi5l77ibl"]
 
 [ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
 [ext_resource type="PackedScene" uid="uid://dw4ojydnn8mlq" path="res://Cursor/cursor.tscn" id="1_eo2o7"]
 [ext_resource type="Script" uid="uid://buy227idb1d0c" path="res://Scenes/editor.gd" id="1_eyy8u"]
 [ext_resource type="Script" uid="uid://y0j4pcn25wfi" path="res://Scenes/level.gd" id="2_24ceq"]
 [ext_resource type="PackedScene" uid="uid://dgdnl8mwnjivp" path="res://Scenes/UI/hotbar.tscn" id="2_32ik4"]
+[ext_resource type="PackedScene" uid="uid://cd4enn34snm7g" path="res://Scenes/UI/ObjectProperties/propertyUIelements/text_property_editor.tscn" id="3_1k58v"]
 [ext_resource type="Script" uid="uid://g7pdbfqfu3l5" path="res://Scenes/save_load_manager.gd" id="3_7fkqn"]
+[ext_resource type="Script" uid="uid://dd74qlrgt7d7g" path="res://Scenes/properties_sidebar.gd" id="3_exjlx"]
+[ext_resource type="PackedScene" uid="uid://c7kxkfdsoe5hv" path="res://Scenes/UI/ObjectProperties/propertyUIelements/vector_property_editor.tscn" id="4_1k58v"]
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/The Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="4_8howc"]
 [ext_resource type="Script" uid="uid://cy16eivwe3nt5" path="res://Scenes/tile_map_layer.gd" id="5_b78su"]
+[ext_resource type="PackedScene" uid="uid://bl8v3im8arb10" path="res://Scenes/UI/ObjectProperties/propertyUIelements/color_property_editor.tscn" id="5_l4kvy"]
 [ext_resource type="Script" path="res://Scenes/objects.gd" id="9_1k58v"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b78su"]
@@ -404,7 +408,7 @@ sources/0 = SubResource("TileSetAtlasSource_b78su")
 [node name="Node2D" type="Node"]
 
 [node name="CursorCanvas" type="CanvasLayer" parent="."]
-layer = 10
+layer = 2048
 follow_viewport_enabled = true
 
 [node name="Cursor" parent="CursorCanvas" instance=ExtResource("1_eo2o7")]
@@ -428,17 +432,19 @@ offset_top = -64.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="Control" type="Control" parent="CanvasLayer"]
+[node name="PropertiesSidebar" type="Control" parent="CanvasLayer"]
 layout_mode = 3
-anchors_preset = 15
+anchor_left = 0.80600005
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 981.0
+offset_left = 5.487915
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
+script = ExtResource("3_exjlx")
 
-[node name="Panel" type="Panel" parent="CanvasLayer/Control"]
+[node name="PropertiesPanel" type="Panel" parent="CanvasLayer/PropertiesSidebar"]
+clip_contents = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -446,23 +452,36 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/Panel"]
+[node name="closeButton" type="Button" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel"]
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 1
 anchors_preset = -1
+anchor_right = 0.16
+anchor_bottom = 0.04954321
+offset_bottom = -0.10400009
+text = "x"
+
+[node name="Properties" type="VBoxContainer" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
 anchor_top = 0.1
-anchor_right = 1.0
+anchor_right = 0.95
 anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TextEdit" type="TextEdit" parent="CanvasLayer/Control/Panel/VBoxContainer"]
-custom_minimum_size = Vector2(0, 32)
+[node name="TextPropertyEditor" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties" instance=ExtResource("3_1k58v")]
+visible = false
 layout_mode = 2
 
-[node name="SpinBox" type="SpinBox" parent="CanvasLayer/Control/Panel/VBoxContainer"]
+[node name="VectorPropertyEditor" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties" instance=ExtResource("4_1k58v")]
+visible = false
 layout_mode = 2
-step = 0.2
-suffix = "px"
+
+[node name="ColorPropertyEditor" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties" instance=ExtResource("5_l4kvy")]
+visible = false
+layout_mode = 2
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 324)

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ObjectProperty" load_steps=3 format=3 uid="uid://bh2hcytk84e13"]
+
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="1_l1vmp"]
+[ext_resource type="PackedScene" uid="uid://c7kxkfdsoe5hv" path="res://Scenes/UI/ObjectProperties/propertyUIelements/vector_property_editor.tscn" id="2_6ieqw"]
+
+[resource]
+script = ExtResource("1_l1vmp")
+codeName = "position"
+displayName = "Position"
+uiNode = ExtResource("2_6ieqw")
+metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

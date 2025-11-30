@@ -5,16 +5,18 @@ var popupIsOpen:bool = false
 var gridSize:int = 64
 
 signal resetStage()
+signal updateProperty(property,value)
 signal updateHotbar(hotbarIndex, item)
 signal updateHotbarSelection(hotbarIndex)
 signal setItem(item)
-
 
 var hotbarIndex: int = 0
 var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
 
 @onready var objects
 @onready var tileMap: TileMapLayer
+@onready var propertiesUI: VBoxContainer
+var objectBeingEdited
 
 var objectPosHash : Dictionary = {}
 

@@ -10,10 +10,14 @@ spacing_bottom = -12
 bg_color = Color(0, 0.66910195, 0.7954759, 0.21176471)
 
 [resource]
+default_base_scale = 1.0
 Button/font_sizes/font_size = 12
 Button/fonts/font = SubResource("FontVariation_1unef")
 Button/styles/normal = ExtResource("1_ten13")
 Panel/styles/panel = SubResource("StyleBoxFlat_1unef")
+SpinBoxInnerLineEdit/base_type = &"LineEdit"
+SpinBoxInnerLineEdit/constants/minimum_character_width = 3
+SpinBoxInnerLineEdit/font_sizes/font_size = 14
 hotbarButton/base_type = &"Button"
 hotbarButton/styles/disabled = ExtResource("1_ten13")
 hotbarButton/styles/focus = ExtResource("1_ten13")

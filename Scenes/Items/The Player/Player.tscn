@@ -290,7 +290,7 @@ _data = {
 script = ExtResource("1_e8vge")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(0, 4)
+position = Vector2(1, 5)
 texture = ExtResource("2_k1a7i")
 hframes = 3
 vframes = 2

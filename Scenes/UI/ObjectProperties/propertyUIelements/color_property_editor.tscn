@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://bl8v3im8arb10"]
+
+[ext_resource type="Script" uid="uid://bycqkexsqu0s0" path="res://Scenes/UI/ObjectProperties/propertyUIelements/color_property_editor.gd" id="1_of8k5"]
+
+[node name="ColorPropertyEditor" type="Panel"]
+custom_minimum_size = Vector2(0, 32)
+script = ExtResource("1_of8k5")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Color:"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+
+[connection signal="color_changed" from="HBoxContainer/ColorPickerButton" to="." method="_on_color_picker_button_color_changed"]

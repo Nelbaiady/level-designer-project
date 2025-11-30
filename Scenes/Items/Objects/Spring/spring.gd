@@ -2,17 +2,16 @@ extends RigidBody2D
 
 @onready var animationPlayer: AnimationPlayer = $Sprite2D/AnimationPlayer
 
-var strength:int = 1100
+var baseStrength:int = 1100
+var power:float = 1
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if !globalEditor.isEditing:
 		if body.is_in_group("player"):
-			body.velocity = Vector2(body.velocity.x,-strength)
+			body.velocity = Vector2(body.velocity.x,-(baseStrength*power))
 			body.gravityMult = 1.0
 			animationPlayer.play("RESET")
 			animationPlayer.play("Spring_springing")
-		
-
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name=="Spring_springing":

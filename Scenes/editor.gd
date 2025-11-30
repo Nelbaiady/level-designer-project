@@ -22,6 +22,7 @@ func _ready() -> void:
 	setSelectedItem(selectedItem)
 	globalEditor.setItem.connect(setSelectedItem)
 	globalEditor.resetStage.connect(resetStage)
+	globalEditor.propertiesUI = $"../CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties"
 	
 func _physics_process(_delta: float) -> void:
 			

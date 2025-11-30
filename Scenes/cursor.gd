@@ -15,26 +15,27 @@ func _ready() -> void:
 	pass
 	
 func _process(_delta: float) -> void:
-#	show the mouse if a popup opens
-	#if globalEditor.popupIsOpen:
-	#print(Input.mouse_mode)
-	if globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE:
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		popupWasOpen = true
-		print('open')
-#	if the popup was just closed, hide the mouse	
-	elif popupWasOpen and !globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_HIDDEN:
-		print('close')
-		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-		popupWasOpen = false
-	#if !globalEditor.popupIsOpen:
+
+	#if globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE:
+		#Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		#popupWasOpen = true
+		#print('open')
+##	if the popup was just closed, hide the mouse	
+	#elif popupWasOpen and !globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_HIDDEN:
+		#print('close')
 		#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+		#popupWasOpen = false
+		
 	if globalEditor.isEditing:
 		#To make UI block controller input, we make the controller trigger a real mouse click
 		if Input.is_action_just_pressed("controllerClickLeft"):
 			click()
 		if Input.is_action_just_released("controllerClickLeft"):
-			unclick()
+			unClick()
+		if Input.is_action_just_pressed("controllerClickRight"):
+			rightClick()
+		if Input.is_action_just_released("controllerClickRight"):
+			unRightClick()
 		#Left stick input vector
 		cursorMoveVector = Vector2(Input.get_axis("LstickL","LstickR"),Input.get_axis("LstickU","LstickD"))
 		#If the mouse moved and is on screen, use mouse controls
@@ -48,7 +49,6 @@ func _process(_delta: float) -> void:
 		#code for moving the cursor with controllers
 		if prioritizeController:
 			cursorMoveSpeedMult = 1-Input.get_action_strength("L2") + 0.2
-			print(cursorMoveSpeedMult)
 			position += cursorMoveVector * cursorMoveSpeed * cursorMoveSpeedMult
 			#Make sure the cursor does not go off screen
 			position.x = clamp(position.x, get_viewport().get_camera_2d().global_position.x - get_viewport_rect().size.x / 2,get_viewport().get_camera_2d().global_position.x + get_viewport_rect().size.x / 2 - 1)#-1 on the max of both clamps because the mouse otherwise goes off screen
@@ -59,7 +59,7 @@ func _process(_delta: float) -> void:
 		else:
 			position = get_global_mouse_position()
 			mousePosition = get_viewport().get_mouse_position()
-	visible = cursorOnScreen and globalEditor.isEditing and !globalEditor.popupIsOpen
+	visible = cursorOnScreen and globalEditor.isEditing #and !globalEditor.popupIsOpen
 func _notification(event):
 	#mouse enters the window
 	if event == NOTIFICATION_WM_MOUSE_ENTER:
@@ -85,12 +85,24 @@ func click():
 	#await get_tree().process_frame
 	#clickEvent.pressed = true
 	#Input.parse_input_event(clickEvent)
-	
-func unclick():
+func unClick():
 	var clickEvent = InputEventMouseButton.new()
 	clickEvent.position = get_viewport().canvas_transform * global_position
 	#clickEvent.position = position
 	clickEvent.button_index = MOUSE_BUTTON_LEFT
 	clickEvent.pressed = false
 	#get_viewport().push_input(clickEvent)
+	Input.parse_input_event(clickEvent)
+	
+func rightClick():
+	var clickEvent = InputEventMouseButton.new()
+	clickEvent.position = get_viewport().canvas_transform * global_position
+	clickEvent.button_index = MOUSE_BUTTON_RIGHT
+	clickEvent.pressed = true
+	Input.parse_input_event(clickEvent)
+func unRightClick():
+	var clickEvent = InputEventMouseButton.new()
+	clickEvent.position = get_viewport().canvas_transform * global_position
+	clickEvent.button_index = MOUSE_BUTTON_RIGHT
+	clickEvent.pressed = false
 	Input.parse_input_event(clickEvent)

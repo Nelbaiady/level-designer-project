@@ -1,18 +1,15 @@
-[gd_scene load_steps=17 format=3 uid="uid://bgavxi5l77ibl"]
+[gd_scene load_steps=14 format=3 uid="uid://bgavxi5l77ibl"]
 
 [ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
 [ext_resource type="PackedScene" uid="uid://dw4ojydnn8mlq" path="res://Cursor/cursor.tscn" id="1_eo2o7"]
 [ext_resource type="Script" uid="uid://buy227idb1d0c" path="res://Scenes/editor.gd" id="1_eyy8u"]
 [ext_resource type="Script" uid="uid://y0j4pcn25wfi" path="res://Scenes/level.gd" id="2_24ceq"]
 [ext_resource type="PackedScene" uid="uid://dgdnl8mwnjivp" path="res://Scenes/UI/hotbar.tscn" id="2_32ik4"]
-[ext_resource type="PackedScene" uid="uid://cd4enn34snm7g" path="res://Scenes/UI/ObjectProperties/propertyUIelements/text_property_editor.tscn" id="3_1k58v"]
 [ext_resource type="Script" uid="uid://g7pdbfqfu3l5" path="res://Scenes/save_load_manager.gd" id="3_7fkqn"]
 [ext_resource type="Script" uid="uid://dd74qlrgt7d7g" path="res://Scenes/properties_sidebar.gd" id="3_exjlx"]
-[ext_resource type="PackedScene" uid="uid://c7kxkfdsoe5hv" path="res://Scenes/UI/ObjectProperties/propertyUIelements/vector_property_editor.tscn" id="4_1k58v"]
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/The Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="4_8howc"]
 [ext_resource type="Script" uid="uid://cy16eivwe3nt5" path="res://Scenes/tile_map_layer.gd" id="5_b78su"]
-[ext_resource type="PackedScene" uid="uid://bl8v3im8arb10" path="res://Scenes/UI/ObjectProperties/propertyUIelements/color_property_editor.tscn" id="5_l4kvy"]
 [ext_resource type="Script" path="res://Scenes/objects.gd" id="9_1k58v"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b78su"]
@@ -434,7 +431,8 @@ grow_vertical = 0
 
 [node name="PropertiesSidebar" type="Control" parent="CanvasLayer"]
 layout_mode = 3
-anchor_left = 0.80600005
+anchors_preset = 11
+anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 5.487915
@@ -470,18 +468,6 @@ anchor_right = 0.95
 anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="TextPropertyEditor" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties" instance=ExtResource("3_1k58v")]
-visible = false
-layout_mode = 2
-
-[node name="VectorPropertyEditor" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties" instance=ExtResource("4_1k58v")]
-visible = false
-layout_mode = 2
-
-[node name="ColorPropertyEditor" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties" instance=ExtResource("5_l4kvy")]
-visible = false
-layout_mode = 2
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 324)
@@ -530,5 +516,6 @@ script = ExtResource("9_1k58v")
 [node name="Player" parent="." instance=ExtResource("4_7wlcy")]
 position = Vector2(544, 280)
 
+[connection signal="pressed" from="CanvasLayer/PropertiesSidebar/PropertiesPanel/closeButton" to="CanvasLayer/PropertiesSidebar" method="_on_close_button_pressed"]
 [connection signal="canceled" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_canceled"]
 [connection signal="confirmed" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_confirmed"]

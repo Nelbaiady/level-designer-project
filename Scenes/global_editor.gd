@@ -4,8 +4,12 @@ var isEditing:bool = true
 var popupIsOpen:bool = false
 var gridSize:int = 64
 
+@warning_ignore("unused_signal")
 signal resetStage()
+@warning_ignore("unused_signal")
 signal updateProperty(property,value)
+@warning_ignore("unused_signal")
+signal showPropertiesSidebar()
 signal updateHotbar(hotbarIndex, item)
 signal updateHotbarSelection(hotbarIndex)
 signal setItem(item)

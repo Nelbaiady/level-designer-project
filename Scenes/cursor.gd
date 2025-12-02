@@ -15,7 +15,6 @@ func _ready() -> void:
 	pass
 	
 func _process(_delta: float) -> void:
-
 	#if globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE:
 		#Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		#popupWasOpen = true

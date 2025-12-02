@@ -13,6 +13,7 @@ config_version=5
 config/name="Level Designer Project"
 run/main_scene="uid://bgavxi5l77ibl"
 config/features=PackedStringArray("4.5", "Forward Plus")
+run/max_fps=144
 boot_splash/bg_color=Color(1, 0.827451, 0.42745098, 1)
 boot_splash/image="uid://8vrw88iumrtu"
 config/icon="res://icon.svg"

@@ -1,5 +1,6 @@
 extends Node2D
 
+@export var clickCollision:Area2D
 @export var properties: Array[ObjectProperty] = [
 	preload("uid://bh2hcytk84e13") #position
 	,preload("uid://dqbrp3ghialya") #size/scale
@@ -11,8 +12,13 @@ enum categories {gizmo, npc, decoration}
 var rootNode:Node 
 var isBeingEdited = false
 
-func _ready() -> void:	
+
+func _ready() -> void:
 	rootNode= get_parent()
+	if !clickCollision:
+		printerr("Object ",rootNode.name," has no click collision")
+	else:
+		clickCollision.input_event.connect(clickedOn)
 
 func _physics_process(_delta: float) -> void:
 	#rootNode
@@ -27,7 +33,7 @@ func getProperty(property:String):
 func setProperty(property:String, value):
 	rootNode.set(property,value)
 
-func _on_area_2d_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
 		summonPropertiesUI()
 
@@ -35,6 +41,7 @@ func summonPropertiesUI():
 	populatePropertiesUI()
 
 func populatePropertiesUI():
+	globalEditor.showPropertiesSidebar.emit()
 #	Empty the UI first
 	for i in globalEditor.propertiesUI.get_children():
 		i.queue_free()

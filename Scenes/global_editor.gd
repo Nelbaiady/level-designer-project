@@ -22,10 +22,13 @@ var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008
 @onready var propertiesUI: VBoxContainer
 var objectBeingEdited
 
+enum Tools {place, move, erase}
+@export var currentTool: Tools
+
 var objectPosHash : Dictionary = {}
 
-#func _ready() -> void:
-	#pass
+func _ready() -> void:
+	signalBus.setCurrentTool.connect(setCurrentTool)
 
 #list of every possible object type
 #var objectRoster = ["res://Scenes/Items/Objects/Spring/Spring.tres"]
@@ -35,12 +38,12 @@ func placeTile(item, cell):
 	tileMap.set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
 	#globalEditor.levelSaveStruct.tiles.append( { "pos":[cell.x, cell.y], "sourceID":tileMap.get_cell_source_id(cell), "atlasCoords":[tileMap.get_cell_atlas_coords(cell).x,tileMap.get_cell_atlas_coords(cell).y], "altTile":tileMap.get_cell_alternative_tile(cell)} ) #add the tile to the items struct
 
-func placeObject(item:Item, cell:Vector2i):
+func placeObject(object:objectItem, cell:Vector2i):
 	var placedObjectPosition: Vector2i = cell * globalEditor.gridSize + (Vector2i.RIGHT*globalEditor.gridSize/2)
-	var objectToPlace = item.objectReference.instantiate()
+	var objectToPlace = object.objectReference.instantiate()
 	objectToPlace.global_position = placedObjectPosition
 	objects.add_child(objectToPlace)
-	globalEditor.objectPosHash[cell] = {"object":objectToPlace,"rosterID":item.rosterID}
+	globalEditor.objectPosHash[cell] = {"object":objectToPlace,"rosterID":object.rosterID,"properties":{}}
 
 func clearLevel():
 	for i in objectPosHash:
@@ -58,6 +61,12 @@ func _input(event: InputEvent) -> void:
 		setHotbarIndex(posmod(hotbarIndex-1, len(hotbar)))
 	if event.is_action_pressed("previousItem"):
 		setHotbarIndex(posmod(hotbarIndex+1, len(hotbar)))
+	if event.is_action_pressed("eraseTool"):
+		signalBus.setCurrentTool.emit(Tools.erase)
+	#if event.is_action_pressed("moveTool"):
+		#signalBus.setCurrentTool.emit(Tools.move)
+	if event.is_action_pressed("placeTool"):
+		signalBus.setCurrentTool.emit(Tools.place)
 
 func setHotbarIndex(newIndex):
 	if newIndex < len(hotbar) and hotbar[newIndex]:
@@ -68,3 +77,6 @@ func setHotbarIndex(newIndex):
 func updateHotbarUI():
 	for i in range(len(hotbar)):
 		updateHotbar.emit(i, hotbar[i])
+
+func setCurrentTool(tool):
+	currentTool = tool

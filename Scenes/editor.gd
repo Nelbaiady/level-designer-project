@@ -36,24 +36,32 @@ func _physics_process(_delta: float) -> void:
 			#place an object
 			if Input.is_action_just_released("mouseClickLeft"):
 				placeButtonIsHeld = false
-			if placeButtonIsHeld and cursor.cursorOnScreen:
-				placeItem()
+			if placeButtonIsHeld and cursor.cursorOnScreen: #TIGHT COUPLING HERE MIGHT NOT BE IDEAL
+				print(globalEditor.currentTool)
+				match globalEditor.currentTool:
+					globalEditor.Tools.place:
+						placeItem()
+					globalEditor.Tools.move:
+						pass #UNTIL MOVE TOOL IS IMPLEMENTED
+					globalEditor.Tools.erase:
+						eraseItem()
+
 			#if Input.is_action_just_pressed("mouseClickLeft") or (Input.is_action_pressed("mouseClickLeft") and cursorCellCoords!=previousCursorCellCoords):
 				#placeItem()
-			#erase object at mouse
-			if Input.is_action_just_pressed("erase") or (Input.is_action_pressed("erase") and cursorCellCoords!=previousCursorCellCoords):
-				if selectedItem is terrainItem:
-					#var erasedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
-					#tileMap.erase_cell(erasedTilePosition) #if we wanted to erase a non-terrain tile
-					tileMap.set_cells_terrain_connect([cursorCellCoords],0,-1,false)
-				if selectedItem is objectItem:
-					if globalEditor.objectPosHash.has(cursorCellCoords):
-						#selectedItem.objectReference.queue_free()
-						var objectToDelete = globalEditor.objectPosHash[cursorCellCoords].object
-						globalEditor.objectPosHash.erase(cursorCellCoords)
-						if is_instance_valid(objectToDelete):
-							objectToDelete.queue_free()
-					
+			##erase object at mouse
+			#if Input.is_action_just_pressed("erase") or (Input.is_action_pressed("erase") and cursorCellCoords!=previousCursorCellCoords):
+				#if selectedItem is terrainItem:
+					##var erasedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
+					##tileMap.erase_cell(erasedTilePosition) #if we wanted to erase a non-terrain tile
+					#tileMap.set_cells_terrain_connect([cursorCellCoords],0,-1,false)
+				#if selectedItem is objectItem:
+					#if globalEditor.objectPosHash.has(cursorCellCoords):
+						##selectedItem.objectReference.queue_free()
+						#var objectToDelete = globalEditor.objectPosHash[cursorCellCoords].object
+						#globalEditor.objectPosHash.erase(cursorCellCoords)
+						#if is_instance_valid(objectToDelete):
+							#objectToDelete.queue_free()
+					#
 			if Input.is_action_just_released("clear"):
 				globalEditor.clearLevel()
 				#tileMap.clear()
@@ -98,7 +106,6 @@ func setSelectedItem(newItem: Item):
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action("mouseClickLeft") and cursor.cursorOnScreen and globalEditor.isEditing:
-		placeItem()
 		placeButtonIsHeld = true
 
 func placeItem():
@@ -106,10 +113,22 @@ func placeItem():
 		#var placedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
 		#tileMap.set_cell(cursorCellCoords,0,Vector2i(1,1)) #IF WE WANTED TO PLACE A REGULAR TILE
 		globalEditor.placeTile(selectedItem,cursorCellCoords)
-		
 	if selectedItem is objectItem:
-		if !globalEditor.objectPosHash.has(cursorCellCoords):
+		if !globalEditor.objectPosHash.has(cursorCellCoords): #if these coordinates dont already have an object
 			globalEditor.placeObject(selectedItem,cursorCellCoords)
+
+func eraseItem():
+	if selectedItem is terrainItem:
+		#var erasedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
+		#tileMap.erase_cell(erasedTilePosition) #if we wanted to erase a non-terrain tile
+		tileMap.set_cells_terrain_connect([cursorCellCoords],0,-1,false)
+	if selectedItem is objectItem:
+		if globalEditor.objectPosHash.has(cursorCellCoords):
+			#selectedItem.objectReference.queue_free()
+			var objectToDelete = globalEditor.objectPosHash[cursorCellCoords].object
+			globalEditor.objectPosHash.erase(cursorCellCoords)
+			if is_instance_valid(objectToDelete):
+				objectToDelete.queue_free()
 
 func resetStage():
 	globalEditor.isEditing = true

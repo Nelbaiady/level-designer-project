@@ -7,11 +7,11 @@ extends Node2D
 	,preload("uid://byn3kv4q02kpl") #color/modulate
 	]
 var propertyUiElements = []
-enum categories {gizmo, npc, decoration}
-@export var category: categories
+enum Categories {gizmo, npc, decoration}
+@export var category: Categories
 var rootNode:Node 
 var isBeingEdited = false
-
+var rosterId:int
 
 func _ready() -> void:
 	rootNode= get_parent()
@@ -21,21 +21,25 @@ func _ready() -> void:
 		clickCollision.input_event.connect(clickedOn)
 
 func _physics_process(_delta: float) -> void:
-	#rootNode
-	#if clickBox.
-	#properties.set("position")
-	#if Input.is_action_just_pressed("6"):
 	pass
 
 func getProperty(property:String):
 	return rootNode.get(property)
 
 func setProperty(property:String, value):
-	rootNode.set(property,value)
+	#rootNode.set(property,value)
+	if property=="position":
+		#DEAL WITH THIS SOMEHOW
+		pass
+	else:
+		globalEditor.objectPosHash[ Vector2i(global_position/64) ]["properties"][property] = value
+		rootNode.set(property,globalEditor.objectPosHash[ Vector2i(global_position/64) ]["properties"][property] )
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
 		summonPropertiesUI()
+	if event is InputEventMouseButton and event.is_action_pressed("mouseClickLeft"):
+		pass#if globalEditor
 
 func summonPropertiesUI():
 	populatePropertiesUI()

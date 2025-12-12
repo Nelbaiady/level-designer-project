@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bgavxi5l77ibl"]
+[gd_scene load_steps=15 format=3 uid="uid://bgavxi5l77ibl"]
 
 [ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
 [ext_resource type="PackedScene" uid="uid://dw4ojydnn8mlq" path="res://Cursor/cursor.tscn" id="1_eo2o7"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dgdnl8mwnjivp" path="res://Scenes/UI/hotbar.tscn" id="2_32ik4"]
 [ext_resource type="Script" uid="uid://g7pdbfqfu3l5" path="res://Scenes/save_load_manager.gd" id="3_7fkqn"]
 [ext_resource type="Script" uid="uid://dd74qlrgt7d7g" path="res://Scenes/properties_sidebar.gd" id="3_exjlx"]
+[ext_resource type="Script" uid="uid://ypn63mwok8gk" path="res://Scenes/toolIndicatorLabel.gd" id="4_1k58v"]
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/The Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="4_8howc"]
 [ext_resource type="Script" uid="uid://cy16eivwe3nt5" path="res://Scenes/tile_map_layer.gd" id="5_b78su"]
@@ -468,6 +469,34 @@ anchor_right = 0.95
 anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="CanvasLayer/Control/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -21.5
+offset_top = -11.166667
+offset_right = 21.5
+offset_bottom = 11.166667
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_1k58v")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 324)

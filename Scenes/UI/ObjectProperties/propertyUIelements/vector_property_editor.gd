@@ -10,7 +10,6 @@ func _ready() -> void:
 	xValueNode.value = value.x
 	yValueNode.value = value.y
 func updateValue():
-	#print(value)
 	xValueNode.value = value.x
 	yValueNode.value = value.y
 func _on_x_value_spin_box_value_changed(newValue: float) -> void:

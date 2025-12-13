@@ -13,6 +13,7 @@ signal showPropertiesSidebar()
 signal updateHotbar(hotbarIndex, item)
 signal updateHotbarSelection(hotbarIndex)
 signal setItem(item)
+var objectInstancesCount:int = 0
 
 var hotbarIndex: int = 0
 var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
@@ -21,6 +22,7 @@ var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008
 @onready var tileMap: TileMapLayer
 @onready var propertiesUI: VBoxContainer
 var objectBeingEdited
+
 
 enum Tools {place, move, erase}
 @export var currentTool: Tools
@@ -38,18 +40,21 @@ func placeTile(item, cell):
 	tileMap.set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
 	#globalEditor.levelSaveStruct.tiles.append( { "pos":[cell.x, cell.y], "sourceID":tileMap.get_cell_source_id(cell), "atlasCoords":[tileMap.get_cell_atlas_coords(cell).x,tileMap.get_cell_atlas_coords(cell).y], "altTile":tileMap.get_cell_alternative_tile(cell)} ) #add the tile to the items struct
 
-func placeObject(object:objectItem, cell:Vector2i):
-	var placedObjectPosition: Vector2i = cell * globalEditor.gridSize + (Vector2i.RIGHT*globalEditor.gridSize/2)
+func placeObject(object:objectItem, position:Vector2):
 	var objectToPlace = object.objectReference.instantiate()
-	objectToPlace.global_position = placedObjectPosition
+	objectToPlace.global_position = position
 	objects.add_child(objectToPlace)
-	globalEditor.objectPosHash[cell] = {"object":objectToPlace,"rosterID":object.rosterID,"properties":{}}
+	var instanceID = objectInstancesCount
+	globalEditor.objectPosHash[instanceID] = {"object":objectToPlace,"rosterID":object.rosterID,"properties":{"position":position}}
+	signalBus.placeObject.emit(instanceID, objectToPlace)
+	objectInstancesCount+=1
 
 func clearLevel():
 	for i in objectPosHash:
 		objectPosHash[i].object.queue_free()
 	tileMap.clear()
 	objectPosHash.clear()
+
 
 func _input(event: InputEvent) -> void:
 	#selecting items in the hotbar using the number keys
@@ -63,10 +68,12 @@ func _input(event: InputEvent) -> void:
 		setHotbarIndex(posmod(hotbarIndex+1, len(hotbar)))
 	if event.is_action_pressed("eraseTool"):
 		signalBus.setCurrentTool.emit(Tools.erase)
-	#if event.is_action_pressed("moveTool"):
-		#signalBus.setCurrentTool.emit(Tools.move)
 	if event.is_action_pressed("placeTool"):
 		signalBus.setCurrentTool.emit(Tools.place)
+	if event.is_action_pressed("nextTool"):
+		signalBus.setCurrentTool.emit(posmod((currentTool+1),len(Tools)))
+	if event.is_action_pressed("previousTool"):
+		signalBus.setCurrentTool.emit(posmod((currentTool-1),len(Tools)))
 
 func setHotbarIndex(newIndex):
 	if newIndex < len(hotbar) and hotbar[newIndex]:

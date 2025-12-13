@@ -12,13 +12,23 @@ enum Categories {gizmo, npc, decoration}
 var rootNode:Node 
 var isBeingEdited = false
 var rosterId:int
+var isMouseOver:bool = false
+var instanceID:int = -1
 
 func _ready() -> void:
 	rootNode= get_parent()
+	signalBus.placeObject.connect(setStartingStuff)
 	if !clickCollision:
 		printerr("Object ",rootNode.name," has no click collision")
 	else:
 		clickCollision.input_event.connect(clickedOn)
+		clickCollision.mouse_entered.connect(mouseEntered)
+		clickCollision.mouse_exited.connect(mouseExited)
+		signalBus.eraseObject.connect(checkErase)
+
+func setStartingStuff(instID, obj):
+	if obj == rootNode:
+		instanceID = instID
 
 func _physics_process(_delta: float) -> void:
 	pass
@@ -39,7 +49,8 @@ func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
 		summonPropertiesUI()
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickLeft"):
-		pass#if globalEditor
+		if globalEditor.currentTool == globalEditor.Tools.erase:
+			eraseSelf()
 
 func summonPropertiesUI():
 	populatePropertiesUI()
@@ -67,7 +78,18 @@ func populatePropertiesUI():
 		newNode.updateValue()
 	globalEditor.updateProperty.connect(setProperty)
 
+func mouseEntered():
+	isMouseOver = true
+func mouseExited():
+	isMouseOver = false
+
 func setNotEditing():
 	isBeingEdited = false
 	propertyUiElements.clear()
 	globalEditor.updateProperty.disconnect(setProperty)
+
+func checkErase():
+	if isMouseOver:
+		eraseSelf()
+func eraseSelf():
+	rootNode.queue_free()

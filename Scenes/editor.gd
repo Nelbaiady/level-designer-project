@@ -13,7 +13,9 @@ var selectedItemType = "terrain"
 var cursorCellCoords: Vector2i = Vector2i.ZERO
 var previousCursorCellCoords: Vector2i = cursorCellCoords
 var previousCursorPos:Vector2 = Vector2.ZERO
+var previousPlacePos:Vector2 = Vector2.ZERO
 var placeButtonIsHeld:bool = false
+var clickFrame:bool = false
 
 var cursorItemIconTween: Tween
 
@@ -24,20 +26,23 @@ func _ready() -> void:
 	globalEditor.resetStage.connect(resetStage)
 	globalEditor.propertiesUI = $"../CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties"
 	
-func _physics_process(_delta: float) -> void:
-			
+func _process(_delta: float) -> void:
+	if clickFrame:
+		clickFrame = false
 	if !globalEditor.popupIsOpen:
 		if globalEditor.isEditing:
 			previousCursorCellCoords = cursorCellCoords
 			cursorCellCoords = tileMap.local_to_map(Vector2i(cursor.global_position))
-			if cursorCellCoords!=previousCursorCellCoords:
+
+			if cursorCellCoords!=previousCursorCellCoords and selectedItem is terrainItem:
 				tweenCursorItemIcon()
+			elif selectedItem is objectItem:
+				cursorItemIcon.position = cursor.global_position + selectedItem.textureOffset
 			
 			#place an object
 			if Input.is_action_just_released("mouseClickLeft"):
 				placeButtonIsHeld = false
 			if placeButtonIsHeld and cursor.cursorOnScreen: #TIGHT COUPLING HERE MIGHT NOT BE IDEAL
-				print(globalEditor.currentTool)
 				match globalEditor.currentTool:
 					globalEditor.Tools.place:
 						placeItem()
@@ -107,6 +112,7 @@ func setSelectedItem(newItem: Item):
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action("mouseClickLeft") and cursor.cursorOnScreen and globalEditor.isEditing:
 		placeButtonIsHeld = true
+		clickFrame = true
 
 func placeItem():
 	if selectedItem is terrainItem:
@@ -114,8 +120,11 @@ func placeItem():
 		#tileMap.set_cell(cursorCellCoords,0,Vector2i(1,1)) #IF WE WANTED TO PLACE A REGULAR TILE
 		globalEditor.placeTile(selectedItem,cursorCellCoords)
 	if selectedItem is objectItem:
-		if !globalEditor.objectPosHash.has(cursorCellCoords): #if these coordinates dont already have an object
-			globalEditor.placeObject(selectedItem,cursorCellCoords)
+		#if !globalEditor.objectPosHash.has(cursor.global_position): #if these coordinates dont already have an object
+		#if globalEditor.numObjectsHoveredOver.is_empty():
+		if clickFrame or (cursor.global_position.x > previousPlacePos.x+globalEditor.gridSize or cursor.global_position.x < previousPlacePos.x-globalEditor.gridSize or cursor.global_position.y > previousPlacePos.y+globalEditor.gridSize or cursor.global_position.y < previousPlacePos.y-globalEditor.gridSize ):
+			previousPlacePos = cursor.global_position
+			globalEditor.placeObject(selectedItem,cursor.global_position)
 
 func eraseItem():
 	if selectedItem is terrainItem:
@@ -123,12 +132,14 @@ func eraseItem():
 		#tileMap.erase_cell(erasedTilePosition) #if we wanted to erase a non-terrain tile
 		tileMap.set_cells_terrain_connect([cursorCellCoords],0,-1,false)
 	if selectedItem is objectItem:
-		if globalEditor.objectPosHash.has(cursorCellCoords):
-			#selectedItem.objectReference.queue_free()
-			var objectToDelete = globalEditor.objectPosHash[cursorCellCoords].object
-			globalEditor.objectPosHash.erase(cursorCellCoords)
-			if is_instance_valid(objectToDelete):
-				objectToDelete.queue_free()
+		signalBus.eraseObject.emit()
+		#if globalEditor.objectPosHash.has(cursorCellCoords):
+			##selectedItem.objectReference.queue_free()
+			#var objectToDelete = globalEditor.objectPosHash[cursorCellCoords].object
+			#globalEditor.objectPosHash.erase(cursorCellCoords)
+			#if is_instance_valid(objectToDelete):
+				#objectToDelete.queue_free()
+		
 
 func resetStage():
 	globalEditor.isEditing = true

@@ -405,6 +405,21 @@ sources/0 = SubResource("TileSetAtlasSource_b78su")
 
 [node name="Node2D" type="Node"]
 
+[node name="cursorItemIcon" type="TextureRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.5019608)
+z_index = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 64.0
+offset_bottom = 76.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
 [node name="CursorCanvas" type="CanvasLayer" parent="."]
 layer = 2048
 follow_viewport_enabled = true
@@ -507,21 +522,6 @@ script = ExtResource("1_8howc")
 
 [node name="Editor" type="Node2D" parent="."]
 script = ExtResource("1_eyy8u")
-
-[node name="cursorItemIcon" type="TextureRect" parent="."]
-self_modulate = Color(1, 1, 1, 0.5019608)
-z_index = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_right = 64.0
-offset_bottom = 76.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
 [node name="SaveLoadManager" type="Node2D" parent="."]
 script = ExtResource("3_7fkqn")

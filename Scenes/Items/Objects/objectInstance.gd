@@ -16,8 +16,9 @@ var isMouseOver:bool = false
 var instanceID:int = -1
 
 func _ready() -> void:
+	print()
 	rootNode= get_parent()
-	signalBus.placeObject.connect(setStartingStuff)
+	signalBus.placeObjectSignal.connect(setStartingStuff)
 	if !clickCollision:
 		printerr("Object ",rootNode.name," has no click collision")
 	else:
@@ -26,9 +27,14 @@ func _ready() -> void:
 		clickCollision.mouse_exited.connect(mouseExited)
 		signalBus.eraseObject.connect(checkErase)
 
-func setStartingStuff(instID, obj):
+func setStartingStuff(instID, obj, loadedProperties:Dictionary):
+	print(loadedProperties)
 	if obj == rootNode:
 		instanceID = instID
+		if loadedProperties:
+			for i in loadedProperties:
+				print("setting ", i, " to ", loadedProperties[i], " in object ", instID)
+				setProperty(i,loadedProperties[i])
 
 func _physics_process(_delta: float) -> void:
 	pass
@@ -37,13 +43,10 @@ func getProperty(property:String):
 	return rootNode.get(property)
 
 func setProperty(property:String, value):
-	#rootNode.set(property,value)
-	if property=="position":
-		#DEAL WITH THIS SOMEHOW
-		pass
-	else:
-		globalEditor.objectPosHash[ Vector2i(global_position/64) ]["properties"][property] = value
-		rootNode.set(property,globalEditor.objectPosHash[ Vector2i(global_position/64) ]["properties"][property] )
+	#print(globalEditor.objectsHash)
+	#print()
+	globalEditor.objectsHash[ instanceID ]["properties"][property] = value
+	rootNode.set(property, value )
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):

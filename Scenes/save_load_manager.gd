@@ -6,6 +6,10 @@ var isSaving = false
 
 var levelSaveStruct : Dictionary = { "tiles": [], "objects": []}
 
+#func _ready() -> void:
+	#
+	
+
 func _input(event: InputEvent) -> void:
 	if globalEditor.isEditing:
 		if event.is_action_pressed("save"):
@@ -47,8 +51,16 @@ func saveLevel(path):
 		var altTile : int = tileMap.get_cell_alternative_tile(vectorPos)
 		if source!=-1:
 			levelSaveStruct.tiles.append( { "pos": pos, "atlasCoords": coords, "sourceID": source, "altTile": altTile } )
-	for i in globalEditor.objectPosHash:
-		levelSaveStruct.objects.append({"pos":[i.x,i.y],"rosterID":globalEditor.objectPosHash[i].rosterID})
+	for i in globalEditor.objectsHash:
+		var currentSavingObject = globalEditor.objectsHash[i]
+		levelSaveStruct.objects.append({"instanceID":i,"rosterID":currentSavingObject.rosterID,"properties":var_to_str(currentSavingObject.properties) })
+		#print("------------------------------------------------------------")
+		#print(globalEditor.objectsHash[i])
+		#print("------------------------------------------------------------")
+		#print(var_to_str(globalEditor.objectsHash[i]))
+		#print("------------------------------------------------------------")
+		#print(str_to_var( var_to_str(globalEditor.objectsHash[i]) ))
+		#print("------------------------------------------------------------")
 	saveFile.store_string(JSON.stringify(levelSaveStruct))
 	
 func loadLevel(path):
@@ -63,4 +75,8 @@ func loadLevel(path):
 	for i in len( loadedData.tiles ):
 		tileMap.set_cell(Vector2i(loadedData.tiles[i].pos[0],loadedData.tiles[i].pos[1]) , loadedData.tiles[i].sourceID,Vector2i(loadedData.tiles[i].atlasCoords[0],loadedData.tiles[i].atlasCoords[1]) , loadedData.tiles[i].altTile)
 	for i in len( loadedData.objects ):
-		globalEditor.placeObject(globalEditor.itemRoster[loadedData.objects[i].rosterID],Vector2i(loadedData.objects[i].pos[0],loadedData.objects[i].pos[1]) )
+		var currentLoadingObject = loadedData.objects[i]
+		globalEditor.loadPlaceObject(currentLoadingObject)
+		#globalEditor.placeObject(globalEditor.itemRoster[loadedData.objects[i].rosterID],Vector2i(loadedData.objects[i].pos[0],loadedData.objects[i].pos[1]) )
+	#print(globalEditor.objectsHash)
+	

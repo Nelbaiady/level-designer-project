@@ -60,10 +60,10 @@ func _process(_delta: float) -> void:
 					##tileMap.erase_cell(erasedTilePosition) #if we wanted to erase a non-terrain tile
 					#tileMap.set_cells_terrain_connect([cursorCellCoords],0,-1,false)
 				#if selectedItem is objectItem:
-					#if globalEditor.objectPosHash.has(cursorCellCoords):
+					#if globalEditor.objectsHash.has(cursorCellCoords):
 						##selectedItem.objectReference.queue_free()
-						#var objectToDelete = globalEditor.objectPosHash[cursorCellCoords].object
-						#globalEditor.objectPosHash.erase(cursorCellCoords)
+						#var objectToDelete = globalEditor.objectsHash[cursorCellCoords].object
+						#globalEditor.objectsHash.erase(cursorCellCoords)
 						#if is_instance_valid(objectToDelete):
 							#objectToDelete.queue_free()
 					#
@@ -120,7 +120,7 @@ func placeItem():
 		#tileMap.set_cell(cursorCellCoords,0,Vector2i(1,1)) #IF WE WANTED TO PLACE A REGULAR TILE
 		globalEditor.placeTile(selectedItem,cursorCellCoords)
 	if selectedItem is objectItem:
-		#if !globalEditor.objectPosHash.has(cursor.global_position): #if these coordinates dont already have an object
+		#if !globalEditor.objectsHash.has(cursor.global_position): #if these coordinates dont already have an object
 		#if globalEditor.numObjectsHoveredOver.is_empty():
 		if clickFrame or (cursor.global_position.x > previousPlacePos.x+globalEditor.gridSize or cursor.global_position.x < previousPlacePos.x-globalEditor.gridSize or cursor.global_position.y > previousPlacePos.y+globalEditor.gridSize or cursor.global_position.y < previousPlacePos.y-globalEditor.gridSize ):
 			previousPlacePos = cursor.global_position
@@ -133,10 +133,10 @@ func eraseItem():
 		tileMap.set_cells_terrain_connect([cursorCellCoords],0,-1,false)
 	if selectedItem is objectItem:
 		signalBus.eraseObject.emit()
-		#if globalEditor.objectPosHash.has(cursorCellCoords):
+		#if globalEditor.objectsHash.has(cursorCellCoords):
 			##selectedItem.objectReference.queue_free()
-			#var objectToDelete = globalEditor.objectPosHash[cursorCellCoords].object
-			#globalEditor.objectPosHash.erase(cursorCellCoords)
+			#var objectToDelete = globalEditor.objectsHash[cursorCellCoords].object
+			#globalEditor.objectsHash.erase(cursorCellCoords)
 			#if is_instance_valid(objectToDelete):
 				#objectToDelete.queue_free()
 		

@@ -27,7 +27,7 @@ var objectBeingEdited
 enum Tools {place, move, erase}
 @export var currentTool: Tools
 
-var objectPosHash : Dictionary = {}
+var objectsHash : Dictionary = {}
 
 func _ready() -> void:
 	signalBus.setCurrentTool.connect(setCurrentTool)
@@ -45,15 +45,23 @@ func placeObject(object:objectItem, position:Vector2):
 	objectToPlace.global_position = position
 	objects.add_child(objectToPlace)
 	var instanceID = objectInstancesCount
-	globalEditor.objectPosHash[instanceID] = {"object":objectToPlace,"rosterID":object.rosterID,"properties":{"position":position}}
-	signalBus.placeObject.emit(instanceID, objectToPlace)
+	globalEditor.objectsHash[instanceID] = {"object":objectToPlace, "rosterID":object.rosterID,"properties":{"position":position}}
+	signalBus.placeObjectSignal.emit(instanceID, objectToPlace, {})
 	objectInstancesCount+=1
+# placing an object when loading the level
+func loadPlaceObject(loadingObject):
+	var objectToPlace = itemRoster[loadingObject.rosterID].objectReference.instantiate()
+	objects.add_child(objectToPlace)
+	var instanceID = int(loadingObject.instanceID)
+	globalEditor.objectsHash[instanceID] = {"object":objectToPlace, "rosterID":int(loadingObject.rosterID),"properties": str_to_var(loadingObject.properties) }
+	signalBus.placeObjectSignal.emit(instanceID, objectToPlace, str_to_var(loadingObject.properties) )
+	
 
 func clearLevel():
-	for i in objectPosHash:
-		objectPosHash[i].object.queue_free()
+	for i in objectsHash:
+		objectsHash[i].object.queue_free()
 	tileMap.clear()
-	objectPosHash.clear()
+	objectsHash.clear()
 
 
 func _input(event: InputEvent) -> void:

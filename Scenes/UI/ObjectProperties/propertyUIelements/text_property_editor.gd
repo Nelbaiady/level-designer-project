@@ -12,4 +12,4 @@ func updateValue():
 
 func _on_line_edit_text_changed(new_text: String) -> void:
 	value = new_text
-	globalEditor.updateProperty.emit(propertyName, value)
+	signalBus.updateProperty.emit(propertyName, value)

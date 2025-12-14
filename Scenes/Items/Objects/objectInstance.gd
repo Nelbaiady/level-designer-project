@@ -16,11 +16,10 @@ var isMouseOver:bool = false
 var instanceID:int = -1
 
 func _ready() -> void:
-	print()
 	rootNode= get_parent()
 	signalBus.placeObjectSignal.connect(setStartingStuff)
 	if !clickCollision:
-		printerr("Object ",rootNode.name," has no click collision")
+		printerr("Object ",rootNode.name, " instance number ", instanceID, " has no click collision")
 	else:
 		clickCollision.input_event.connect(clickedOn)
 		clickCollision.mouse_entered.connect(mouseEntered)
@@ -28,12 +27,10 @@ func _ready() -> void:
 		signalBus.eraseObject.connect(checkErase)
 
 func setStartingStuff(instID, obj, loadedProperties:Dictionary):
-	print(loadedProperties)
 	if obj == rootNode:
 		instanceID = instID
 		if loadedProperties:
 			for i in loadedProperties:
-				print("setting ", i, " to ", loadedProperties[i], " in object ", instID)
 				setProperty(i,loadedProperties[i])
 
 func _physics_process(_delta: float) -> void:
@@ -43,8 +40,6 @@ func getProperty(property:String):
 	return rootNode.get(property)
 
 func setProperty(property:String, value):
-	#print(globalEditor.objectsHash)
-	#print()
 	globalEditor.objectsHash[ instanceID ]["properties"][property] = value
 	rootNode.set(property, value )
 
@@ -76,10 +71,9 @@ func populatePropertiesUI():
 		globalEditor.propertiesUI.add_child(newNode)
 		newNode.label.text = i.displayName
 		newNode.propertyName = i.codeName
-		#print(i.codeName, " ", getProperty(i.codeName))
 		newNode.value = getProperty(i.codeName)
 		newNode.updateValue()
-	globalEditor.updateProperty.connect(setProperty)
+	signalBus.updateProperty.connect(setProperty)
 
 func mouseEntered():
 	isMouseOver = true
@@ -89,7 +83,7 @@ func mouseExited():
 func setNotEditing():
 	isBeingEdited = false
 	propertyUiElements.clear()
-	globalEditor.updateProperty.disconnect(setProperty)
+	signalBus.updateProperty.disconnect(setProperty)
 
 func checkErase():
 	if isMouseOver:

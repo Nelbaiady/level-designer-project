@@ -4,10 +4,10 @@ var isEditing:bool = true
 var popupIsOpen:bool = false
 var gridSize:int = 64
 
-@warning_ignore("unused_signal")
-signal resetStage()
-@warning_ignore("unused_signal")
-signal updateProperty(property,value)
+#@warning_ignore("unused_signal")
+#signal resetStage()
+#@warning_ignore("unused_signal")
+#signal updateProperty(property,value)
 @warning_ignore("unused_signal")
 signal showPropertiesSidebar()
 signal updateHotbar(hotbarIndex, item)
@@ -24,7 +24,7 @@ var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008
 var objectBeingEdited
 
 
-enum Tools {place, move, erase}
+enum Tools {place, erase, move}
 @export var currentTool: Tools
 
 var objectsHash : Dictionary = {}

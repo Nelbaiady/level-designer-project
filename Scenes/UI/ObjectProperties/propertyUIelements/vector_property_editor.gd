@@ -14,8 +14,8 @@ func updateValue():
 	yValueNode.value = value.y
 func _on_x_value_spin_box_value_changed(newValue: float) -> void:
 	value.x = newValue
-	globalEditor.updateProperty.emit(propertyName, value)
+	signalBus.updateProperty.emit(propertyName, value)
 
 func _on_y_value_spin_box_value_changed(newValue: float) -> void:
 	value.y = newValue
-	globalEditor.updateProperty.emit(propertyName, value)
+	signalBus.updateProperty.emit(propertyName, value)

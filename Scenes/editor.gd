@@ -23,7 +23,7 @@ func _ready() -> void:
 	selectedItem = globalEditor.hotbar[globalEditor.hotbarIndex]
 	setSelectedItem(selectedItem)
 	globalEditor.setItem.connect(setSelectedItem)
-	globalEditor.resetStage.connect(resetStage)
+	signalBus.resetStage.connect(resetStage)
 	globalEditor.propertiesUI = $"../CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties"
 	
 func _process(_delta: float) -> void:
@@ -37,7 +37,7 @@ func _process(_delta: float) -> void:
 			if cursorCellCoords!=previousCursorCellCoords and selectedItem is terrainItem:
 				tweenCursorItemIcon()
 			elif selectedItem is objectItem:
-				cursorItemIcon.position = cursor.global_position + selectedItem.textureOffset
+				cursorItemIcon.position = cursor.global_position - (Vector2.ONE * globalEditor.gridSize/2) + selectedItem.textureOffset
 			
 			#place an object
 			if Input.is_action_just_released("mouseClickLeft"):
@@ -79,7 +79,7 @@ func _process(_delta: float) -> void:
 			if globalEditor.isEditing:
 				globalEditor.isEditing = false
 			else:
-				globalEditor.resetStage.emit()
+				signalBus.resetStage.emit()
 
 			
 	#COMMON CODE FOR EDIT AND PLAY MODE

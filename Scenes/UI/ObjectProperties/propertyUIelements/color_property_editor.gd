@@ -12,4 +12,4 @@ func updateValue():
 	
 func _on_color_picker_button_color_changed(color: Color) -> void:
 	value = color
-	globalEditor.updateProperty.emit(propertyName, value)
+	signalBus.updateProperty.emit(propertyName, value)

@@ -17,7 +17,7 @@ var lastEditPosition = Vector2.ZERO
 
 
 func _ready() -> void:
-	globalEditor.connect("resetStage",resetPlayer)
+	signalBus.connect("resetStage",resetPlayer)
 
 func _physics_process(delta: float) -> void:
 	

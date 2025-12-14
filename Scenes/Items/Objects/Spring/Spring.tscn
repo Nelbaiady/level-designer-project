@@ -85,6 +85,7 @@ freeze = true
 script = ExtResource("1_3rwud")
 
 [node name="Object" parent="." node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_n374f")]
+position = Vector2(0, -32)
 clickCollision = NodePath("Area2D2")
 
 [node name="Area2D2" type="Area2D" parent="Object"]
@@ -94,6 +95,7 @@ position = Vector2(0, 32)
 shape = SubResource("RectangleShape2D_n374f")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -32)
 texture = ExtResource("1_kccgo")
 hframes = 6
 vframes = 5
@@ -106,11 +108,11 @@ libraries = {
 autoplay = "Spring_idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 48)
+position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_kccgo")
 
 [node name="Area2D" type="Area2D" parent="."]
-position = Vector2(0, 16)
+position = Vector2(0, -16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0, -4)

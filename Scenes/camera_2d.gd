@@ -13,7 +13,7 @@ const holdStepThreshold = 0.08
 var nextHoldStepTarget = holdThreshold
 
 func _ready() -> void:
-	globalEditor.connect("resetStage",resetCamera)
+	signalBus.connect("resetStage",resetCamera)
 
 func resetCamera():
 	position = Vector2(576,324)

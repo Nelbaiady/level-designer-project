@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bgavxi5l77ibl"]
+[gd_scene load_steps=16 format=3 uid="uid://bgavxi5l77ibl"]
 
 [ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
 [ext_resource type="PackedScene" uid="uid://dw4ojydnn8mlq" path="res://Cursor/cursor.tscn" id="1_eo2o7"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://ypn63mwok8gk" path="res://Scenes/toolIndicatorLabel.gd" id="4_1k58v"]
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/The Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="4_8howc"]
+[ext_resource type="Script" uid="uid://ffyc5hsflkqu" path="res://Scenes/propertiesEditingLabel.gd" id="4_l4kvy"]
 [ext_resource type="Script" uid="uid://cy16eivwe3nt5" path="res://Scenes/tile_map_layer.gd" id="5_b78su"]
 [ext_resource type="Script" path="res://Scenes/objects.gd" id="9_1k58v"]
 
@@ -453,16 +454,53 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 5.487915
-grow_horizontal = 2
+grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("3_exjlx")
 
+[node name="propertiesEditingLabelPanel" type="Panel" parent="CanvasLayer/PropertiesSidebar"]
+self_modulate = Color(1, 1, 1, 0)
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.13
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -74.0
+offset_top = -47.666668
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="propertiesEditingLabel" type="Label" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer/MarginContainer"]
+layout_mode = 2
+text = "Player"
+horizontal_alignment = 1
+vertical_alignment = 2
+script = ExtResource("4_l4kvy")
+
 [node name="PropertiesPanel" type="Panel" parent="CanvasLayer/PropertiesSidebar"]
 clip_contents = true
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
+anchor_top = 0.13
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2

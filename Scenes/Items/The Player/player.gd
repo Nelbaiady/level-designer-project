@@ -6,26 +6,27 @@ extends CharacterBody2D
 @export var gravityMult : float = 1
 @export var fallingGravityMult : float = 2
 
-var jumping = false
+var jumping:bool = false
+var bounced:bool = false
 
 var directionInput = Vector2.ZERO
 
-var lastEditPosition = Vector2.ZERO
-
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
 @onready var sprite: Sprite2D = $Sprite2D
+@onready var mainCollision: CollisionShape2D = $CollisionShape2D
+
 
 
 func _ready() -> void:
 	signalBus.connect("resetStage",resetPlayer)
 
+
 func _physics_process(delta: float) -> void:
-	
 	#Either mode
 	directionInput = Vector2(Input.get_axis("left","right"),Input.get_axis("down","up"))
 	#Edit mode
 	if globalEditor.isEditing:
-		lastEditPosition = position
+		pass
 	
 	#Play mode
 	else:
@@ -42,6 +43,7 @@ func _physics_process(delta: float) -> void:
 			
 		if (is_on_floor()):
 			jumping = false
+			bounced = false
 			gravityMult = 1
 		else:
 			#faster falling
@@ -52,12 +54,17 @@ func _physics_process(delta: float) -> void:
 
 func resetPlayer():
 	velocity = Vector2.ZERO
-	var resetPlayerTween = create_tween()
-	resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
-	resetPlayerTween.set_ease(Tween.EASE_OUT)
-	resetPlayerTween.tween_property(self,"position",lastEditPosition,0.3)
-	#position = lastEditPosition
+	#var resetPlayerTween = create_tween()
+	#resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
+	#resetPlayerTween.set_ease(Tween.EASE_OUT)
+	#resetPlayerTween.tween_property(self,"position",globalEditor.playerProperties.position ,0.3)
 	animationPlayer.current_animation="idle"
+	for i in globalEditor.playerProperties:
+		var resetPlayerTween = create_tween()
+		resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
+		resetPlayerTween.set_ease(Tween.EASE_OUT)
+		resetPlayerTween.tween_property(self,i,globalEditor.playerProperties[i] ,0.3)
+	
 
 func manageAnimations():
 	if directionInput.x < 0: sprite.flip_h = true 

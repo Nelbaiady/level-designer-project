@@ -18,7 +18,7 @@ func showSidebar():
 	hotbarTween = create_tween()
 	hotbarTween.set_trans(Tween.TRANS_CUBIC)
 	hotbarTween.set_ease(Tween.EASE_OUT)
-	hotbarTween.tween_property(self,"anchor_left",0.805,0.1)
+	hotbarTween.tween_property(self,"anchor_left",0.7,0.1)
 
 func hideSidebar():
 	hotbarTween = create_tween()

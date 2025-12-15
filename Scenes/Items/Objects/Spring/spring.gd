@@ -10,6 +10,7 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		if body.is_in_group("player"):
 			body.velocity = Vector2(body.velocity.x,-(baseStrength*power))
 			body.gravityMult = 1.0
+			body.bounced = true
 			animationPlayer.play("RESET")
 			animationPlayer.play("Spring_springing")
 

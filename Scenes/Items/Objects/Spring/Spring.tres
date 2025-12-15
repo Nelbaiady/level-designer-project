@@ -8,5 +8,6 @@
 script = ExtResource("1_o4klu")
 objectReference = ExtResource("1_dsaeg")
 texture = ExtResource("3_dsaeg")
+name = "Spring"
 rosterID = 1
 metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

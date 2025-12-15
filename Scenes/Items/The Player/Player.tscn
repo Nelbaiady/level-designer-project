@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://ce1i72nmpos1n"]
+[gd_scene load_steps=14 format=3 uid="uid://ce1i72nmpos1n"]
 
 [ext_resource type="Script" uid="uid://dm0nrwlnpl01u" path="res://Scenes/Items/The Player/player.gd" id="1_e8vge"]
 [ext_resource type="Texture2D" uid="uid://b1kn3s452k3i3" path="res://Scenes/Items/The Player/player_idle.png" id="2_k1a7i"]
 [ext_resource type="Texture2D" uid="uid://ct3tpjr58vm1h" path="res://Scenes/Items/The Player/player_run.png" id="3_l5y80"]
 [ext_resource type="Texture2D" uid="uid://cgv67v8iol7sl" path="res://Scenes/Items/The Player/player_jumped.png" id="4_kvi7n"]
 [ext_resource type="Texture2D" uid="uid://dh4haxp1xh35w" path="res://Scenes/Items/The Player/player_jumpUp.png" id="5_kvi7n"]
+[ext_resource type="Script" uid="uid://lgfj8ak2f47o" path="res://Scenes/Items/The Player/playerProperties.gd" id="6_mpkmv"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gntrk"]
 radius = 31.9
@@ -289,6 +290,9 @@ _data = {
 [node name="CharacterBody2D" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_e8vge")
 
+[node name="playerProperties" type="Node" parent="."]
+script = ExtResource("6_mpkmv")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(1, 5)
 texture = ExtResource("2_k1a7i")
@@ -304,3 +308,9 @@ libraries = {
 &"": SubResource("AnimationLibrary_ay8ch")
 }
 autoplay = "idle"
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(0, 8)
+shape = SubResource("CapsuleShape2D_gntrk")

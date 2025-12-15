@@ -28,6 +28,7 @@ enum Tools {place, erase, move}
 @export var currentTool: Tools
 
 var objectsHash : Dictionary = {}
+var playerProperties : Dictionary = {"position":Vector2(544,280)}
 
 func _ready() -> void:
 	signalBus.setCurrentTool.connect(setCurrentTool)

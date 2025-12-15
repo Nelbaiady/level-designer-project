@@ -13,7 +13,7 @@ var selectedItemType = "terrain"
 var cursorCellCoords: Vector2i = Vector2i.ZERO
 var previousCursorCellCoords: Vector2i = cursorCellCoords
 var previousCursorPos:Vector2 = Vector2.ZERO
-var previousPlacePos:Vector2 = Vector2.ZERO
+var previousPlacePos:Vector2 = Vector2.INF
 var placeButtonIsHeld:bool = false
 var clickFrame:bool = false
 
@@ -25,10 +25,8 @@ func _ready() -> void:
 	globalEditor.setItem.connect(setSelectedItem)
 	signalBus.resetStage.connect(resetStage)
 	globalEditor.propertiesUI = $"../CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties"
-	
+
 func _process(_delta: float) -> void:
-	if clickFrame:
-		clickFrame = false
 	if !globalEditor.popupIsOpen:
 		if globalEditor.isEditing:
 			previousCursorCellCoords = cursorCellCoords
@@ -42,6 +40,7 @@ func _process(_delta: float) -> void:
 			#place an object
 			if Input.is_action_just_released("mouseClickLeft"):
 				placeButtonIsHeld = false
+				previousPlacePos = Vector2.INF
 			if placeButtonIsHeld and cursor.cursorOnScreen: #TIGHT COUPLING HERE MIGHT NOT BE IDEAL
 				match globalEditor.currentTool:
 					globalEditor.Tools.place:
@@ -81,7 +80,8 @@ func _process(_delta: float) -> void:
 			else:
 				signalBus.resetStage.emit()
 
-			
+	if clickFrame:
+		clickFrame = false
 	#COMMON CODE FOR EDIT AND PLAY MODE
 	cursorItemIcon.visible = cursor.visible
 	previousCursorPos = cursor.global_position
@@ -122,7 +122,7 @@ func placeItem():
 	if selectedItem is objectItem:
 		#if !globalEditor.objectsHash.has(cursor.global_position): #if these coordinates dont already have an object
 		#if globalEditor.numObjectsHoveredOver.is_empty():
-		if clickFrame or (cursor.global_position.x > previousPlacePos.x+globalEditor.gridSize or cursor.global_position.x < previousPlacePos.x-globalEditor.gridSize or cursor.global_position.y > previousPlacePos.y+globalEditor.gridSize or cursor.global_position.y < previousPlacePos.y-globalEditor.gridSize ):
+		if clickFrame or (previousPlacePos.is_finite() and (cursor.global_position.x > previousPlacePos.x+globalEditor.gridSize or cursor.global_position.x < previousPlacePos.x-globalEditor.gridSize or cursor.global_position.y > previousPlacePos.y+globalEditor.gridSize or cursor.global_position.y < previousPlacePos.y-globalEditor.gridSize )):
 			previousPlacePos = cursor.global_position
 			globalEditor.placeObject(selectedItem,cursor.global_position)
 

@@ -10,6 +10,18 @@ var isBeingEdited:bool = false
 
 func _ready() -> void:
 	clickCollision.input_event.connect(clickedOn)
+	signalBus.connect("resetStage",resetPlayer)
+	
+func resetPlayer():
+	rootNode.velocity = Vector2.ZERO
+	rootNode.animationPlayer.current_animation="idle"
+	for i in globalEditor.playerProperties:
+		var value = globalEditor.playerProperties[i] 
+		var resetPlayerTween = create_tween()
+		resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
+		resetPlayerTween.set_ease(Tween.EASE_OUT)
+		resetPlayerTween.tween_property(rootNode,i,value ,0.3)
+		print("setting ", i ," to ",value)
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
@@ -20,6 +32,8 @@ func getProperty(property:String):
 	return rootNode.get(property)
 
 func setProperty(property:String, value):
+	if property == "scale":
+		value = abs(value)
 	rootNode.set(property, value )
 	globalEditor.playerProperties[property] = value
 	#objectsHash[ instanceID ]["properties"][property] = value

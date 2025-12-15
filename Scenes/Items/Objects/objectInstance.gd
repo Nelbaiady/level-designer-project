@@ -41,6 +41,8 @@ func getProperty(property:String):
 	return rootNode.get(property)
 
 func setProperty(property:String, value):
+	if property == "scale":
+		value = abs(value)
 	globalEditor.objectsHash[ instanceID ]["properties"][property] = value
 	rootNode.set(property, value )
 

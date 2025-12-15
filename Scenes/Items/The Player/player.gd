@@ -18,8 +18,8 @@ var directionInput = Vector2.ZERO
 
 
 func _ready() -> void:
-	signalBus.connect("resetStage",resetPlayer)
-
+	#signalBus.connect("resetStage",resetPlayer)
+	pass
 
 func _physics_process(delta: float) -> void:
 	#Either mode
@@ -52,18 +52,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		manageAnimations()
 
-func resetPlayer():
-	velocity = Vector2.ZERO
-	#var resetPlayerTween = create_tween()
-	#resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
-	#resetPlayerTween.set_ease(Tween.EASE_OUT)
-	#resetPlayerTween.tween_property(self,"position",globalEditor.playerProperties.position ,0.3)
-	animationPlayer.current_animation="idle"
-	for i in globalEditor.playerProperties:
-		var resetPlayerTween = create_tween()
-		resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
-		resetPlayerTween.set_ease(Tween.EASE_OUT)
-		resetPlayerTween.tween_property(self,i,globalEditor.playerProperties[i] ,0.3)
+
 	
 
 func manageAnimations():

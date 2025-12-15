@@ -22,14 +22,12 @@ func getProperty(property:String):
 func setProperty(property:String, value):
 	rootNode.set(property, value )
 	globalEditor.playerProperties[property] = value
-	print(globalEditor.playerProperties)
 	#objectsHash[ instanceID ]["properties"][property] = value
 
 func summonPropertiesUI():
 	populatePropertiesUI()
 
 func populatePropertiesUI():
-	pass
 	globalEditor.showPropertiesSidebar.emit()
 #	Empty the UI first
 	for i in globalEditor.propertiesUI.get_children():
@@ -47,4 +45,7 @@ func populatePropertiesUI():
 		newNode.propertyName = i.codeName
 		newNode.value = getProperty(i.codeName)
 		newNode.updateValue()
-	signalBus.updateProperty.connect(setProperty)
+	if !signalBus.updateProperty.is_connected(setProperty):
+		signalBus.updateProperty.connect(setProperty)
+func setNotEditing():
+	isBeingEdited = false

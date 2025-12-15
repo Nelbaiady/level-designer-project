@@ -4,7 +4,7 @@ extends Node2D
 
 var isSaving = false
 
-var levelSaveStruct : Dictionary = { "tiles": [], "objects": []}
+#var levelSaveStruct : Dictionary = { "tiles": [], "objects": []}
 
 #func _ready() -> void:
 	#
@@ -40,8 +40,10 @@ func saveLevel(path):
 	var saveFile = FileAccess.open(path+".json", FileAccess.WRITE)
 	if(FileAccess.get_open_error() != OK):
 		return false
-	levelSaveStruct.objects.clear()
-	levelSaveStruct.tiles.clear()
+	var levelSaveStruct : Dictionary = { "tiles": [], "objects": [], "playerProperties":{}}
+	#levelSaveStruct.objects.clear()
+	#levelSaveStruct.tiles.clear()
+	#levelSaveStruct.playerProperties.clear()
 	#ADD EVERYTHING TO THE LEVEL STRUCT
 	for vectorPos in tileMap.get_used_cells():
 		##var vectorPos = Vector2i(x, y)
@@ -54,13 +56,8 @@ func saveLevel(path):
 	for i in globalEditor.objectsHash:
 		var currentSavingObject = globalEditor.objectsHash[i]
 		levelSaveStruct.objects.append({"instanceID":i,"rosterID":currentSavingObject.rosterID,"properties":var_to_str(currentSavingObject.properties) })
-		#print("------------------------------------------------------------")
-		#print(globalEditor.objectsHash[i])
-		#print("------------------------------------------------------------")
-		#print(var_to_str(globalEditor.objectsHash[i]))
-		#print("------------------------------------------------------------")
-		#print(str_to_var( var_to_str(globalEditor.objectsHash[i]) ))
-		#print("------------------------------------------------------------")
+	levelSaveStruct.playerProperties = var_to_str(globalEditor.playerProperties)
+
 	saveFile.store_string(JSON.stringify(levelSaveStruct))
 	
 func loadLevel(path):
@@ -77,6 +74,9 @@ func loadLevel(path):
 	for i in len( loadedData.objects ):
 		var currentLoadingObject = loadedData.objects[i]
 		globalEditor.loadPlaceObject(currentLoadingObject)
+	globalEditor.playerProperties = str_to_var( loadedData.playerProperties )
+	
+	signalBus.resetStage.emit()
 		#globalEditor.placeObject(globalEditor.itemRoster[loadedData.objects[i].rosterID],Vector2i(loadedData.objects[i].pos[0],loadedData.objects[i].pos[1]) )
 	#print(globalEditor.objectsHash)
 	

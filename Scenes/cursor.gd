@@ -8,13 +8,15 @@ var mouseOnScreen: bool = false
 var cursorOnScreen: bool = false
 var prioritizeController:bool = false
 var popupWasOpen: bool = false
+var isSpinBoxing: bool = false
 #@onready var itemIcon: TextureRect = $"../../cursorItemIcon"
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	pass
+	signalBus.spinboxSpun.connect( spinBoxing )
 	
 func _process(_delta: float) -> void:
+	print(isSpinBoxing)
 	#if globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE:
 		#Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		#popupWasOpen = true
@@ -58,7 +60,7 @@ func _process(_delta: float) -> void:
 		else:
 			position = get_global_mouse_position()
 			mousePosition = get_viewport().get_mouse_position()
-	visible = cursorOnScreen and globalEditor.isEditing #and !globalEditor.popupIsOpen
+	visible = cursorOnScreen and globalEditor.isEditing and !isSpinBoxing #and !globalEditor.popupIsOpen
 func _notification(event):
 	#mouse enters the window
 	if event == NOTIFICATION_WM_MOUSE_ENTER:
@@ -105,3 +107,12 @@ func unRightClick():
 	clickEvent.button_index = MOUSE_BUTTON_RIGHT
 	clickEvent.pressed = false
 	Input.parse_input_event(clickEvent)
+
+func spinBoxing():
+	if Input.is_action_pressed("mouseClickLeft"):
+		isSpinBoxing = true
+	
+func _input(event: InputEvent) -> void:
+	if event.is_action_released("mouseClickLeft"):
+		if isSpinBoxing:
+			isSpinBoxing = false

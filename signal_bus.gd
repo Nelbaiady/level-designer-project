@@ -12,3 +12,6 @@ signal resetStage()
 signal updateProperty(property,value)
 @warning_ignore("unused_signal")
 signal editingObject(objectName, instanceID)
+
+@warning_ignore("unused_signal")
+signal spinboxSpun()

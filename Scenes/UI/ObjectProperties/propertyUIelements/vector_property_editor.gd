@@ -6,6 +6,7 @@ var propertyName: String
 @onready var xValueNode = $HBoxContainer/xValueSpinBox
 @onready var yValueNode = $HBoxContainer/yValueSpinBox
 
+
 func _ready() -> void:
 	xValueNode.value = value.x
 	yValueNode.value = value.y
@@ -15,7 +16,9 @@ func updateValue():
 func _on_x_value_spin_box_value_changed(newValue: float) -> void:
 	value.x = newValue
 	signalBus.updateProperty.emit(propertyName, value)
+	signalBus.spinboxSpun.emit()
 
 func _on_y_value_spin_box_value_changed(newValue: float) -> void:
 	value.y = newValue
 	signalBus.updateProperty.emit(propertyName, value)
+	signalBus.spinboxSpun.emit()

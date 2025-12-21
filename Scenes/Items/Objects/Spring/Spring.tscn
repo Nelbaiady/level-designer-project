@@ -1,9 +1,15 @@
-[gd_scene load_steps=14 format=3 uid="uid://dgecn3g6yiv5q"]
+[gd_scene load_steps=20 format=3 uid="uid://dgecn3g6yiv5q"]
 
 [ext_resource type="Script" uid="uid://2q1oyw00iuvq" path="res://Scenes/Items/Objects/Spring/spring.gd" id="1_3rwud"]
 [ext_resource type="Texture2D" uid="uid://bmpv2scxavoir" path="res://Scenes/Items/Objects/Spring/Spring.png" id="1_kccgo"]
 [ext_resource type="PackedScene" uid="uid://c4aci6f2wscx5" path="res://Scenes/Items/Objects/objectMod.tscn" id="2_n374f"]
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="3_mrp00"]
+[ext_resource type="Resource" uid="uid://bh2hcytk84e13" path="res://Scenes/UI/ObjectProperties/properties/positionProperty.tres" id="4_vclpx"]
 [ext_resource type="Texture2D" uid="uid://dycbcfmvewimq" path="res://Scenes/Items/Objects/Spring/springIcon.png" id="5_e7gxc"]
+[ext_resource type="Resource" uid="uid://dqbrp3ghialya" path="res://Scenes/UI/ObjectProperties/properties/sizeProperty.tres" id="5_wnvis"]
+[ext_resource type="Resource" uid="uid://byn3kv4q02kpl" path="res://Scenes/UI/ObjectProperties/properties/colorProperty.tres" id="6_yfou2"]
+[ext_resource type="Resource" uid="uid://dt3gvme5p3joj" path="res://Scenes/UI/ObjectProperties/properties/rotationProperty.tres" id="7_vmnu4"]
+[ext_resource type="Resource" uid="uid://bimwvakfjiujp" path="res://Scenes/UI/ObjectProperties/properties/powerProperty.tres" id="8_vclpx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n374f"]
 size = Vector2(64, 64)
@@ -87,6 +93,7 @@ script = ExtResource("1_3rwud")
 [node name="Object" parent="." node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_n374f")]
 position = Vector2(0, -32)
 clickCollision = NodePath("Area2D2")
+properties = Array[ExtResource("3_mrp00")]([ExtResource("4_vclpx"), ExtResource("5_wnvis"), ExtResource("6_yfou2"), ExtResource("7_vmnu4"), ExtResource("8_vclpx")])
 
 [node name="Area2D2" type="Area2D" parent="Object"]
 

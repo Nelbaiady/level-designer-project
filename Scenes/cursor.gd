@@ -16,7 +16,6 @@ func _ready() -> void:
 	signalBus.spinboxSpun.connect( spinBoxing )
 	
 func _process(_delta: float) -> void:
-	print(isSpinBoxing)
 	#if globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE:
 		#Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		#popupWasOpen = true

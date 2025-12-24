@@ -4,7 +4,7 @@ var hotbarTween:Tween
 var wasEditing = true
 
 func _ready() -> void:
-	globalEditor.showPropertiesSidebar.connect(showSidebar)
+	signalBus.showPropertiesSidebar.connect(showSidebar)
 #func _physics_process(_delta: float) -> void:
 	#if globalEditor.isEditing and !wasEditing:
 		#wasEditing = true

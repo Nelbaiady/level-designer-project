@@ -33,6 +33,7 @@ func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 			for i in loadedProperties:
 				setProperty(i,loadedProperties[i])
 	rosterID = globalEditor.objectsHash[instanceID]["rosterID"]
+	signalBus.placeObjectSignal.disconnect(setStartingStuff)
 
 func _physics_process(_delta: float) -> void:
 	pass
@@ -45,7 +46,6 @@ func setProperty(property:String, value):
 		value = abs(value)
 	globalEditor.objectsHash[ instanceID ]["properties"][property] = value
 	rootNode.set(property, value )
-	print(rootNode)
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
@@ -59,7 +59,7 @@ func summonPropertiesUI():
 	populatePropertiesUI()
 
 func populatePropertiesUI():
-	globalEditor.showPropertiesSidebar.emit()
+	signalBus.showPropertiesSidebar.emit()
 #	Empty the UI first
 	for i in globalEditor.propertiesUI.get_children():
 		i.queue_free()

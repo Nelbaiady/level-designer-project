@@ -21,7 +21,6 @@ func resetPlayer():
 		resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
 		resetPlayerTween.set_ease(Tween.EASE_OUT)
 		resetPlayerTween.tween_property(rootNode,i,value ,0.3)
-		print("setting ", i ," to ",value)
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
@@ -41,7 +40,7 @@ func summonPropertiesUI():
 	populatePropertiesUI()
 
 func populatePropertiesUI():
-	globalEditor.showPropertiesSidebar.emit()
+	signalBus.showPropertiesSidebar.emit()
 #	Empty the UI first
 	for i in globalEditor.propertiesUI.get_children():
 		i.queue_free()

@@ -26,7 +26,7 @@ func resetPlayer():
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
 		summonPropertiesUI()
-		signalBus.editingObject.emit("Player",0)
+		signalBus.editingObject.emit("Player",-1)
 
 func getProperty(property:String):
 	return rootNode.get(property)
@@ -36,7 +36,6 @@ func setProperty(property:String, value):
 		value = abs(value)
 	rootNode.set(property, value )
 	globalEditor.playerProperties[property] = value
-	#objectsHash[ instanceID ]["properties"][property] = value
 
 func summonPropertiesUI():
 	populatePropertiesUI()
@@ -63,3 +62,4 @@ func populatePropertiesUI():
 		signalBus.updateProperty.connect(setProperty)
 func setNotEditing():
 	isBeingEdited = false
+	signalBus.updateProperty.disconnect(setProperty)

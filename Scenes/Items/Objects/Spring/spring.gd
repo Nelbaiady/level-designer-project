@@ -8,8 +8,9 @@ var power:float = 1
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if !globalEditor.isEditing:
 		if body.is_in_group("player") or body.is_in_group("movable"):
-			#body.position = Vector2(body.position.x,body.position.y) + Vector2(0,-scale.y*32)#-(baseStrength*power)).rotated(deg_to_rad(90))
-			body.velocity = (body.velocity * abs(Vector2(1,0).rotated(rotation))) + Vector2(0,-(baseStrength*power)).rotated(rotation)
+			#OLD VERSION #body.velocity = (body.velocity * abs(Vector2(1,0).rotated(rotation))) + Vector2(0,-(baseStrength*power)).rotated(rotation)
+			body.velocity = body.velocity.slide(Vector2.UP.rotated(rotation)) + Vector2.UP.rotated(rotation) * (baseStrength * power)
+			
 			body.gravityMult = 1.0
 			body.bounced = true
 			animationPlayer.play("RESET")

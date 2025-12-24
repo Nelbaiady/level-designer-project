@@ -45,6 +45,7 @@ func setProperty(property:String, value):
 		value = abs(value)
 	globalEditor.objectsHash[ instanceID ]["properties"][property] = value
 	rootNode.set(property, value )
+	print(rootNode)
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):

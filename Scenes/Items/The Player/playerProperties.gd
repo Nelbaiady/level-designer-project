@@ -24,7 +24,7 @@ func resetPlayer():
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
-		if globalEditor.isEditing:
+		if globalEditor.isEditing or globalEditor.isObjectBeingEdited:
 			summonPropertiesUI()
 			signalBus.editingObject.emit("Player",-1)
 

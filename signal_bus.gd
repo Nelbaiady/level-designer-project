@@ -6,8 +6,13 @@ signal eraseObject()
 @warning_ignore("unused_signal")
 signal placeObjectSignal(instanceID, object, properties)
 
+#switch from play mode to edit mode
 @warning_ignore("unused_signal")
 signal resetStage()
+#switch from edit mode to play mode
+@warning_ignore("unused_signal")
+signal playLevel()
+#destroy the player and recreate them to reset properties
 @warning_ignore("unused_signal")
 signal reloadPlayer()
 

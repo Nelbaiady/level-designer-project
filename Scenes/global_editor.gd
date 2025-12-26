@@ -2,6 +2,7 @@ extends Node
 
 var isEditing:bool = true
 var popupIsOpen:bool = false
+
 var gridSize:int = 64
 
 signal updateHotbar(hotbarIndex, item)
@@ -17,8 +18,8 @@ var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008
 @onready var propertiesUI: VBoxContainer
 var objectBeingEdited
 var isObjectBeingEdited = false
-@onready var player: CharacterBody2D
 
+@onready var player: CharacterBody2D
 const PLAYER = preload("uid://ce1i72nmpos1n")
 
 

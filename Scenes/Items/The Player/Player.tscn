@@ -1,11 +1,17 @@
-[gd_scene load_steps=14 format=3 uid="uid://ce1i72nmpos1n"]
+[gd_scene load_steps=20 format=3 uid="uid://ce1i72nmpos1n"]
 
 [ext_resource type="Script" uid="uid://dm0nrwlnpl01u" path="res://Scenes/Items/The Player/player.gd" id="1_e8vge"]
-[ext_resource type="Texture2D" uid="uid://b1kn3s452k3i3" path="res://Scenes/Items/The Player/player_idle.png" id="2_k1a7i"]
-[ext_resource type="Texture2D" uid="uid://ct3tpjr58vm1h" path="res://Scenes/Items/The Player/player_run.png" id="3_l5y80"]
-[ext_resource type="Texture2D" uid="uid://cgv67v8iol7sl" path="res://Scenes/Items/The Player/player_jumped.png" id="4_kvi7n"]
-[ext_resource type="Texture2D" uid="uid://dh4haxp1xh35w" path="res://Scenes/Items/The Player/player_jumpUp.png" id="5_kvi7n"]
+[ext_resource type="Texture2D" uid="uid://b1kn3s452k3i3" path="res://Scenes/Items/The Player/sprites/player_idle.png" id="2_k1a7i"]
+[ext_resource type="Texture2D" uid="uid://ct3tpjr58vm1h" path="res://Scenes/Items/The Player/sprites/player_run.png" id="3_l5y80"]
+[ext_resource type="Texture2D" uid="uid://cgv67v8iol7sl" path="res://Scenes/Items/The Player/sprites/player_jumped.png" id="4_kvi7n"]
+[ext_resource type="Texture2D" uid="uid://dh4haxp1xh35w" path="res://Scenes/Items/The Player/sprites/player_jumpUp.png" id="5_kvi7n"]
 [ext_resource type="Script" uid="uid://lgfj8ak2f47o" path="res://Scenes/Items/The Player/playerProperties.gd" id="6_mpkmv"]
+[ext_resource type="Script" uid="uid://bdsg5fotd5pq3" path="res://Logic/StateMachine.gd" id="7_4cmne"]
+[ext_resource type="Script" uid="uid://bnjvso4kvfr10" path="res://Scenes/Items/The Player/states/falling.gd" id="8_qsa3t"]
+[ext_resource type="Script" uid="uid://bjfsn7u5scli4" path="res://Scenes/Items/The Player/states/rising.gd" id="8_w1k0w"]
+[ext_resource type="Script" uid="uid://b2jtwkorhb01s" path="res://Scenes/Items/The Player/states/idle.gd" id="9_p02g4"]
+[ext_resource type="Script" uid="uid://dl6ck2tmwtmxy" path="res://Scenes/Items/The Player/states/editing.gd" id="10_qsa3t"]
+[ext_resource type="Script" uid="uid://dxw0j6wgiic50" path="res://Scenes/Items/The Player/states/running.gd" id="12_6170r"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gntrk"]
 radius = 31.9
@@ -287,7 +293,7 @@ _data = {
 &"run": SubResource("Animation_ay8ch")
 }
 
-[node name="CharacterBody2D" type="CharacterBody2D" groups=["player"]]
+[node name="Player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_e8vge")
 
 [node name="playerProperties" type="Node" parent="."]
@@ -314,3 +320,24 @@ autoplay = "idle"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(0, 8)
 shape = SubResource("CapsuleShape2D_gntrk")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
+script = ExtResource("7_4cmne")
+initialState = NodePath("Editing")
+metadata/_custom_type_script = "uid://bdsg5fotd5pq3"
+
+[node name="Falling" type="Node" parent="StateMachine"]
+script = ExtResource("8_qsa3t")
+
+[node name="Rising" type="Node" parent="StateMachine"]
+script = ExtResource("8_w1k0w")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("9_p02g4")
+
+[node name="Editing" type="Node" parent="StateMachine"]
+script = ExtResource("10_qsa3t")
+metadata/_custom_type_script = "uid://bvj7h8be6v0io"
+
+[node name="Running" type="Node" parent="StateMachine"]
+script = ExtResource("12_6170r")

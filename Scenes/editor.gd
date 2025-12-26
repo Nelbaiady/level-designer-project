@@ -25,6 +25,7 @@ func _ready() -> void:
 	globalEditor.setItem.connect(setSelectedItem)
 	signalBus.resetStage.connect(resetStage)
 	globalEditor.propertiesUI = $"../CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties"
+	
 
 func _process(_delta: float) -> void:
 	if !globalEditor.popupIsOpen:

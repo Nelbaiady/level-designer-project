@@ -16,6 +16,9 @@ var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008
 @onready var tileMap: TileMapLayer
 @onready var propertiesUI: VBoxContainer
 var objectBeingEdited
+@onready var player: CharacterBody2D
+
+const PLAYER = preload("uid://ce1i72nmpos1n")
 
 
 enum Tools {place, erase, move}
@@ -26,6 +29,7 @@ var playerProperties : Dictionary = {"position":Vector2(544,280)}
 
 func _ready() -> void:
 	signalBus.setCurrentTool.connect(setCurrentTool)
+	signalBus.reloadPlayer.connect(reloadPlayer)
 
 #list of every possible object type
 #var objectRoster = ["res://Scenes/Items/Objects/Spring/Spring.tres"]
@@ -54,10 +58,18 @@ func loadPlaceObject(loadingObject):
 
 func clearLevel():
 	for i in objectsHash:
-		objectsHash[i].object.queue_free()
+		if objectsHash[i].object == null:
+			printerr("found a null object. ObjectHash: ",objectsHash, "\n")
+		else:
+			objectsHash[i].object.queue_free()
 	tileMap.clear()
 	objectsHash.clear()
 
+func reloadPlayer():
+	var prevPlayerParent = player.get_parent()
+	player.queue_free()
+	var newPlayer = PLAYER.instantiate()
+	prevPlayerParent.add_child(newPlayer)
 
 func _input(event: InputEvent) -> void:
 	#selecting items in the hotbar using the number keys

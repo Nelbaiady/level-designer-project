@@ -18,9 +18,8 @@ var directionInput = Vector2.ZERO
 
 
 func _ready() -> void:
-	#signalBus.connect("resetStage",resetPlayer)
-	pass
-
+	globalEditor.player = self
+	
 func _physics_process(delta: float) -> void:
 	#Either mode
 	directionInput = Vector2(Input.get_axis("left","right"),Input.get_axis("down","up"))
@@ -51,9 +50,6 @@ func _physics_process(delta: float) -> void:
 				gravityMult = fallingGravityMult
 		move_and_slide()
 		manageAnimations()
-
-
-	
 
 func manageAnimations():
 	if directionInput.x < 0: sprite.flip_h = true 

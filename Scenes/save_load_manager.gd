@@ -62,8 +62,7 @@ func saveLevel(path):
 	
 func loadLevel(path):
 	var levelFile = FileAccess.open(path, FileAccess.READ)
-	signalBus.resetStage.emit()
-	
+	signalBus.reloadPlayer.emit()
 	if(FileAccess.get_open_error() != OK):
 		return false
 	var jsonData = levelFile.get_as_text()
@@ -77,6 +76,7 @@ func loadLevel(path):
 		var currentLoadingObject = loadedData.objects[i]
 		globalEditor.loadPlaceObject(currentLoadingObject)
 	globalEditor.playerProperties = str_to_var( loadedData.playerProperties )
+	signalBus.resetStage.emit()
 		#globalEditor.placeObject(globalEditor.itemRoster[loadedData.objects[i].rosterID],Vector2i(loadedData.objects[i].pos[0],loadedData.objects[i].pos[1]) )
 	#print(globalEditor.objectsHash)
 	

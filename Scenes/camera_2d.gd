@@ -17,6 +17,7 @@ func _ready() -> void:
 
 func resetCamera():
 	position = Vector2(576,324)
+	player = globalEditor.player
 
 func _physics_process(_delta: float) -> void:
 	if !globalEditor.popupIsOpen:

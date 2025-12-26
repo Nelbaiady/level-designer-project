@@ -1,10 +1,9 @@
 extends Control
 var hotbarTween:Tween
 
-var wasEditing = true
-
 func _ready() -> void:
 	signalBus.showPropertiesSidebar.connect(showSidebar)
+	signalBus.hidePropertiesSidebar.connect(hideSidebar)
 #func _physics_process(_delta: float) -> void:
 	#if globalEditor.isEditing and !wasEditing:
 		#wasEditing = true
@@ -28,4 +27,4 @@ func hideSidebar():
 
 
 func _on_close_button_pressed() -> void:
-	hideSidebar()
+	signalBus.hidePropertiesSidebar.emit()

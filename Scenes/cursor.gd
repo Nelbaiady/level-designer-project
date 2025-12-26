@@ -10,23 +10,14 @@ var prioritizeController:bool = false
 var popupWasOpen: bool = false
 var isSpinBoxing: bool = false
 #@onready var itemIcon: TextureRect = $"../../cursorItemIcon"
+@onready var cursor_item_icon: TextureRect = $"../../cursorItemIcon"
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	signalBus.spinboxSpun.connect( spinBoxing )
 	
 func _process(_delta: float) -> void:
-	#if globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_VISIBLE:
-		#Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		#popupWasOpen = true
-		#print('open')
-##	if the popup was just closed, hide the mouse	
-	#elif popupWasOpen and !globalEditor.popupIsOpen and Input.mouse_mode!=Input.MOUSE_MODE_HIDDEN:
-		#print('close')
-		#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-		#popupWasOpen = false
-		
-	if globalEditor.isEditing:
+	if globalEditor.isEditing or globalEditor.isObjectBeingEdited:
 		#To make UI block controller input, we make the controller trigger a real mouse click
 		if Input.is_action_just_pressed("controllerClickLeft"):
 			click()
@@ -59,7 +50,9 @@ func _process(_delta: float) -> void:
 		else:
 			position = get_global_mouse_position()
 			mousePosition = get_viewport().get_mouse_position()
-	visible = cursorOnScreen and globalEditor.isEditing and !isSpinBoxing #and !globalEditor.popupIsOpen
+	visible = cursorOnScreen and (globalEditor.isEditing or globalEditor.isObjectBeingEdited) and !isSpinBoxing
+	#itemIcon.visible = false#visible and globalEditor.isEditing
+	#print(itemIcon.texture)
 func _notification(event):
 	#mouse enters the window
 	if event == NOTIFICATION_WM_MOUSE_ENTER:

@@ -407,6 +407,7 @@ sources/0 = SubResource("TileSetAtlasSource_b78su")
 [node name="Node2D" type="Node"]
 
 [node name="cursorItemIcon" type="TextureRect" parent="."]
+visible = false
 self_modulate = Color(1, 1, 1, 0.5019608)
 z_index = 1
 anchors_preset = 8

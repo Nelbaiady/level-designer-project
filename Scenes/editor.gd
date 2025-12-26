@@ -51,26 +51,10 @@ func _process(_delta: float) -> void:
 					globalEditor.Tools.erase:
 						eraseItem()
 
-			#if Input.is_action_just_pressed("mouseClickLeft") or (Input.is_action_pressed("mouseClickLeft") and cursorCellCoords!=previousCursorCellCoords):
-				#placeItem()
-			##erase object at mouse
-			#if Input.is_action_just_pressed("erase") or (Input.is_action_pressed("erase") and cursorCellCoords!=previousCursorCellCoords):
-				#if selectedItem is terrainItem:
-					##var erasedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
-					##tileMap.erase_cell(erasedTilePosition) #if we wanted to erase a non-terrain tile
-					#tileMap.set_cells_terrain_connect([cursorCellCoords],0,-1,false)
-				#if selectedItem is objectItem:
-					#if globalEditor.objectsHash.has(cursorCellCoords):
-						##selectedItem.objectReference.queue_free()
-						#var objectToDelete = globalEditor.objectsHash[cursorCellCoords].object
-						#globalEditor.objectsHash.erase(cursorCellCoords)
-						#if is_instance_valid(objectToDelete):
-							#objectToDelete.queue_free()
-					#
 			if Input.is_action_just_released("clear"):
 				globalEditor.clearLevel()
 				#tileMap.clear()
-#				#I need to add code for clearing objects too
+#		If Not editing
 		else:
 			pass
 			
@@ -84,7 +68,7 @@ func _process(_delta: float) -> void:
 	if clickFrame:
 		clickFrame = false
 	#COMMON CODE FOR EDIT AND PLAY MODE
-	cursorItemIcon.visible = cursor.visible
+	cursorItemIcon.visible = cursor.visible and globalEditor.isEditing
 	previousCursorPos = cursor.global_position
 	#END OF PHYSICS PROCESS
 

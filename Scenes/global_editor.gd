@@ -16,6 +16,7 @@ var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008
 @onready var tileMap: TileMapLayer
 @onready var propertiesUI: VBoxContainer
 var objectBeingEdited
+var isObjectBeingEdited = false
 @onready var player: CharacterBody2D
 
 const PLAYER = preload("uid://ce1i72nmpos1n")
@@ -30,6 +31,8 @@ var playerProperties : Dictionary = {"position":Vector2(544,280)}
 func _ready() -> void:
 	signalBus.setCurrentTool.connect(setCurrentTool)
 	signalBus.reloadPlayer.connect(reloadPlayer)
+	signalBus.showPropertiesSidebar.connect(propertiesEditorIsShown)
+	signalBus.hidePropertiesSidebar.connect(propertiesEditorIsHidden)
 
 #list of every possible object type
 #var objectRoster = ["res://Scenes/Items/Objects/Spring/Spring.tres"]
@@ -102,3 +105,8 @@ func updateHotbarUI():
 
 func setCurrentTool(tool):
 	currentTool = tool
+
+func propertiesEditorIsShown():
+	isObjectBeingEdited = true
+func propertiesEditorIsHidden():
+	isObjectBeingEdited = false

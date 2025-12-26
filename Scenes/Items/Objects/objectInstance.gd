@@ -49,8 +49,9 @@ func setProperty(property:String, value):
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
-		summonPropertiesUI()
-		signalBus.editingObject.emit(globalEditor.itemRoster[rosterID].name,instanceID)
+		if globalEditor.isEditing:
+			summonPropertiesUI()
+			signalBus.editingObject.emit(globalEditor.itemRoster[rosterID].name,instanceID)
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickLeft"):
 		if globalEditor.currentTool == globalEditor.Tools.erase:
 			eraseSelf()

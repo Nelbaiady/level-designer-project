@@ -24,8 +24,9 @@ func resetPlayer():
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
-		summonPropertiesUI()
-		signalBus.editingObject.emit("Player",-1)
+		if globalEditor.isEditing:
+			summonPropertiesUI()
+			signalBus.editingObject.emit("Player",-1)
 
 func getProperty(property:String):
 	return rootNode.get(property)

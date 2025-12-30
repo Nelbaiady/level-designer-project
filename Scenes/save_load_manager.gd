@@ -13,19 +13,19 @@ var isSaving = false
 func _input(event: InputEvent) -> void:
 	if globalEditor.isEditing:
 		if event.is_action_pressed("save"):
-			globalEditor.popupIsOpen = true
+			globalEditor.saveLoadPopupIsOpen = true
 			isSaving = true
 			file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE 
 			file_dialog.show()
 			
 		if event.is_action_pressed("load"):
-			globalEditor.popupIsOpen = true
+			globalEditor.saveLoadPopupIsOpen = true
 			isSaving = false
 			file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 			file_dialog.show()
 			
 func _on_file_dialog_confirmed() -> void:
-	globalEditor.popupIsOpen = false
+	globalEditor.saveLoadPopupIsOpen = false
 	if isSaving:
 		saveLevel(file_dialog.current_path)
 	else:
@@ -33,7 +33,7 @@ func _on_file_dialog_confirmed() -> void:
 
 
 func _on_file_dialog_canceled() -> void:
-	globalEditor.popupIsOpen = false
+	globalEditor.saveLoadPopupIsOpen = false
 
 func saveLevel(path):
 	#REFERENCE: https://godotforums.org/d/35977-how-do-i-save-a-tileset-in-a-building-game/2

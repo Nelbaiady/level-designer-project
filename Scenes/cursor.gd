@@ -7,7 +7,7 @@ var mousePosition:Vector2
 var mouseOnScreen: bool = false
 var cursorOnScreen: bool = false
 var prioritizeController:bool = false
-var popupWasOpen: bool = false
+#var popupWasOpen: bool = false #unused
 var isSpinBoxing: bool = false
 #@onready var itemIcon: TextureRect = $"../../cursorItemIcon"
 @onready var cursor_item_icon: TextureRect = $"../../cursorItemIcon"

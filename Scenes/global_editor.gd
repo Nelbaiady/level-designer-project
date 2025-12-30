@@ -2,6 +2,8 @@ extends Node
 
 var isEditing:bool = true
 var popupIsOpen:bool = false
+var colorPickerPopupIsOpen = false
+var saveLoadPopupIsOpen = false
 
 var gridSize:int = 64
 
@@ -34,6 +36,9 @@ func _ready() -> void:
 	signalBus.reloadPlayer.connect(reloadPlayer)
 	signalBus.showPropertiesSidebar.connect(propertiesEditorIsShown)
 	signalBus.hidePropertiesSidebar.connect(propertiesEditorIsHidden)
+
+func _physics_process(_delta: float) -> void:
+	popupIsOpen = saveLoadPopupIsOpen or colorPickerPopupIsOpen
 
 #list of every possible object type
 #var objectRoster = ["res://Scenes/Items/Objects/Spring/Spring.tres"]

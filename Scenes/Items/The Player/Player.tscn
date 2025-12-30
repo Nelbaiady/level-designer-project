@@ -13,10 +13,6 @@
 [ext_resource type="Script" uid="uid://dl6ck2tmwtmxy" path="res://Scenes/Items/The Player/states/editing.gd" id="10_qsa3t"]
 [ext_resource type="Script" uid="uid://dxw0j6wgiic50" path="res://Scenes/Items/The Player/states/running.gd" id="12_6170r"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gntrk"]
-radius = 31.9
-height = 80.0
-
 [sub_resource type="Animation" id="Animation_kvi7n"]
 length = 0.001
 tracks/0/type = "value"
@@ -293,6 +289,10 @@ _data = {
 &"run": SubResource("Animation_ay8ch")
 }
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gntrk"]
+radius = 31.9
+height = 80.0
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 script = ExtResource("1_e8vge")
 
@@ -305,9 +305,12 @@ texture = ExtResource("2_k1a7i")
 hframes = 3
 vframes = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 8)
-shape = SubResource("CapsuleShape2D_gntrk")
+[node name="PlayerCollision" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(19, -24, 32, 9, 32, 41, 24, 49, -24, 49, -32, 41, -32, 9, -19, -24, 0, -30)
+
+[node name="PlayerCrouchCollision" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(32, 9, 32, 41, 24, 49, -24, 49, -32, 41, -32, 9)
+disabled = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -316,9 +319,10 @@ libraries = {
 autoplay = "idle"
 
 [node name="Area2D" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(0, 8)
+position = Vector2(0, 9)
 shape = SubResource("CapsuleShape2D_gntrk")
 
 [node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]

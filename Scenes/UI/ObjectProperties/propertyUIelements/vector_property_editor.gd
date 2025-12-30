@@ -1,18 +1,23 @@
-extends Panel
+extends PropertyEditor
 
-var value:Vector2 = Vector2.ONE
-var propertyName: String
-@onready var label: Label = $HBoxContainer/Label
-@onready var xValueNode = $HBoxContainer/xValueSpinBox
-@onready var yValueNode = $HBoxContainer/yValueSpinBox
-
+func propertyReady():
+	valueNodes[0].value = value.x
+	valueNodes[1].value = value.y
+	if (minValue!=null and maxValue!=null) and (minValue!=0 and maxValue!=0):
+		for i in valueNodes:
+			i.min_value = minValue
+			i.max_value = maxValue
+	for i in valueNodes:
+		if i is SpinBox:
+			i.get_line_edit().focus_mode = Control.FOCUS_CLICK
 
 func _ready() -> void:
-	xValueNode.value = value.x
-	yValueNode.value = value.y
+	valueNodes = [$HBoxContainer/xValueSpinBox, $HBoxContainer/yValueSpinBox]
+
 func updateValue():
-	xValueNode.value = value.x
-	yValueNode.value = value.y
+	valueNodes[0].value = value.x
+	valueNodes[1].value = value.y
+	
 func _on_x_value_spin_box_value_changed(newValue: float) -> void:
 	value.x = newValue
 	signalBus.updateProperty.emit(propertyName, value)

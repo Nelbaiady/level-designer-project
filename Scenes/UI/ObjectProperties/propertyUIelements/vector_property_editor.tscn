@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7kxkfdsoe5hv"]
 
 [ext_resource type="Script" uid="uid://cg6udjb2cyhqs" path="res://Scenes/UI/ObjectProperties/propertyUIelements/vector_property_editor.gd" id="1_oie7u"]
-[ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/theme/UItheme.tres" id="1_vgvs7"]
+[ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="1_vgvs7"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ebjba"]
 font_size = 14
@@ -26,16 +26,18 @@ label_settings = SubResource("LabelSettings_ebjba")
 
 [node name="xValueSpinBox" type="SpinBox" parent="HBoxContainer"]
 layout_mode = 2
+focus_mode = 1
 theme = ExtResource("1_vgvs7")
 min_value = -9999999999999.0
 max_value = 9999999999999.0
-step = 0.2
+step = 0.1
 allow_greater = true
 allow_lesser = true
 prefix = "X:"
 
 [node name="yValueSpinBox" type="SpinBox" parent="HBoxContainer"]
 layout_mode = 2
+focus_mode = 1
 theme = ExtResource("1_vgvs7")
 min_value = -9999999999999.0
 max_value = 9999999999999.0

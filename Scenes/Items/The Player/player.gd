@@ -13,7 +13,7 @@ var directionInput = Vector2.ZERO
 
 @onready var animationPlayer: AnimationPlayer = $AnimationPlayer
 @onready var sprite: Sprite2D = $Sprite2D
-@onready var mainCollision: CollisionShape2D = $CollisionShape2D
+@onready var mainCollision: CollisionPolygon2D = $PlayerCollision
 
 @onready var stateMachine: StateMachine = $StateMachine
 

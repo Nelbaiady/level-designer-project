@@ -514,6 +514,7 @@ anchors_preset = -1
 anchor_right = 0.16
 anchor_bottom = 0.04954321
 offset_bottom = -0.10400009
+focus_mode = 1
 text = "x"
 
 [node name="Properties" type="VBoxContainer" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel"]

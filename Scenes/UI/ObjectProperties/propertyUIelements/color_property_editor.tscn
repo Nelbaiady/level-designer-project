@@ -22,5 +22,6 @@ text = "Color:"
 [node name="ColorPickerButton" type="ColorPickerButton" parent="HBoxContainer"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+focus_mode = 0
 
 [connection signal="color_changed" from="HBoxContainer/ColorPickerButton" to="." method="_on_color_picker_button_color_changed"]

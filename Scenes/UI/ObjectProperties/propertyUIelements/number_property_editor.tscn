@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://bydj3gco3u5wr"]
 
 [ext_resource type="Script" uid="uid://dir28lw0jlwuy" path="res://Scenes/UI/ObjectProperties/propertyUIelements/number_property_editor.gd" id="1_32n73"]
-[ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/theme/UItheme.tres" id="2_d5kri"]
+[ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="2_d5kri"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ebjba"]
 font_size = 14

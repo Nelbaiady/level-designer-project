@@ -2,7 +2,7 @@ extends Node2D
 
 @onready var level: Node2D = $"../Level"
 @onready var tileMap: TileMapLayer = $"../Level/TileMapLayer"
-@onready var cursor: Node2D =$"../CursorCanvas/Cursor"
+@onready var cursor: Node2D = $"../CursorCanvas/Cursor"
 #@onready var cursor: Node2D =$"../Cursor"
 @onready var cursorItemIcon: TextureRect = $"../cursorItemIcon"
 
@@ -102,12 +102,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func placeItem():
 	if selectedItem is terrainItem:
-		#var placedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
-		#tileMap.set_cell(cursorCellCoords,0,Vector2i(1,1)) #IF WE WANTED TO PLACE A REGULAR TILE
 		globalEditor.placeTile(selectedItem,cursorCellCoords)
 	if selectedItem is objectItem:
-		#if !globalEditor.objectsHash.has(cursor.global_position): #if these coordinates dont already have an object
-		#if globalEditor.numObjectsHoveredOver.is_empty():
 		if clickFrame or (previousPlacePos.is_finite() and (cursor.global_position.x > previousPlacePos.x+globalEditor.gridSize or cursor.global_position.x < previousPlacePos.x-globalEditor.gridSize or cursor.global_position.y > previousPlacePos.y+globalEditor.gridSize or cursor.global_position.y < previousPlacePos.y-globalEditor.gridSize )):
 			previousPlacePos = cursor.global_position
 			globalEditor.placeObject(selectedItem,cursor.global_position)
@@ -119,12 +115,6 @@ func eraseItem():
 		tileMap.set_cells_terrain_connect([cursorCellCoords],0,-1,false)
 	if selectedItem is objectItem:
 		signalBus.eraseObject.emit()
-		#if globalEditor.objectsHash.has(cursorCellCoords):
-			##selectedItem.objectReference.queue_free()
-			#var objectToDelete = globalEditor.objectsHash[cursorCellCoords].object
-			#globalEditor.objectsHash.erase(cursorCellCoords)
-			#if is_instance_valid(objectToDelete):
-				#objectToDelete.queue_free()
 		
 
 func resetStage():

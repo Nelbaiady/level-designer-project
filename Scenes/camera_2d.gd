@@ -21,11 +21,12 @@ func resetCamera():
 	tweenToPlayer()
 
 func _physics_process(_delta: float) -> void:
-	if !globalEditor.popupIsOpen:
-		transLateCamera(Input.get_vector("camLeft","camRight","camUp","camDown")*25)
 
 	if !globalEditor.isEditing:
 		position = position.lerp(player.position,0.3) 
+	else:
+		if !globalEditor.popupIsOpen:
+			transLateCamera(Input.get_vector("camLeft","camRight","camUp","camDown")*25)
 
 func transLateCamera(direction: Vector2):
 	position += direction

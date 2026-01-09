@@ -10,4 +10,5 @@ displayName = "Rotation"
 uiNode = ExtResource("2_rpym6")
 minValue = -360.0
 maxValue = 360.0
+step = 1.0
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

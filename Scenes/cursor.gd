@@ -28,7 +28,7 @@ func _process(_delta: float) -> void:
 		if Input.is_action_just_released("controllerClickRight"):
 			unRightClick()
 		#Left stick input vector
-		cursorMoveVector = Vector2(Input.get_axis("LstickL","LstickR"),Input.get_axis("LstickU","LstickD"))
+		cursorMoveVector = Vector2(Input.get_vector("rLeft","rRight","rUp","rDown"))
 		#If the mouse moved and is on screen, use mouse controls
 		if (get_viewport().get_mouse_position() != mousePosition) and mouseOnScreen:
 			prioritizeController = false
@@ -39,8 +39,8 @@ func _process(_delta: float) -> void:
 			cursorOnScreen = true
 		#code for moving the cursor with controllers
 		if prioritizeController:
-			cursorMoveSpeedMult = 1-Input.get_action_strength("L2") + 0.2
-			position += cursorMoveVector * cursorMoveSpeed * cursorMoveSpeedMult
+			cursorMoveSpeedMult = 1-Input.get_action_strength("L2") + 0.1
+			position = get_global_mouse_position() + cursorMoveVector * cursorMoveSpeed * cursorMoveSpeedMult
 			#Make sure the cursor does not go off screen
 			position.x = clamp(position.x, get_viewport().get_camera_2d().global_position.x - get_viewport_rect().size.x / 2,get_viewport().get_camera_2d().global_position.x + get_viewport_rect().size.x / 2 - 1)#-1 on the max of both clamps because the mouse otherwise goes off screen
 			position.y = clamp(position.y, get_viewport().get_camera_2d().global_position.y - get_viewport_rect().size.y / 2,get_viewport().get_camera_2d().global_position.y + get_viewport_rect().size.y / 2 - 1)

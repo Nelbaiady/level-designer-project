@@ -3,6 +3,7 @@ class_name PropertyEditor extends Panel
 var value
 var minValue: float
 var maxValue: float
+var step: float
 #the property's in-code name
 var propertyName: String
 #display name label
@@ -18,13 +19,13 @@ signal propertyReadySignal()
 #func _ready() -> void:
 
 #function triggered when the node is created. Sets up everything.
-func setStartValues(val, minVal, maxVal, propName, labelText):
+func setStartValues(val, minVal, maxVal, stp, propName, labelText):
 	value=val
 	minValue=minVal
 	maxValue=maxVal
+	step = stp
 	propertyName=propName
 	label.text = labelText
-	print("maxvalue in ",propertyName, " is", maxValue)
 	propertyReadySignal.connect(propertyReady)
 	propertyReadySignal.emit()
 #virtual function
@@ -39,6 +40,10 @@ func propertyReady():
 	for i in valueNodes:
 		if i is SpinBox:
 			i.get_line_edit().focus_mode = Control.FOCUS_CLICK
+	if step != null:
+		for i in valueNodes:
+			#if i is SpinBox:
+			i.custom_arrow_step = step
 
 func updateValue():
 	valueNodes[0] = value

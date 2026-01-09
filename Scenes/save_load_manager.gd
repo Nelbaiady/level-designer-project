@@ -77,6 +77,5 @@ func loadLevel(path):
 		globalEditor.loadPlaceObject(currentLoadingObject)
 	globalEditor.playerProperties = str_to_var( loadedData.playerProperties )
 	signalBus.resetStage.emit()
-		#globalEditor.placeObject(globalEditor.itemRoster[loadedData.objects[i].rosterID],Vector2i(loadedData.objects[i].pos[0],loadedData.objects[i].pos[1]) )
-	#print(globalEditor.objectsHash)
+
 	

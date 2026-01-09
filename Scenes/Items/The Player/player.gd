@@ -30,9 +30,9 @@ func exitEditState():
 func _physics_process(_delta: float) -> void:
 	##Either mode
 	directionInput = Vector2(Input.get_axis("left","right"),Input.get_axis("down","up"))
-	#print(stateMachine.state)
-	if directionInput.x < 0: sprite.flip_h = true 
-	if directionInput.x > 0: sprite.flip_h = false
+	if !globalEditor.isEditing:
+		if directionInput.x < 0: sprite.flip_h = true 
+		if directionInput.x > 0: sprite.flip_h = false
 	##Edit mode
 	#if globalEditor.isEditing:
 		#pass

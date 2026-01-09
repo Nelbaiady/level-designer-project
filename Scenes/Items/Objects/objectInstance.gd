@@ -73,20 +73,11 @@ func populatePropertiesUI():
 #	populate the properties editor
 	for i in properties:
 		var newNode = i.uiNode.instantiate() #REPLACE THIS WITH THE NEXT LINE
-		#var newNode:PropertyEditor = i.uiNode.instantiate() 
 		
-		#propertyUiElements.append(newNode)
 		globalEditor.propertiesUI.add_child(newNode)
-		#newNode.label.text = i.displayName
-		#newNode.propertyName = i.codeName
-		#newNode.value = getProperty(i.codeName)
-		#if i.minValue != i.maxValue:
-			#newNode.minValue = 4#i.minValue
-			#newNode.maxValue = 400#i.maxValue
-			#print("setting maxvalue to ",newNode.maxValue, " for ",i.displayName)
-		#newNode.updateValue()
+
 		if newNode is PropertyEditor:
-			newNode.setStartValues(getProperty(i.codeName),i.minValue, i.maxValue, i.codeName, i.displayName)
+			newNode.setStartValues(getProperty(i.codeName),i.minValue, i.maxValue,i.step , i.codeName, i.displayName)
 	signalBus.updateProperty.connect(setProperty)
 
 func mouseEntered():

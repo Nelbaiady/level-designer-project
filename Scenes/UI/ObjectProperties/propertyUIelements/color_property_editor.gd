@@ -24,9 +24,7 @@ func _on_color_picker_button_color_changed(color: Color) -> void:
 func _on_color_picker_button_pressed() -> void:
 	#signalBus.colorPickerToggled.emit(true)
 	globalEditor.colorPickerPopupIsOpen = true
-	print("color picker opened")
 
 func _on_color_picker_button_popup_closed() -> void:
 	#signalBus.colorPickerToggled.emit(false)
 	globalEditor.colorPickerPopupIsOpen = false
-	print("color picker closed")

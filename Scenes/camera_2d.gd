@@ -14,17 +14,25 @@ var nextHoldStepTarget = holdThreshold
 
 func _ready() -> void:
 	signalBus.connect("resetStage",resetCamera)
+	#signalBus.connect("playLevel",resetCamera)
 
 func resetCamera():
-	position = Vector2(576,324)
 	player = globalEditor.player
+	tweenToPlayer()
 
 func _physics_process(_delta: float) -> void:
 	if !globalEditor.popupIsOpen:
-		transLateCamera(Input.get_vector("rLeft","rRight","rUp","rDown")*25)
+		transLateCamera(Input.get_vector("camLeft","camRight","camUp","camDown")*25)
 
 	if !globalEditor.isEditing:
-		position = player.position
+		position = position.lerp(player.position,0.3) 
 
 func transLateCamera(direction: Vector2):
 	position += direction
+	
+func tweenToPlayer():
+	
+	var resetCamTween = create_tween()
+	resetCamTween.set_trans(Tween.TRANS_CUBIC)
+	resetCamTween.set_ease(Tween.EASE_OUT)
+	resetCamTween.tween_property(self,"position",globalEditor.playerProperties.position ,0.3)

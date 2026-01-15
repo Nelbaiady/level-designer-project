@@ -1,6 +1,7 @@
 extends Node2D
 @onready var file_dialog: FileDialog = $"../FileDialog"
-@onready var tileMap: TileMapLayer = $"../Level/TileMapLayer"
+@onready var tileMap: TileMapLayer = $"../Level/Layer0/TileMapLayer"
+@onready var tileMaps: Array[TileMapLayer] = [$"../Level/Layer0/TileMapLayer"]
 
 var isSaving = false
 
@@ -74,7 +75,8 @@ func loadLevel(path):
 		tileMap.set_cell(Vector2i(loadedData.tiles[i].pos[0],loadedData.tiles[i].pos[1]) , loadedData.tiles[i].sourceID,Vector2i(loadedData.tiles[i].atlasCoords[0],loadedData.tiles[i].atlasCoords[1]) , loadedData.tiles[i].altTile)
 	for i in len( loadedData.objects ):
 		var currentLoadingObject = loadedData.objects[i]
-		globalEditor.loadPlaceObject(currentLoadingObject)
+		#globalEditor.loadPlaceObject(currentLoadingObject)
+		globalEditor.placeObject(globalEditor.itemRoster[currentLoadingObject.rosterID],Vector2.ZERO,str_to_var(currentLoadingObject.properties),int(currentLoadingObject.instanceID))
 	globalEditor.playerProperties = str_to_var( loadedData.playerProperties )
 	signalBus.resetStage.emit()
 

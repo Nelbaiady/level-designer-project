@@ -1,7 +1,8 @@
 extends Node2D
 
-@onready var level: Node2D = $"../Level"
-@onready var tileMap: TileMapLayer = $"../Level/TileMapLayer"
+#@onready var level: Node2D = $"../Level"
+@onready var tileMap: TileMapLayer = $"../Level/Layer0/TileMapLayer"
+@onready var tileMaps: Dictionary[int, TileMapLayer] = {0:$"../Level/Layer0/TileMapLayer"}
 @onready var cursor: Node2D = $"../CursorCanvas/Cursor"
 #@onready var cursor: Node2D =$"../Cursor"
 @onready var cursorItemIcon: TextureRect = $"../cursorItemIcon"
@@ -25,6 +26,8 @@ func _ready() -> void:
 	globalEditor.setItem.connect(setSelectedItem)
 	signalBus.resetStage.connect(resetStage)
 	globalEditor.propertiesUI = $"../CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties"
+	globalEditor.tileMaps = tileMaps
+	globalEditor.level = $"../Level"
 	
 
 func _process(_delta: float) -> void:

@@ -12,11 +12,15 @@ signal updateHotbarSelection(hotbarIndex)
 signal setItem(item)
 var objectInstancesCount:int = 0
 
+@onready var level: Level
 var hotbarIndex: int = 0
 var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
+var currentLayer: int = 0
+var currentRoom: int = 0
 
-@onready var objects
-@onready var tileMap: TileMapLayer
+#@onready var objects
+#@onready var tileMap: TileMapLayer
+@onready var tileMaps: Dictionary[int, TileMapLayer]
 @onready var propertiesUI: VBoxContainer
 var objectBeingEdited
 var isObjectBeingEdited = false
@@ -46,24 +50,24 @@ var itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5")
 
 func placeTile(item, cell):
 	#tileMap.set_cell(cursorCellCoords,0,Vector2i(1,1)) #IF WE WANTED TO PLACE A REGULAR TILE
-	tileMap.set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
-
-func placeObject(object:objectItem, position:Vector2):
+	#tileMap.set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
+	tileMaps[currentLayer].set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
+func placeObject(object:objectItem, position:Vector2=Vector2.ZERO,startProperties={}, instanceID = null):
 	var objectToPlace = object.objectReference.instantiate()
 	objectToPlace.global_position = position
-	objects.add_child(objectToPlace)
-	var instanceID = objectInstancesCount
+	level.layers[currentLayer].objects.add_child(objectToPlace)
+	if instanceID == null:
+		instanceID = objectInstancesCount
+		objectInstancesCount+=1
 	globalEditor.objectsHash[instanceID] = {"object":objectToPlace, "rosterID":object.rosterID,"properties":{"position":position}}
-	signalBus.placeObjectSignal.emit(instanceID, objectToPlace, {})
-	objectInstancesCount+=1
+	signalBus.placeObjectSignal.emit(instanceID, objectToPlace, startProperties)
 # placing an object when loading the level
-func loadPlaceObject(loadingObject):
-	var objectToPlace = itemRoster[loadingObject.rosterID].objectReference.instantiate()
-	objects.add_child(objectToPlace)
-	var instanceID = int(loadingObject.instanceID)
-	globalEditor.objectsHash[instanceID] = {"object":objectToPlace, "rosterID":int(loadingObject.rosterID),"properties": str_to_var(loadingObject.properties) }
-	signalBus.placeObjectSignal.emit(instanceID, objectToPlace, str_to_var(loadingObject.properties) )
-	
+#func loadPlaceObject(loadingObject):
+	#var objectToPlace = itemRoster[loadingObject.rosterID].objectReference.instantiate()
+	#level.layers[currentLayer].objects.add_child(objectToPlace)
+	#var instanceID = int(loadingObject.instanceID)
+	#globalEditor.objectsHash[instanceID] = {"object":objectToPlace, "rosterID":int(loadingObject.rosterID),"properties": str_to_var(loadingObject.properties) }
+	#signalBus.placeObjectSignal.emit(instanceID, objectToPlace, str_to_var(loadingObject.properties) )
 
 func clearLevel():
 	for i in objectsHash:
@@ -71,8 +75,11 @@ func clearLevel():
 			printerr("found a null object. ObjectHash: ",objectsHash, "\n")
 		else:
 			objectsHash[i].object.queue_free()
-	tileMap.clear()
+	#tileMap.clear()
+	for i in tileMaps.values():
+		i.clear()
 	objectsHash.clear()
+	objectInstancesCount=0
 
 func reloadPlayer():
 	var prevPlayerParent = player.get_parent()

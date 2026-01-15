@@ -1,4 +1,4 @@
 extends Node
 
-func _ready() -> void:
-	globalEditor.objects = self
+#func _ready() -> void:
+	#globalEditor.objects = self

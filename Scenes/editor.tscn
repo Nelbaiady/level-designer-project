@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bgavxi5l77ibl"]
+[gd_scene load_steps=17 format=4 uid="uid://bgavxi5l77ibl"]
 
 [ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
 [ext_resource type="PackedScene" uid="uid://dw4ojydnn8mlq" path="res://Cursor/cursor.tscn" id="1_eo2o7"]
@@ -11,8 +11,8 @@
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/The Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="4_8howc"]
 [ext_resource type="Script" uid="uid://ffyc5hsflkqu" path="res://Scenes/propertiesEditingLabel.gd" id="4_l4kvy"]
-[ext_resource type="Script" uid="uid://cy16eivwe3nt5" path="res://Scenes/tile_map_layer.gd" id="5_b78su"]
-[ext_resource type="Script" path="res://Scenes/objects.gd" id="9_1k58v"]
+[ext_resource type="Script" uid="uid://gbx72oygq3hy" path="res://Scenes/objects.gd" id="9_1k58v"]
+[ext_resource type="Script" uid="uid://c6r085mo8sgb6" path="res://Scenes/levelLayer.gd" id="11_l4kvy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b78su"]
 texture = ExtResource("4_8howc")
@@ -400,9 +400,9 @@ physics_layer_0/collision_layer = 1
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Dirt"
 terrain_set_0/terrain_0/color = Color(0.78171426, 0, 0.17095065, 1)
-terrain_set_0/terrain_1/name = "Grass"
-terrain_set_0/terrain_1/color = Color(0.2527295, 0.50761116, 0.32676098, 1)
 sources/0 = SubResource("TileSetAtlasSource_b78su")
+
+[sub_resource type="GDScript" id="GDScript_1k58v"]
 
 [node name="Node2D" type="Node"]
 
@@ -577,11 +577,27 @@ root_subfolder = "savedLevels"
 [node name="Level" type="Node2D" parent="."]
 script = ExtResource("2_24ceq")
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Level"]
-tile_set = SubResource("TileSet_7fkqn")
-script = ExtResource("5_b78su")
+[node name="Layer1" type="Parallax2D" parent="Level"]
+scroll_scale = Vector2(0.68, 0.68)
+script = ExtResource("11_l4kvy")
+index = 1
 
-[node name="Objects" type="Node" parent="Level"]
+[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer1"]
+tile_map_data = PackedByteArray("AAABAAQAAAAEAAAAAAABAAUAAAABAAMAAAABAAYAAAADAAUAAAACAAYAAAAFAAUAAAACAAcAAAADAAUAAAADAAcAAAAFAAUAAAADAAgAAAADAAUAAAAEAAgAAAADAAAAAAA=")
+tile_set = SubResource("TileSet_7fkqn")
+collision_enabled = false
+script = SubResource("GDScript_1k58v")
+
+[node name="Objects" type="Node" parent="Level/Layer1"]
+script = ExtResource("9_1k58v")
+
+[node name="Layer0" type="Parallax2D" parent="Level"]
+script = ExtResource("11_l4kvy")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer0"]
+tile_set = SubResource("TileSet_7fkqn")
+
+[node name="Objects" type="Node" parent="Level/Layer0"]
 script = ExtResource("9_1k58v")
 
 [node name="Player" parent="." instance=ExtResource("4_7wlcy")]

@@ -1,4 +1,9 @@
-extends Node
+class_name SignalBus extends Node
+
+#signals to add a node to the globalEditor when it's ready
+@warning_ignore("unused_signal")
+signal onLevelReady(level)
+
 @warning_ignore("unused_signal")
 signal setCurrentTool(tool)
 @warning_ignore("unused_signal")
@@ -8,14 +13,15 @@ signal placeObjectSignal(instanceID, object, properties)
 
 #switch from play mode to edit mode
 @warning_ignore("unused_signal")
-signal resetStage()
+signal startEditMode()
 #switch from edit mode to play mode
 @warning_ignore("unused_signal")
-signal playLevel()
+signal startPlayMode()
 #destroy the player and recreate them to reset properties
 @warning_ignore("unused_signal")
 signal reloadPlayer()
 
+#signals for editing properties
 @warning_ignore("unused_signal")
 signal showPropertiesSidebar()
 @warning_ignore("unused_signal")

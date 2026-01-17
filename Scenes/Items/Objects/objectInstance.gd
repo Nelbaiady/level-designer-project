@@ -32,7 +32,8 @@ func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 		if loadedProperties:
 			for i in loadedProperties:
 				setProperty(i,loadedProperties[i])
-	rosterID = globalEditor.objectsHash[instanceID]["rosterID"]
+	#print(globalEditor.level.rooms)
+	rosterID = globalEditor.getCurrentLevelLayerDict()["objects"][instanceID]["rosterID"]
 	signalBus.placeObjectSignal.disconnect(setStartingStuff)
 
 func _physics_process(_delta: float) -> void:
@@ -44,7 +45,7 @@ func getProperty(property:String):
 func setProperty(property:String, value):
 	if property == "scale":
 		value = abs(value)
-	globalEditor.objectsHash[ instanceID ]["properties"][property] = value
+	globalEditor.getCurrentLevelLayerDict()["objects"][ instanceID ]["properties"][property] = value
 	rootNode.set(property, value )
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:

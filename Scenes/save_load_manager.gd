@@ -5,12 +5,6 @@ extends Node2D
 
 var isSaving = false
 
-#var levelSaveStruct : Dictionary = { "tiles": [], "objects": []}
-
-#func _ready() -> void:
-	#
-	
-
 func _input(event: InputEvent) -> void:
 	if globalEditor.isEditing:
 		if event.is_action_pressed("save"):

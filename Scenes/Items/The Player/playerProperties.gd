@@ -10,7 +10,7 @@ var isBeingEdited:bool = false
 
 func _ready() -> void:
 	clickCollision.input_event.connect(clickedOn)
-	signalBus.connect("resetStage",resetPlayer)
+	signalBus.startEditMode.connect(resetPlayer)
 
 func resetPlayer():
 	rootNode.velocity = Vector2.ZERO

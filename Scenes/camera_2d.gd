@@ -1,4 +1,4 @@
-extends Camera2D
+class_name GameplayCamera extends Camera2D
 
 @onready var player: CharacterBody2D = $"../Player"
 
@@ -11,29 +11,45 @@ var holdTimer: float = 0
 const holdThreshold = 0.3
 const holdStepThreshold = 0.08
 var nextHoldStepTarget = holdThreshold
+@onready var phantom_camera_host: PhantomCameraHost = $PhantomCameraHost
+@onready var phantomCamera: PhantomCamera2D = $"../PhantomCamera2D"
 
 func _ready() -> void:
-	signalBus.connect("resetStage",resetCamera)
+	signalBus.startEditMode.connect(resetCamera)
 	#signalBus.connect("playLevel",resetCamera)
+	signalBus.startPlayMode.connect(playMode)
 
-func resetCamera():
-	player = globalEditor.player
-	tweenToPlayer()
 
 func _physics_process(_delta: float) -> void:
-
 	if !globalEditor.isEditing:
-		position = position.lerp(player.position,0.3) 
+		#position = position.lerp(player.position,0.3) 
+		position = player.position
+		phantomCamera.set_follow_offset(player.velocity/8)
 	else:
 		if !globalEditor.popupIsOpen:
 			transLateCamera(Input.get_vector("camLeft","camRight","camUp","camDown")*25)
 
 func transLateCamera(direction: Vector2):
-	position += direction
+	#phantomCamera.position += direction
+	phantomCamera.set_follow_offset(phantomCamera.get_follow_offset()+direction)
+	#position += direction
 	
-func tweenToPlayer():
-	
-	var resetCamTween = create_tween()
-	resetCamTween.set_trans(Tween.TRANS_CUBIC)
-	resetCamTween.set_ease(Tween.EASE_OUT)
-	resetCamTween.tween_property(self,"position",globalEditor.playerProperties.position ,0.3)
+#func tweenToPlayer():
+	#var resetCamTween = create_tween()
+	#resetCamTween.set_trans(Tween.TRANS_CUBIC)
+	#resetCamTween.set_ease(Tween.EASE_OUT)
+	#resetCamTween.tween_property(self,"position",globalEditor.playerProperties.position ,0.3)
+
+func resetCamera():
+	phantomCamera.set_follow_offset(Vector2.ZERO)
+	#phantomCamera.follow_mode = phantomCamera.FollowMode.NONE
+	#phantomCamera.follow_target = null
+	player = globalEditor.player
+	#tweenToPlayer()
+	#position = player.position
+	#position = globalEditor.playerProperties.position
+	#phantomCamera.position = globalEditor.playerProperties.position
+func playMode():
+	phantomCamera.set_follow_offset(Vector2.ZERO)
+	phantomCamera.follow_target = player
+	#phantomCamera.follow_mode = phantomCamera.FollowMode.SIMPLE

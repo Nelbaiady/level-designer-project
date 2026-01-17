@@ -20,8 +20,8 @@ var directionInput = Vector2.ZERO
 
 func _ready() -> void:
 	globalEditor.player = self
-	signalBus.resetStage.connect(enterEditState)
-	signalBus.playLevel.connect(exitEditState)
+	signalBus.startEditMode.connect(enterEditState)
+	signalBus.startPlayMode.connect(exitEditState)
 	
 func enterEditState():
 	stateMachine._transitionToNextState("Editing")

@@ -13,6 +13,8 @@ func physics_update(delta: float) -> void:
 		player.gravityMult = player.fallingGravityMult
 		
 	player.move_and_slide()
-		
+	
+	if player.is_on_floor():
+		finished.emit(IDLE)
 	if player.velocity.y > 0:
 		finished.emit(FALLING)

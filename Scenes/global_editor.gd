@@ -18,9 +18,14 @@ var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008
 var currentLayer: int = 0
 var currentRoom: int = 0
 
+#var level : Dictionary = {"rooms":[{"background":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}}}}]}
+#var objectsHash : Dictionary = {}
+#var tilemaps : Dictionary = {}
+var playerProperties : Dictionary = {"position":Vector2(544,280)}
+
 #@onready var objects
 #@onready var tileMap: TileMapLayer
-@onready var tileMaps: Dictionary[int, TileMapLayer]
+#@onready var tileMaps: Dictionary[int, TileMapLayer]
 @onready var propertiesUI: VBoxContainer
 var objectBeingEdited
 var isObjectBeingEdited = false
@@ -32,14 +37,15 @@ const PLAYER = preload("uid://ce1i72nmpos1n")
 enum Tools {place, erase, move}
 @export var currentTool: Tools
 
-var objectsHash : Dictionary = {}
-var playerProperties : Dictionary = {"position":Vector2(544,280)}
 
 func _ready() -> void:
 	signalBus.setCurrentTool.connect(setCurrentTool)
 	signalBus.reloadPlayer.connect(reloadPlayer)
 	signalBus.showPropertiesSidebar.connect(propertiesEditorIsShown)
 	signalBus.hidePropertiesSidebar.connect(propertiesEditorIsHidden)
+	signalBus.onLevelReady.connect(levelNodeReady)
+func levelNodeReady(levelNode):
+	level = levelNode
 
 func _physics_process(_delta: float) -> void:
 	popupIsOpen = saveLoadPopupIsOpen or colorPickerPopupIsOpen
@@ -51,7 +57,7 @@ var itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5")
 func placeTile(item, cell):
 	#tileMap.set_cell(cursorCellCoords,0,Vector2i(1,1)) #IF WE WANTED TO PLACE A REGULAR TILE
 	#tileMap.set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
-	tileMaps[currentLayer].set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
+	level.layers[currentLayer].tileMap.set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
 func placeObject(object:objectItem, position:Vector2=Vector2.ZERO,startProperties={}, instanceID = null):
 	var objectToPlace = object.objectReference.instantiate()
 	objectToPlace.global_position = position
@@ -59,26 +65,22 @@ func placeObject(object:objectItem, position:Vector2=Vector2.ZERO,startPropertie
 	if instanceID == null:
 		instanceID = objectInstancesCount
 		objectInstancesCount+=1
-	globalEditor.objectsHash[instanceID] = {"object":objectToPlace, "rosterID":object.rosterID,"properties":{"position":position}}
+	globalEditor.getCurrentLevelLayerDict()["objects"][instanceID] = {"object":objectToPlace, "rosterID":object.rosterID,"properties":{"position":position}}
 	signalBus.placeObjectSignal.emit(instanceID, objectToPlace, startProperties)
-# placing an object when loading the level
-#func loadPlaceObject(loadingObject):
-	#var objectToPlace = itemRoster[loadingObject.rosterID].objectReference.instantiate()
-	#level.layers[currentLayer].objects.add_child(objectToPlace)
-	#var instanceID = int(loadingObject.instanceID)
-	#globalEditor.objectsHash[instanceID] = {"object":objectToPlace, "rosterID":int(loadingObject.rosterID),"properties": str_to_var(loadingObject.properties) }
-	#signalBus.placeObjectSignal.emit(instanceID, objectToPlace, str_to_var(loadingObject.properties) )
 
 func clearLevel():
-	for i in objectsHash:
-		if objectsHash[i].object == null:
-			printerr("found a null object. ObjectHash: ",objectsHash, "\n")
-		else:
-			objectsHash[i].object.queue_free()
+	for i in level["rooms"][currentRoom]["layers"].values():
+		for j in i["objects"]:
+			var object = level.rooms[currentRoom]["layers"][i].object
+			if object == null:
+				printerr("found a null object. ObjectHash: ",i["objects"], "\n")
+			else:
+				object.queue_free()
+		for j in i["tiles"].values():
+			i.clear()
 	#tileMap.clear()
-	for i in tileMaps.values():
-		i.clear()
-	objectsHash.clear()
+	#objectsHash.clear()
+	#level = {"rooms":[{"background":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}}}}]}
 	objectInstancesCount=0
 
 func reloadPlayer():
@@ -123,3 +125,8 @@ func propertiesEditorIsShown():
 	isObjectBeingEdited = true
 func propertiesEditorIsHidden():
 	isObjectBeingEdited = false
+
+func getCurrentLevelRoomDict():
+	return level.getCurrentRoomDict()
+func getCurrentLevelLayerDict():
+	return level.getCurrentLayerDict()

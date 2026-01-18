@@ -40,7 +40,7 @@ enum Tools {place, erase, move}
 
 func _ready() -> void:
 	signalBus.setCurrentTool.connect(setCurrentTool)
-	signalBus.reloadPlayer.connect(reloadPlayer)
+	signalBus.loadedLevel.connect(reloadPlayer)
 	signalBus.showPropertiesSidebar.connect(propertiesEditorIsShown)
 	signalBus.hidePropertiesSidebar.connect(propertiesEditorIsHidden)
 	signalBus.onLevelReady.connect(levelNodeReady)
@@ -69,18 +69,19 @@ func placeObject(object:objectItem, position:Vector2=Vector2.ZERO,startPropertie
 	signalBus.placeObjectSignal.emit(instanceID, objectToPlace, startProperties)
 
 func clearLevel():
-	for i in level["rooms"][currentRoom]["layers"].values():
-		for j in i["objects"]:
-			var object = level.rooms[currentRoom]["layers"][i].object
+	for layerIndex in level["rooms"][currentRoom]["layers"]:
+		var layer = level["rooms"][currentRoom]["layers"][layerIndex]
+		for objectIndex in layer["objects"]:
+			var object = level.rooms[currentRoom]["layers"][layerIndex]["objects"][objectIndex].object
 			if object == null:
-				printerr("found a null object. ObjectHash: ",i["objects"], "\n")
+				printerr("found a null object. Objects: ",layer["objects"], "\n")
 			else:
 				object.queue_free()
-		for j in i["tiles"].values():
-			i.clear()
+	for layer in level.layers.values():
+		layer.tileMap.clear()
 	#tileMap.clear()
 	#objectsHash.clear()
-	#level = {"rooms":[{"background":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}}}}]}
+	level.rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"objects":{}} ,1:{"objects":{}}}  }]
 	objectInstancesCount=0
 
 func reloadPlayer():

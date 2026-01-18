@@ -11,7 +11,11 @@ var isBeingEdited:bool = false
 func _ready() -> void:
 	clickCollision.input_event.connect(clickedOn)
 	signalBus.startEditMode.connect(resetPlayer)
+	signalBus.reloadPlayer.connect(loadPlayer)
 
+func loadPlayer():
+	for i in globalEditor.playerProperties:
+		setProperty(i,globalEditor.playerProperties[i])
 func resetPlayer():
 	rootNode.velocity = Vector2.ZERO
 	rootNode.animationPlayer.current_animation="idle"

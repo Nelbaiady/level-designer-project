@@ -1,7 +1,6 @@
 extends Node2D
 @onready var file_dialog: FileDialog = $"../FileDialog"
-@onready var tileMap: TileMapLayer = $"../Level/Layer0/TileMapLayer"
-@onready var tileMaps: Array[TileMapLayer] = [$"../Level/Layer0/TileMapLayer"]
+#@onready var tileMap: TileMapLayer = $"../Level/Layer0/TileMapLayer"
 
 var isSaving = false
 
@@ -35,43 +34,56 @@ func saveLevel(path):
 	var saveFile = FileAccess.open(path+".json", FileAccess.WRITE)
 	if(FileAccess.get_open_error() != OK):
 		return false
-	var levelSaveStruct : Dictionary = { "tiles": [], "objects": [], "playerProperties":{}}
-	#levelSaveStruct.objects.clear()
-	#levelSaveStruct.tiles.clear()
-	#levelSaveStruct.playerProperties.clear()
-	#ADD EVERYTHING TO THE LEVEL STRUCT
-	for vectorPos in tileMap.get_used_cells():
-		##var vectorPos = Vector2i(x, y)
-		var pos = [vectorPos.x,vectorPos.y]
-		var coords = [tileMap.get_cell_atlas_coords(vectorPos).x,tileMap.get_cell_atlas_coords(vectorPos).y]
-		var source : int = tileMap.get_cell_source_id(vectorPos)
-		var altTile : int = tileMap.get_cell_alternative_tile(vectorPos)
-		if source!=-1:
-			levelSaveStruct.tiles.append( { "pos": pos, "atlasCoords": coords, "sourceID": source, "altTile": altTile } )
-	for i in globalEditor.objectsHash:
-		var currentSavingObject = globalEditor.objectsHash[i]
-		levelSaveStruct.objects.append({"instanceID":i,"rosterID":currentSavingObject.rosterID,"properties":var_to_str(currentSavingObject.properties) })
+	#var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}} ,1:{"tiles":{},"objects":{}}}  }]
+	#var levelSaveStruct : Dictionary = {"rooms": [{"layers":{0:{"tiles": [], "objects": []}}}], "playerProperties":{}}
+	var levelSaveStruct : Dictionary = {"rooms": [ ],"playerProperties":{}}
+	for roomIndex in range(len(globalEditor.level.rooms)):
+		levelSaveStruct["rooms"].append( {"layers":{}} )#{"tiles": [], "objects": []} )
+		for layerIndex in globalEditor.level.rooms[roomIndex]["layers"]:
+			levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]={"tiles": [], "objects": []}
+			var layer = globalEditor.level.rooms[roomIndex]["layers"][layerIndex]
+			var tileMap = globalEditor.level.layers[layerIndex].tileMap
+			#ADD EVERYTHING TO THE LEVEL STRUCT
+			for cellPos in tileMap.get_used_cells():
+				##var cellPos = Vector2i(x, y)
+				var pos = [cellPos.x,cellPos.y]
+				var coords = [tileMap.get_cell_atlas_coords(cellPos).x,tileMap.get_cell_atlas_coords(cellPos).y]
+				var source : int = tileMap.get_cell_source_id(cellPos)
+				var altTile : int = tileMap.get_cell_alternative_tile(cellPos)
+				if source!=-1:
+					levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex].tiles.append( { "pos": pos, "atlasCoords": coords, "sourceID": source, "altTile": altTile } )
+			for i in layer["objects"]:
+				var currentSavingObject = layer["objects"][i]#globalEditor.objectsHash[i]
+				levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["objects"].append({"instanceID":i,"rosterID":currentSavingObject.rosterID,"properties":var_to_str(currentSavingObject.properties) })
 	levelSaveStruct.playerProperties = var_to_str(globalEditor.playerProperties)
 
 	saveFile.store_string(JSON.stringify(levelSaveStruct))
 	
 func loadLevel(path):
 	var levelFile = FileAccess.open(path, FileAccess.READ)
-	signalBus.reloadPlayer.emit()
+	#signalBus.reloadPlayer.emit()
 	if(FileAccess.get_open_error() != OK):
+		printerr("failed to open file: ",path)
 		return false
 	var jsonData = levelFile.get_as_text()
 	var parsedData = JSON.new()
 	parsedData.parse(jsonData)
 	var loadedData : Dictionary = parsedData.get_data()
 	globalEditor.clearLevel()
-	for i in len( loadedData.tiles ):
-		tileMap.set_cell(Vector2i(loadedData.tiles[i].pos[0],loadedData.tiles[i].pos[1]) , loadedData.tiles[i].sourceID,Vector2i(loadedData.tiles[i].atlasCoords[0],loadedData.tiles[i].atlasCoords[1]) , loadedData.tiles[i].altTile)
-	for i in len( loadedData.objects ):
-		var currentLoadingObject = loadedData.objects[i]
-		#globalEditor.loadPlaceObject(currentLoadingObject)
-		globalEditor.placeObject(globalEditor.itemRoster[currentLoadingObject.rosterID],Vector2.ZERO,str_to_var(currentLoadingObject.properties),int(currentLoadingObject.instanceID))
+	#var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}} ,1:{"tiles":{},"objects":{}}}  }]
+#	Loop through each layer within each room
+	for roomIndex in range(len(globalEditor.level.rooms)):
+		for layerIndex in globalEditor.level.rooms[roomIndex]["layers"]:
+			var tileMap = globalEditor.level.layers[layerIndex].tileMap
+			#place tiles for current room and layer
+			for i in len( loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["tiles"] ):
+				var currentTile = loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["tiles"][i]
+				tileMap.set_cell(Vector2i(currentTile.pos[0],currentTile.pos[1]) , currentTile.sourceID,Vector2i(currentTile.atlasCoords[0],currentTile.atlasCoords[1]) , currentTile.altTile)
+			#place objects for current room and layer
+			for i in len( loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["objects"] ):
+				var currentLoadingObject = loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["objects"][i]
+				#globalEditor.loadPlaceObject(currentLoadingObject)
+				globalEditor.placeObject(globalEditor.itemRoster[currentLoadingObject.rosterID],Vector2.ZERO,str_to_var(currentLoadingObject.properties),int(currentLoadingObject.instanceID))
 	globalEditor.playerProperties = str_to_var( loadedData.playerProperties )
-	signalBus.resetStage.emit()
-
-	
+	signalBus.loadedLevel.emit()
+	signalBus.reloadPlayer.emit()

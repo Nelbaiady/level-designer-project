@@ -1,6 +1,6 @@
 class_name Level extends Node2D
 
-var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}} ,1:{"tiles":{},"objects":{}}}  }]
+var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"objects":{}} ,1:{"objects":{}}}  }]
 var layers:Dictionary[int,LevelLayer]
 func _ready() -> void:
 #	find all layers and store them in the layers dictionary

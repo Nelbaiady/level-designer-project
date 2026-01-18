@@ -18,7 +18,8 @@ func _ready() -> void:
 	signalBus.startEditMode.connect(resetCamera)
 	#signalBus.connect("playLevel",resetCamera)
 	signalBus.startPlayMode.connect(playMode)
-
+	signalBus.loadedLevel.connect(refindPlayer)
+	
 
 func _physics_process(_delta: float) -> void:
 	if !globalEditor.isEditing:
@@ -53,3 +54,7 @@ func playMode():
 	phantomCamera.set_follow_offset(Vector2.ZERO)
 	phantomCamera.follow_target = player
 	#phantomCamera.follow_mode = phantomCamera.FollowMode.SIMPLE
+
+func refindPlayer():
+	player = globalEditor.player
+	phantomCamera.set_follow_target(player)

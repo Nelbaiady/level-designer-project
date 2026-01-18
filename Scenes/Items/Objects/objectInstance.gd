@@ -96,4 +96,4 @@ func checkErase():
 		eraseSelf()
 func eraseSelf():
 	rootNode.queue_free()
-	globalEditor.objectsHash.erase(instanceID)
+	globalEditor.getCurrentLevelLayerDict()["objects"].erase(instanceID)

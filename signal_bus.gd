@@ -20,6 +20,9 @@ signal startPlayMode()
 #destroy the player and recreate them to reset properties
 @warning_ignore("unused_signal")
 signal reloadPlayer()
+#this emits after a level has loaded
+@warning_ignore("unused_signal")
+signal loadedLevel()
 
 #signals for editing properties
 @warning_ignore("unused_signal")

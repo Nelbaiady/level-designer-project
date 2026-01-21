@@ -294,6 +294,7 @@ radius = 31.9
 height = 80.0
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
+physics_interpolation_mode = 1
 script = ExtResource("1_e8vge")
 
 [node name="playerProperties" type="Node" parent="."]

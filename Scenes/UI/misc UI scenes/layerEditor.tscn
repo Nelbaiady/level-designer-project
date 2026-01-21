@@ -1,0 +1,96 @@
+[gd_scene load_steps=12 format=3 uid="uid://0c854hhnl8dy"]
+
+[ext_resource type="Texture2D" uid="uid://dm58uajomomji" path="res://Scenes/UI/basic Icons/upArrow.png" id="1_esqf7"]
+[ext_resource type="Script" uid="uid://crkma5clu3p2r" path="res://Scenes/UI/misc UI scenes/layer_editor.gd" id="1_grkft"]
+[ext_resource type="Texture2D" uid="uid://v3184bj5ffkd" path="res://Scenes/UI/basic Icons/downArrow.png" id="2_g2fb5"]
+[ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="2_x16pu"]
+[ext_resource type="Script" uid="uid://cmcyx0p4s3cpq" path="res://Scenes/UI/misc UI scenes/layer_check_box.gd" id="3_1bom4"]
+[ext_resource type="PackedScene" uid="uid://c7kxkfdsoe5hv" path="res://Scenes/UI/ObjectProperties/propertyUIelements/vector_property_editor.tscn" id="3_7hjaf"]
+[ext_resource type="PackedScene" uid="uid://bl8v3im8arb10" path="res://Scenes/UI/ObjectProperties/propertyUIelements/color_property_editor.tscn" id="3_81hjd"]
+[ext_resource type="Script" uid="uid://e0mfhhv6s2r" path="res://Scenes/UI/ObjectProperties/propertyUIelements/specialPropertyUIElements/layer_scroll_scale_property_editor.gd" id="3_uc11u"]
+[ext_resource type="Texture2D" uid="uid://fdspcxtxvbrf" path="res://Scenes/UI/basic Icons/trash.png" id="5_rebym"]
+[ext_resource type="Script" uid="uid://cnd6y4oscb24s" path="res://Scenes/UI/ObjectProperties/propertyUIelements/layer_color_property_editor.gd" id="5_uc11u"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_7hjaf"]
+font_size = 12
+
+[node name="LayerEditor" type="Control"]
+custom_minimum_size = Vector2(0, 108)
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 0.16700001
+offset_bottom = -108.216
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+script = ExtResource("1_grkft")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(142, 4.3806763)
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+custom_minimum_size = Vector2(0, 105)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="CheckBox" type="CheckBox" parent="PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_x16pu")
+theme_type_variation = &"RadioButton"
+script = ExtResource("3_1bom4")
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "   Layer 0"
+label_settings = SubResource("LabelSettings_7hjaf")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScalePropertyEditor" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer2" instance=ExtResource("3_7hjaf")]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("3_uc11u")
+
+[node name="ColorPropertyEditor" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer2" instance=ExtResource("3_81hjd")]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("5_uc11u")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="upButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 3
+icon = ExtResource("1_esqf7")
+
+[node name="downButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 3
+icon = ExtResource("2_g2fb5")
+
+[node name="TrashButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 3
+icon = ExtResource("5_rebym")
+
+[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/CheckBox" to="PanelContainer/MarginContainer/HBoxContainer/CheckBox" method="_on_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/upButton" to="." method="_on_up_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/downButton" to="." method="_on_down_button_pressed"]

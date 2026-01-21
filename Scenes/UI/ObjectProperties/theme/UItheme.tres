@@ -1,20 +1,31 @@
-[gd_resource type="Theme" load_steps=5 format=3 uid="uid://crsgo6pa7nv5x"]
+[gd_resource type="Theme" load_steps=9 format=3 uid="uid://crsgo6pa7nv5x"]
 
 [ext_resource type="StyleBox" uid="uid://2d8f8r0eokfr" path="res://Scenes/UI/ObjectProperties/theme/hotbarButton.tres" id="1_ten13"]
 [ext_resource type="StyleBox" uid="uid://b18enm6ojxqlp" path="res://Scenes/UI/ObjectProperties/theme/hotbarButton/pressedHotbarButton.tres" id="2_1unef"]
+[ext_resource type="StyleBox" uid="uid://clhvdt3gigclc" path="res://Scenes/UI/misc UI scenes/sidebarPanel.tres" id="3_2725r"]
+[ext_resource type="StyleBox" uid="uid://cgb4o0r5f0gmp" path="res://Scenes/UI/misc UI scenes/tabPanel.tres" id="4_hi8js"]
 
 [sub_resource type="FontVariation" id="FontVariation_1unef"]
 spacing_bottom = -12
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_olyxf"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1unef"]
 bg_color = Color(0, 0.66910195, 0.7954759, 0.21176471)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_olyxf"]
+bg_color = Color(0.2947488, 0.40749165, 0.4988804, 0.25882354)
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
 [resource]
 default_base_scale = 1.0
 Button/font_sizes/font_size = 12
 Button/fonts/font = SubResource("FontVariation_1unef")
+Button/styles/hover = SubResource("StyleBoxTexture_olyxf")
 Button/styles/normal = ExtResource("1_ten13")
 Panel/styles/panel = SubResource("StyleBoxFlat_1unef")
+PanelContainer/styles/panel = ExtResource("1_ten13")
 SpinBoxInnerLineEdit/base_type = &"LineEdit"
 SpinBoxInnerLineEdit/constants/minimum_character_width = 3
 SpinBoxInnerLineEdit/font_sizes/font_size = 14
@@ -25,3 +36,9 @@ hotbarButton/styles/hover = ExtResource("1_ten13")
 hotbarButton/styles/hover_pressed = ExtResource("2_1unef")
 hotbarButton/styles/normal = ExtResource("1_ten13")
 hotbarButton/styles/pressed = ExtResource("2_1unef")
+hotbarPanel/base_type = &"Panel"
+hotbarPanel/styles/panel = SubResource("StyleBoxFlat_olyxf")
+propertiesPanel/base_type = &"Panel"
+propertiesPanel/styles/panel = ExtResource("3_2725r")
+tab/base_type = &"PanelContainer"
+tab/styles/panel = ExtResource("4_hi8js")

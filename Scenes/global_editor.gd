@@ -27,6 +27,7 @@ var playerProperties : Dictionary = {"position":Vector2(544,280)}
 #@onready var tileMap: TileMapLayer
 #@onready var tileMaps: Dictionary[int, TileMapLayer]
 @onready var propertiesUI: VBoxContainer
+@onready var propertiesSidebar: PropertiesSidebar
 var objectBeingEdited
 var isObjectBeingEdited = false
 
@@ -44,6 +45,7 @@ func _ready() -> void:
 	signalBus.showPropertiesSidebar.connect(propertiesEditorIsShown)
 	signalBus.hidePropertiesSidebar.connect(propertiesEditorIsHidden)
 	signalBus.onLevelReady.connect(levelNodeReady)
+	#signalBus.onLevelReady.emit()
 func levelNodeReady(levelNode):
 	level = levelNode
 
@@ -79,10 +81,10 @@ func clearLevel():
 				object.queue_free()
 	for layer in level.layers.values():
 		layer.tileMap.clear()
-	#tileMap.clear()
-	#objectsHash.clear()
-	level.rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"objects":{}} ,1:{"objects":{}}}  }]
+	level.rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{}  }]
+	level.collectChildren()
 	objectInstancesCount=0
+	signalBus.loadedLevel.emit()
 
 func reloadPlayer():
 	var prevPlayerParent = player.get_parent()

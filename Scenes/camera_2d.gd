@@ -1,6 +1,8 @@
 class_name GameplayCamera extends Camera2D
 
-@onready var player: CharacterBody2D = $"../Player"
+#@onready var player: CharacterBody2D = $"../Level/Player"
+#@onready var player: Player = $"../Level/Layer0/Player"
+@onready var player#: Player = $"../Level/Layer0/Objects/Player"
 
 var tileSize=100
 
@@ -15,15 +17,19 @@ var nextHoldStepTarget = holdThreshold
 @onready var phantomCamera: PhantomCamera2D = $"../PhantomCamera2D"
 
 func _ready() -> void:
+	signalBus.onLevelReady.connect(setPlayer)
 	signalBus.startEditMode.connect(resetCamera)
 	#signalBus.connect("playLevel",resetCamera)
 	signalBus.startPlayMode.connect(playMode)
 	signalBus.loadedLevel.connect(refindPlayer)
-	
+
+func setPlayer(_lvl):
+	player = globalEditor.player
 
 func _physics_process(_delta: float) -> void:
 	if !globalEditor.isEditing:
 		#position = position.lerp(player.position,0.3) 
+		#if player:
 		position = player.position
 		phantomCamera.set_follow_offset(player.velocity/8)
 	else:

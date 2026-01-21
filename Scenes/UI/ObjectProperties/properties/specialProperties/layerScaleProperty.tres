@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ObjectProperty" load_steps=3 format=3 uid="uid://bngfe3i05bh48"]
+
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="1_3sgdb"]
+[ext_resource type="PackedScene" uid="uid://c7kxkfdsoe5hv" path="res://Scenes/UI/ObjectProperties/propertyUIelements/vector_property_editor.tscn" id="2_s6rbs"]
+
+[resource]
+script = ExtResource("1_3sgdb")
+codeName = "scroll_scale"
+displayName = "Scroll"
+uiNode = ExtResource("2_s6rbs")
+defaultValue = 1.0
+maxValue = 9999999999999.0
+metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://de1p8l0t4qll7"
-path="res://.godot/imported/emptyIcon.png-1fca063c6b8c05588f385f0ee36f8acf.ctex"
+uid="uid://dm58uajomomji"
+path="res://.godot/imported/upArrow.png-95fc61d6f4d70db7536debad44515584.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/UI/emptyIcon.png"
-dest_files=["res://.godot/imported/emptyIcon.png-1fca063c6b8c05588f385f0ee36f8acf.ctex"]
+source_file="res://Scenes/UI/basic Icons/upArrow.png"
+dest_files=["res://.godot/imported/upArrow.png-95fc61d6f4d70db7536debad44515584.ctex"]
 
 [params]
 

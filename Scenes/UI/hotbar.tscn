@@ -4,31 +4,26 @@
 [ext_resource type="Script" uid="uid://cm5umat2khba3" path="res://Scenes/UI/HotbarPanel.gd" id="1_ss4vx"]
 [ext_resource type="Texture2D" uid="uid://b8e50snng4jjw" path="res://Scenes/Items/Terrain/grass/grassIcon.png" id="2_26udg"]
 [ext_resource type="Script" uid="uid://bre0ft12l6is3" path="res://Scenes/UI/hotbarButton.gd" id="2_sk345"]
-[ext_resource type="Texture2D" uid="uid://de1p8l0t4qll7" path="res://Scenes/UI/emptyIcon.png" id="4_26udg"]
+[ext_resource type="Texture2D" uid="uid://de1p8l0t4qll7" path="res://Scenes/UI/basic Icons/emptyIcon.png" id="4_26udg"]
 
 [node name="Hotbar" type="Control"]
+custom_minimum_size = Vector2(700, 0)
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
 grow_horizontal = 2
-grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Panel" type="Panel" parent="."]
-clip_contents = true
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.194
-anchor_right = 0.80600005
-anchor_bottom = 0.123
-offset_left = 0.5119934
-offset_right = -0.51208496
-offset_bottom = 0.29599762
+anchors_preset = 10
+anchor_right = 1.0
 grow_horizontal = 2
 theme = ExtResource("1_26udg")
+theme_type_variation = &"hotbarPanel"
 script = ExtResource("1_ss4vx")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel"]

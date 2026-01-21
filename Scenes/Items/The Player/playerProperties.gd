@@ -4,6 +4,9 @@ var isBeingEdited:bool = false
 	preload("uid://bh2hcytk84e13") #position
 	,preload("uid://dqbrp3ghialya") #size/scale
 	,preload("uid://byn3kv4q02kpl") #color/modulate
+	,preload("uid://bts6u1j5o4xl8") #jump power
+	,preload("uid://b15t6r3lo518i") #can Jump
+	
 	]
 @onready var clickCollision: Area2D = $"../Area2D"
 @onready var rootNode: CharacterBody2D = $".."
@@ -29,7 +32,7 @@ func resetPlayer():
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
 		if globalEditor.isEditing or globalEditor.isObjectBeingEdited:
-			summonPropertiesUI()
+			populatePropertiesUI()
 			signalBus.editingObject.emit("Player",-1)
 
 func getProperty(property:String):
@@ -41,29 +44,9 @@ func setProperty(property:String, value):
 	rootNode.set(property, value )
 	globalEditor.playerProperties[property] = value
 
-func summonPropertiesUI():
-	populatePropertiesUI()
-
 func populatePropertiesUI():
-	signalBus.showPropertiesSidebar.emit()
-#	Empty the UI first
-	for i in globalEditor.propertiesUI.get_children():
-		i.queue_free()
-#	tell the editor to focus on this object
-	if globalEditor.objectBeingEdited:
-		globalEditor.objectBeingEdited.setNotEditing()
-	globalEditor.objectBeingEdited = self
-	isBeingEdited = true
-#	populate the properties editor
-	for i in properties:
-		var newNode = i.uiNode.instantiate()
-		globalEditor.propertiesUI.add_child(newNode)
-		newNode.label.text = i.displayName
-		newNode.propertyName = i.codeName
-		newNode.value = getProperty(i.codeName)
-		newNode.updateValue()
-	if !signalBus.updateProperty.is_connected(setProperty):
-		signalBus.updateProperty.connect(setProperty)
+	globalEditor.propertiesSidebar.populatePropertiesUI(self)
+	
 func setNotEditing():
 	isBeingEdited = false
 	signalBus.updateProperty.disconnect(setProperty)

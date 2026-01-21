@@ -1,4 +1,4 @@
-extends PropertyEditor
+class_name TextPropertyEditor extends PropertyEditor
 
 
 #var value:String = ""
@@ -14,4 +14,5 @@ func _ready() -> void:
 
 func _on_line_edit_text_changed(new_text: String) -> void:
 	value = new_text
-	signalBus.updateProperty.emit(propertyName, value)
+	#signalBus.updateProperty.emit(propertyName, value)
+	emitUpdate()

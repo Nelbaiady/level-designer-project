@@ -1,4 +1,4 @@
-extends Node2D
+class_name ObjectInstance extends Node2D
 
 @export var clickCollision:Area2D
 @export var properties: Array[ObjectProperty] = [
@@ -36,8 +36,6 @@ func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 	rosterID = globalEditor.getCurrentLevelLayerDict()["objects"][instanceID]["rosterID"]
 	signalBus.placeObjectSignal.disconnect(setStartingStuff)
 
-func _physics_process(_delta: float) -> void:
-	pass
 
 func getProperty(property:String):
 	return rootNode.get(property)
@@ -45,6 +43,9 @@ func getProperty(property:String):
 func setProperty(property:String, value):
 	if property == "scale":
 		value = abs(value)
+	if !globalEditor.getCurrentLevelLayerDict()["objects"].has( instanceID ):
+		printerr("Error: no object of instance id ",instanceID," within layer ",globalEditor.currentLayer)
+		return -1
 	globalEditor.getCurrentLevelLayerDict()["objects"][ instanceID ]["properties"][property] = value
 	rootNode.set(property, value )
 
@@ -61,25 +62,7 @@ func summonPropertiesUI():
 	populatePropertiesUI()
 
 func populatePropertiesUI():
-	signalBus.showPropertiesSidebar.emit()
-#	Empty the UI first
-	for i in globalEditor.propertiesUI.get_children():
-		i.queue_free()
-	#propertyUiElements.clear()
-#	tell the editor to focus on this object
-	if globalEditor.objectBeingEdited:
-		globalEditor.objectBeingEdited.setNotEditing()
-	globalEditor.objectBeingEdited = self
-	isBeingEdited = true
-#	populate the properties editor
-	for i in properties:
-		var newNode = i.uiNode.instantiate() #REPLACE THIS WITH THE NEXT LINE
-		
-		globalEditor.propertiesUI.add_child(newNode)
-
-		if newNode is PropertyEditor:
-			newNode.setStartValues(getProperty(i.codeName),i.minValue, i.maxValue,i.step , i.codeName, i.displayName)
-	signalBus.updateProperty.connect(setProperty)
+	globalEditor.propertiesSidebar.populatePropertiesUI(self)
 
 func mouseEntered():
 	isMouseOver = true

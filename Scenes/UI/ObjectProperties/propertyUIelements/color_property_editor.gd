@@ -1,4 +1,4 @@
-extends PropertyEditor
+class_name ColorPropertyEditor extends PropertyEditor
 
 #var minValue: float
 #var maxValue: float
@@ -19,7 +19,8 @@ func propertyReady():
 
 func _on_color_picker_button_color_changed(color: Color) -> void:
 	value = color
-	signalBus.updateProperty.emit(propertyName, value)
+	#signalBus.updateProperty.emit(propertyName, value)
+	emitUpdate()
 
 func _on_color_picker_button_pressed() -> void:
 	#signalBus.colorPickerToggled.emit(true)

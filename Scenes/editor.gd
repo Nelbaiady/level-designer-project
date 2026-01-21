@@ -137,6 +137,7 @@ func eraseItem():
 		signalBus.eraseObject.emit()
 		
 
+##sets the mode to edit mode
 func resetStage():
 	globalEditor.isEditing = true
 	cursorItemIcon.visible = true

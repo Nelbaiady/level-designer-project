@@ -40,6 +40,7 @@ func saveLevel(path):
 	for roomIndex in range(len(globalEditor.level.rooms)):
 		levelSaveStruct["rooms"].append( {"layers":{}} )#{"tiles": [], "objects": []} )
 		for layerIndex in globalEditor.level.rooms[roomIndex]["layers"]:
+			#print("saving layer ",layerIndex)
 			levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]={"tiles": [], "objects": []}
 			var layer = globalEditor.level.rooms[roomIndex]["layers"][layerIndex]
 			var tileMap = globalEditor.level.layers[layerIndex].tileMap
@@ -73,7 +74,15 @@ func loadLevel(path):
 	#var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}} ,1:{"tiles":{},"objects":{}}}  }]
 #	Loop through each layer within each room
 	for roomIndex in range(len(globalEditor.level.rooms)):
-		for layerIndex in globalEditor.level.rooms[roomIndex]["layers"]:
+		globalEditor.level.rooms[globalEditor.currentRoom]["layers"]={}
+		#print("loadable layers: ",loadedData["rooms"][roomIndex]["layers"].keys())
+		#for layerIndex in globalEditor.level.rooms[roomIndex]["layers"]:
+		for stringLayerIndex in loadedData["rooms"][roomIndex]["layers"].keys():
+			var layerIndex = int(stringLayerIndex)
+			#layers[i.index] = i #We need to dynamically spawn the nodes and set their indices
+			globalEditor.level.rooms[roomIndex]["layers"][layerIndex]={"objects":{}}
+
+			globalEditor.currentLayer = layerIndex
 			var tileMap = globalEditor.level.layers[layerIndex].tileMap
 			#place tiles for current room and layer
 			for i in len( loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["tiles"] ):
@@ -84,6 +93,7 @@ func loadLevel(path):
 				var currentLoadingObject = loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["objects"][i]
 				#globalEditor.loadPlaceObject(currentLoadingObject)
 				globalEditor.placeObject(globalEditor.itemRoster[currentLoadingObject.rosterID],Vector2.ZERO,str_to_var(currentLoadingObject.properties),int(currentLoadingObject.instanceID))
+	globalEditor.currentLayer = 0
 	globalEditor.playerProperties = str_to_var( loadedData.playerProperties )
 	signalBus.loadedLevel.emit()
 	signalBus.reloadPlayer.emit()

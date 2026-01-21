@@ -51,8 +51,7 @@ func _process(_delta: float) -> void:
 			position = get_global_mouse_position()
 			mousePosition = get_viewport().get_mouse_position()
 	visible = cursorOnScreen and (globalEditor.isEditing or globalEditor.isObjectBeingEdited) and !isSpinBoxing
-	#itemIcon.visible = false#visible and globalEditor.isEditing
-	#print(itemIcon.texture)
+
 func _notification(event):
 	#mouse enters the window
 	if event == NOTIFICATION_WM_MOUSE_ENTER:

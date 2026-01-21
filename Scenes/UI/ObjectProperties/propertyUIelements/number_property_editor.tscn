@@ -8,6 +8,9 @@ font_size = 14
 
 [node name="NumberPropertyEditor" type="Panel"]
 custom_minimum_size = Vector2(0, 32)
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
 script = ExtResource("1_32n73")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -26,9 +29,10 @@ label_settings = SubResource("LabelSettings_ebjba")
 
 [node name="ValueSpinBox" type="SpinBox" parent="HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme = ExtResource("2_d5kri")
-min_value = -9999999999999.0
-max_value = 9999999999999.0
+min_value = -999999999999.0
+max_value = 999999999999.0
 step = 0.2
 allow_greater = true
 allow_lesser = true

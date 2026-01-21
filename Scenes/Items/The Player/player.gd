@@ -2,7 +2,8 @@ class_name Player extends CharacterBody2D
 @export var gravity : int = 2400
 @export var maxMoveSpeed : int = 700
 @export var accelaration : int = 4000
-@export var jumpSpeed : int = 1000
+@export var jumpPower : int = 1000
+@export var canJump := true
 @export var gravityMult : float = 1
 @export var fallingGravityMult : float = 2
 

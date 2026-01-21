@@ -8,4 +8,5 @@ script = ExtResource("1_tmsq6")
 codeName = "power"
 displayName = "Power"
 uiNode = ExtResource("2_1a1mj")
+hasMin = true
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

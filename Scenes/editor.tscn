@@ -1,8 +1,9 @@
-[gd_scene load_steps=24 format=4 uid="uid://bgavxi5l77ibl"]
+[gd_scene load_steps=25 format=3 uid="uid://bgavxi5l77ibl"]
 
 [ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
 [ext_resource type="PackedScene" uid="uid://dw4ojydnn8mlq" path="res://Cursor/cursor.tscn" id="1_eo2o7"]
 [ext_resource type="Script" uid="uid://buy227idb1d0c" path="res://Scenes/editor.gd" id="1_eyy8u"]
+[ext_resource type="Script" uid="uid://cd2xhslepnrjh" path="res://Scenes/top_area_ui.gd" id="2_3lyd6"]
 [ext_resource type="Script" uid="uid://y0j4pcn25wfi" path="res://Scenes/level.gd" id="2_24ceq"]
 [ext_resource type="PackedScene" uid="uid://dgdnl8mwnjivp" path="res://Scenes/UI/hotbar.tscn" id="2_32ik4"]
 [ext_resource type="Script" uid="uid://g7pdbfqfu3l5" path="res://Scenes/save_load_manager.gd" id="3_7fkqn"]
@@ -11,6 +12,7 @@
 [ext_resource type="Script" uid="uid://ypn63mwok8gk" path="res://Scenes/toolIndicatorLabel.gd" id="4_1k58v"]
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/The Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="4_8howc"]
+[ext_resource type="Texture2D" uid="uid://cufwjh7b2h1io" path="res://Scenes/UI/basic Icons/layersIcon.png" id="4_i5vsu"]
 [ext_resource type="Script" uid="uid://ffyc5hsflkqu" path="res://Scenes/propertiesEditingLabel.gd" id="4_l4kvy"]
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="7_nfgmo"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="8_cnbw5"]
@@ -18,10 +20,6 @@
 [ext_resource type="Script" uid="uid://gbx72oygq3hy" path="res://Scenes/objects.gd" id="9_1k58v"]
 [ext_resource type="Script" uid="uid://c6r085mo8sgb6" path="res://Scenes/levelLayer.gd" id="11_l4kvy"]
 [ext_resource type="Script" uid="uid://ul8eb8jem2l" path="res://Scenes/properties_handler.gd" id="15_i5vsu"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0l4bc"]
-width = 48
-height = 48
 
 [sub_resource type="Resource" id="Resource_nfgmo"]
 script = ExtResource("8_op3c8")
@@ -445,35 +443,37 @@ follow_viewport_enabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+[node name="Top Area UI" type="HBoxContainer" parent="CanvasLayer"]
+clip_contents = true
 anchors_preset = -1
 anchor_right = 1.0
-anchor_bottom = 0.15
-offset_bottom = -15.0
+anchor_bottom = 0.314
+offset_bottom = -64.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 12
+script = ExtResource("2_3lyd6")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Top Area UI"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Tool Display" type="Control" parent="CanvasLayer/HBoxContainer/HBoxContainer"]
+[node name="Tool Display" type="Control" parent="CanvasLayer/Top Area UI/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HBoxContainer/HBoxContainer/Tool Display"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Panel" type="Panel" parent="CanvasLayer/HBoxContainer/HBoxContainer/Tool Display/VBoxContainer"]
+[node name="Panel" type="Panel" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display/VBoxContainer"]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/HBoxContainer/HBoxContainer/Tool Display/VBoxContainer/Panel"]
+[node name="Label" type="Label" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display/VBoxContainer/Panel"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -488,37 +488,35 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_1k58v")
 
-[node name="Panel" type="Panel" parent="CanvasLayer/HBoxContainer/HBoxContainer"]
+[node name="Panel" type="Panel" parent="CanvasLayer/Top Area UI/HBoxContainer"]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="CanvasLayer/HBoxContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="CanvasLayer/Top Area UI/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="layersButton" type="Button" parent="CanvasLayer/HBoxContainer/HBoxContainer/Control"]
+[node name="layersButton" type="Button" parent="CanvasLayer/Top Area UI/HBoxContainer/Control"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -48.0
-offset_top = 48.0
-offset_bottom = 24.0
+offset_left = -46.0
+offset_top = 8.0
+offset_right = 2.0
+offset_bottom = 56.0
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_vertical = 0
 focus_mode = 0
 theme = ExtResource("3_cnbw5")
-theme_type_variation = &"hotbarButton"
-theme_override_icons/icon = SubResource("NoiseTexture2D_0l4bc")
-flat = true
+icon = ExtResource("4_i5vsu")
 icon_alignment = 1
-vertical_icon_alignment = 0
 
-[node name="Hotbar" parent="CanvasLayer/HBoxContainer" instance=ExtResource("2_32ik4")]
+[node name="Hotbar" parent="CanvasLayer/Top Area UI" instance=ExtResource("2_32ik4")]
 layout_mode = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/HBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Top Area UI"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -658,7 +656,6 @@ script = ExtResource("11_l4kvy")
 index = 2
 
 [node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer2"]
-tile_map_data = PackedByteArray("AAD8/wgAAAAAAAAAAAD8/wkAAAAAAAIAAAD9/wUAAAAAAAAAAAD9/wYAAAAAAAEAAAD9/wcAAAAAAAEAAAD9/wgAAAAEAAIAAAD9/wkAAAABAAIAAAD+/wUAAAACAAAAAAD+/wYAAAADAAIAAAD+/wcAAAABAAEAAAD+/wgAAAABAAEAAAD+/wkAAAABAAIAAAD//wYAAAACAAAAAAD//wcAAAADAAIAAAD//wgAAAABAAEAAAD//wkAAAABAAIAAAAAAAcAAAABAAAAAAAAAAgAAAABAAEAAAAAAAkAAAABAAIAAAABAAcAAAABAAAAAAABAAgAAAABAAEAAAABAAkAAAABAAIAAAACAAYAAAAAAAAAAAACAAcAAAAEAAIAAAACAAgAAAABAAEAAAACAAkAAAAGAAEAAAACAAoAAAAGAAAAAAADAAUAAAAAAAAAAAADAAYAAAAEAAIAAAADAAcAAAABAAEAAAADAAgAAAAGAAIAAAADAAkAAAACAAIAAAAEAAMAAAAEAAAAAAAEAAQAAAABAAMAAAAEAAUAAAAEAAEAAAAEAAYAAAABAAEAAAAEAAcAAAABAAEAAAAEAAgAAAABAAIAAAAFAAUAAAABAAAAAAAFAAYAAAABAAEAAAAFAAcAAAABAAEAAAAFAAgAAAAFAAIAAAAFAAkAAAAAAAIAAAAGAAIAAAAEAAAAAAAGAAMAAAABAAMAAAAGAAQAAAADAAYAAAAGAAUAAAAEAAIAAAAGAAYAAAABAAEAAAAGAAcAAAABAAEAAAAGAAgAAAABAAEAAAAGAAkAAAAFAAIAAAAGAAoAAAAAAAIAAAAHAAQAAAACAAAAAAAHAAUAAAACAAEAAAAHAAYAAAACAAEAAAAHAAcAAAADAAIAAAAHAAgAAAABAAEAAAAHAAkAAAAGAAIAAAAHAAoAAAACAAIAAAAIAAcAAAABAAAAAAAIAAgAAAABAAEAAAAIAAkAAAABAAIAAAAJAAYAAAAAAAAAAAAJAAcAAAAEAAIAAAAJAAgAAAABAAEAAAAJAAkAAAABAAIAAAAKAAUAAAAAAAAAAAAKAAYAAAAEAAIAAAAKAAcAAAABAAEAAAAKAAgAAAABAAEAAAAKAAkAAAABAAIAAAALAAQAAAAEAAAAAAALAAUAAAAFAAYAAAALAAYAAAACAAEAAAALAAcAAAADAAIAAAALAAgAAAABAAEAAAALAAkAAAAFAAIAAAALAAoAAAAAAAIAAAAMAAcAAAABAAAAAAAMAAgAAAABAAEAAAAMAAkAAAABAAEAAAAMAAoAAAABAAIAAAANAAYAAAAEAAAAAAANAAcAAAAEAAEAAAANAAgAAAABAAEAAAANAAkAAAABAAEAAAANAAoAAAABAAIAAAAOAAcAAAABAAAAAAAOAAgAAAABAAEAAAAOAAkAAAAGAAIAAAAOAAoAAAACAAIAAAAPAAIAAAAEAAAAAAAPAAMAAAABAAMAAAAPAAQAAAABAAMAAAAPAAUAAAABAAMAAAAPAAYAAAABAAMAAAAPAAcAAAAEAAEAAAAPAAgAAAABAAEAAAAPAAkAAAABAAIAAAAQAAcAAAABAAAAAAAQAAgAAAABAAEAAAAQAAkAAAABAAIAAAARAAYAAAAAAAAAAAARAAcAAAAEAAIAAAARAAgAAAABAAEAAAARAAkAAAABAAIAAAASAAYAAAABAAAAAAASAAcAAAABAAEAAAASAAgAAAABAAEAAAASAAkAAAABAAIAAAATAAYAAAACAAAAAAATAAcAAAACAAEAAAATAAgAAAADAAIAAAATAAkAAAABAAIAAAAUAAgAAAACAAAAAAAUAAkAAAACAAIAAAA=")
 tile_set = SubResource("TileSet_7fkqn")
 collision_enabled = false
 script = SubResource("GDScript_1k58v")
@@ -708,7 +705,7 @@ script = SubResource("GDScript_1k58v")
 [node name="Objects" type="Node2D" parent="Level/Layer-1"]
 script = ExtResource("9_1k58v")
 
-[connection signal="pressed" from="CanvasLayer/HBoxContainer/HBoxContainer/Control/layersButton" to="Level" method="_on_layers_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Top Area UI/HBoxContainer/Control/layersButton" to="Level" method="_on_layers_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/PropertiesSidebar/PropertiesPanel/closeButton" to="CanvasLayer/PropertiesSidebar" method="_on_close_button_pressed"]
 [connection signal="canceled" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_canceled"]
 [connection signal="confirmed" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_confirmed"]

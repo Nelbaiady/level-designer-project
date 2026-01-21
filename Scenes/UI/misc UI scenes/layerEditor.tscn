@@ -74,18 +74,21 @@ size_flags_horizontal = 4
 alignment = 1
 
 [node name="upButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 3
 icon = ExtResource("1_esqf7")
 
 [node name="downButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 3
 icon = ExtResource("2_g2fb5")
 
 [node name="TrashButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer"]
+visible = false
 layout_mode = 2
 size_flags_vertical = 4
 focus_mode = 3

@@ -94,23 +94,24 @@ func reloadPlayer():
 	player.position = Vector2(544.0,280.0)
 
 func _input(event: InputEvent) -> void:
-	#selecting items in the hotbar using the number keys
-	for i in range(10):
-		if event.is_action_pressed(str(i)):
-			setHotbarIndex(10 if i==0 else i-1)
-			
-	if event.is_action_pressed("nextItem"):
-		setHotbarIndex(posmod(hotbarIndex-1, len(hotbar)))
-	if event.is_action_pressed("previousItem"):
-		setHotbarIndex(posmod(hotbarIndex+1, len(hotbar)))
-	if event.is_action_pressed("eraseTool"):
-		signalBus.setCurrentTool.emit(Tools.erase)
-	if event.is_action_pressed("placeTool"):
-		signalBus.setCurrentTool.emit(Tools.place)
-	if event.is_action_pressed("nextTool"):
-		signalBus.setCurrentTool.emit(posmod((currentTool+1),len(Tools)))
-	if event.is_action_pressed("previousTool"):
-		signalBus.setCurrentTool.emit(posmod((currentTool-1),len(Tools)))
+	if isEditing:
+		#selecting items in the hotbar using the number keys
+		for i in range(10):
+			if event.is_action_pressed(str(i)):
+				setHotbarIndex(10 if i==0 else i-1)
+				
+		if event.is_action_pressed("nextItem"):
+			setHotbarIndex(posmod(hotbarIndex-1, len(hotbar)))
+		if event.is_action_pressed("previousItem"):
+			setHotbarIndex(posmod(hotbarIndex+1, len(hotbar)))
+		if event.is_action_pressed("eraseTool"):
+			signalBus.setCurrentTool.emit(Tools.erase)
+		if event.is_action_pressed("placeTool"):
+			signalBus.setCurrentTool.emit(Tools.place)
+		if event.is_action_pressed("nextTool"):
+			signalBus.setCurrentTool.emit(posmod((currentTool+1),len(Tools)))
+		if event.is_action_pressed("previousTool"):
+			signalBus.setCurrentTool.emit(posmod((currentTool-1),len(Tools)))
 
 func setHotbarIndex(newIndex):
 	if newIndex < len(hotbar) and hotbar[newIndex]:

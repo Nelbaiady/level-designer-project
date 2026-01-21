@@ -95,7 +95,6 @@ func loadLevel(path):
 				globalEditor.placeObject(globalEditor.itemRoster[currentLoadingObject.rosterID],Vector2.ZERO,str_to_var(currentLoadingObject.properties),int(currentLoadingObject.instanceID))
 			
 			#set the layer's properties
-			print("properties of layer ",layerIndex,": ",str_to_var(loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["layerProperties"]))
 			var currentLoadingLayerProperties = str_to_var(loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["layerProperties"])
 			for prop in currentLoadingLayerProperties:
 				globalEditor.level.setProperty(prop,currentLoadingLayerProperties[prop],layerIndex)

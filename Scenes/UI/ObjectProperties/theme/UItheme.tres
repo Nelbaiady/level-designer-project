@@ -8,7 +8,12 @@
 [sub_resource type="FontVariation" id="FontVariation_1unef"]
 spacing_bottom = -12
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_olyxf"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2725r"]
+bg_color = Color(0.6, 0.6, 0.6, 0.54901963)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1unef"]
 bg_color = Color(0, 0.66910195, 0.7954759, 0.21176471)
@@ -22,7 +27,7 @@ corner_radius_bottom_left = 16
 default_base_scale = 1.0
 Button/font_sizes/font_size = 12
 Button/fonts/font = SubResource("FontVariation_1unef")
-Button/styles/hover = SubResource("StyleBoxTexture_olyxf")
+Button/styles/hover = SubResource("StyleBoxFlat_2725r")
 Button/styles/normal = ExtResource("1_ten13")
 Panel/styles/panel = SubResource("StyleBoxFlat_1unef")
 PanelContainer/styles/panel = ExtResource("1_ten13")

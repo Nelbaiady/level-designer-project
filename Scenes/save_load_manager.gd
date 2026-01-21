@@ -56,6 +56,7 @@ func saveLevel(path):
 			for i in layer["objects"]:
 				var currentSavingObject = layer["objects"][i]#globalEditor.objectsHash[i]
 				levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["objects"].append({"instanceID":i,"rosterID":currentSavingObject.rosterID,"properties":var_to_str(currentSavingObject.properties) })
+			levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["layerProperties"]=var_to_str(globalEditor.level.rooms[roomIndex]["layers"][layerIndex]["layerProperties"])
 	levelSaveStruct.playerProperties = var_to_str(globalEditor.playerProperties)
 
 	saveFile.store_string(JSON.stringify(levelSaveStruct))
@@ -80,8 +81,7 @@ func loadLevel(path):
 		for stringLayerIndex in loadedData["rooms"][roomIndex]["layers"].keys():
 			var layerIndex = int(stringLayerIndex)
 			#layers[i.index] = i #We need to dynamically spawn the nodes and set their indices
-			globalEditor.level.rooms[roomIndex]["layers"][layerIndex]={"objects":{}}
-
+			globalEditor.level.rooms[roomIndex]["layers"][layerIndex]={"objects":{},"layerProperties":{}}
 			globalEditor.currentLayer = layerIndex
 			var tileMap = globalEditor.level.layers[layerIndex].tileMap
 			#place tiles for current room and layer
@@ -93,6 +93,13 @@ func loadLevel(path):
 				var currentLoadingObject = loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["objects"][i]
 				#globalEditor.loadPlaceObject(currentLoadingObject)
 				globalEditor.placeObject(globalEditor.itemRoster[currentLoadingObject.rosterID],Vector2.ZERO,str_to_var(currentLoadingObject.properties),int(currentLoadingObject.instanceID))
+			
+			#set the layer's properties
+			print("properties of layer ",layerIndex,": ",str_to_var(loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["layerProperties"]))
+			var currentLoadingLayerProperties = str_to_var(loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["layerProperties"])
+			for prop in currentLoadingLayerProperties:
+				globalEditor.level.setProperty(prop,currentLoadingLayerProperties[prop],layerIndex)
+			
 	globalEditor.currentLayer = 0
 	globalEditor.playerProperties = str_to_var( loadedData.playerProperties )
 	signalBus.loadedLevel.emit()

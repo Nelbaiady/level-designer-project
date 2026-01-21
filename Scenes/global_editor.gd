@@ -91,6 +91,7 @@ func reloadPlayer():
 	player.queue_free()
 	var newPlayer = PLAYER.instantiate()
 	prevPlayerParent.add_child(newPlayer)
+	player.position = Vector2(544.0,280.0)
 
 func _input(event: InputEvent) -> void:
 	#selecting items in the hotbar using the number keys

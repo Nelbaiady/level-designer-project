@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ObjectProperty" load_steps=3 format=3 uid="uid://d7aufjc2xj1h"]
+
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="1_ixdnv"]
+[ext_resource type="PackedScene" uid="uid://bydj3gco3u5wr" path="res://Scenes/UI/ObjectProperties/propertyUIelements/number_property_editor.tscn" id="2_wkinn"]
+
+[resource]
+script = ExtResource("1_ixdnv")
+codeName = "deceleration"
+displayName = "Ground deceleration"
+uiNode = ExtResource("2_wkinn")
+defaultValue = 4000.0
+step = 1.0
+hasMin = true
+metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

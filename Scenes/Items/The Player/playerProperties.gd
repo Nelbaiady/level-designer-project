@@ -6,7 +6,11 @@ var isBeingEdited:bool = false
 	,preload("uid://byn3kv4q02kpl") #color/modulate
 	,preload("uid://bts6u1j5o4xl8") #jump power
 	,preload("uid://b15t6r3lo518i") #can Jump
-	
+	,preload("uid://7hr3aqaumfr2") #can Crouch
+	,preload("uid://bethifqoxndpo") #can Crawl
+	,preload("uid://do5ll6ym26tfy") #acceleration
+	,preload("uid://cer7cfvecm4ww") #acceleration
+	,preload("uid://d7aufjc2xj1h") #deceleration
 	]
 @onready var clickCollision: Area2D = $"../Area2D"
 @onready var rootNode: CharacterBody2D = $".."

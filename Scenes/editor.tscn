@@ -655,7 +655,7 @@ scroll_scale = Vector2(0.6, 0.6)
 script = ExtResource("11_l4kvy")
 index = 2
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer2"]
+[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer2" groups=["solids"]]
 tile_set = SubResource("TileSet_7fkqn")
 collision_enabled = false
 script = SubResource("GDScript_1k58v")
@@ -669,7 +669,7 @@ scroll_scale = Vector2(0.8, 0.8)
 script = ExtResource("11_l4kvy")
 index = 1
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer1"]
+[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer1" groups=["solids"]]
 tile_set = SubResource("TileSet_7fkqn")
 collision_enabled = false
 script = SubResource("GDScript_1k58v")
@@ -684,7 +684,7 @@ script = ExtResource("11_l4kvy")
 position = Vector2(544, 280)
 floor_snap_length = 12.0
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer0"]
+[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer0" groups=["solids"]]
 tile_set = SubResource("TileSet_7fkqn")
 
 [node name="Objects" type="Node2D" parent="Level/Layer0"]
@@ -697,7 +697,7 @@ scroll_scale = Vector2(1.2, 1.2)
 script = ExtResource("11_l4kvy")
 index = -1
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer-1"]
+[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer-1" groups=["solids"]]
 tile_set = SubResource("TileSet_7fkqn")
 collision_enabled = false
 script = SubResource("GDScript_1k58v")

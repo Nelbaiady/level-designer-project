@@ -85,7 +85,7 @@ _data = {
 &"idil": SubResource("Animation_e7gxc")
 }
 
-[node name="Spring" type="RigidBody2D"]
+[node name="Spring" type="RigidBody2D" groups=["solids"]]
 input_pickable = true
 freeze = true
 script = ExtResource("1_3rwud")

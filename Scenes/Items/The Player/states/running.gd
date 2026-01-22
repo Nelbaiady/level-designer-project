@@ -2,11 +2,14 @@
 extends PlayerState
 
 func enter(_previous_state_path: String, _data := {}) -> void:
-	player.animationPlayer.play("run")
+	#player.animationPlayer.play(&"RESET")
+	#player.animationPlayer.advance(0)
+	#player.animationPlayer.play("run")
+	player.resetPlay("run")
 
 func physics_update(delta: float) -> void:
 	player.velocity.y += player.gravity * player.gravityMult * delta
-	player.velocity = Vector2(move_toward(player.velocity.x,player.directionInput.x * player.maxMoveSpeed,player.accelaration*delta),player.velocity.y)
+	player.velocity = Vector2(move_toward(player.velocity.x,player.directionInput.x * player.topRunSpeed,player.acceleration*delta),player.velocity.y)
 	player.move_and_slide()
 
 	if !player.is_on_floor():

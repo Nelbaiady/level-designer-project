@@ -46,7 +46,8 @@ func setProperty(property:String, value, layerID):
 	layers[layerID].set(property, value)
 
 func _on_layers_button_pressed() -> void:
-	globalEditor.propertiesSidebar.populateLayersUI(propertiesHandler)
+	#globalEditor.propertiesSidebar.populateLayersUI(propertiesHandler)
+	signalBus.populateLayersUI.emit(propertiesHandler)
 	
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("0"):

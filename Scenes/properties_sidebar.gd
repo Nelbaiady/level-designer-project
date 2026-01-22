@@ -4,7 +4,8 @@ var hotbarTween:Tween
 const LAYER_EDITOR = preload("uid://0c854hhnl8dy")
 
 func _ready() -> void:
-	globalEditor.propertiesSidebar = self
+	#globalEditor.propertiesSidebar = self
+	signalBus.populateLayersUI.connect(populateLayersUI)
 	signalBus.showPropertiesSidebar.connect(showSidebar)
 	signalBus.hidePropertiesSidebar.connect(hideSidebar)
 

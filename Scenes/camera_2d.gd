@@ -39,7 +39,6 @@ func _physics_process(_delta: float) -> void:
 func transLateCamera(direction: Vector2):
 	#phantomCamera.position += direction
 	phantomCamera.set_follow_offset(phantomCamera.get_follow_offset()+direction)
-	#position += direction
 	
 #func tweenToPlayer():
 	#var resetCamTween = create_tween()

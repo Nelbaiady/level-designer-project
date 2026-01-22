@@ -1,4 +1,4 @@
-extends Node2D
+class_name Cursor extends Node2D
 
 var cursorMoveVector:Vector2 
 var mousePosition:Vector2 
@@ -7,16 +7,13 @@ var mousePosition:Vector2
 var mouseOnScreen: bool = false
 var cursorOnScreen: bool = false
 var prioritizeController:bool = false
-#var popupWasOpen: bool = false #unused
 var isSpinBoxing: bool = false
-#@onready var itemIcon: TextureRect = $"../../cursorItemIcon"
-@onready var cursor_item_icon: TextureRect = $"../../cursorItemIcon"
+
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	signalBus.spinboxSpun.connect( spinBoxing )
-	
-func _process(_delta: float) -> void:
+func updateCursorPosition():
 	if globalEditor.isEditing or globalEditor.isObjectBeingEdited:
 		#To make UI block controller input, we make the controller trigger a real mouse click
 		if Input.is_action_just_pressed("controllerClickLeft"):
@@ -48,8 +45,12 @@ func _process(_delta: float) -> void:
 			if mouseOnScreen:
 				get_viewport().warp_mouse(get_viewport().canvas_transform * global_position)
 		else:
-			position = get_global_mouse_position()
+			#position = get_global_mouse_position()
 			mousePosition = get_viewport().get_mouse_position()
+			#mouse position relative to viewport + viewport distance from origin
+			position = mousePosition + get_viewport().get_camera_2d().position-get_viewport().get_visible_rect().size/2
+func _process(_delta: float) -> void:
+	updateCursorPosition()
 	visible = cursorOnScreen and (globalEditor.isEditing or globalEditor.isObjectBeingEdited) and !isSpinBoxing
 
 func _notification(event):
@@ -69,21 +70,15 @@ func _notification(event):
 func click():
 	var clickEvent = InputEventMouseButton.new()
 	clickEvent.position = get_viewport().canvas_transform * global_position
-	#clickEvent.position = position
 	clickEvent.button_index = MOUSE_BUTTON_LEFT
 	clickEvent.pressed = true
-	#get_viewport().push_input(clickEvent)
 	Input.parse_input_event(clickEvent)
-	#await get_tree().process_frame
-	#clickEvent.pressed = true
-	#Input.parse_input_event(clickEvent)
+
 func unClick():
 	var clickEvent = InputEventMouseButton.new()
 	clickEvent.position = get_viewport().canvas_transform * global_position
-	#clickEvent.position = position
 	clickEvent.button_index = MOUSE_BUTTON_LEFT
 	clickEvent.pressed = false
-	#get_viewport().push_input(clickEvent)
 	Input.parse_input_event(clickEvent)
 	
 func rightClick():

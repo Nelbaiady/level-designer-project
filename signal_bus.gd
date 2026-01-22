@@ -36,6 +36,8 @@ signal editingObject(objectName, instanceID)
 
 #signals for layer property editing
 @warning_ignore("unused_signal")
+signal populateLayersUI(propertiesHandler)
+@warning_ignore("unused_signal")
 signal updateLayerProperty(property, value, layerID)##signal for editing layer properties
 @warning_ignore("unused_signal")
 signal selectLayer(layerID)##signal for changing layer

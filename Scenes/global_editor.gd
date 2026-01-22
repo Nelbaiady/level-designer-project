@@ -27,7 +27,7 @@ var playerProperties : Dictionary = {"position":Vector2(544,280)}
 #@onready var tileMap: TileMapLayer
 #@onready var tileMaps: Dictionary[int, TileMapLayer]
 @onready var propertiesUI: VBoxContainer
-@onready var propertiesSidebar: PropertiesSidebar
+#@onready var propertiesSidebar: PropertiesSidebar
 var objectBeingEdited
 var isObjectBeingEdited = false
 

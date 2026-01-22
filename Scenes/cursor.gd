@@ -36,7 +36,9 @@ func updateCursorPosition():
 			cursorOnScreen = true
 		#code for moving the cursor with controllers
 		if prioritizeController:
-			cursorMoveSpeedMult = 1-Input.get_action_strength("L2") + 0.1
+			cursorMoveSpeedMult = 1-Input.get_action_strength("L2")
+			if cursorMoveSpeedMult < 0.15:
+				cursorMoveSpeedMult = 0.15
 			position = get_global_mouse_position() + cursorMoveVector * cursorMoveSpeed * cursorMoveSpeedMult
 			#Make sure the cursor does not go off screen
 			position.x = clamp(position.x, get_viewport().get_camera_2d().global_position.x - get_viewport_rect().size.x / 2,get_viewport().get_camera_2d().global_position.x + get_viewport_rect().size.x / 2 - 1)#-1 on the max of both clamps because the mouse otherwise goes off screen

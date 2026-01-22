@@ -49,7 +49,7 @@ func setProperty(property:String, value):
 	globalEditor.playerProperties[property] = value
 
 func populatePropertiesUI():
-	globalEditor.propertiesSidebar.populatePropertiesUI(self)
+	signalBus.populatePropertiesUI.emit(self)
 	
 func setNotEditing():
 	isBeingEdited = false

@@ -62,7 +62,7 @@ func summonPropertiesUI():
 	populatePropertiesUI()
 
 func populatePropertiesUI():
-	globalEditor.propertiesSidebar.populatePropertiesUI(self)
+	signalBus.populatePropertiesUI.emit(self)
 
 func mouseEntered():
 	isMouseOver = true

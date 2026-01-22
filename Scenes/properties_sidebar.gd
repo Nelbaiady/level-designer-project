@@ -5,6 +5,7 @@ const LAYER_EDITOR = preload("uid://0c854hhnl8dy")
 
 func _ready() -> void:
 	#globalEditor.propertiesSidebar = self
+	signalBus.populatePropertiesUI.connect(populatePropertiesUI)
 	signalBus.populateLayersUI.connect(populateLayersUI)
 	signalBus.showPropertiesSidebar.connect(showSidebar)
 	signalBus.hidePropertiesSidebar.connect(hideSidebar)

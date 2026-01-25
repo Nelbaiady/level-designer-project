@@ -8,6 +8,7 @@ script = ExtResource("1_iylaw")
 codeName = "scale"
 displayName = "Size"
 uiNode = ExtResource("2_iylaw")
+minValue = 0.1
 maxValue = 9999999999999.0
 hasMin = true
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

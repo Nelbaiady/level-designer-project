@@ -1,7 +1,8 @@
-[gd_scene load_steps=24 format=3 uid="uid://ce1i72nmpos1n"]
+[gd_scene load_steps=26 format=3 uid="uid://ce1i72nmpos1n"]
 
 [ext_resource type="Script" uid="uid://dm0nrwlnpl01u" path="res://Scenes/Items/The Player/player.gd" id="1_e8vge"]
 [ext_resource type="Texture2D" uid="uid://b1kn3s452k3i3" path="res://Scenes/Items/The Player/sprites/player_idle.png" id="2_k1a7i"]
+[ext_resource type="PackedScene" uid="uid://fij4t53a7ga" path="res://shaders and effects/selection_particles.tscn" id="3_jkifv"]
 [ext_resource type="Texture2D" uid="uid://ct3tpjr58vm1h" path="res://Scenes/Items/The Player/sprites/player_run.png" id="3_l5y80"]
 [ext_resource type="Texture2D" uid="uid://cgv67v8iol7sl" path="res://Scenes/Items/The Player/sprites/player_jumped.png" id="4_kvi7n"]
 [ext_resource type="Texture2D" uid="uid://dh4haxp1xh35w" path="res://Scenes/Items/The Player/sprites/player_jumpUp.png" id="5_kvi7n"]
@@ -13,6 +14,8 @@
 [ext_resource type="Script" uid="uid://dl6ck2tmwtmxy" path="res://Scenes/Items/The Player/states/editing.gd" id="10_qsa3t"]
 [ext_resource type="Script" uid="uid://de12sfrbh1lj5" path="res://Scenes/Items/The Player/crouched.gd" id="11_meww7"]
 [ext_resource type="Script" uid="uid://dxw0j6wgiic50" path="res://Scenes/Items/The Player/states/running.gd" id="12_6170r"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jkifv"]
 
 [sub_resource type="Animation" id="Animation_kvi7n"]
 length = 0.001
@@ -75,6 +78,23 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_meww7"]
+resource_name = "crouching"
+length = 0.2083375
+step = 0.041666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.20833333),
+"transitions": PackedFloat32Array(0.19614607, 1.1095697, 2.4622886),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 0.4), Vector2(1, 0.5)]
 }
 
 [sub_resource type="Animation" id="Animation_l5y80"]
@@ -293,23 +313,6 @@ tracks/3/keys = {
 "values": [0, 1, 2, 3, 4]
 }
 
-[sub_resource type="Animation" id="Animation_meww7"]
-resource_name = "crouching"
-length = 0.2083375
-step = 0.041666668
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.125, 0.20833333),
-"transitions": PackedFloat32Array(0.19614607, 1.1095697, 2.4622886),
-"update": 0,
-"values": [Vector2(1, 1), Vector2(1.2, 0.4), Vector2(1, 0.5)]
-}
-
 [sub_resource type="Animation" id="Animation_jkifv"]
 resource_name = "unCrouchin"
 length = 0.25000417
@@ -410,12 +413,16 @@ height = 80.0
 
 [node name="Player" type="CharacterBody2D" groups=["player", "solids"]]
 physics_interpolation_mode = 1
+material = SubResource("ShaderMaterial_jkifv")
 script = ExtResource("1_e8vge")
 
-[node name="playerProperties" type="Node" parent="."]
+[node name="playerProperties" type="Node2D" parent="."]
 script = ExtResource("6_mpkmv")
 
+[node name="selectionParticles" parent="playerProperties" instance=ExtResource("3_jkifv")]
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
+use_parent_material = true
 position = Vector2(0, 47)
 texture = ExtResource("2_k1a7i")
 offset = Vector2(1, -41.945313)

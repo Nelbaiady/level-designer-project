@@ -1,5 +1,6 @@
 class_name ObjectInstance extends Node2D
 
+@onready var selectionParticles: GPUParticles2D = $selectionParticles
 @export var clickCollision:Area2D
 @export var properties: Array[ObjectProperty] = [
 	preload("uid://bh2hcytk84e13") #position
@@ -14,6 +15,7 @@ var isBeingEdited = false
 var isMouseOver:bool = false
 var rosterID:int
 var instanceID:int = -1
+var layerID:int = 0
 
 func _ready() -> void:
 	rootNode= get_parent()
@@ -25,8 +27,20 @@ func _ready() -> void:
 		clickCollision.mouse_entered.connect(mouseEntered)
 		clickCollision.mouse_exited.connect(mouseExited)
 		signalBus.eraseObject.connect(checkErase)
+		signalBus.editingObject.connect(objectEditingStarted)
+		signalBus.hidePropertiesSidebar.connect(objectEditingStopped)
 
+##outline when selecting an object
+func objectEditingStarted(_name, _id):
+	if globalEditor.objectBeingEdited == self:
+		selectionParticles.emitting = true
+	else:
+		selectionParticles.emitting = false
+func objectEditingStopped():
+	selectionParticles.emitting = false
+	
 func setStartingStuff(instID, obj, loadedProperties:Dictionary):
+	layerID = globalEditor.currentLayer
 	if obj == rootNode:
 		instanceID = instID
 		if loadedProperties:
@@ -43,10 +57,10 @@ func getProperty(property:String):
 func setProperty(property:String, value):
 	if property == "scale":
 		value = abs(value)
-	if !globalEditor.getCurrentLevelLayerDict()["objects"].has( instanceID ):
-		printerr("Error: no object of instance id ",instanceID," within layer ",globalEditor.currentLayer)
-		return -1
-	globalEditor.getCurrentLevelLayerDict()["objects"][ instanceID ]["properties"][property] = value
+	#if !globalEditor.getCurrentLevelLayerDict()["objects"].has( instanceID ):
+		#printerr("Error: no object of instance id ",instanceID," within layer ",globalEditor.currentLayer)
+		#return -1
+	globalEditor.getCurrentLevelRoomDict()["layers"][layerID]["objects"][ instanceID ]["properties"][property] = value
 	rootNode.set(property, value )
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:

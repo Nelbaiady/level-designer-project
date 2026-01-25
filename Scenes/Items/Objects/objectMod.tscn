@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://c4aci6f2wscx5"]
+[gd_scene load_steps=3 format=3 uid="uid://c4aci6f2wscx5"]
 
 [ext_resource type="Script" uid="uid://cb1l6jkesh14s" path="res://Scenes/Items/Objects/objectInstance.gd" id="1_22uvg"]
+[ext_resource type="PackedScene" uid="uid://fij4t53a7ga" path="res://shaders and effects/selection_particles.tscn" id="2_23st2"]
 
 [node name="Object" type="Node2D"]
 script = ExtResource("1_22uvg")
+
+[node name="selectionParticles" parent="." instance=ExtResource("2_23st2")]
+position = Vector2(0, 32)

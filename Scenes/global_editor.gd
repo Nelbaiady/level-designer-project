@@ -57,8 +57,6 @@ func _physics_process(_delta: float) -> void:
 var itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
 
 func placeTile(item, cell):
-	#tileMap.set_cell(cursorCellCoords,0,Vector2i(1,1)) #IF WE WANTED TO PLACE A REGULAR TILE
-	#tileMap.set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
 	level.layers[currentLayer].tileMap.set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
 func placeObject(object:objectItem, position:Vector2=Vector2.ZERO,startProperties={}, instanceID = null):
 	var objectToPlace = object.objectReference.instantiate()

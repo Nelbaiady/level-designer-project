@@ -92,8 +92,8 @@ script = ExtResource("1_3rwud")
 
 [node name="Object" parent="." node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_n374f")]
 position = Vector2(0, -32)
-clickCollision = NodePath("Area2D2")
 properties = Array[ExtResource("3_mrp00")]([ExtResource("4_vclpx"), ExtResource("5_wnvis"), ExtResource("6_yfou2"), ExtResource("7_vmnu4"), ExtResource("8_vclpx")])
+clickCollision = NodePath("Area2D2")
 
 [node name="Area2D2" type="Area2D" parent="Object"]
 
@@ -102,6 +102,7 @@ position = Vector2(0, 32)
 shape = SubResource("RectangleShape2D_n374f")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+use_parent_material = true
 position = Vector2(0, -32)
 texture = ExtResource("1_kccgo")
 hframes = 6
@@ -115,6 +116,7 @@ libraries = {
 autoplay = "Spring_idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_kccgo")
 
@@ -122,6 +124,7 @@ shape = SubResource("RectangleShape2D_kccgo")
 position = Vector2(0, -16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+visible = false
 position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_3rwud")
 

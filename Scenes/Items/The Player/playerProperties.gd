@@ -1,5 +1,8 @@
 extends Node
-var isBeingEdited:bool = false
+
+@onready var selectionParticles: GPUParticles2D = $selectionParticles
+@onready var clickCollision: Area2D = $"../Area2D"
+@onready var rootNode: CharacterBody2D = $".."
 @export var properties: Array[ObjectProperty] = [
 	preload("uid://bh2hcytk84e13") #position
 	,preload("uid://dqbrp3ghialya") #size/scale
@@ -12,13 +15,23 @@ var isBeingEdited:bool = false
 	,preload("uid://cer7cfvecm4ww") #acceleration
 	,preload("uid://d7aufjc2xj1h") #deceleration
 	]
-@onready var clickCollision: Area2D = $"../Area2D"
-@onready var rootNode: CharacterBody2D = $".."
+var isBeingEdited:bool = false
 
 func _ready() -> void:
 	clickCollision.input_event.connect(clickedOn)
 	signalBus.startEditMode.connect(resetPlayer)
 	signalBus.reloadPlayer.connect(loadPlayer)
+	signalBus.editingObject.connect(objectEditingStarted)
+	signalBus.hidePropertiesSidebar.connect(objectEditingStopped)
+#
+##outline when selecting an object
+func objectEditingStarted(_name, _id):
+	if globalEditor.objectBeingEdited == self:
+		selectionParticles.emitting = true
+	else:
+		selectionParticles.emitting = false
+func objectEditingStopped():
+	selectionParticles.emitting = false
 
 func loadPlayer():
 	for i in globalEditor.playerProperties:

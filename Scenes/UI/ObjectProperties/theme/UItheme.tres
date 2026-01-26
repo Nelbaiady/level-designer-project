@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=9 format=3 uid="uid://crsgo6pa7nv5x"]
+[gd_resource type="Theme" format=3 uid="uid://crsgo6pa7nv5x"]
 
 [ext_resource type="StyleBox" uid="uid://2d8f8r0eokfr" path="res://Scenes/UI/ObjectProperties/theme/hotbarButton.tres" id="1_ten13"]
 [ext_resource type="StyleBox" uid="uid://b18enm6ojxqlp" path="res://Scenes/UI/ObjectProperties/theme/hotbarButton/pressedHotbarButton.tres" id="2_1unef"]

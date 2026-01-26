@@ -82,6 +82,7 @@ func clearLevel():
 	level.rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{}  }]
 	level.collectChildren()
 	objectInstancesCount=0
+	signalBus.hidePropertiesSidebar.emit()
 	signalBus.loadedLevel.emit()
 
 func reloadPlayer():

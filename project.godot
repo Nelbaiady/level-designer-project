@@ -8,11 +8,15 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Level Designer Project"
 run/main_scene="uid://bgavxi5l77ibl"
-config/features=PackedStringArray("4.5", "Forward Plus")
+config/features=PackedStringArray("4.6", "Forward Plus")
 run/max_fps=144
 boot_splash/bg_color=Color(1, 0.827451, 0.42745098, 1)
 boot_splash/image="uid://8vrw88iumrtu"
@@ -22,7 +26,7 @@ config/icon="res://icon.svg"
 
 globalEditor="*res://Scenes/global_editor.gd"
 signalBus="*res://signal_bus.gd"
-PhantomCameraManager="*res://addons/phantom_camera/scripts/managers/phantom_camera_manager.gd"
+PhantomCameraManager="*uid://duq6jhf6unyis"
 
 [dotnet]
 

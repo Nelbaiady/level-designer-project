@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://0c854hhnl8dy"]
+[gd_scene format=3 uid="uid://0c854hhnl8dy"]
 
 [ext_resource type="Texture2D" uid="uid://dm58uajomomji" path="res://Scenes/UI/basic Icons/upArrow.png" id="1_esqf7"]
 [ext_resource type="Script" uid="uid://crkma5clu3p2r" path="res://Scenes/UI/misc UI scenes/layer_editor.gd" id="1_grkft"]
@@ -14,7 +14,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_7hjaf"]
 font_size = 12
 
-[node name="LayerEditor" type="Control"]
+[node name="LayerEditor" type="Control" unique_id=1157302587]
 custom_minimum_size = Vector2(0, 108)
 layout_mode = 3
 anchor_right = 1.0
@@ -25,7 +25,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 0
 script = ExtResource("1_grkft")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1431507386]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,60 +34,60 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(142, 4.3806763)
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1215938266]
 custom_minimum_size = Vector2(0, 105)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer" unique_id=865965252]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="CheckBox" type="CheckBox" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="CheckBox" type="CheckBox" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=681615031]
 layout_mode = 2
 theme = ExtResource("2_x16pu")
 theme_type_variation = &"RadioButton"
 script = ExtResource("3_1bom4")
 
-[node name="Label" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=1262975824]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "   Layer 0"
 label_settings = SubResource("LabelSettings_7hjaf")
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=1143414604]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ScalePropertyEditor" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer2" instance=ExtResource("3_7hjaf")]
+[node name="ScalePropertyEditor" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer2" unique_id=105774349 instance=ExtResource("3_7hjaf")]
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("3_uc11u")
 
-[node name="ColorPropertyEditor" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer2" instance=ExtResource("3_81hjd")]
+[node name="ColorPropertyEditor" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer2" unique_id=1663561483 instance=ExtResource("3_81hjd")]
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("5_uc11u")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=1173106733]
 layout_mode = 2
 size_flags_horizontal = 4
 alignment = 1
 
-[node name="upButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="upButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1879007671]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 3
 icon = ExtResource("1_esqf7")
 
-[node name="downButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer"]
+[node name="downButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1096124559]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 3
 icon = ExtResource("2_g2fb5")
 
-[node name="TrashButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="TrashButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=121379757]
 visible = false
 layout_mode = 2
 size_flags_vertical = 4

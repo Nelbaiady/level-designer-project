@@ -19,6 +19,7 @@ func _ready() -> void:
 	colorPropertyEditorNode.setStartValues(layer.modulate,0,0,0,"modulate","Color",false,false,[layerID])
 	#selectionPropertyEditorNode.setStartValues((level.layerID==layerID),0,0,0,"","",false,false,[layerID])
 	refreshData()
+	signalBus.updateLayerUI.connect(refreshData)
 
 func layerChanged(_newLayer):
 	refreshData()
@@ -36,19 +37,22 @@ func refreshData():
 	
 
 func _on_up_button_pressed() -> void:
-#	get the layer node's index position relative to its siblings
-	var targetNodeIndex:int
-#	If the above layer is layer 0
-	if layerID==-1:
-		targetNodeIndex = (level.layers[layerID+1].get_index()-1) #move two steps above layer 0 (the player is supposed to be in between)
-	else: 
-		targetNodeIndex = level.layers[layerID+1].get_index()
-		level.swapLayers(layerID,layerID+1)
-		
-	level.move_child(level.layers[layerID],targetNodeIndex)
-	
-	refreshData()
-	level.collectChildren()
+##	get the layer node's index position relative to its siblings
+	#var targetNodeIndex:int
+##	If the above layer is layer 0
+	#if layerID==-1:
+		#targetNodeIndex = (level.layers[layerID+1].get_index()-1) #move two steps above layer 0 (the player is supposed to be in between)
+	#else: 
+		#targetNodeIndex = level.layers[layerID+1].get_index()
+		#level.swapLayers(layerID,layerID+1)
+		#
+	#level.move_child(level.layers[layerID],targetNodeIndex)
+	#
+	signalBus.moveLayerUp.emit(layerID)
+	#refreshData()
+	#level.collectChildren()
 
 func _on_down_button_pressed() -> void:
-	pass # Replace with function body.
+	signalBus.moveLayerDown.emit(layerID)
+	#refreshData()
+	#level.collectChildren()

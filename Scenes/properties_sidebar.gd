@@ -42,7 +42,6 @@ func populatePropertiesUI(object):
 				newNode.setStartValues(object.getProperty(i.codeName),i.minValue, i.maxValue,i.step , i.codeName, i.displayName,i.hasMin, i.hasMax ,[])
 	if !signalBus.updateProperty.is_connected(object.setProperty):
 		signalBus.updateProperty.connect(object.setProperty)
-		
 ##	tell the editor to forget any other objects and focus on this object
 func setObjectBeingEdited(object):
 	if globalEditor.objectBeingEdited:

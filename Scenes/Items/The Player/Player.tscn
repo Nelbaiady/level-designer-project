@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://ce1i72nmpos1n"]
+[gd_scene format=3 uid="uid://ce1i72nmpos1n"]
 
 [ext_resource type="Script" uid="uid://dm0nrwlnpl01u" path="res://Scenes/Items/The Player/player.gd" id="1_e8vge"]
 [ext_resource type="Texture2D" uid="uid://b1kn3s452k3i3" path="res://Scenes/Items/The Player/sprites/player_idle.png" id="2_k1a7i"]
@@ -411,17 +411,17 @@ _data = {
 radius = 31.9
 height = 80.0
 
-[node name="Player" type="CharacterBody2D" groups=["player", "solids"]]
+[node name="Player" type="CharacterBody2D" unique_id=668648745 groups=["player", "solids"]]
 physics_interpolation_mode = 1
 material = SubResource("ShaderMaterial_jkifv")
 script = ExtResource("1_e8vge")
 
-[node name="playerProperties" type="Node2D" parent="."]
+[node name="playerProperties" type="Node2D" parent="." unique_id=1069572556]
 script = ExtResource("6_mpkmv")
 
-[node name="selectionParticles" parent="playerProperties" instance=ExtResource("3_jkifv")]
+[node name="selectionParticles" parent="playerProperties" unique_id=1909001571 instance=ExtResource("3_jkifv")]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1771113116]
 use_parent_material = true
 position = Vector2(0, 47)
 texture = ExtResource("2_k1a7i")
@@ -429,53 +429,51 @@ offset = Vector2(1, -41.945313)
 hframes = 3
 vframes = 2
 
-[node name="uncrouchChecker" type="Area2D" parent="."]
+[node name="uncrouchChecker" type="Area2D" parent="." unique_id=1223757199]
 
-[node name="PlayerCollision" type="CollisionPolygon2D" parent="uncrouchChecker"]
+[node name="PlayerCollision" type="CollisionPolygon2D" parent="uncrouchChecker" unique_id=1639036022]
 scale = Vector2(0.96, 0.96)
 polygon = PackedVector2Array(19, -24, 32, 9, -32, 9, -19, -24, 0, -30)
 
-[node name="PlayerCollision" type="CollisionPolygon2D" parent="."]
+[node name="PlayerCollision" type="CollisionPolygon2D" parent="." unique_id=1984773814]
 scale = Vector2(0.96, 0.96)
 polygon = PackedVector2Array(19, -24, 32, 9, 32, 41, 24, 49, -24, 49, -32, 41, -32, 9, -19, -24, 0, -30)
 
-[node name="PlayerCrouchCollision" type="CollisionPolygon2D" parent="."]
+[node name="PlayerCrouchCollision" type="CollisionPolygon2D" parent="." unique_id=223064845]
 scale = Vector2(0.96, 0.96)
 polygon = PackedVector2Array(32, 9, 32, 41, 24, 49, -24, 49, -32, 41, -32, 9)
 disabled = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_ay8ch")
-}
-autoplay = "idle"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2057835058]
+libraries/ = SubResource("AnimationLibrary_ay8ch")
+autoplay = &"idle"
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." unique_id=598745717]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1536448752]
 position = Vector2(0, 9)
 shape = SubResource("CapsuleShape2D_gntrk")
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
+[node name="StateMachine" type="Node" parent="." unique_id=1748929628 node_paths=PackedStringArray("initialState")]
 script = ExtResource("7_4cmne")
 initialState = NodePath("Editing")
 metadata/_custom_type_script = "uid://bdsg5fotd5pq3"
 
-[node name="Falling" type="Node" parent="StateMachine"]
+[node name="Falling" type="Node" parent="StateMachine" unique_id=1649807558]
 script = ExtResource("8_qsa3t")
 
-[node name="Rising" type="Node" parent="StateMachine"]
+[node name="Rising" type="Node" parent="StateMachine" unique_id=907149053]
 script = ExtResource("8_w1k0w")
 
-[node name="Idle" type="Node" parent="StateMachine"]
+[node name="Idle" type="Node" parent="StateMachine" unique_id=416894079]
 script = ExtResource("9_p02g4")
 
-[node name="Crouched" type="Node" parent="StateMachine"]
+[node name="Crouched" type="Node" parent="StateMachine" unique_id=1513378023]
 script = ExtResource("11_meww7")
 
-[node name="Editing" type="Node" parent="StateMachine"]
+[node name="Editing" type="Node" parent="StateMachine" unique_id=878611351]
 script = ExtResource("10_qsa3t")
 metadata/_custom_type_script = "uid://bvj7h8be6v0io"
 
-[node name="Running" type="Node" parent="StateMachine"]
+[node name="Running" type="Node" parent="StateMachine" unique_id=1173330553]
 script = ExtResource("12_6170r")

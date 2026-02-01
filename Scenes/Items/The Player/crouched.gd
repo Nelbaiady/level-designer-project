@@ -41,5 +41,4 @@ func unCrouchCheck():
 
 func crouchTransition(anim:String):
 	if anim=="unCrouching":
-		print("uncrouched")
 		player.animationPlayer.play("idle")

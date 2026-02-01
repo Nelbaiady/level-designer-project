@@ -15,7 +15,7 @@ var isBeingEdited = false
 var isMouseOver:bool = false
 var rosterID:int
 var instanceID:int = -1
-var layerID:int = 0
+var layer:LevelLayer
 
 func _ready() -> void:
 	rootNode= get_parent()
@@ -40,7 +40,7 @@ func objectEditingStopped():
 	selectionParticles.emitting = false
 	
 func setStartingStuff(instID, obj, loadedProperties:Dictionary):
-	layerID = globalEditor.currentLayer
+	layer = rootNode.get_parent().get_parent()
 	if obj == rootNode:
 		instanceID = instID
 		if loadedProperties:
@@ -60,7 +60,7 @@ func setProperty(property:String, value):
 	#if !globalEditor.getCurrentLevelLayerDict()["objects"].has( instanceID ):
 		#printerr("Error: no object of instance id ",instanceID," within layer ",globalEditor.currentLayer)
 		#return -1
-	globalEditor.getCurrentLevelRoomDict()["layers"][layerID]["objects"][ instanceID ]["properties"][property] = value
+	globalEditor.getCurrentLevelRoomDict()["layers"][layer.index]["objects"][ instanceID ]["properties"][property] = value
 	rootNode.set(property, value )
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:

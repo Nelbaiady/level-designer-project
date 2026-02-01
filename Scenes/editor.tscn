@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bgavxi5l77ibl"]
+[gd_scene format=3 uid="uid://bgavxi5l77ibl"]
 
 [ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
 [ext_resource type="PackedScene" uid="uid://dw4ojydnn8mlq" path="res://Cursor/cursor.tscn" id="1_eo2o7"]
@@ -415,9 +415,9 @@ sources/0 = SubResource("TileSetAtlasSource_b78su")
 
 [sub_resource type="GDScript" id="GDScript_1k58v"]
 
-[node name="Node2D" type="Node"]
+[node name="Node2D" type="Node" unique_id=1408597539]
 
-[node name="cursorItemIcon" type="TextureRect" parent="."]
+[node name="cursorItemIcon" type="TextureRect" parent="." unique_id=1233162024]
 visible = false
 self_modulate = Color(1, 1, 1, 0.5019608)
 z_index = 1
@@ -435,15 +435,15 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
-[node name="CursorCanvas" type="CanvasLayer" parent="."]
+[node name="CursorCanvas" type="CanvasLayer" parent="." unique_id=1354198706]
 layer = 2048
 follow_viewport_enabled = true
 
-[node name="Cursor" parent="CursorCanvas" instance=ExtResource("1_eo2o7")]
+[node name="Cursor" parent="CursorCanvas" unique_id=921979480 instance=ExtResource("1_eo2o7")]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=268677100]
 
-[node name="Top Area UI" type="HBoxContainer" parent="CanvasLayer"]
+[node name="Top Area UI" type="HBoxContainer" parent="CanvasLayer" unique_id=48417170]
 clip_contents = true
 anchors_preset = -1
 anchor_right = 1.0
@@ -455,25 +455,25 @@ size_flags_vertical = 3
 theme_override_constants/separation = 12
 script = ExtResource("2_3lyd6")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Top Area UI"]
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Top Area UI" unique_id=146337005]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Tool Display" type="Control" parent="CanvasLayer/Top Area UI/HBoxContainer"]
+[node name="Tool Display" type="Control" parent="CanvasLayer/Top Area UI/HBoxContainer" unique_id=1510456922]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display" unique_id=1657314484]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Panel" type="Panel" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display/VBoxContainer"]
+[node name="Panel" type="Panel" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display/VBoxContainer" unique_id=20790880]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display/VBoxContainer/Panel"]
+[node name="Label" type="Label" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display/VBoxContainer/Panel" unique_id=261963612]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -488,14 +488,14 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_1k58v")
 
-[node name="Panel" type="Panel" parent="CanvasLayer/Top Area UI/HBoxContainer"]
+[node name="Panel" type="Panel" parent="CanvasLayer/Top Area UI/HBoxContainer" unique_id=1464356861]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="CanvasLayer/Top Area UI/HBoxContainer"]
+[node name="Control" type="Control" parent="CanvasLayer/Top Area UI/HBoxContainer" unique_id=958778049]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="layersButton" type="Button" parent="CanvasLayer/Top Area UI/HBoxContainer/Control"]
+[node name="layersButton" type="Button" parent="CanvasLayer/Top Area UI/HBoxContainer/Control" unique_id=690513294]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -512,15 +512,15 @@ theme = ExtResource("3_cnbw5")
 icon = ExtResource("4_i5vsu")
 icon_alignment = 1
 
-[node name="Hotbar" parent="CanvasLayer/Top Area UI" instance=ExtResource("2_32ik4")]
+[node name="Hotbar" parent="CanvasLayer/Top Area UI" unique_id=1476390264 instance=ExtResource("2_32ik4")]
 layout_mode = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Top Area UI"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Top Area UI" unique_id=294669773]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PropertiesSidebar" type="Control" parent="CanvasLayer"]
+[node name="PropertiesSidebar" type="Control" parent="CanvasLayer" unique_id=1003501295]
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
@@ -531,7 +531,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("3_exjlx")
 
-[node name="propertiesEditingLabelPanel" type="Panel" parent="CanvasLayer/PropertiesSidebar"]
+[node name="propertiesEditingLabelPanel" type="Panel" parent="CanvasLayer/PropertiesSidebar" unique_id=1522755482]
 self_modulate = Color(1, 1, 1, 0)
 clip_contents = true
 layout_mode = 1
@@ -541,7 +541,7 @@ anchor_bottom = 0.13
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel"]
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel" unique_id=207308021]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 3
@@ -557,21 +557,21 @@ pivot_offset = Vector2(2, 27.42667)
 theme = ExtResource("3_cnbw5")
 theme_type_variation = &"tab"
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer" unique_id=1533983739]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="propertiesEditingLabel" type="Label" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer/MarginContainer"]
+[node name="propertiesEditingLabel" type="Label" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer/MarginContainer" unique_id=1242636918]
 layout_mode = 2
 text = "Player"
 horizontal_alignment = 1
 vertical_alignment = 2
 script = ExtResource("4_l4kvy")
 
-[node name="PropertiesPanel" type="Panel" parent="CanvasLayer/PropertiesSidebar"]
+[node name="PropertiesPanel" type="Panel" parent="CanvasLayer/PropertiesSidebar" unique_id=1949280062]
 clip_contents = true
 layout_mode = 1
 anchors_preset = -1
@@ -583,7 +583,7 @@ grow_vertical = 2
 theme = ExtResource("3_cnbw5")
 theme_type_variation = &"propertiesPanel"
 
-[node name="closeButton" type="Button" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel"]
+[node name="closeButton" type="Button" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel" unique_id=600812247]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 1
 anchors_preset = -1
@@ -594,7 +594,7 @@ focus_mode = 1
 theme = ExtResource("3_cnbw5")
 text = "x"
 
-[node name="Properties" type="VBoxContainer" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel"]
+[node name="Properties" type="VBoxContainer" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel" unique_id=1328526897]
 clip_contents = true
 layout_mode = 1
 anchors_preset = -1
@@ -605,7 +605,7 @@ anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PhantomCamera2D" type="Node2D" parent="." node_paths=PackedStringArray("follow_target")]
+[node name="PhantomCamera2D" type="Node2D" parent="." unique_id=1919693164 node_paths=PackedStringArray("follow_target")]
 top_level = true
 position = Vector2(544, 280)
 script = ExtResource("7_nfgmo")
@@ -616,7 +616,7 @@ follow_damping = true
 follow_damping_value = Vector2(0.05, 0.05)
 metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525]
 physics_interpolation_mode = 1
 top_level = true
 position = Vector2(544, 280)
@@ -625,84 +625,84 @@ limit_enabled = false
 position_smoothing_speed = 20.0
 script = ExtResource("1_8howc")
 
-[node name="PhantomCameraHost" type="Node" parent="Camera2D"]
+[node name="PhantomCameraHost" type="Node" parent="Camera2D" unique_id=1366881780]
 process_priority = 300
 process_physics_priority = 300
 script = ExtResource("8_cnbw5")
 metadata/_custom_type_script = "uid://bd046eokvcnu2"
 
-[node name="Editor" type="Node2D" parent="."]
+[node name="Editor" type="Node2D" parent="." unique_id=947430787]
 script = ExtResource("1_eyy8u")
 
-[node name="SaveLoadManager" type="Node2D" parent="."]
+[node name="SaveLoadManager" type="Node2D" parent="." unique_id=986423807]
 script = ExtResource("3_7fkqn")
 
-[node name="FileDialog" type="FileDialog" parent="."]
+[node name="FileDialog" type="FileDialog" parent="." unique_id=890024928]
 oversampling_override = 1.0
 position = Vector2i(255, 150)
 ok_button_text = "OK"
 root_subfolder = "savedLevels"
 
-[node name="Level" type="Node2D" parent="."]
+[node name="Level" type="Node2D" parent="." unique_id=827656185]
 script = ExtResource("2_24ceq")
 
-[node name="PropertiesHandler" type="Node" parent="Level"]
+[node name="PropertiesHandler" type="Node" parent="Level" unique_id=1719493391]
 script = ExtResource("15_i5vsu")
 
-[node name="Layer2" type="Parallax2D" parent="Level"]
+[node name="Layer2" type="Parallax2D" parent="Level" unique_id=641990692]
 modulate = Color(1, 1, 1, 0.7058824)
 scroll_scale = Vector2(0.6, 0.6)
 script = ExtResource("11_l4kvy")
 index = 2
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer2" groups=["solids"]]
+[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer2" unique_id=637726208 groups=["solids"]]
 tile_set = SubResource("TileSet_7fkqn")
 collision_enabled = false
 script = SubResource("GDScript_1k58v")
 
-[node name="Objects" type="Node2D" parent="Level/Layer2"]
+[node name="Objects" type="Node2D" parent="Level/Layer2" unique_id=1003622972]
 script = ExtResource("9_1k58v")
 
-[node name="Layer1" type="Parallax2D" parent="Level"]
+[node name="Layer1" type="Parallax2D" parent="Level" unique_id=2147122965]
 modulate = Color(1, 1, 1, 0.8039216)
 scroll_scale = Vector2(0.8, 0.8)
 script = ExtResource("11_l4kvy")
 index = 1
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer1" groups=["solids"]]
+[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer1" unique_id=2138617904 groups=["solids"]]
 tile_set = SubResource("TileSet_7fkqn")
 collision_enabled = false
 script = SubResource("GDScript_1k58v")
 
-[node name="Objects" type="Node2D" parent="Level/Layer1"]
+[node name="Objects" type="Node2D" parent="Level/Layer1" unique_id=2055332779]
 script = ExtResource("9_1k58v")
 
-[node name="Layer0" type="Parallax2D" parent="Level"]
+[node name="Layer0" type="Parallax2D" parent="Level" unique_id=603169679]
 script = ExtResource("11_l4kvy")
 
-[node name="Player" parent="Level/Layer0" instance=ExtResource("4_7wlcy")]
+[node name="Player" parent="Level/Layer0" unique_id=1400268196 instance=ExtResource("4_7wlcy")]
 position = Vector2(544, 280)
 floor_snap_length = 12.0
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer0" groups=["solids"]]
+[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer0" unique_id=1315211395 groups=["solids"]]
 tile_set = SubResource("TileSet_7fkqn")
 
-[node name="Objects" type="Node2D" parent="Level/Layer0"]
+[node name="Objects" type="Node2D" parent="Level/Layer0" unique_id=1242314794]
 physics_interpolation_mode = 1
 script = ExtResource("9_1k58v")
 
-[node name="Layer-1" type="Parallax2D" parent="Level"]
+[node name="Layer-1" type="Parallax2D" parent="Level" unique_id=1686483385]
 modulate = Color(0.65012825, 0.6501283, 0.65012825, 0.84313726)
 scroll_scale = Vector2(1.2, 1.2)
 script = ExtResource("11_l4kvy")
 index = -1
 
-[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer-1" groups=["solids"]]
+[node name="TileMapLayer" type="TileMapLayer" parent="Level/Layer-1" unique_id=2120074075 groups=["solids"]]
 tile_set = SubResource("TileSet_7fkqn")
 collision_enabled = false
 script = SubResource("GDScript_1k58v")
 
-[node name="Objects" type="Node2D" parent="Level/Layer-1"]
+[node name="Objects" type="Node2D" parent="Level/Layer-1" unique_id=98253682]
 script = ExtResource("9_1k58v")
 
 [connection signal="pressed" from="CanvasLayer/Top Area UI/HBoxContainer/Control/layersButton" to="Level" method="_on_layers_button_pressed"]

@@ -43,6 +43,12 @@ signal populateLayersUI(propertiesHandler)
 signal updateLayerProperty(property, value, layerID)##signal for editing layer properties
 @warning_ignore("unused_signal")
 signal selectLayer(layerID)##signal for changing layer
+@warning_ignore("unused_signal")
+signal moveLayerUp(layerID)##signal for changing layer
+@warning_ignore("unused_signal")
+signal moveLayerDown(layerID)##signal for changing layer
+@warning_ignore("unused_signal")
+signal updateLayerUI()##signal for changing layer
 
 @warning_ignore("unused_signal")
 signal spinboxSpun()

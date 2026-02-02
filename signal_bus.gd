@@ -42,11 +42,17 @@ signal populateLayersUI(propertiesHandler)
 @warning_ignore("unused_signal")
 signal updateLayerProperty(property, value, layerID)##signal for editing layer properties
 @warning_ignore("unused_signal")
-signal selectLayer(layerID)##signal for changing layer
+signal selectLayer(layerID)##signal for selecting layer
 @warning_ignore("unused_signal")
-signal moveLayerUp(layerID)##signal for changing layer
+signal moveLayerUp(layerID)##signal for moving a layer up
 @warning_ignore("unused_signal")
-signal moveLayerDown(layerID)##signal for changing layer
+signal moveLayerDown(layerID)##signal for moving a layer down
+@warning_ignore("unused_signal")
+signal addLayerAbove(layerID)##signal for adding a new layer above
+@warning_ignore("unused_signal")
+signal addLayerBelow(layerID)##signal for adding a new layer below
+@warning_ignore("unused_signal")
+signal deleteLayer(layerID)##signal for deleting a layer
 @warning_ignore("unused_signal")
 signal updateLayerUI()##signal for changing layer
 

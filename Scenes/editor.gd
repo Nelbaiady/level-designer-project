@@ -28,7 +28,7 @@ func _ready() -> void:
 	setSelectedItem(selectedItem)
 	globalEditor.setItem.connect(setSelectedItem)
 	signalBus.startEditMode.connect(resetStage)
-	globalEditor.propertiesUI = $"../CanvasLayer/PropertiesSidebar/PropertiesPanel/Properties"
+	globalEditor.propertiesUI = $"../CanvasLayer/PropertiesSidebar/PropertiesPanel/ScrollContainer/Properties"
 	#globalEditor.tileMaps = tileMaps
 	#globalEditor.level = $"../Level"
 	signalBus.onLevelReady.connect(levelReady)

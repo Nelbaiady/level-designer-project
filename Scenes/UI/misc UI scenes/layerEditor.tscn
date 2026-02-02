@@ -94,6 +94,39 @@ size_flags_vertical = 4
 focus_mode = 3
 icon = ExtResource("5_rebym")
 
+[node name="addAboveButton" type="Button" parent="." unique_id=824083511]
+visible = false
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+text = "+"
+
+[node name="addBelowButton" type="Button" parent="." unique_id=1468073017]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "+"
+
 [connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/CheckBox" to="PanelContainer/MarginContainer/HBoxContainer/CheckBox" method="_on_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/upButton" to="." method="_on_up_button_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/downButton" to="." method="_on_down_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/TrashButton" to="." method="_on_trash_button_pressed"]
+[connection signal="pressed" from="addAboveButton" to="." method="_on_add_above_button_pressed"]
+[connection signal="pressed" from="addBelowButton" to="." method="_on_add_below_button_pressed"]

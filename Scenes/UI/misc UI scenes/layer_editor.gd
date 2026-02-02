@@ -8,6 +8,8 @@ var layer:LevelLayer
 @onready var selectionPropertyEditorNode: LayerCheckBoxPropertyEditor = $PanelContainer/MarginContainer/HBoxContainer/CheckBox
 @onready var label: Label = $PanelContainer/MarginContainer/HBoxContainer/Label
 @onready var trashButton: Button = $PanelContainer/MarginContainer/HBoxContainer/TrashButton
+@onready var addAboveButton: Button = $addAboveButton
+@onready var addBelowButton: Button = $addBelowButton
 @onready var upButton: Button = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/upButton
 @onready var downButton: Button = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/downButton
 
@@ -30,29 +32,23 @@ func refreshData():
 	trashButton.visible=false if layerID==0 else true
 	upButton.visible = false if (layerID == level.layers.keys().max() or layerID==0) else true
 	downButton.visible = false if (layerID == level.layers.keys().min() or layerID==0) else true
+	addAboveButton.visible = true if (layerID == level.layers.keys().max()) else false
 	scrollScalePropertyEditorNode.layerIndex = layerID
 	colorPropertyEditorNode.layerIndex = layerID
 	selectionPropertyEditorNode.layerIndex = layerID
 	selectionPropertyEditorNode.updateValue(globalEditor.currentLayer)
-	
 
 func _on_up_button_pressed() -> void:
-##	get the layer node's index position relative to its siblings
-	#var targetNodeIndex:int
-##	If the above layer is layer 0
-	#if layerID==-1:
-		#targetNodeIndex = (level.layers[layerID+1].get_index()-1) #move two steps above layer 0 (the player is supposed to be in between)
-	#else: 
-		#targetNodeIndex = level.layers[layerID+1].get_index()
-		#level.swapLayers(layerID,layerID+1)
-		#
-	#level.move_child(level.layers[layerID],targetNodeIndex)
-	#
 	signalBus.moveLayerUp.emit(layerID)
-	#refreshData()
-	#level.collectChildren()
 
 func _on_down_button_pressed() -> void:
 	signalBus.moveLayerDown.emit(layerID)
-	#refreshData()
-	#level.collectChildren()
+
+func _on_add_above_button_pressed() -> void:
+	signalBus.addLayerAbove.emit(layerID)
+
+func _on_add_below_button_pressed() -> void:
+	signalBus.addLayerBelow.emit(layerID)
+	
+func _on_trash_button_pressed() -> void:
+	signalBus.deleteLayer.emit(layerID)

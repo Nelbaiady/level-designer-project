@@ -60,6 +60,7 @@ func populateLayersUI(object): #This is probably redundant
 		var newNode:LayerEditor = LAYER_EDITOR.instantiate()
 		newNode.layerID = i
 		globalEditor.propertiesUI.add_child(newNode)
+	signalBus.editingObject.emit("Layers",0)
 		#if newNode is PropertyEditor:
 			#newNode.setStartValues(object.getProperty(i.codeName),i.minValue, i.maxValue,i.step , i.codeName, i.displayName)
 	#if !signalBus.updateProperty.is_connected(object.setProperty):

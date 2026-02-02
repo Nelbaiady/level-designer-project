@@ -10,7 +10,7 @@ class_name ObjectInstance extends Node2D
 #var propertyUiElements = []
 enum Categories {gizmo, npc, decoration}
 @export var category: Categories
-var rootNode:Node 
+var rootNode:Node
 var isBeingEdited = false
 var isMouseOver:bool = false
 var rosterID:int

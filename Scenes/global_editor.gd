@@ -69,6 +69,7 @@ func placeObject(object:objectItem, position:Vector2=Vector2.ZERO,startPropertie
 	signalBus.placeObjectSignal.emit(instanceID, objectToPlace, startProperties)
 
 func clearLevel():
+	currentLayer=0
 	for layerIndex in level["rooms"][currentRoom]["layers"]:
 		var layer = level["rooms"][currentRoom]["layers"][layerIndex]
 		for objectIndex in layer["objects"]:
@@ -77,8 +78,14 @@ func clearLevel():
 				printerr("found a null object. Objects: ",layer["objects"], "\n")
 			else:
 				object.queue_free()
-	for layer in level.layers.values():
-		layer.tileMap.clear()
+	for layerID in level.rooms[currentRoom]["layers"]: #delete all layers except for layer 0
+		var layer = level.layers[layerID]
+		layer.tileMap.clear() #clear tilemap
+		if layerID!=0:
+			#print("deleting ",layer)
+			layer.queue_free()
+			level.remove_child(layer) #apparently queue_free sometimes keeps the node as a null child
+			level.layers.erase(layerID)
 	level.rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{}  }]
 	level.collectChildren()
 	objectInstancesCount=0

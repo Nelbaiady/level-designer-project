@@ -1,8 +1,6 @@
 class_name GameplayCamera extends Camera2D
 
-#@onready var player: CharacterBody2D = $"../Level/Player"
-#@onready var player: Player = $"../Level/Layer0/Player"
-@onready var player#: Player = $"../Level/Layer0/Objects/Player"
+@onready var player
 
 var tileSize=100
 
@@ -18,47 +16,40 @@ var nextHoldStepTarget = holdThreshold
 
 func _ready() -> void:
 	signalBus.onLevelReady.connect(setPlayer)
-	signalBus.startEditMode.connect(resetCamera)
-	#signalBus.connect("playLevel",resetCamera)
+	signalBus.startEditMode.connect(editMode)
 	signalBus.startPlayMode.connect(playMode)
 	signalBus.loadedLevel.connect(refindPlayer)
 
 func setPlayer(_lvl):
-	player = globalEditor.player
+	refindPlayer()
+	#for some reason the below three lines in that exact order fix the cursor jitter on startup. no idea why.
+	phantomCamera.follow_mode = phantomCamera.FollowMode.FRAMED
+	phantomCamera.set_follow_target(player)
+	phantomCamera.follow_mode = phantomCamera.FollowMode.NONE
 
 func _physics_process(_delta: float) -> void:
 	if !globalEditor.isEditing:
-		#position = position.lerp(player.position,0.3) 
-		#if player:
-		position = player.position
 		phantomCamera.set_follow_offset(player.velocity/8)
 	else:
 		if !globalEditor.popupIsOpen:
 			transLateCamera(Input.get_vector("camLeft","camRight","camUp","camDown")*25)
 
 func transLateCamera(direction: Vector2):
-	#phantomCamera.position += direction
-	phantomCamera.set_follow_offset(phantomCamera.get_follow_offset()+direction)
+	phantomCamera.position += direction
 	
-#func tweenToPlayer():
-	#var resetCamTween = create_tween()
-	#resetCamTween.set_trans(Tween.TRANS_CUBIC)
-	#resetCamTween.set_ease(Tween.EASE_OUT)
-	#resetCamTween.tween_property(self,"position",globalEditor.playerProperties.position ,0.3)
-
-func resetCamera():
+func editMode():
+	phantomCamera.follow_mode = phantomCamera.FollowMode.NONE
 	phantomCamera.set_follow_offset(Vector2.ZERO)
-	#phantomCamera.follow_mode = phantomCamera.FollowMode.NONE
-	#phantomCamera.follow_target = null
 	player = globalEditor.player
-	#tweenToPlayer()
-	#position = player.position
-	#position = globalEditor.playerProperties.position
-	#phantomCamera.position = globalEditor.playerProperties.position
+	var camTween = create_tween()
+	camTween.set_trans(Tween.TRANS_CUBIC)
+	camTween.set_ease(Tween.EASE_OUT)
+	camTween.tween_property(phantomCamera,"position",globalEditor.playerProperties.position,0.1)
+
 func playMode():
+	phantomCamera.follow_mode = phantomCamera.FollowMode.FRAMED
+	phantomCamera.set_follow_target(player)
 	phantomCamera.set_follow_offset(Vector2.ZERO)
-	phantomCamera.follow_target = player
-	#phantomCamera.follow_mode = phantomCamera.FollowMode.SIMPLE
 
 func refindPlayer():
 	player = globalEditor.player

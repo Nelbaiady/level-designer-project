@@ -25,10 +25,7 @@ func addLayerAbove(layerID):
 	var newLayer = LAYER.instantiate()
 	add_child(newLayer)
 	move_child(newLayer,layers[layerID].get_index())
-	updateChildren()
-	collectChildren()
-	restoreTempProperties()
-	signalBus.populateLayersUI.emit(propertiesHandler) #refresh the UI to show new layer positions
+	refreshEverything()
 ##adds a layer below the givel layerID's layer
 func addLayerBelow(layerID):
 	storeTempProperties()
@@ -36,10 +33,7 @@ func addLayerBelow(layerID):
 		globalEditor.currentLayer-=1
 	var newLayer = LAYER.instantiate()
 	layers[layerID].add_sibling(newLayer)
-	updateChildren()
-	collectChildren()
-	restoreTempProperties()
-	signalBus.populateLayersUI.emit(propertiesHandler) #refresh the UI to show new layer positions
+	refreshEverything()
 func deleteLayer(layerID):
 	storeTempProperties()
 	if layerID == globalEditor.currentLayer: #making sure we don't have a nonexistant layer selected after this
@@ -48,10 +42,7 @@ func deleteLayer(layerID):
 	layerToDelete.queue_free()
 	remove_child(layerToDelete) #apparently queue_free sometimes keeps the node as a null child
 	layers.erase(layerID)
-	updateChildren()
-	collectChildren()
-	restoreTempProperties()
-	signalBus.populateLayersUI.emit(propertiesHandler) #refresh the UI to show new layer positions
+	refreshEverything()
 ##Moves a layer up one step, adapting the indices so that layer 0 is always the same, and updates data structures and ui
 func moveLayerUp(layerID):
 	globalEditor.currentLayer+= (2 if layerID==-1 else 1) if layerID==globalEditor.currentLayer else 0
@@ -61,10 +52,7 @@ func moveLayerUp(layerID):
 	targetNodeIndex = layers[layerID+1].get_index()
 	move_child(layers[layerID],targetNodeIndex)
 	#signalBus.updateLayerUI.emit()
-	updateChildren()
-	collectChildren()
-	restoreTempProperties()
-	signalBus.populateLayersUI.emit(propertiesHandler) #refresh the UI to show new layer positions
+	refreshEverything()
 func moveLayerDown(layerID):
 	globalEditor.currentLayer-= (2 if layerID==1 else 1) if layerID==globalEditor.currentLayer else 0
 	storeTempProperties()
@@ -73,10 +61,7 @@ func moveLayerDown(layerID):
 	targetNodeIndex = layers[layerID-1].get_index()
 	move_child(layers[layerID],targetNodeIndex)
 	#signalBus.updateLayerUI.emit()
-	updateChildren()
-	collectChildren()
-	restoreTempProperties()
-	signalBus.populateLayersUI.emit(propertiesHandler) #refresh the UI to show new layer positions
+	refreshEverything()
 func storeTempProperties(): ##stores all of a layer's properties in a variable in the node temporarily because an operation is expected to alter this layer
 	for i in layers: #store properties from rooms
 		layers[i].tempProperties = rooms[globalEditor.currentRoom]["layers"][i]
@@ -84,6 +69,13 @@ func restoreTempProperties(): ##restores all of a layer's properties from a vari
 	for i in layers: #restore properties into rooms
 		if layers[i].tempProperties != {}:
 			rooms[globalEditor.currentRoom]["layers"][i] = layers[i].tempProperties
+##updates all data structures
+func refreshEverything():
+	updateChildren()
+	collectChildren()
+	restoreTempProperties()
+	if globalEditor.isObjectBeingEdited:
+		signalBus.populateLayersUI.emit(propertiesHandler) #refresh the UI to show new layer positions
 
 ##swaps the keys between any 2 dictionaries
 func swapDictKeys(dict, key1, key2):

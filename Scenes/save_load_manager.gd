@@ -75,13 +75,20 @@ func loadLevel(path):
 	#var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}} ,1:{"tiles":{},"objects":{}}}  }]
 #	Loop through each layer within each room
 	for roomIndex in range(len(globalEditor.level.rooms)):
-		globalEditor.level.rooms[globalEditor.currentRoom]["layers"]={}
-		#print("loadable layers: ",loadedData["rooms"][roomIndex]["layers"].keys())
-		#for layerIndex in globalEditor.level.rooms[roomIndex]["layers"]:
+		#globalEditor.level.rooms[globalEditor.currentRoom]["layers"]={}
+		#first pass for instantiating layer nodes
+		for stringLayerIndex in loadedData["rooms"][roomIndex]["layers"].keys():
+			var layerIndex = int(stringLayerIndex)
+			if layerIndex<0:
+				globalEditor.level.addLayerBelow(0)
+			if layerIndex>0:
+				globalEditor.level.addLayerAbove(0)
+			
+		#second pass for setting properties and placing items
 		for stringLayerIndex in loadedData["rooms"][roomIndex]["layers"].keys():
 			var layerIndex = int(stringLayerIndex)
 			#layers[i.index] = i #We need to dynamically spawn the nodes and set their indices
-			globalEditor.level.rooms[roomIndex]["layers"][layerIndex]={"objects":{},"layerProperties":{}}
+			#globalEditor.level.rooms[roomIndex]["layers"][layerIndex]={"objects":{},"layerProperties":{}}
 			globalEditor.currentLayer = layerIndex
 			var tileMap = globalEditor.level.layers[layerIndex].tileMap
 			#place tiles for current room and layer

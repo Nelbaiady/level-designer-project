@@ -71,6 +71,7 @@ alignment = 1
 [node name="Tool Display" type="Control" parent="CanvasLayer/Top Area UI/HBoxContainer" unique_id=1510456922]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display" unique_id=1657314484]
 layout_mode = 0
@@ -102,6 +103,7 @@ layout_mode = 2
 [node name="Control" type="Control" parent="CanvasLayer/Top Area UI/HBoxContainer" unique_id=958778049]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="layersButton" type="Button" parent="CanvasLayer/Top Area UI/HBoxContainer/Control" unique_id=690513294]
 layout_mode = 1
@@ -122,6 +124,7 @@ icon_alignment = 1
 
 [node name="Hotbar" parent="CanvasLayer/Top Area UI" unique_id=1476390264 instance=ExtResource("2_32ik4")]
 layout_mode = 2
+mouse_filter = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Top Area UI" unique_id=294669773]
@@ -219,14 +222,13 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PhantomCamera2D" type="Node2D" parent="." unique_id=1919693164 node_paths=PackedStringArray("follow_target")]
-top_level = true
 position = Vector2(544, 280)
 script = ExtResource("7_nfgmo")
-follow_mode = 5
 follow_target = NodePath("../Level/Layer0/Player")
 tween_resource = SubResource("Resource_nfgmo")
 follow_damping = true
 follow_damping_value = Vector2(0.05, 0.05)
+dead_zone_height = 0.65
 metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525]

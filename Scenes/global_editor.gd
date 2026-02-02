@@ -29,7 +29,8 @@ var playerProperties : Dictionary = {"position":Vector2(544,280)}
 @onready var propertiesUI: VBoxContainer
 #@onready var propertiesSidebar: PropertiesSidebar
 var objectBeingEdited
-var isObjectBeingEdited = false
+##if the sidebar is open (sorry for the horrible name)
+var isObjectBeingEdited = false 
 
 @onready var player: CharacterBody2D
 const PLAYER = preload("uid://ce1i72nmpos1n")
@@ -86,6 +87,9 @@ func clearLevel():
 			layer.queue_free()
 			level.remove_child(layer) #apparently queue_free sometimes keeps the node as a null child
 			level.layers.erase(layerID)
+	#reset layer 0 properties
+	level.setProperty("modulate",Color.WHITE,0)
+	level.setProperty("scroll_scale",Vector2.ONE,0)
 	level.rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{}  }]
 	level.collectChildren()
 	objectInstancesCount=0

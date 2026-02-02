@@ -44,6 +44,7 @@ size_flags_vertical = 4
 
 [node name="CheckBox" type="CheckBox" parent="PanelContainer/MarginContainer/HBoxContainer" unique_id=681615031]
 layout_mode = 2
+focus_mode = 3
 theme = ExtResource("2_x16pu")
 theme_type_variation = &"RadioButton"
 script = ExtResource("3_1bom4")
@@ -106,6 +107,7 @@ offset_top = -16.0
 offset_right = 16.0
 offset_bottom = 16.0
 grow_horizontal = 2
+focus_mode = 3
 text = "+"
 
 [node name="addBelowButton" type="Button" parent="." unique_id=1468073017]
@@ -122,6 +124,7 @@ offset_right = 16.0
 offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 0
+focus_mode = 3
 text = "+"
 
 [connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/CheckBox" to="PanelContainer/MarginContainer/HBoxContainer/CheckBox" method="_on_pressed"]

@@ -23,6 +23,7 @@ func _ready() -> void:
 	refreshData()
 	signalBus.updateLayerUI.connect(refreshData)
 
+##when a layer is selected
 func layerChanged(_newLayer):
 	refreshData()
 

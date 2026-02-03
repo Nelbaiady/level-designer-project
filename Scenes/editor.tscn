@@ -221,10 +221,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PhantomCamera2D" type="Node2D" parent="." unique_id=1919693164 node_paths=PackedStringArray("follow_target")]
+[node name="PhantomCamera2D" type="Node2D" parent="." unique_id=1919693164]
 position = Vector2(544, 280)
 script = ExtResource("7_nfgmo")
-follow_target = NodePath("../Level/Layer0/Player")
 tween_resource = SubResource("Resource_nfgmo")
 follow_damping = true
 follow_damping_value = Vector2(0.05, 0.05)
@@ -232,10 +231,8 @@ dead_zone_height = 0.65
 metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525]
-physics_interpolation_mode = 1
 top_level = true
 position = Vector2(544, 280)
-process_callback = 0
 limit_enabled = false
 position_smoothing_speed = 20.0
 script = ExtResource("1_8howc")

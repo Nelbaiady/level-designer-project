@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://dgecn3g6yiv5q"]
+[gd_scene format=3 uid="uid://dgecn3g6yiv5q"]
 
 [ext_resource type="Script" uid="uid://2q1oyw00iuvq" path="res://Scenes/Items/Objects/Spring/spring.gd" id="1_3rwud"]
 [ext_resource type="Texture2D" uid="uid://bmpv2scxavoir" path="res://Scenes/Items/Objects/Spring/Spring.png" id="1_kccgo"]
@@ -85,23 +85,23 @@ _data = {
 &"idil": SubResource("Animation_e7gxc")
 }
 
-[node name="Spring" type="RigidBody2D" groups=["solids"]]
+[node name="Spring" type="RigidBody2D" unique_id=741611201 groups=["solids"]]
 input_pickable = true
 freeze = true
 script = ExtResource("1_3rwud")
 
-[node name="Object" parent="." node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_n374f")]
+[node name="Object" parent="." unique_id=1400891492 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_n374f")]
 position = Vector2(0, -32)
-properties = Array[ExtResource("3_mrp00")]([ExtResource("4_vclpx"), ExtResource("5_wnvis"), ExtResource("6_yfou2"), ExtResource("7_vmnu4"), ExtResource("8_vclpx")])
 clickCollision = NodePath("Area2D2")
+properties = Array[ExtResource("3_mrp00")]([ExtResource("4_vclpx"), ExtResource("5_wnvis"), ExtResource("6_yfou2"), ExtResource("7_vmnu4"), ExtResource("8_vclpx")])
 
-[node name="Area2D2" type="Area2D" parent="Object"]
+[node name="Area2D2" type="Area2D" parent="Object" unique_id=800412032]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Object/Area2D2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Object/Area2D2" unique_id=238653133]
 position = Vector2(0, 32)
 shape = SubResource("RectangleShape2D_n374f")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=737391380]
 use_parent_material = true
 position = Vector2(0, -32)
 texture = ExtResource("1_kccgo")
@@ -109,36 +109,32 @@ hframes = 6
 vframes = 5
 region_rect = Rect2(0, 0, 384, 640)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D"]
-libraries = {
-&"": SubResource("AnimationLibrary_e7gxc")
-}
-autoplay = "Spring_idle"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D" unique_id=1009681883]
+libraries/ = SubResource("AnimationLibrary_e7gxc")
+autoplay = &"Spring_idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1597492652]
 visible = false
 position = Vector2(0, 16)
 shape = SubResource("RectangleShape2D_kccgo")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." unique_id=2093443537]
 position = Vector2(0, -16)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=556810360]
 visible = false
 position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_3rwud")
 
-[node name="testoline" type="Sprite2D" parent="Area2D/CollisionShape2D"]
+[node name="testoline" type="Sprite2D" parent="Area2D/CollisionShape2D" unique_id=1036664526]
 visible = false
 texture = ExtResource("5_e7gxc")
 hframes = 6
 vframes = 5
 frame = 8
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Area2D/CollisionShape2D/testoline"]
-libraries = {
-&"": SubResource("AnimationLibrary_mkrdu")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Area2D/CollisionShape2D/testoline" unique_id=874128107]
+libraries/ = SubResource("AnimationLibrary_mkrdu")
 
 [connection signal="animation_finished" from="Sprite2D/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

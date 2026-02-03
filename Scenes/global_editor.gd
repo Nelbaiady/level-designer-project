@@ -1,4 +1,4 @@
-extends Node
+class_name GlobalEditor extends Node
 
 var isEditing:bool = true
 var popupIsOpen:bool = false
@@ -12,6 +12,8 @@ signal updateHotbarSelection(hotbarIndex)
 signal setItem(item)
 var objectInstancesCount:int = 0
 
+#list of every possible object type
+var itemRoster:Array[Item] = []#[preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
 @onready var level: Level
 var hotbarIndex: int = 0
 var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
@@ -41,6 +43,7 @@ enum Tools {place, erase, move}
 
 
 func _ready() -> void:
+	itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
 	signalBus.setCurrentTool.connect(setCurrentTool)
 	signalBus.loadedLevel.connect(reloadPlayer)
 	signalBus.showPropertiesSidebar.connect(propertiesEditorIsShown)
@@ -53,9 +56,6 @@ func levelNodeReady(levelNode):
 func _physics_process(_delta: float) -> void:
 	popupIsOpen = saveLoadPopupIsOpen or colorPickerPopupIsOpen
 
-#list of every possible object type
-#var objectRoster = ["res://Scenes/Items/Objects/Spring/Spring.tres"]
-var itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
 
 func placeTile(item, cell):
 	level.layers[currentLayer].tileMap.set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
@@ -83,7 +83,6 @@ func clearLevel():
 		var layer = level.layers[layerID]
 		layer.tileMap.clear() #clear tilemap
 		if layerID!=0:
-			#print("deleting ",layer)
 			layer.queue_free()
 			level.remove_child(layer) #apparently queue_free sometimes keeps the node as a null child
 			level.layers.erase(layerID)

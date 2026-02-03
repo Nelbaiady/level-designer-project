@@ -8,7 +8,7 @@ var mouseOnScreen: bool = false
 var cursorOnScreen: bool = false
 var prioritizeController:bool = false
 var isSpinBoxing: bool = false
-
+var screenPosition:Vector2 = Vector2.ZERO ##variable to represent cursor position in screen space
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -32,22 +32,24 @@ func updateCursorPosition():
 		#If the mouse isnt making any movement in the game window and the left stick is moved in any direction, 
 		#use controller to move the cursor
 		if cursorMoveVector:
-			prioritizeController = true
+			if !prioritizeController:
+				prioritizeController = true
+				screenPosition = position
 			cursorOnScreen = true
 		#code for moving the cursor with controllers
 		if prioritizeController:
 			cursorMoveSpeedMult = 1-Input.get_action_strength("L2")
 			if cursorMoveSpeedMult < 0.15:
 				cursorMoveSpeedMult = 0.15
-			position = get_global_mouse_position() + cursorMoveVector * cursorMoveSpeed * cursorMoveSpeedMult
+			screenPosition += cursorMoveVector * cursorMoveSpeed * cursorMoveSpeedMult
+			position = screenPosition
 			#Make sure the cursor does not go off screen
-			position.x = clamp(position.x, get_viewport().get_camera_2d().global_position.x - get_viewport_rect().size.x / 2,get_viewport().get_camera_2d().global_position.x + get_viewport_rect().size.x / 2 - 1)#-1 on the max of both clamps because the mouse otherwise goes off screen
-			position.y = clamp(position.y, get_viewport().get_camera_2d().global_position.y - get_viewport_rect().size.y / 2,get_viewport().get_camera_2d().global_position.y + get_viewport_rect().size.y / 2 - 1)
+			screenPosition.x = clamp(screenPosition.x, get_viewport().get_camera_2d().global_position.x - get_viewport_rect().size.x / 2,get_viewport().get_camera_2d().global_position.x + get_viewport_rect().size.x / 2 - 1)#-1 on the max of both clamps because the mouse otherwise goes off screen
+			screenPosition.y = clamp(screenPosition.y, get_viewport().get_camera_2d().global_position.y - get_viewport_rect().size.y / 2,get_viewport().get_camera_2d().global_position.y + get_viewport_rect().size.y / 2 - 1)
 			#Move the mouse itself too if it's inside the game window
 			if mouseOnScreen:
 				get_viewport().warp_mouse(get_viewport().canvas_transform * global_position)
 		else:
-			#position = get_global_mouse_position()
 			mousePosition = get_viewport().get_mouse_position()
 			#mouse position relative to viewport + viewport distance from origin
 			position = mousePosition + get_viewport().get_camera_2d().position-get_viewport().get_visible_rect().size/2
@@ -72,6 +74,7 @@ func _notification(event):
 func click():
 	var clickEvent = InputEventMouseButton.new()
 	clickEvent.position = get_viewport().canvas_transform * global_position
+	clickEvent.global_position = get_viewport().canvas_transform * global_position
 	clickEvent.button_index = MOUSE_BUTTON_LEFT
 	clickEvent.pressed = true
 	Input.parse_input_event(clickEvent)
@@ -79,6 +82,7 @@ func click():
 func unClick():
 	var clickEvent = InputEventMouseButton.new()
 	clickEvent.position = get_viewport().canvas_transform * global_position
+	clickEvent.global_position = get_viewport().canvas_transform * global_position
 	clickEvent.button_index = MOUSE_BUTTON_LEFT
 	clickEvent.pressed = false
 	Input.parse_input_event(clickEvent)
@@ -86,12 +90,14 @@ func unClick():
 func rightClick():
 	var clickEvent = InputEventMouseButton.new()
 	clickEvent.position = get_viewport().canvas_transform * global_position
+	clickEvent.global_position = get_viewport().canvas_transform * global_position
 	clickEvent.button_index = MOUSE_BUTTON_RIGHT
 	clickEvent.pressed = true
 	Input.parse_input_event(clickEvent)
 func unRightClick():
 	var clickEvent = InputEventMouseButton.new()
 	clickEvent.position = get_viewport().canvas_transform * global_position
+	clickEvent.global_position = get_viewport().canvas_transform * global_position
 	clickEvent.button_index = MOUSE_BUTTON_RIGHT
 	clickEvent.pressed = false
 	Input.parse_input_event(clickEvent)

@@ -18,4 +18,5 @@ func physics_update(delta: float) -> void:
 		finished.emit(RISING)
 	elif player.directionInput.x == 0:
 		finished.emit(IDLE)
-		
+	elif player.directionInput.y < player.crouchInputThreshold and player.canCrouch:
+		finished.emit(CROUCHED)

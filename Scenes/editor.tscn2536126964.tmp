@@ -60,8 +60,6 @@ script/source = "class_name Backend extends Node
 [sub_resource type="GDScript" id="GDScript_i5vsu"]
 resource_name = "Authentication"
 script/source = "class_name Authentication extends Node
-#REFERENCE: https://www.youtube.com/watch?v=g1tgPEKCKg0
-#CURRENTLY AT 13:00!!!!!
 
 #supabase
 const SUPABASE_PROJECT_ID = \"ejsiqjmcbkeiqbpvwlfa\"
@@ -82,54 +80,11 @@ var httpRequest: HTTPRequest
 signal authSuccess(user)
 signal authError(error)
 
-func _ready() -> void:
-	httpRequest = HTTPRequest.new()
-	add_child(httpRequest)
-	authSuccess.connect(onAuthSuccess)
-	authError.connect(onAuthError)
-	httpRequest.request_completed.connect(onHttpRequestCompleted)
-
-func onHttpRequestCompleted(_result, responseCode, _headers, body):
-	var session
-	var json
-	var response = body.get_string_from_utf8()
-	if has_meta(\"temp_session\"):
-		session = get_meta(\"temp_session\")
-		remove_meta(\"temp_session\")
-		if responseCode == 200:
-			json = JSON.new()
-			if json.parse(response) == OK:
-				session[\"user\"] = json.data
-				authSuccess.emit(session)
-		else:
-			authError.emit(\"Failed to get user info\")
-		clearTcpServer()
-		return
-	clearTcpServer()
-	
-	if responseCode != 200:
-		authError.emit(\"Authentication failed \"+response)
-		return
-		
-	json = JSON.new()
-	var parsedResult = json.parse(response)
-	if parsedResult != OK:
-		authError.emit(\"Failed to parse auth response\")
-		return
-	var data = json.data
-	session = {
-		\"access_token\": data.get(\"access_token\", \"\"),
-		\"refresh_token\": data.get(\"refresh_token\", \"\"),
-		\"expires_in\": data.get(\"expires_in\", 0),
-		\"user\": data.get(\"user\", {})
-	}
-	authSuccess.emit(session)
-	storeSession(session)
-
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed(\"4\"):
 		signInWithGoogle()
 
+#REFERENCE: https://www.youtube.com/watch?v=g1tgPEKCKg0
 func signInWithGoogle():
 	#generate a random string
 	codeVerifier = \"\"
@@ -143,7 +98,7 @@ func signInWithGoogle():
 	hashingContext.start(HashingContext.HASH_SHA256)
 	hashingContext.update(bytes)
 	var hashed = hashingContext.finish()
-	codeChallenge = Marshalls.raw_to_base64(hashed).replace(\"+\",\"-\").replace(\"/\",\"_\").rstrip(\"=\")
+	codeChallenge = Marshalls.raw_to_base64(hashed).replace(\"+\",\"-\").replace(\"/\",\"-\").rstrip(\"=\")
 	
 	#start tcp server
 	tcpServer = TCPServer.new()
@@ -199,26 +154,21 @@ func _process(_delta: float) -> void:
 					if request.contains(\"\\r\\n\\r\\n\"):
 						
 						#process the callback request
-						#print(\"received callback request\")
+						print(\"received callback request\")
 						var requestLines = request.split('\\n')
 						var requestLine = requestLines[0] if requestLines.size() > 0 else \"\"
+						#CURRENTLY AT 7:30!!!!!
 						if requestLine.begins_with(\"GET\"):
 							var urlPart = requestLine.split(\" \")[1]
 							var queryStart = urlPart.find(\"?\")
 							var query = urlPart.substr(queryStart+1)
-							#parse query params
-							var params = {} 
-							var pairs = query.split(\"&\")
-							for pair in pairs:
-								var keyValue = pair.split(\"=\")
-								if keyValue.size() == 2:
-									params[keyValue[0].uri_decode()] = keyValue[1].uri_decode()
+							var params = {} #parse query params
+							
 							
 							if params.has(\"error\"):
 								sendCallbackResponse(connection,false,params.get(\"error_description\",\"Authentication failed\"))
 								authError.emit(params.get(\"error_description\",\"Authentication failed\"))
-								
-								clearTcpServer()
+								#clear server
 								return
 								
 							#get auth code
@@ -235,23 +185,13 @@ func _process(_delta: float) -> void:
 									\"auth_code\":code,
 									\"code_verifier\":codeVerifier
 								})
-								httpRequest.request(url,headers,HTTPClient.METHOD_POST,body)
-								
 							else:
 								sendCallbackResponse(connection,false,\"No auth code received\")
-							#IM AT 10:30!!!!!!
+						
 						break
 				else:
 					await get_tree().create_timer(0.01).timeout
 					timeout+=0.1 #might be better to replace this with delta
-
-func clearTcpServer():
-	if tcpServer:
-		tcpServer.stop()
-		tcpServer = null
-	set_process(false)
-	return
-
 func sendCallbackResponse(connection, isSuccess=true, message=\"\"):
 	var body:String
 	if isSuccess:
@@ -279,64 +219,9 @@ func sendCallbackResponse(connection, isSuccess=true, message=\"\"):
 	)
 	connection.put_data(response.to_utf8_buffer())
 	connection.disconnect_from_host()
-
-func storeSession(session):
-	session[\"stored_at\"] = Time.get_unix_time_from_system()
-	#TODO apparently this isnt secure
-	var file = FileAccess.open(\"user://auth_session.dat\",FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify(session))
-		file.close()
-func loadSession():
-	var file = FileAccess.open(\"user://auth_session.dat\",FileAccess.READ)
-	if file:
-		var content = file.get_as_text()
-		file.close()
-		var json = JSON.new()
-		if json.parse(content) == OK:
-			var session = json.data
-			
-			if session.has(\"stored_at\") and session.has(\"expires_in\") :
-				var age = Time.get_unix_time_from_system() - session.stored_at
-				if age > session.expires_in - 300:
-					session[\"is_expired\"] = true
-			return session
-	return {}
-func isSessionValid():
-	var session = loadSession()
-	if not session.has(\"access_token\") or session.access_token == \"\":
-		return false
-	if session.get(\"is_expired\", false):
-		return false
-	return true
-func refreshToken(refreshString:String):
-	var url = SUPABASE_URL+\"/auth/v1/token?grant_type=refresh_token\"
-	var headers = [
-		\"Content-Type: application/json\",
-		\"apikey: \"+SUPABASE_ANON_KEY
-	]
-	var body = {
-		\"refresh_token\": refreshString
-	}
-	httpRequest.request(url,headers,HTTPClient.METHOD_POST,JSON.stringify(body))
-
-func signOut():
-	var session = loadSession()
-	if session.has(\"access_token\"):
-		var url = SUPABASE_URL+\"/auth/v1/logout\"
-		var headers = [
-			\"Content-Type: application/json\",
-			\"apikey: \"+SUPABASE_ANON_KEY,
-			\"Authorization: Bearer \"+session.access_token
-		]
-		httpRequest.request(url,headers,HTTPClient.METHOD_POST,\"\")
-	#clear session file
-	var dir = DirAccess.open(\"user://\")
-	if dir:
-		dir.remove(\"auth_session.dat\")
-		
-func onAuthSuccess(session):
-	print(\"signed in! welcome \",session)
+	
+func onAuthSuccess(user):
+	print(\"signed in! welcome \",user)
 func onAuthError(error):
 	print(\"error signign up >:( \",error)
 

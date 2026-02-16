@@ -15,7 +15,8 @@ func updateValue():
 	valueNodes[0].color = value
 
 func propertyReady():
-	valueNodes[0].color = value
+	if globalEditor.isEditing:
+		valueNodes[0].color = value
 
 func _on_color_picker_button_color_changed(color: Color) -> void:
 	value = color

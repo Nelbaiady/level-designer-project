@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2ggkud4ji7se"
-path="res://.godot/imported/grassIco.png-ef2793a4a9a2f15370b766804d3edf86.ctex"
+uid="uid://ivcdy10irvqu"
+path="res://.godot/imported/canimusRunning.png-f4cddccadcc27b879d7611dcf3c7e114.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Items/Terrain/grass/grassIco.png"
-dest_files=["res://.godot/imported/grassIco.png-ef2793a4a9a2f15370b766804d3edf86.ctex"]
+source_file="res://Scenes/Items/Objects/NPC/Canimus/canimusRunning.png"
+dest_files=["res://.godot/imported/canimusRunning.png-f4cddccadcc27b879d7611dcf3c7e114.ctex"]
 
 [params]
 

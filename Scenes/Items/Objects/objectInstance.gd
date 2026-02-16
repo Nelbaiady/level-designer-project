@@ -29,6 +29,8 @@ func _ready() -> void:
 		signalBus.eraseObject.connect(checkErase)
 		signalBus.editingObject.connect(objectEditingStarted)
 		signalBus.hidePropertiesSidebar.connect(objectEditingStopped)
+		signalBus.startEditMode.connect(editModeStarted)
+		#signalBus.startPlayMode.connect(playModeStarted)
 
 ##outline when selecting an object
 func objectEditingStarted(_name, _id):
@@ -50,18 +52,30 @@ func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 	rosterID = globalEditor.getCurrentLevelLayerDict()["objects"][instanceID]["rosterID"]
 	signalBus.placeObjectSignal.disconnect(setStartingStuff)
 
+func editModeStarted():
+	#rootNode.process_mode = Node.PROCESS_MODE_DISABLED
+	for property in properties:
+		print("setting ",property.codeName," to ",getProperty(property.codeName))
+		setProperty(property.codeName, getProperty(property.codeName), true)
+#func playModeStarted():
+	#pass
 
 func getProperty(property:String):
-	return rootNode.get(property)
-
-func setProperty(property:String, value):
+	if getObjectFromLevelStruct()["properties"].has(property):
+		return getObjectFromLevelStruct()["properties"][property]
+	else:
+		return rootNode.get(property)
+func setProperty(property:String, value, tween = false):
 	if property == "scale":
 		value = abs(value)
-	#if !globalEditor.getCurrentLevelLayerDict()["objects"].has( instanceID ):
-		#printerr("Error: no object of instance id ",instanceID," within layer ",globalEditor.currentLayer)
-		#return -1
-	globalEditor.getCurrentLevelRoomDict()["layers"][layer.index]["objects"][ instanceID ]["properties"][property] = value
-	rootNode.set(property, value )
+	getObjectFromLevelStruct()["properties"][property] = value
+	if tween:
+		var propertyTween = create_tween()
+		propertyTween.set_trans(Tween.TRANS_CUBIC)
+		propertyTween.set_ease(Tween.EASE_OUT)
+		propertyTween.tween_property(rootNode,property,value ,0.3)
+	else:
+		rootNode.set(property, value )
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
@@ -94,3 +108,6 @@ func checkErase():
 func eraseSelf():
 	rootNode.queue_free()
 	globalEditor.getCurrentLevelLayerDict()["objects"].erase(instanceID)
+	
+func getObjectFromLevelStruct() -> Dictionary: 
+	return globalEditor.getCurrentLevelRoomDict()["layers"][layer.index]["objects"][ instanceID ]

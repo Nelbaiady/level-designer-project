@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://c7kxkfdsoe5hv"]
+[gd_scene format=3 uid="uid://c7kxkfdsoe5hv"]
 
 [ext_resource type="Script" uid="uid://cg6udjb2cyhqs" path="res://Scenes/UI/ObjectProperties/propertyUIelements/vector_property_editor.gd" id="1_oie7u"]
 [ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="1_vgvs7"]
@@ -6,7 +6,7 @@
 [sub_resource type="LabelSettings" id="LabelSettings_ebjba"]
 font_size = 14
 
-[node name="VectorPropertyEditor" type="Panel"]
+[node name="VectorPropertyEditor" type="Panel" unique_id=292386586]
 custom_minimum_size = Vector2(0, 32)
 anchors_preset = 10
 anchor_right = 1.0
@@ -14,7 +14,7 @@ grow_horizontal = 2
 size_flags_horizontal = 3
 script = ExtResource("1_oie7u")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=333781000]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,12 +23,12 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1169973749]
 layout_mode = 2
 text = "Size:"
 label_settings = SubResource("LabelSettings_ebjba")
 
-[node name="xValueSpinBox" type="SpinBox" parent="HBoxContainer"]
+[node name="xValueSpinBox" type="SpinBox" parent="HBoxContainer" unique_id=362780963]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 1
@@ -40,7 +40,7 @@ allow_greater = true
 allow_lesser = true
 prefix = "X:"
 
-[node name="yValueSpinBox" type="SpinBox" parent="HBoxContainer"]
+[node name="yValueSpinBox" type="SpinBox" parent="HBoxContainer" unique_id=1770954536]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 1

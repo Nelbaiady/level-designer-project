@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://caa3am7a5y5av"]
+
+[ext_resource type="Texture2D" uid="uid://fqa88r2pdjb4" path="res://Scenes/Items/Objects/NPC/Canimus/canimusIdle.png" id="1_fgj4o"]
+[ext_resource type="PackedScene" uid="uid://c4aci6f2wscx5" path="res://Scenes/Items/Objects/objectMod.tscn" id="2_myemf"]
+
+[sub_resource type="GDScript" id="GDScript_fgj4o"]
+resource_name = "Canimus"
+script/source = "extends CharacterBody2D
+
+func _process(_delta: float) -> void:
+	if !globalEditor.isEditing:
+		velocity.y += 10
+		move_and_slide()
+	else:
+		velocity = Vector2.ZERO
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j2sd1"]
+atlas = ExtResource("1_fgj4o")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_13ulp"]
+atlas = ExtResource("1_fgj4o")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wm4yp"]
+atlas = ExtResource("1_fgj4o")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oadvy"]
+atlas = ExtResource("1_fgj4o")
+region = Rect2(0, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yqupv"]
+atlas = ExtResource("1_fgj4o")
+region = Rect2(192, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gd7os"]
+atlas = ExtResource("1_fgj4o")
+region = Rect2(384, 192, 192, 192)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5icnn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j2sd1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_13ulp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wm4yp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oadvy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yqupv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gd7os")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5lns4"]
+size = Vector2(104, 80)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dff58"]
+radius = 40.0
+
+[node name="Canimus" type="CharacterBody2D" unique_id=1317101315]
+script = SubResource("GDScript_fgj4o")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=917958512]
+sprite_frames = SubResource("SpriteFrames_5icnn")
+autoplay = "default"
+frame = 1
+frame_progress = 0.44440424
+
+[node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_myemf")]
+clickCollision = NodePath("Area2D")
+category = 1
+
+[node name="Area2D" type="Area2D" parent="Object" unique_id=12686494]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Object/Area2D" unique_id=1321507038]
+position = Vector2(4, -8)
+shape = SubResource("RectangleShape2D_5lns4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=834873578]
+position = Vector2(0, -8)
+shape = SubResource("CircleShape2D_dff58")

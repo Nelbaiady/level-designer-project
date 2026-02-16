@@ -12,7 +12,7 @@ func _ready() -> void:
 func updateButton(hotbarIndex:int, item:Item):
 	if hotbarIndex == index:
 		if item:
-			icon = item.texture
+			icon = item.icon
 			disabled = false
 			#focus_mode = Control.FOCUS_ALL
 			#button_pressed = true

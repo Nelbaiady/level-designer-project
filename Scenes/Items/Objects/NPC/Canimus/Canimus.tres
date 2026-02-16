@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="objectItem" format=3 uid="uid://vwukdhi6nhpd"]
+
+[ext_resource type="Texture2D" uid="uid://5ludbht74na0" path="res://Scenes/Items/Objects/NPC/Canimus/canimusIcon.png" id="1_2688d"]
+[ext_resource type="PackedScene" uid="uid://caa3am7a5y5av" path="res://Scenes/Items/Objects/NPC/Canimus/Canimus.tscn" id="2_tt1md"]
+[ext_resource type="Script" uid="uid://c6m2hjthmh1nv" path="res://Scenes/Items/Objects/object.gd" id="3_bq7k1"]
+[ext_resource type="Texture2D" uid="uid://bdwfy22bmo3yg" path="res://Scenes/Items/Objects/NPC/Canimus/canimusPreviewTexture.png" id="3_tt1md"]
+
+[resource]
+script = ExtResource("3_bq7k1")
+objectReference = ExtResource("2_tt1md")
+icon = ExtResource("1_2688d")
+previewTexture = ExtResource("3_tt1md")
+name = "Canimus"
+rosterID = 2
+metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

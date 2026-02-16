@@ -339,77 +339,11 @@ func onAuthSuccess(session):
 	print(\"signed in! welcome \",session)
 func onAuthError(error):
 	print(\"error signign up >:( \",error)
-
-
-
-
-
-
-##var auth = SupabaseAuth.new(
-##{
-##\"supabaseUrl\": SUPABASE_URL,
-##\"supabaseKey\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqc2lxam1jYmtlaXFicHZ3bGZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwNDAwODAsImV4cCI6MjA4MjYxNjA4MH0.ckwUzUOr8v_vyD37C0pzbCKXCLhATylURUbvHZfbUa0\"
-##},
-##PackedStringArray([
-	##\"Content-Type: application/json\",
-	##\"Accept: application/json\",
-	##\"apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqc2lxam1jYmtlaXFicHZ3bGZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwNDAwODAsImV4cCI6MjA4MjYxNjA4MH0.ckwUzUOr8v_vyD37C0pzbCKXCLhATylURUbvHZfbUa0\",
-	##\"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqc2lxam1jYmtlaXFicHZ3bGZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwNDAwODAsImV4cCI6MjA4MjYxNjA4MH0.ckwUzUOr8v_vyD37C0pzbCKXCLhATylURUbvHZfbUa0\"])
-##)
-##func _ready() -> void:
-	##add_child(auth)
-	###auth.signed_up.connect(_on_signed_up)
-	##auth.signed_in.connect(_on_signed_in)
-	##auth.error.connect(_on_auth_error)
-	#
-#var server := TCPServer.new()
-#func _ready() -> void:
-	#server.listen(3000)
-#
-#func _process(_delta: float) -> void:
-	#if server.is_connection_available():
-		#var peer = server.take_connection()
-		#var request = peer.get_utf8_string(peer.get_available_bytes())
-		#print(request)
-		#print(\"AND REQUEST TYPE IS \", typeof(request))
-		#peer.disconnect_from_host()
-#
-#func _input(event: InputEvent) -> void:
-	#if event.is_action_pressed(\"4\"):
-		#var uri = str(SUPABASE_URL,\"/auth/v1/authorize?provider=google&response_type=token\")
-		#OS.shell_open(uri)
-		##var pollTimer = Timer.new()
-		##pollTimer.autostart = true
-		##pollTimer.wait_time = 2
-		##pollTimer.timeout.connect(checkAuthResponse)
-		##
-		##add_child(pollTimer)
-##func checkAuthResponse():
-	##var authCheckRequest = HTTPRequest.new()
-	##add_child(authCheckRequest)
-	##authCheckRequest.request_completed.connect(
-		##func(result, code, headers, body):
-			###print(\"returned \",code)
-			###print(\"with result \",result)
-			###print(\"with headers \",headers)
-			###print(\"with body \",body)
-			##if code==200:
-				##print(\"welcome \", body.get_string_from_utf8() )
-	##)
-	##authCheckRequest.request(str(SUPABASE_URL,\"/auth/v1/user\"),
-	##PackedStringArray([
-		##str(\"apikey: \",SUPABASE_ANON_KEY),
-		##str(\"Authorization: Bearer \",SUPABASE_ANON_KEY) 
-		##]), HTTPClient.METHOD_GET
-	##)
-##func _on_signed_up(user):
-	##print(\"signed up! welcome \",user)
 "
 
 [node name="Node2D" type="Node" unique_id=1408597539]
 
 [node name="cursorItemIcon" type="TextureRect" parent="." unique_id=1233162024]
-visible = false
 self_modulate = Color(1, 1, 1, 0.5019608)
 z_index = 1
 anchors_preset = 8
@@ -425,6 +359,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
+metadata/_edit_use_anchors_ = true
 
 [node name="CursorCanvas" type="CanvasLayer" parent="." unique_id=1354198706]
 layer = 2048

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="objectItem" load_steps=4 format=3 uid="uid://c2d008ix6upm5"]
+[gd_resource type="Resource" script_class="objectItem" format=3 uid="uid://c2d008ix6upm5"]
 
 [ext_resource type="PackedScene" uid="uid://dgecn3g6yiv5q" path="res://Scenes/Items/Objects/Spring/Spring.tscn" id="1_dsaeg"]
 [ext_resource type="Script" uid="uid://c6m2hjthmh1nv" path="res://Scenes/Items/Objects/object.gd" id="1_o4klu"]
@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("1_o4klu")
 objectReference = ExtResource("1_dsaeg")
-texture = ExtResource("3_dsaeg")
+icon = ExtResource("3_dsaeg")
 name = "Spring"
 rosterID = 1
 metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

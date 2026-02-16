@@ -51,7 +51,8 @@ func _process(_delta: float) -> void:
 			if (cursorCellCoords!=previousCursorCellCoords or (round(camera.phantomCamera.position*100) != round(camera.position*100)) ) and selectedItem is terrainItem:
 				tweenCursorItemIcon()
 			elif selectedItem is objectItem:
-				cursorItemIcon.position = (cursor.global_position - (Vector2.ONE * globalEditor.gridSize/2) + selectedItem.textureOffset)
+				#cursorItemIcon.position = (cursor.global_position - (Vector2.ONE * globalEditor.gridSize/2) + selectedItem.textureOffset)
+				cursorItemIcon.position = (cursor.global_position - (Vector2.ONE * (cursorItemIcon.texture.get_size()/2) if selectedItem.centerPreview else Vector2.ZERO) + selectedItem.textureOffset)
 			
 			#place an object
 			if Input.is_action_just_released("mouseClickLeft"):
@@ -103,9 +104,10 @@ func setSelectedItem(newItem: Item):
 		selectedItemType = "terrain"
 	if selectedItem is objectItem:
 		selectedItemType = "object"
-	cursorItemIcon.texture = selectedItem.texture
-	cursorItemIcon.size = selectedItem.texture.get_size()
+	cursorItemIcon.texture = selectedItem.icon if selectedItem.previewTexture==null else selectedItem.previewTexture
+	cursorItemIcon.size = cursorItemIcon.texture.get_size()
 	if cursorItemIconTween!=null and cursorItemIconTween.is_running():
+		cursorItemIconTween.stop()
 		cursorItemIconTween.kill()
 		tweenCursorItemIcon()
 	else:

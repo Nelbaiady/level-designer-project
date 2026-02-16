@@ -2,8 +2,9 @@ class_name VectorPropertyEditor extends PropertyEditor
 
 func propertyReady():
 	super()
-	valueNodes[0].value = value.x
-	valueNodes[1].value = value.y
+	if globalEditor.isEditing:
+		valueNodes[0].value = value.x
+		valueNodes[1].value = value.y
 
 func _ready() -> void:
 	valueNodes = [$HBoxContainer/xValueSpinBox, $HBoxContainer/yValueSpinBox]

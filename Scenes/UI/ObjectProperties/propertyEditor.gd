@@ -35,7 +35,7 @@ func setStartValues(val, minVal, maxVal, stp, propName, labelText, hasMinVal=fal
 	propertyReadySignal.emit()
 #virtual function
 func propertyReady():
-	if len(valueNodes)==1 and ("value" in valueNodes[0]):
+	if len(valueNodes)==1 and ("value" in valueNodes[0]) and globalEditor.isEditing:
 		valueNodes[0].value = value
 #	if a min and max value are set, make sure the ui input reflects that
 	#if (minValue!=null and maxValue!=null) and (minValue!=0 and maxValue!=0):

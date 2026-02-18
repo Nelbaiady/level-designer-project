@@ -10,10 +10,12 @@ extends Node
 	,preload("uid://bts6u1j5o4xl8") #jump power
 	,preload("uid://b15t6r3lo518i") #can Jump
 	,preload("uid://7hr3aqaumfr2") #can Crouch
+	,preload("uid://utkx0vgp3gc5") #can Chourc
 	,preload("uid://bethifqoxndpo") #can Crawl
 	,preload("uid://do5ll6ym26tfy") #acceleration
-	,preload("uid://cer7cfvecm4ww") #acceleration
+	,preload("uid://cer7cfvecm4ww") #top running speed
 	,preload("uid://d7aufjc2xj1h") #deceleration
+	,preload("uid://d3y2ia0lj7kk5") #maxHealth
 	]
 var isBeingEdited:bool = false
 

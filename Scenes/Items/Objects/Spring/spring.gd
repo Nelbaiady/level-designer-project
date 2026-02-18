@@ -7,12 +7,10 @@ var power:float = 1
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if !globalEditor.isEditing:
-		if body.is_in_group("player") or body.is_in_group("movable"):
+		if body.is_in_group("player") or body.is_in_group("movables"):
 			#OLD VERSION #body.velocity = (body.velocity * abs(Vector2(1,0).rotated(rotation))) + Vector2(0,-(baseStrength*power)).rotated(rotation)
 			body.velocity = body.velocity.slide(Vector2.UP.rotated(rotation)) + Vector2.UP.rotated(rotation) * (baseStrength * power)
 			
-			body.gravityMult = 1.0
-			body.bounced = true
 			animationPlayer.play("RESET")
 			animationPlayer.play("Spring_springing")
 

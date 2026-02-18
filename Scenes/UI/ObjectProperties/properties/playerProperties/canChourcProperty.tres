@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ObjectProperty" format=3 uid="uid://utkx0vgp3gc5"]
+
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="1_y6bgd"]
+[ext_resource type="PackedScene" uid="uid://vpjuq6jpn308" path="res://Scenes/UI/ObjectProperties/propertyUIelements/checkBox_property_editor.tscn" id="2_xgnfb"]
+
+[resource]
+script = ExtResource("1_y6bgd")
+codeName = "canChourc"
+displayName = "Chourc"
+uiNode = ExtResource("2_xgnfb")
+metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

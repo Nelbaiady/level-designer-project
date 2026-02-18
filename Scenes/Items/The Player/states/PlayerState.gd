@@ -5,6 +5,7 @@ const RUNNING = "Running"
 const RISING = "Rising"
 const FALLING = "Falling"
 const CROUCHED = "Crouched"
+const CHOURCED = "Chourced"
 
 var player: Player
 

@@ -9,7 +9,10 @@ func enter(_previous_state_path: String, _data := {}) -> void:
 	player.gravityMult = player.fallingGravityMult
 
 func physics_update(delta: float) -> void:
-	player.velocity.y += player.gravity * player.gravityMult * delta
+	if player.velocity.y < player.terminalVelocity:
+		player.velocity.y += player.gravity * player.gravityMult * delta  
+	else: 
+		player.velocity.y = player.terminalVelocity
 	player.velocity = Vector2(move_toward(player.velocity.x,player.directionInput.x * player.topRunSpeed,player.acceleration*delta),player.velocity.y)
 	player.move_and_slide()
 		

@@ -336,7 +336,10 @@ func signOut():
 		dir.remove(\"auth_session.dat\")
 		
 func onAuthSuccess(session):
-	print(\"signed in! welcome \",session)
+	#print(\"signed in! \",session)
+	#print()
+	print(\"Welcome \",session[\"user\"][\"user_metadata\"][\"name\"])
+	
 func onAuthError(error):
 	print(\"error signign up >:( \",error)
 "

@@ -79,6 +79,47 @@ tracks/4/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath(".:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_jkifv"]
+resource_name = "chourcing"
+length = 0.2083375
+step = 0.041666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.20833333),
+"transitions": PackedFloat32Array(0.19614607, 1.1095697, 2.4622886),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.4, 2.2), Vector2(0.5, 2)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = false
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.20833333),
+"transitions": PackedFloat32Array(0.19614607, 1.1095697, 2.4622886),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(0.4, 2.2), Vector2(0.5, 2)]
+}
 
 [sub_resource type="Animation" id="Animation_meww7"]
 resource_name = "crouching"
@@ -313,21 +354,81 @@ tracks/3/keys = {
 "values": [0, 1, 2, 3, 4]
 }
 
-[sub_resource type="Animation" id="Animation_jkifv"]
-resource_name = "unCrouchin"
-length = 0.25000417
+[sub_resource type="Animation" id="Animation_k1ypc"]
+resource_name = "unChourcing"
+length = 0.2083375
 step = 0.041666668
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/path = NodePath("Sprite2D:texture")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.16666667, 0.20833333),
-"transitions": PackedFloat32Array(0.2332583, 1.4640859, 0.4829681),
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_k1a7i")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [3]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:vframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 0.33333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite2D:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.20833333),
+"transitions": PackedFloat32Array(0.34151006, 1.9318728, 0.3535533),
 "update": 0,
-"values": [Vector2(1, 0.5), Vector2(0.9, 1.1), Vector2(1, 1)]
+"values": [Vector2(0.5, 2), Vector2(1.2, 0.8), Vector2(1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = false
+tracks/5/path = NodePath(".:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.20833333),
+"transitions": PackedFloat32Array(0.34151006, 1.9318728, 0.3535533),
+"update": 0,
+"values": [Vector2(0.5, 2), Vector2(1.2, 0.8), Vector2(1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_8pi6c"]
@@ -398,12 +499,13 @@ tracks/4/keys = {
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ay8ch"]
 _data = {
 &"RESET": SubResource("Animation_kvi7n"),
+&"chourcing": SubResource("Animation_jkifv"),
 &"crouching": SubResource("Animation_meww7"),
 &"idle": SubResource("Animation_l5y80"),
 &"jumpUp": SubResource("Animation_cqpvr"),
 &"jumped": SubResource("Animation_un2c2"),
 &"run": SubResource("Animation_ay8ch"),
-&"unCrouchin": SubResource("Animation_jkifv"),
+&"unChourcing": SubResource("Animation_k1ypc"),
 &"unCrouching": SubResource("Animation_8pi6c")
 }
 
@@ -411,7 +513,56 @@ _data = {
 radius = 31.9
 height = 80.0
 
-[node name="Player" type="CharacterBody2D" unique_id=668648745 groups=["player", "solids"]]
+[sub_resource type="GDScript" id="GDScript_jkifv"]
+resource_name = "chourced"
+script/source = "#CHOURCED STATE
+extends PlayerState
+
+func enter(_previous_state_path: String, _data := {}) -> void:
+	player.resetPlay(\"chourcing\")
+	if !player.animationPlayer.animation_finished.is_connected(crouchTransition):
+		player.animationPlayer.animation_finished.connect(crouchTransition)
+	#if !player.uncrouchChecker. is_connected(crouchTransition):
+		#player.animationPlayer.animation_finished.connect(crouchTransition)
+	player.mainCollision.disabled=true
+	player.chourcCollision.disabled=false
+
+func physics_update(delta: float) -> void:
+	player.velocity.y += player.gravity * player.gravityMult * delta
+	player.velocity = Vector2(move_toward(player.velocity.x,0,player.deceleration*delta),player.velocity.y)
+	
+	#player.velocity = Vector2(move_toward(player.velocity.x,player.directionInput.x * player.topRunSpeed,player.acceleration*delta),player.velocity.y)
+	player.move_and_slide()
+
+	if !player.is_on_floor():
+		player.mainCollision.disabled=false
+		player.chourcCollision.disabled=true
+		finished.emit(FALLING)
+	elif Input.is_action_just_pressed(\"jump\") and player.canJump:
+		player.mainCollision.disabled=false
+		player.chourcCollision.disabled=true
+		finished.emit(RISING)
+	elif player.directionInput.y <= -player.crouchInputThreshold:
+		#perform the check inside so as not to check every frame.
+		#if unCrouchCheck():
+			player.mainCollision.disabled=false
+			player.chourcCollision.disabled=true
+			finished.emit(IDLE)
+			player.animationPlayer.play(\"unChourcing\")
+
+##checks if the player can uncrouch by making sure there are no solid objects above the player
+#func unCrouchCheck():
+	#for i in player.uncrouchChecker.get_overlapping_bodies():
+		#if i.is_in_group(\"solids\") and i != player:
+			#return false
+	#return true
+
+func crouchTransition(anim:String):
+	if anim==\"unChourcing\":
+		player.animationPlayer.play(\"idle\")
+"
+
+[node name="Player" type="CharacterBody2D" unique_id=668648745 groups=["movables", "player", "solids"]]
 physics_interpolation_mode = 1
 material = SubResource("ShaderMaterial_jkifv")
 script = ExtResource("1_e8vge")
@@ -429,15 +580,28 @@ offset = Vector2(1, -41.945313)
 hframes = 3
 vframes = 2
 
+[node name="chourcChecker" type="Area2D" parent="." unique_id=756982984]
+
+[node name="chourcCheckerCollision" type="CollisionPolygon2D" parent="chourcChecker" unique_id=2109958513]
+position = Vector2(0, -48)
+scale = Vector2(0.48, 1.92)
+polygon = PackedVector2Array(19, -24, 32, 9, 33.333332, 16.666668, -33.333332, 16.666668, -32, 9, -19, -24, 0, -30)
+
 [node name="uncrouchChecker" type="Area2D" parent="." unique_id=1223757199]
 
-[node name="PlayerCollision" type="CollisionPolygon2D" parent="uncrouchChecker" unique_id=1639036022]
+[node name="uncrouchCheckerCollision" type="CollisionPolygon2D" parent="uncrouchChecker" unique_id=1639036022]
 scale = Vector2(0.96, 0.96)
 polygon = PackedVector2Array(19, -24, 32, 9, -32, 9, -19, -24, 0, -30)
 
 [node name="PlayerCollision" type="CollisionPolygon2D" parent="." unique_id=1984773814]
 scale = Vector2(0.96, 0.96)
 polygon = PackedVector2Array(19, -24, 32, 9, 32, 41, 24, 49, -24, 49, -32, 41, -32, 9, -19, -24, 0, -30)
+
+[node name="PlayerChourcCollision" type="CollisionPolygon2D" parent="." unique_id=1926250148]
+position = Vector2(0, -47.999996)
+scale = Vector2(0.48, 1.92)
+polygon = PackedVector2Array(19, -24, 32, 9, 32, 41, 24, 49, -24, 49, -32, 41, -32, 9, -19, -24, 0, -30)
+disabled = true
 
 [node name="PlayerCrouchCollision" type="CollisionPolygon2D" parent="." unique_id=223064845]
 scale = Vector2(0.96, 0.96)
@@ -470,6 +634,9 @@ script = ExtResource("9_p02g4")
 
 [node name="Crouched" type="Node" parent="StateMachine" unique_id=1513378023]
 script = ExtResource("11_meww7")
+
+[node name="Chourced" type="Node" parent="StateMachine" unique_id=1757473699]
+script = SubResource("GDScript_jkifv")
 
 [node name="Editing" type="Node" parent="StateMachine" unique_id=878611351]
 script = ExtResource("10_qsa3t")

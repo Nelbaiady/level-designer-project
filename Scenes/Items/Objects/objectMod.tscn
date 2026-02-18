@@ -7,4 +7,3 @@
 script = ExtResource("1_22uvg")
 
 [node name="selectionParticles" parent="." unique_id=598846703 instance=ExtResource("2_23st2")]
-position = Vector2(0, 32)

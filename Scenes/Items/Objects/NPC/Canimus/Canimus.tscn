@@ -71,7 +71,7 @@ size = Vector2(104, 80)
 [sub_resource type="CircleShape2D" id="CircleShape2D_dff58"]
 radius = 40.0
 
-[node name="Canimus" type="CharacterBody2D" unique_id=1317101315]
+[node name="Canimus" type="CharacterBody2D" unique_id=1317101315 groups=["movables", "solids"]]
 script = SubResource("GDScript_fgj4o")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=917958512]
@@ -81,10 +81,12 @@ frame = 1
 frame_progress = 0.44440424
 
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_myemf")]
+position = Vector2(0, -8)
 clickCollision = NodePath("Area2D")
 category = 1
 
 [node name="Area2D" type="Area2D" parent="Object" unique_id=12686494]
+position = Vector2(0, 8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Object/Area2D" unique_id=1321507038]
 position = Vector2(4, -8)

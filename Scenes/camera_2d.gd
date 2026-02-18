@@ -1,6 +1,6 @@
 class_name GameplayCamera extends Camera2D
 
-@onready var player
+@onready var player:Player
 
 var tileSize=100
 
@@ -19,6 +19,8 @@ func _ready() -> void:
 	signalBus.startEditMode.connect(editMode)
 	signalBus.startPlayMode.connect(playMode)
 	signalBus.loadedLevel.connect(refindPlayer)
+	
+	phantomCamera.dead_zone_reached.connect(_on_dead_zone_changed)
 
 func setPlayer(_lvl):
 	refindPlayer()
@@ -27,12 +29,16 @@ func setPlayer(_lvl):
 	phantomCamera.set_follow_target(player)
 	phantomCamera.follow_mode = phantomCamera.FollowMode.NONE
 
+func _on_dead_zone_changed(zoneVector):
+	if !globalEditor.isEditing:
+		phantomCamera.set_follow_offset(((player.velocity/5) * abs(zoneVector)).limit_length(500))
 func _physics_process(_delta: float) -> void:
 	if !globalEditor.isEditing:
-		phantomCamera.set_follow_offset(player.velocity/8)
+		#phantomCamera.set_follow_offset((player.velocity/5))#.limit_length(400))
+		pass
 	else:
 		if !globalEditor.popupIsOpen:
-			transLateCamera(Input.get_vector("camLeft","camRight","camUp","camDown")*25)
+			transLateCamera(Input.get_vector("LstickL","LstickR","LstickU","LstickD")*25)
 
 func transLateCamera(direction: Vector2):
 	phantomCamera.position += direction

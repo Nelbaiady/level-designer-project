@@ -26,5 +26,6 @@ label_settings = SubResource("LabelSettings_ebjba")
 
 [node name="CheckBox" type="CheckBox" parent="HBoxContainer" unique_id=1307546344]
 layout_mode = 2
+focus_mode = 3
 
 [connection signal="pressed" from="HBoxContainer/CheckBox" to="." method="_on_check_box_pressed"]

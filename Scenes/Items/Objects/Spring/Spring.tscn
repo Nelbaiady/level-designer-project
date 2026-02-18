@@ -91,11 +91,11 @@ freeze = true
 script = ExtResource("1_3rwud")
 
 [node name="Object" parent="." unique_id=1400891492 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_n374f")]
-position = Vector2(0, -32)
 clickCollision = NodePath("Area2D2")
 properties = Array[ExtResource("3_mrp00")]([ExtResource("4_vclpx"), ExtResource("5_wnvis"), ExtResource("6_yfou2"), ExtResource("7_vmnu4"), ExtResource("8_vclpx")])
 
 [node name="Area2D2" type="Area2D" parent="Object" unique_id=800412032]
+position = Vector2(0, -32)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Object/Area2D2" unique_id=238653133]
 position = Vector2(0, 32)

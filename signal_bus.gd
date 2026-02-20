@@ -3,6 +3,12 @@ class_name SignalBus extends Node
 #signals to add a node to the globalEditor when it's ready
 @warning_ignore("unused_signal")
 signal onLevelReady(level)##called when a level is ready in the scene tree
+@warning_ignore("unused_signal")
+signal loadedLevel()##called when a level has been loaded from a JSON
+
+@warning_ignore("unused_signal")
+signal uploadCurrentLevel()##called when a level has been loaded from a JSON
+
 
 @warning_ignore("unused_signal")
 signal setCurrentTool(tool)
@@ -21,8 +27,6 @@ signal startPlayMode()
 @warning_ignore("unused_signal")
 signal reloadPlayer()
 #this emits after a level has loaded
-@warning_ignore("unused_signal")
-signal loadedLevel()##called when a level has been loaded from a JSON
 
 #signals for editing properties
 @warning_ignore("unused_signal")

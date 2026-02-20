@@ -1,4 +1,4 @@
-extends Node2D
+class_name SaveLoadManager extends Node
 @onready var file_dialog: FileDialog = $"../FileDialog"
 #@onready var tileMap: TileMapLayer = $"../Level/Layer0/TileMapLayer"
 
@@ -34,13 +34,17 @@ func saveLevel(path):
 	var saveFile = FileAccess.open(path+".json", FileAccess.WRITE)
 	if(FileAccess.get_open_error() != OK):
 		return false
+	var levelSaveStruct : Dictionary = parseLevelToJson()
+	saveFile.store_string(JSON.stringify(levelSaveStruct))
+
+func parseLevelToJson():
+	#Exemples for reference
 	#var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}} ,1:{"tiles":{},"objects":{}}}  }]
 	#var levelSaveStruct : Dictionary = {"rooms": [{"layers":{0:{"tiles": [], "objects": []}}}], "playerProperties":{}}
-	var levelSaveStruct : Dictionary = {"rooms": [ ],"playerProperties":{}}
+	var levelSaveStruct = {"rooms": [ ],"playerProperties":{}}
 	for roomIndex in range(len(globalEditor.level.rooms)):
 		levelSaveStruct["rooms"].append( {"layers":{}} )#{"tiles": [], "objects": []} )
 		for layerIndex in globalEditor.level.rooms[roomIndex]["layers"]:
-			#print("saving layer ",layerIndex)
 			levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]={"tiles": [], "objects": []}
 			var layer = globalEditor.level.rooms[roomIndex]["layers"][layerIndex]
 			var tileMap = globalEditor.level.layers[layerIndex].tileMap
@@ -58,9 +62,8 @@ func saveLevel(path):
 				levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["objects"].append({"instanceID":i,"rosterID":currentSavingObject.rosterID,"properties":var_to_str(currentSavingObject.properties) })
 			levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["layerProperties"]=var_to_str(globalEditor.level.rooms[roomIndex]["layers"][layerIndex]["layerProperties"])
 	levelSaveStruct.playerProperties = var_to_str(globalEditor.playerProperties)
+	return levelSaveStruct
 
-	saveFile.store_string(JSON.stringify(levelSaveStruct))
-	
 func loadLevel(path):
 	var levelFile = FileAccess.open(path, FileAccess.READ)
 	#signalBus.reloadPlayer.emit()

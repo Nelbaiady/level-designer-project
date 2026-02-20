@@ -27,7 +27,7 @@ func updateCursorPosition():
 		if Input.is_action_just_released("controllerClickRight"):
 			unRightClick()
 		#Left stick input vector
-		cursorMoveVector = Vector2(Input.get_vector("rLeft","rRight","rUp","rDown"))
+		cursorMoveVector = Input.get_vector("rLeft","rRight","rUp","rDown")
 		#If the mouse isnt making any movement in the game window and the right stick is moved in any direction, 
 		#use controller to move the cursor
 		if cursorMoveVector:

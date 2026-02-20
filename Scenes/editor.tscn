@@ -64,9 +64,11 @@ script/source = "class_name Authentication extends Node
 #CURRENTLY AT 13:00!!!!!
 
 #supabase
-const SUPABASE_PROJECT_ID = \"ejsiqjmcbkeiqbpvwlfa\"
 var SUPABASE_URL = str(\"https://\",SUPABASE_PROJECT_ID,\".supabase.co\")
+const SUPABASE_PROJECT_ID = \"ejsiqjmcbkeiqbpvwlfa\"
 const SUPABASE_ANON_KEY = \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqc2lxam1jYmtlaXFicHZ3bGZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjcwNDAwODAsImV4cCI6MjA4MjYxNjA4MH0.ckwUzUOr8v_vyD37C0pzbCKXCLhATylURUbvHZfbUa0\"
+
+@onready var saveLoadManager: SaveLoadManager = $\"../../SaveLoadManager\"
 
 #local server
 var tcpServer:TCPServer
@@ -82,12 +84,61 @@ var httpRequest: HTTPRequest
 signal authSuccess(user)
 signal authError(error)
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed(\"4\"):
+		signInWithGoogle()
+	if event.is_action_pressed(\"5\"):
+		signalBus.uploadCurrentLevel.emit()
+		
 func _ready() -> void:
 	httpRequest = HTTPRequest.new()
 	add_child(httpRequest)
 	authSuccess.connect(onAuthSuccess)
 	authError.connect(onAuthError)
+	signalBus.uploadCurrentLevel.connect(uploadLevel)
 	httpRequest.request_completed.connect(onHttpRequestCompleted)
+	if OS.has_feature(\"web\"):
+		handleWebRedirect()
+
+func uploadLevel(levelName=\"uploadedLevel\"):
+	var levelSaveStruct = saveLoadManager.parseLevelToJson()
+	var data = JSON.stringify(levelSaveStruct)
+	var url = SUPABASE_URL + \"/storage/v1/object/Levels/\"+levelName
+	var headers = [
+		\"Content-Type: application/octet-stream\",
+		\"apikey: \"+SUPABASE_ANON_KEY,
+		\"Authorization: Bearer \"+loadSession().access_token
+	]
+	httpRequest.request(url,headers,HTTPClient.METHOD_PUT,data)
+
+func handleWebRedirect():
+	var urlPart = JavaScriptBridge.eval(\"window.location.hash\", true)
+	if urlPart == \"\" or not urlPart.begins_with(\"#\"):
+		return
+		
+	var query = urlPart.substr(1)
+	var params = {} 
+	var pairs = query.split(\"&\")
+	for pair in pairs:
+		var keyValue = pair.split(\"=\")
+		if keyValue.size() == 2:
+			params[keyValue[0].uri_decode()] = keyValue[1].uri_decode()
+	if params.has(\"error\"):
+		authError.emit(params.error_description)
+	var session = {
+		\"access_token\": params.get(\"access_token\", \"\"),
+		\"refresh_token\": params.get(\"refresh_token\", \"\"),
+		\"expires_in\": params.get(\"expires_in\", 0),
+		\"user\": params.get(\"user\", {})
+	}
+	var url = SUPABASE_URL+\"/auth/v1/user\"
+	var headers = [
+		\"Content-Type: application/json\",
+		\"apikey: \"+SUPABASE_ANON_KEY,
+		\"Authorization: Bearer \"+session.access_token
+	]
+	set_meta(\"temp_session\", session)
+	httpRequest.request(url,headers,HTTPClient.METHOD_GET,\"\")
 
 func onHttpRequestCompleted(_result, responseCode, _headers, body):
 	var session
@@ -126,51 +177,57 @@ func onHttpRequestCompleted(_result, responseCode, _headers, body):
 	authSuccess.emit(session)
 	storeSession(session)
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed(\"4\"):
-		signInWithGoogle()
 
 func signInWithGoogle():
-	#generate a random string
-	codeVerifier = \"\"
-	var randsChars = \"QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm123456790\"
-	for i in 64:
-		codeVerifier+= randsChars[randi() % randsChars.length()]
+	var params = {}
+	redirectUrl = \"\"
+	if OS.has_feature(\"web\"):
+		redirectUrl = JavaScriptBridge.eval(\"window.location.href\")
+		params = {
+			\"provider\": \"google\",
+			\"redirect_to\": redirectUrl,
+		}
+	else:
+		#generate a random string
+		codeVerifier = \"\"
+		var randsChars = \"QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm123456790\"
+		for i in 64:
+			codeVerifier+= randsChars[randi() % randsChars.length()]
+		
+		#generate pkce params
+		var bytes = codeVerifier.to_utf8_buffer()
+		var hashingContext = HashingContext.new()
+		hashingContext.start(HashingContext.HASH_SHA256)
+		hashingContext.update(bytes)
+		var hashed = hashingContext.finish()
+		codeChallenge = Marshalls.raw_to_base64(hashed).replace(\"+\",\"-\").replace(\"/\",\"_\").rstrip(\"=\")
 	
-	#generate pkce params
-	var bytes = codeVerifier.to_utf8_buffer()
-	var hashingContext = HashingContext.new()
-	hashingContext.start(HashingContext.HASH_SHA256)
-	hashingContext.update(bytes)
-	var hashed = hashingContext.finish()
-	codeChallenge = Marshalls.raw_to_base64(hashed).replace(\"+\",\"-\").replace(\"/\",\"_\").rstrip(\"=\")
-	
-	#start tcp server
-	tcpServer = TCPServer.new()
-	var error = tcpServer.listen(localPort)#,\"127.0.0.1\")
-	if error!=OK:
-		print(\"Could not start TCP server on port \",localPort,\", \",error)
-		var fallbackPorts = [3000, 54322, 54323, 9999, 8080]
-		for port in fallbackPorts:
-			error = tcpServer.listen(port,\"127.0.0.1\")
-			if error==OK:
-				localPort = port
-				redirectUrl = str(\"http://localhost:\",localPort)
-				print(\"successfully started tcp server on fallback port \",localPort)
-				break
-		if error !=OK:
-			printerr(\"Failed to start TCP server on all fallback ports\")
-			return false
-	set_process(true)
-	
-	#build the auth url
-	var params = {
-		\"provider\": \"google\",
-		\"redirect_to\": redirectUrl,
-		\"code_challenge\": codeChallenge,
-		\"code_challenge_method\": \"S256\",
-		\"flow_type\": \"pkce\"
-	}
+		#start tcp server
+		tcpServer = TCPServer.new()
+		var error = tcpServer.listen(localPort)#,\"127.0.0.1\")
+		if error!=OK:
+			print(\"Could not start TCP server on port \",localPort,\", \",error)
+			var fallbackPorts = [3000, 54322, 54323, 9999, 8080]
+			for port in fallbackPorts:
+				error = tcpServer.listen(port,\"127.0.0.1\")
+				if error==OK:
+					localPort = port
+					#redirectUrl = str(\"http://localhost:\",localPort)
+					print(\"successfully started tcp server on fallback port \",localPort)
+					break
+			if error !=OK:
+				printerr(\"Failed to start TCP server on all fallback ports\")
+				return false
+		redirectUrl = str(\"http://localhost:\",localPort)
+		set_process(true)
+		#build the auth url
+		params = {
+			\"provider\": \"google\",
+			\"redirect_to\": redirectUrl,
+			\"code_challenge\": codeChallenge,
+			\"code_challenge_method\": \"S256\",
+			\"flow_type\": \"pkce\"
+		}
 	var queryString = \"\"
 	for param in params:
 		if queryString != \"\":
@@ -182,6 +239,7 @@ func signInWithGoogle():
 	OS.shell_open(authUrl)
 
 func _process(_delta: float) -> void:
+	
 	if not tcpServer or not tcpServer.is_listening():
 		return
 	if tcpServer.is_connection_available():
@@ -239,7 +297,6 @@ func _process(_delta: float) -> void:
 								
 							else:
 								sendCallbackResponse(connection,false,\"No auth code received\")
-							#IM AT 10:30!!!!!!
 						break
 				else:
 					await get_tree().create_timer(0.01).timeout
@@ -336,9 +393,8 @@ func signOut():
 		dir.remove(\"auth_session.dat\")
 		
 func onAuthSuccess(session):
-	#print(\"signed in! \",session)
-	#print()
-	print(\"Welcome \",session[\"user\"][\"user_metadata\"][\"name\"])
+	print(\"success, \",session)
+	#print(\"Welcome \",session[\"user\"][\"user_metadata\"][\"name\"])
 	
 func onAuthError(error):
 	print(\"error signign up >:( \",error)
@@ -567,7 +623,7 @@ metadata/_custom_type_script = "uid://bd046eokvcnu2"
 [node name="Editor" type="Node2D" parent="." unique_id=947430787]
 script = ExtResource("1_eyy8u")
 
-[node name="SaveLoadManager" type="Node2D" parent="." unique_id=986423807]
+[node name="SaveLoadManager" type="Node" parent="." unique_id=1604020172]
 script = ExtResource("3_7fkqn")
 
 [node name="FileDialog" type="FileDialog" parent="." unique_id=890024928]

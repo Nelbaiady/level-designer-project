@@ -60,3 +60,10 @@ func resetPlay(animation:String):
 	animationPlayer.advance(0)
 	animationPlayer.play(animation)
 	animationPlayer.advance(0)
+	
+	
+func chourcCheck():
+	for i in chourcChecker.get_overlapping_bodies():
+		if i.is_in_group("solids") and i != self:
+			return false
+	return true

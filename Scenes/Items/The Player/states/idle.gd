@@ -7,12 +7,6 @@ func enter(_previous_state_path: String, _data := {}) -> void:
 	#player.animationPlayer.play("idle")
 	player.resetPlay("idle")
 
-func chourcCheck():
-	for i in player.chourcChecker.get_overlapping_bodies():
-		if i.is_in_group("solids") and i != player:
-			return false
-	return true
-
 func physics_update(delta: float) -> void:
 	player.velocity.y += player.gravity * player.gravityMult * delta
 	player.velocity = Vector2(move_toward(player.velocity.x,0,player.deceleration*delta),player.velocity.y)
@@ -24,7 +18,7 @@ func physics_update(delta: float) -> void:
 		finished.emit(RISING)
 	elif player.directionInput.y < player.crouchInputThreshold and player.canCrouch:
 		finished.emit(CROUCHED)
-	elif player.directionInput.y > -player.crouchInputThreshold and player.canChourc and chourcCheck():
+	elif player.directionInput.y > -player.crouchInputThreshold and player.canChourc and player.chourcCheck():
 		finished.emit(CHOURCED)
 	elif player.directionInput.x != 0:
 		finished.emit(RUNNING)

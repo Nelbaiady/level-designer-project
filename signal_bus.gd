@@ -8,6 +8,8 @@ signal loadedLevel()##called when a level has been loaded from a JSON
 
 @warning_ignore("unused_signal")
 signal uploadCurrentLevel()##called when a level has been loaded from a JSON
+@warning_ignore("unused_signal")
+signal loadLevel(data)##called when a level has been loaded from a JSON
 
 
 @warning_ignore("unused_signal")

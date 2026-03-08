@@ -3,7 +3,9 @@ class_name SaveLoadManager extends Node
 #@onready var tileMap: TileMapLayer = $"../Level/Layer0/TileMapLayer"
 
 var isSaving = false
-
+func _ready() -> void:
+	signalBus.loadLevel.connect(loadLevel)
+	
 func _input(event: InputEvent) -> void:
 	if globalEditor.isEditing:
 		if event.is_action_pressed("save"):
@@ -64,16 +66,22 @@ func parseLevelToJson():
 	levelSaveStruct.playerProperties = var_to_str(globalEditor.playerProperties)
 	return levelSaveStruct
 
-func loadLevel(path):
-	var levelFile = FileAccess.open(path, FileAccess.READ)
-	#signalBus.reloadPlayer.emit()
-	if(FileAccess.get_open_error() != OK):
-		printerr("failed to open file: ",path)
-		return false
-	var jsonData = levelFile.get_as_text()
-	var parsedData = JSON.new()
-	parsedData.parse(jsonData)
-	var loadedData : Dictionary = parsedData.get_data()
+func loadLevel(data):
+	var loadedData : Dictionary
+	if typeof(data)==TYPE_DICTIONARY:
+		loadedData=data
+	elif typeof(data)==TYPE_STRING:
+		var levelFile = FileAccess.open(data, FileAccess.READ)
+		#signalBus.reloadPlayer.emit()
+		if(FileAccess.get_open_error() != OK):
+			printerr("failed to open file: ",data)
+			return false
+		var jsonData = levelFile.get_as_text()
+		var parsedData = JSON.new()
+		parsedData.parse(jsonData)
+		loadedData = parsedData.get_data()
+	else:
+		printerr("no valid level data")
 	globalEditor.clearLevel()
 	#var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}} ,1:{"tiles":{},"objects":{}}}  }]
 #	Loop through each layer within each room

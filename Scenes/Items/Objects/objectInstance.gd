@@ -55,7 +55,6 @@ func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 func editModeStarted():
 	#rootNode.process_mode = Node.PROCESS_MODE_DISABLED
 	for property in properties:
-		print("setting ",property.codeName," to ",getProperty(property.codeName))
 		setProperty(property.codeName, getProperty(property.codeName), true)
 #func playModeStarted():
 	#pass

@@ -61,7 +61,6 @@ script/source = "class_name Backend extends Node
 resource_name = "Authentication"
 script/source = "class_name Authentication extends Node
 #REFERENCE: https://www.youtube.com/watch?v=g1tgPEKCKg0
-#CURRENTLY AT 13:00!!!!!
 
 #supabase
 var SUPABASE_URL = str(\"https://\",SUPABASE_PROJECT_ID,\".supabase.co\")
@@ -89,7 +88,8 @@ func _input(event: InputEvent) -> void:
 		signInWithGoogle()
 	if event.is_action_pressed(\"5\"):
 		signalBus.uploadCurrentLevel.emit()
-		
+	if event.is_action_pressed(\"6\"):
+		downloadLevel()
 func _ready() -> void:
 	httpRequest = HTTPRequest.new()
 	add_child(httpRequest)
@@ -100,16 +100,49 @@ func _ready() -> void:
 	if OS.has_feature(\"web\"):
 		handleWebRedirect()
 
+
 func uploadLevel(levelName=\"uploadedLevel\"):
-	var levelSaveStruct = saveLoadManager.parseLevelToJson()
-	var data = JSON.stringify(levelSaveStruct)
-	var url = SUPABASE_URL + \"/storage/v1/object/Levels/\"+levelName
-	var headers = [
-		\"Content-Type: application/octet-stream\",
-		\"apikey: \"+SUPABASE_ANON_KEY,
-		\"Authorization: Bearer \"+loadSession().access_token
-	]
-	httpRequest.request(url,headers,HTTPClient.METHOD_PUT,data)
+	if isSessionValid():
+		levelName+= str(snappedf(randf(),0.01))
+		var levelSaveStruct = saveLoadManager.parseLevelToJson()
+		var data = JSON.stringify(levelSaveStruct)
+		var url = SUPABASE_URL + \"/storage/v1/object/Levels/\"+levelName+\".json\"
+		var headers = [
+			\"Content-Type: application/octet-stream\",
+			\"apikey: \"+SUPABASE_ANON_KEY,
+			\"Authorization: Bearer \"+loadSession().access_token
+		]
+		httpRequest.request(url,headers,HTTPClient.METHOD_POST,data)
+		httpRequest.request_completed.connect(
+			func (_result, responseCode, _headers, body):
+				if responseCode == 200:
+					authSuccess.emit(str(\"Successfully uploaded level \",JSON.parse_string(body.get_string_from_utf8())[\"Key\"].get_file() ) )
+				else:
+					authError.emit(\"Failed to upload level\")
+		, CONNECT_ONE_SHOT)
+	else:
+		authError.emit(\"flip dude, youre not signed in bro\")
+func downloadLevel(levelName:=\"uploadedLevel\"):
+	if isSessionValid():
+		var levelSaveStruct = saveLoadManager.parseLevelToJson()
+		var data = JSON.stringify(levelSaveStruct)
+		var url = SUPABASE_URL + \"/storage/v1/object/Levels/\"+levelName+\".json\"
+		var headers = [
+			\"Content-Type: application/octet-stream\",
+			\"apikey: \"+SUPABASE_ANON_KEY,
+			\"Authorization: Bearer \"+loadSession().access_token
+		]
+		httpRequest.request(url,headers,HTTPClient.METHOD_GET,data)
+		httpRequest.request_completed.connect(
+			func (_result, responseCode, _headers, body):
+				if responseCode == 200:
+					authSuccess.emit(str(\"Successfully downloaded level \"))
+					signalBus.loadLevel.emit(JSON.parse_string(body.get_string_from_utf8()))
+				else:
+					authError.emit(\"Failed to download level\")
+		, CONNECT_ONE_SHOT)
+	else:
+		authError.emit(\"flip dude, youre not signed in bro\")
 
 func handleWebRedirect():
 	var urlPart = JavaScriptBridge.eval(\"window.location.hash\", true)
@@ -168,14 +201,15 @@ func onHttpRequestCompleted(_result, responseCode, _headers, body):
 		authError.emit(\"Failed to parse auth response\")
 		return
 	var data = json.data
-	session = {
-		\"access_token\": data.get(\"access_token\", \"\"),
-		\"refresh_token\": data.get(\"refresh_token\", \"\"),
-		\"expires_in\": data.get(\"expires_in\", 0),
-		\"user\": data.get(\"user\", {})
-	}
-	authSuccess.emit(session)
-	storeSession(session)
+	if data.has(\"access_token\"):
+		session = {
+			\"access_token\": data.get(\"access_token\", \"\"),
+			\"refresh_token\": data.get(\"refresh_token\", \"\"),
+			\"expires_in\": data.get(\"expires_in\", 0),
+			\"user\": data.get(\"user\", {})
+		}
+		storeSession(session)
+	authSuccess.emit(str(responseCode,\": \",response))
 
 
 func signInWithGoogle():
@@ -366,7 +400,7 @@ func isSessionValid():
 	if session.get(\"is_expired\", false):
 		return false
 	return true
-func refreshToken(refreshString:String):
+func refreshToken(refreshString):
 	var url = SUPABASE_URL+\"/auth/v1/token?grant_type=refresh_token\"
 	var headers = [
 		\"Content-Type: application/json\",
@@ -393,11 +427,11 @@ func signOut():
 		dir.remove(\"auth_session.dat\")
 		
 func onAuthSuccess(session):
-	print(\"success, \",session)
+	print(\"auth success: \",session)
 	#print(\"Welcome \",session[\"user\"][\"user_metadata\"][\"name\"])
 	
 func onAuthError(error):
-	print(\"error signign up >:( \",error)
+	print(\"auth error: \",error)
 "
 
 [node name="Node2D" type="Node" unique_id=1408597539]
@@ -599,17 +633,21 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PhantomCamera2D" type="Node2D" parent="." unique_id=1919693164]
+top_level = true
 position = Vector2(544, 280)
 script = ExtResource("7_nfgmo")
+follow_mode = 5
 tween_resource = SubResource("Resource_nfgmo")
 follow_damping = true
-follow_damping_value = Vector2(0.05, 0.05)
+follow_damping_value = Vector2(0.2, 0.2)
+dead_zone_width = 0.2
 dead_zone_height = 0.65
 metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525]
 top_level = true
 position = Vector2(544, 280)
+process_callback = 0
 limit_enabled = false
 position_smoothing_speed = 20.0
 script = ExtResource("1_8howc")

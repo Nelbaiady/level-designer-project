@@ -16,7 +16,8 @@ var objectInstancesCount:int = 0
 var itemRoster:Array[Item] = []#[preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
 @onready var level: Level
 var hotbarIndex: int = 0
-var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),null,null,null,null,null,null,null]
+var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
+#var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),null,null,null,null,null,null,null]
 var currentLayer: int = 0
 var currentRoom: int = 0
 
@@ -70,6 +71,7 @@ func placeObject(object:objectItem, position:Vector2=Vector2.ZERO,startPropertie
 	signalBus.placeObjectSignal.emit(instanceID, objectToPlace, startProperties)
 
 func clearLevel():
+	playerProperties = {"position":Vector2(544,280)}
 	currentLayer=0
 	for layerIndex in level["rooms"][currentRoom]["layers"]:
 		var layer = level["rooms"][currentRoom]["layers"][layerIndex]

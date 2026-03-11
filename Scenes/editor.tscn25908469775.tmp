@@ -114,78 +114,41 @@ func _ready() -> void:
 ##makes sure the account exists and has an entry in the database
 func ensureAccountExists():
 	print(\"checking for user \"+sessionCache.user.id)
-	var url = SUPABASE_URL + \"/rest/v1/users?id=eq.\" + sessionCache.user.id
+	var url = SUPABASE_URL + \"/rest/v1/Users?id=eq.\" + sessionCache.user.id
 	var headers = [
 		\"apikey: \" + SUPABASE_ANON_KEY,
 		\"Authorization: Bearer \" + sessionCache.access_token
 	]
 	httpRequest.request(url, headers, HTTPClient.METHOD_GET)
-	#httpRequest.request_completed.connect(
-		#func (_result, _responseCode, _headers, body):
-			#if body.get_string_from_utf8() == \"[]\":
-				#print(\"user doesnt exist. adding now...\")
-				#signUp()
-			#else:
-				#print(\"user found: \", body.get_string_from_utf8())
-	#, CONNECT_ONE_SHOT)
-	var response = await httpRequest.request_completed
-	var body = response[3]
-	if body.get_string_from_utf8() == \"[]\":
-		print(\"user doesnt exist. adding now...\")
-		await signUp()
-	else:
-		print(\"user found: \", body.get_string_from_utf8())
+	httpRequest.request_completed.connect(
+		func (_result, _responseCode, _headers, body):
+			if body.get_string_from_utf8() == \"[]\":
+				print(\"user doesnt exist. adding now...\")
+				signUp()
+			else:
+				print(\"user found: \", body.get_string_from_utf8())
+	, CONNECT_ONE_SHOT)
+	await httpRequest.request_completed
 
-#func signUp(usrname:String=\"CheeseChair\"):
-	##var url = SUPABASE_URL + \"/rest/v1/Users?id=eq.\" + sessionCache.user.id
-	#var url = SUPABASE_URL + \"/rest/v1/users\"
-	#var headers = [
-		#\"apikey: \" + SUPABASE_ANON_KEY,
-		#\"Authorization: Bearer \" + sessionCache.access_token,
-		#\"Content-Type: application/json\",
-		#\"Prefer: return=representation\"
-	#]
-	#var body = JSON.stringify({
-		#\"id\": sessionCache.user.id,
-		#\"username\":usrname
-	#})
-	#httpRequest.request(url, headers, HTTPClient.METHOD_POST, body)
-	##httpRequest.request_completed.connect(
-		##func (_result, _responseCode, _headers, body):
-			##print()
-	##, CONNECT_ONE_SHOT)
-	#await httpRequest.request_completed
 func signUp(usrname:String=\"CheeseChair\"):
-	#var url = SUPABASE_URL + \"/rest/v1/rpc/createUser\"
-	#var headers = [
-		#\"apikey: \" + SUPABASE_ANON_KEY,
-		#\"Authorization: Bearer \" + sessionCache.access_token,
-		#\"Content-Type: application/json\"
-	#]
-	#var body = JSON.stringify({
-		#\"username\": usrname
-	#})
-	#httpRequest.request(url, headers, HTTPClient.METHOD_POST, body)
-	#await httpRequest.request_completed
-	#print(\"signup response: \", response[1], \" \", response[3].get_string_from_utf8())
-	await rpcRequest({\"username\": usrname},\"createUser\")
-
-##Sends a request for a supabase rpc function. response is an array where:[br]
-##Response[0]: result[br]
-##Response[1]: responseCode[br] 
-##Response[2]: headers[br]
-##Response[3]: body[br]
-func rpcRequest(params:Dictionary,functionName:String):
-	var url = SUPABASE_URL + \"/rest/v1/rpc/\"+functionName
+	#var url = SUPABASE_URL + \"/rest/v1/Users?id=eq.\" + sessionCache.user.id
+	var url = SUPABASE_URL + \"/rest/v1/Users\"
 	var headers = [
 		\"apikey: \" + SUPABASE_ANON_KEY,
 		\"Authorization: Bearer \" + sessionCache.access_token,
-		\"Content-Type: application/json\"
+		\"Content-Type: application/json\",
+		\"Prefer: return=representation\"
 	]
-	var body = JSON.stringify(params)
+	var body = JSON.stringify({
+		\"id\": sessionCache.user.id,
+		\"Username\":usrname
+	})
 	httpRequest.request(url, headers, HTTPClient.METHOD_POST, body)
-	var response = await httpRequest.request_completed
-	return response
+	#httpRequest.request_completed.connect(
+		#func (_result, _responseCode, _headers, body):
+			#print()
+	#, CONNECT_ONE_SHOT)
+	await httpRequest.request_completed
 
 func uploadLevel(levelName=\"uploadedLevel\"):
 	await ensureValidSession()
@@ -198,23 +161,17 @@ func uploadLevel(levelName=\"uploadedLevel\"):
 		var headers = [
 			\"Content-Type: application/octet-stream\",
 			\"apikey: \"+SUPABASE_ANON_KEY,
-			\"Authorization: Bearer \"+sessionCache.access_token
+			\"Authorization: Bearer \"+loadSession().access_token
 		]
 		httpRequest.request(url,headers,HTTPClient.METHOD_POST,data)
-		#httpRequest.request_completed.connect(
-			#func (_result, responseCode, _headers, body):
-				#if responseCode == 200:
-					#httpReply.emit(str(\"Successfully uploaded level \",JSON.parse_string(body.get_string_from_utf8())[\"Key\"].get_file() ) )
-				#else:
-					#authError.emit(\"Failed to upload level\")
-		#, CONNECT_ONE_SHOT)
-		var response = await httpRequest.request_completed
-		var responseCode = response[1]
-		var body = response[3]
-		if responseCode == 200:
-			httpReply.emit(str(\"Successfully uploaded level \",JSON.parse_string(body.get_string_from_utf8())[\"Key\"].get_file() ) )
-		else:
-			authError.emit(\"Failed to upload level\")
+		httpRequest.request_completed.connect(
+			func (_result, responseCode, _headers, body):
+				if responseCode == 200:
+					httpReply.emit(str(\"Successfully uploaded level \",JSON.parse_string(body.get_string_from_utf8())[\"Key\"].get_file() ) )
+				else:
+					authError.emit(\"Failed to upload level\")
+		, CONNECT_ONE_SHOT)
+		await httpRequest.request_completed
 	else:
 		authError.emit(\"flip dude, youre not signed in bro\")
 func downloadLevel(levelName:=\"uploadedLevel\"):
@@ -228,22 +185,15 @@ func downloadLevel(levelName:=\"uploadedLevel\"):
 			\"Authorization: Bearer \"+loadSession().access_token
 		]
 		httpRequest.request(url,headers,HTTPClient.METHOD_GET,data)
-		#httpRequest.request_completed.connect(
-			#func (_result, responseCode, _headers, body):
-				#if responseCode == 200:
-					#httpReply.emit(str(\"Successfully downloaded level \"))
-					#signalBus.loadLevel.emit(JSON.parse_string(body.get_string_from_utf8()))
-				#else:
-					#authError.emit(\"Failed to download level\")
-		#, CONNECT_ONE_SHOT)
-		var response = await httpRequest.request_completed
-		var responseCode = response[1]
-		var body = response[3]
-		if responseCode == 200:
-			httpReply.emit(str(\"Successfully downloaded level \"))
-			signalBus.loadLevel.emit(JSON.parse_string(body.get_string_from_utf8()))
-		else:
-			authError.emit(\"Failed to download level\")
+		httpRequest.request_completed.connect(
+			func (_result, responseCode, _headers, body):
+				if responseCode == 200:
+					httpReply.emit(str(\"Successfully downloaded level \"))
+					signalBus.loadLevel.emit(JSON.parse_string(body.get_string_from_utf8()))
+				else:
+					authError.emit(\"Failed to download level\")
+		, CONNECT_ONE_SHOT)
+		await httpRequest.request_completed
 	else:
 		authError.emit(\"flip dude, youre not signed in bro\")
 
@@ -295,7 +245,7 @@ func onHttpRequestCompleted(_result, responseCode, _headers, body):
 		return
 	clearTcpServer()
 	
-	if responseCode < 200 or responseCode > 299:
+	if responseCode != 200:
 		authError.emit(\"Authentication failed \"+response)
 		return
 		
@@ -549,7 +499,7 @@ func onHttpReplyError(message):
 	print(message)
 	
 func onAuthSuccess(session):
-	#print(\"auth success: \",session)
+	print(\"auth success: \",session)
 	if typeof(session) == TYPE_DICTIONARY:
 		sessionCache = session
 	#print(\"Welcome \",session[\"user\"][\"user_metadata\"][\"name\"])

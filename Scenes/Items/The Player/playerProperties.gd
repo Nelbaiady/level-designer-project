@@ -1,4 +1,4 @@
-extends Node
+class_name PlayerProperties extends Node
 
 @onready var selectionParticles: GPUParticles2D = $selectionParticles
 @onready var clickCollision: Area2D = $"../Area2D"

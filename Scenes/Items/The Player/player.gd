@@ -33,6 +33,7 @@ var directionInput = Vector2.ZERO
 
 
 @onready var stateMachine: StateMachine = $StateMachine
+@onready var playerProperties: PlayerProperties = $playerProperties
 
 
 func _ready() -> void:
@@ -54,14 +55,19 @@ func _physics_process(_delta: float) -> void:
 		if directionInput.x < 0: sprite.flip_h = true 
 		if directionInput.x > 0: sprite.flip_h = false
 
-##plays an animation and also plays the reset track
+##plays an animation and also plays the reset track (reset no longer happens for now due to bugs)
 func resetPlay(animation:String):
-	animationPlayer.play(&"RESET")
-	animationPlayer.advance(0)
+	#animationPlayer.play(&"RESET")
+	#animationPlayer.advance(0)
+	restoreSpriteScale()
 	animationPlayer.play(animation)
-	animationPlayer.advance(0)
-	
-	
+	#animationPlayer.advance(0)
+func restoreSpriteScale():
+	if globalEditor.playerProperties.has("scale"):
+		sprite.scale = globalEditor.playerProperties["scale"]
+	else:
+		sprite.scale = Vector2.ONE
+
 func chourcCheck():
 	for i in chourcChecker.get_overlapping_bodies():
 		if i.is_in_group("solids") and i != self:

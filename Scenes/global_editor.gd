@@ -4,6 +4,7 @@ var isEditing:bool = true
 var popupIsOpen:bool = false
 var colorPickerPopupIsOpen = false
 var saveLoadPopupIsOpen = false
+var textPopupIsOpen = false
 
 var gridSize:int = 64
 
@@ -55,7 +56,7 @@ func levelNodeReady(levelNode):
 	level = levelNode
 
 func _physics_process(_delta: float) -> void:
-	popupIsOpen = saveLoadPopupIsOpen or colorPickerPopupIsOpen
+	popupIsOpen = saveLoadPopupIsOpen or colorPickerPopupIsOpen or textPopupIsOpen
 
 
 func placeTile(item, cell):

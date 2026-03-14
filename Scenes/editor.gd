@@ -28,7 +28,7 @@ func _ready() -> void:
 	setSelectedItem(selectedItem)
 	globalEditor.setItem.connect(setSelectedItem)
 	signalBus.startEditMode.connect(resetStage)
-	globalEditor.propertiesUI = $"../CanvasLayer/PropertiesSidebar/PropertiesPanel/ScrollContainer/Properties"
+	globalEditor.propertiesUI = $"../HUD/PropertiesSidebar/PropertiesPanel/ScrollContainer/Properties"
 	#globalEditor.tileMaps = tileMaps
 	#globalEditor.level = $"../Level"
 	signalBus.onLevelReady.connect(levelReady)
@@ -74,13 +74,8 @@ func _process(_delta: float) -> void:
 		else:
 			pass
 			
-		#toggle between edit mode and play mode
-		if Input.is_action_just_pressed("toggleEditing"):
-			if globalEditor.isEditing:
-				globalEditor.isEditing = false
-				signalBus.startPlayMode.emit()
-			else:
-				signalBus.startEditMode.emit()
+
+
 
 	if clickFrame:
 		clickFrame = false
@@ -117,6 +112,13 @@ func setSelectedItem(newItem: Item):
 			cursorItemIcon.position = (Vector2(cursorCellCoords * globalEditor.gridSize) + selectedItem.textureOffset)
 
 func _unhandled_input(event: InputEvent) -> void:
+	#toggle between edit mode and play mode
+	if Input.is_action_just_pressed("toggleEditing"):
+		if globalEditor.isEditing:
+			globalEditor.isEditing = false
+			signalBus.startPlayMode.emit()
+		else:
+			signalBus.startEditMode.emit()
 	if event.is_action("mouseClickLeft") and cursor.cursorOnScreen and globalEditor.isEditing:
 		placeButtonIsHeld = true
 		clickFrame = true

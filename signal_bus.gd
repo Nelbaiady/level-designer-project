@@ -19,16 +19,13 @@ signal eraseObject()
 @warning_ignore("unused_signal")
 signal placeObjectSignal(instanceID, object, properties)
 
-#switch from play mode to edit mode
 @warning_ignore("unused_signal")
-signal startEditMode()
-#switch from edit mode to play mode
+signal startEditMode()##when switching to edit mode
 @warning_ignore("unused_signal")
-signal startPlayMode()
-#destroy the player and recreate them to reset properties
+signal startPlayMode()##when switching to play mode
 @warning_ignore("unused_signal")
-signal reloadPlayer()
-#this emits after a level has loaded
+signal reloadPlayer()##destroy the player and recreate them to reset properties. This emits after a level has loaded.
+
 
 #signals for editing properties
 @warning_ignore("unused_signal")
@@ -63,4 +60,11 @@ signal deleteLayer(layerID)##signal for deleting a layer
 signal updateLayerUI()##signal for changing layer
 
 @warning_ignore("unused_signal")
-signal spinboxSpun()
+signal spinboxSpun()##when a spinbox with a specific script is spin, it emits this
+
+@warning_ignore("unused_signal")
+signal startTextEditPopup(prompt)##tells the text edit popup to appear and prepare to send something back
+@warning_ignore("unused_signal")
+signal endTextEditPopup(text,isCancelled:bool)##tells the text edit popup to appear and prepare to send something back
+@warning_ignore("unused_signal")
+signal startTextPopup(text)##regular text popup without input

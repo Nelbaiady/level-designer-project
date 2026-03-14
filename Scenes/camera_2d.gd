@@ -14,6 +14,8 @@ var nextHoldStepTarget = holdThreshold
 @onready var phantom_camera_host: PhantomCameraHost = $PhantomCameraHost
 @onready var phantomCamera: PhantomCamera2D = $"../PhantomCamera2D"
 
+var inputVector = Vector2.ZERO
+
 func _ready() -> void:
 	signalBus.onLevelReady.connect(setPlayer)
 	signalBus.startEditMode.connect(editMode)
@@ -42,12 +44,44 @@ func _physics_process(_delta: float) -> void:
 		pass
 	else:
 		if !globalEditor.popupIsOpen:
-			transLateCamera(Input.get_vector("LstickL","LstickR","LstickU","LstickD")*25)
+			transLateCamera(inputVector*25)
+
+#Input vector needs to be handled using unhandled input in case the user is typing into a textbox
+var inputPosX = 0
+var inputNegX = 0
+var inputPosY = 0
+var inputNegY = 0
+func _unhandled_input(event: InputEvent) -> void:
+	if !globalEditor.popupIsOpen and globalEditor.isEditing:
+		if event.is_action_pressed("LstickR"):
+			inputPosX = Input.get_action_strength("LstickR")
+		if event.is_action_released("LstickR"):
+			inputPosX = 0
+			
+		if event.is_action_pressed("LstickL"):
+			inputNegX = Input.get_action_strength("LstickL")
+		if event.is_action_released("LstickL"):
+			inputNegX = 0
+		
+		if event.is_action_pressed("LstickU"):
+			inputPosY = Input.get_action_strength("LstickU")
+		if event.is_action_released("LstickU"):
+			inputPosY = 0
+			
+		if event.is_action_pressed("LstickD"):
+			inputNegY = Input.get_action_strength("LstickD")
+		if event.is_action_released("LstickD"):
+			inputNegY = 0
+		inputVector = Vector2(inputPosX-inputNegX,inputNegY-inputPosY)
 
 func transLateCamera(direction: Vector2):
 	phantomCamera.position += direction
 	
 func editMode():
+	inputPosX = 0
+	inputNegX = 0
+	inputPosY = 0
+	inputNegY = 0
 	phantomCamera.follow_mode = phantomCamera.FollowMode.NONE
 	phantomCamera.set_follow_offset(Vector2.ZERO)
 	player = globalEditor.player

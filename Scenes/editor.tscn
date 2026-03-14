@@ -19,6 +19,62 @@
 [ext_resource type="Script" uid="uid://ul8eb8jem2l" path="res://Scenes/properties_handler.gd" id="15_i5vsu"]
 [ext_resource type="PackedScene" uid="uid://j4eyk5hksqrt" path="res://Scenes/layer.tscn" id="17_0l4bc"]
 
+[sub_resource type="GDScript" id="GDScript_3lyd6"]
+resource_name = "textEditPopup"
+script/source = "class_name textEditPopup extends Control
+
+@onready var lineEdit: LineEdit = $PanelContainer/MarginContainer/VBoxContainer/MarginContainer/LineEdit
+@onready var label: Label = $PanelContainer/MarginContainer/VBoxContainer/Label
+
+@onready var cancelButton: Button = $PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/MarginContainer/cancelButton
+
+##true if the prompt requires text input
+var withInput=false
+##usage example
+#func _input(event: InputEvent) -> void:
+	#if event.is_action_pressed(\"9\"):
+		#signalBus.startTextEditPopup.emit('what a doozy eh?')
+		#var inputText = await signalBus.endTextEditPopup
+		#print(inputText[0])
+
+func _ready() -> void:
+	signalBus.startTextEditPopup.connect(startInputPopup)
+	signalBus.startTextPopup.connect(startInfoPopup)
+
+##Just text and a confirm button as a notification.
+func startInfoPopup(prompt:String):
+	withInput = false
+	lineEdit.visible = false
+	cancelButton.visible = false
+	visible = true
+	label.text = prompt
+	globalEditor.textPopupIsOpen = true
+
+func startInputPopup(prompt:String):
+	withInput = true
+	lineEdit.clear()
+	lineEdit.visible = true
+	cancelButton.visible = true
+	visible = true
+	label.text = prompt
+	globalEditor.textPopupIsOpen = true
+	
+func endInputPopup(isCancelled:bool):
+	signalBus.endTextEditPopup.emit(lineEdit.text,isCancelled)
+	visible = false
+	globalEditor.textPopupIsOpen = false
+	lineEdit.clear()
+
+func _on_confirm_button_pressed() -> void:
+	if withInput:
+		endInputPopup(true)
+	else:
+		endInputPopup(false)
+
+func _on_cancel_button_pressed() -> void:
+	endInputPopup(false)
+"
+
 [sub_resource type="Resource" id="Resource_nfgmo"]
 script = ExtResource("8_op3c8")
 duration = 0.5
@@ -88,7 +144,7 @@ signal tokenRefreshed
 
 var sessionCache:Dictionary
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(\"4\"):
 		signInWithGoogle()
 	if event.is_action_pressed(\"5\"):
@@ -122,8 +178,16 @@ func ensureAccountExists():
 		await signUp()
 	else:
 		print(\"user found: \", body.get_string_from_utf8())
-func signUp(usrname:String=\"CheeseChairActual\"):
-	await rpcRequest({\"username\": usrname},\"createUser\")
+func signUp(username:String=\"\"):
+	if username==\"\":
+		signalBus.startTextEditPopup.emit(\"Welcome new player! what would you like your display name to be?\")
+		var returns = await signalBus.endTextEditPopup
+		username = returns[0]
+		var isCancelled = returns[1]
+		if isCancelled:
+			signalBus.startTextPopup.emit()
+			return
+	await rpcRequest({\"username\": username},\"createUser\")
 
 ##Sends a request for a supabase rpc function. response is an array where:[br]
 ##Response[0]: result[br]
@@ -196,7 +260,7 @@ func handleWebRedirect():
 	var urlPart = JavaScriptBridge.eval(\"window.location.hash\", true)
 	if urlPart == \"\" or not urlPart.begins_with(\"#\"):
 		return
-		
+
 	var query = urlPart.substr(1)
 	var params = {} 
 	var pairs = query.split(\"&\")
@@ -232,8 +296,8 @@ func onHttpRequestCompleted(_result, responseCode, _headers, body):
 		remove_meta(\"temp_session\")
 		if responseCode == 200:
 			json = JSON.new()
+			session[\"user\"]=json.data
 			if json.parse(response) == OK:
-				session[\"user\"] = json.data
 				authSuccess.emit(session)
 		else:
 			authError.emit(\"Failed to get user info\")
@@ -246,12 +310,12 @@ func onHttpRequestCompleted(_result, responseCode, _headers, body):
 		return
 		
 	json = JSON.new()
+	json.parse(response)
 	#var parsedResult = json.parse(response)
 	#if parsedResult != OK:
-		#authError.emit(\"Failed to parse auth response\")
+		#httpReplyError.emit(\"Failed to parse http response\")
 		#return
 	var data = json.data
-	
 	if data and data.has(\"access_token\"):
 		session = {
 			\"access_token\": data.get(\"access_token\", \"\"),
@@ -259,11 +323,10 @@ func onHttpRequestCompleted(_result, responseCode, _headers, body):
 			\"expires_in\": data.get(\"expires_in\", 0),
 			\"user\": data.get(\"user\", {})
 		}
-		storeSession(session)
-		sessionCache = session
-		tokenRefreshed.emit()
 		authSuccess.emit(session)
 	else:
+		#if data and data.has(\"user\"):
+		#print(response)
 		httpReply.emit(response)
 
 
@@ -346,7 +409,6 @@ func _process(_delta: float) -> void:
 					if request.contains(\"\\r\\n\\r\\n\"):
 						
 						#process the callback request
-						#print(\"received callback request\")
 						var requestLines = request.split('\\n')
 						var requestLine = requestLines[0] if requestLines.size() > 0 else \"\"
 						if requestLine.begins_with(\"GET\"):
@@ -382,6 +444,15 @@ func _process(_delta: float) -> void:
 									\"auth_code\":code,
 									\"code_verifier\":codeVerifier
 								})
+								
+								#var session = {
+									#\"access_token\": params.get(\"access_token\", \"\"),
+									#\"refresh_token\": params.get(\"refresh_token\", \"\"),
+									#\"expires_in\": params.get(\"expires_in\", 0),
+									#\"user\": params.get(\"user\", {})
+								#}
+								#set_meta(\"temp_session\", session)
+								
 								httpRequest.request(url,headers,HTTPClient.METHOD_POST,body)
 								await httpRequest.request_completed
 							else:
@@ -490,16 +561,17 @@ func signOut():
 	if dir:
 		dir.remove(\"auth_session.dat\")
 
-func onHttpReply(message):
-	print(message)
+func onHttpReply(_message):
 	pass
 func onHttpReplyError(message):
 	printerr(\"error: \",message)
 	
 func onAuthSuccess(session):
-	#print(\"auth success: \",session)
 	if typeof(session) == TYPE_DICTIONARY:
+		storeSession(session)
 		sessionCache = session
+		tokenRefreshed.emit()
+	signalBus.startTextPopup.emit(str(\"Welcome \",session[\"user\"][\"user_metadata\"][\"name\"]))
 	#print(\"Welcome \",session[\"user\"][\"user_metadata\"][\"name\"])
 
 func onAuthError(error):
@@ -532,9 +604,99 @@ follow_viewport_enabled = true
 
 [node name="Cursor" parent="CursorCanvas" unique_id=921979480 instance=ExtResource("1_eo2o7")]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=268677100]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=268677100]
 
-[node name="Top Area UI" type="HBoxContainer" parent="CanvasLayer" unique_id=48417170]
+[node name="TextEditPopup" type="Control" parent="HUD" unique_id=38263661]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+script = SubResource("GDScript_3lyd6")
+
+[node name="PanelContainer" type="PanelContainer" parent="HUD/TextEditPopup" unique_id=2047174232]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.75
+anchor_bottom = 0.75
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_cnbw5")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer" unique_id=85910485]
+layout_mode = 2
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer" unique_id=2056360712]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer" unique_id=1894290260]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Insert text here"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer" unique_id=1784808162]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.48
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 5
+
+[node name="LineEdit" type="LineEdit" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=2066967567]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer" unique_id=1674105826]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2" unique_id=1843718711]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1846751620]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 24
+
+[node name="cancelButton" type="Button" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/MarginContainer" unique_id=995163819]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"
+
+[node name="MarginContainer2" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1211649265]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 24
+
+[node name="confirmButton" type="Button" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/MarginContainer2" unique_id=166694240]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Confirm"
+
+[node name="Top Area UI" type="HBoxContainer" parent="HUD" unique_id=48417170]
 clip_contents = true
 anchors_preset = -1
 anchor_right = 1.0
@@ -546,26 +708,26 @@ size_flags_vertical = 3
 theme_override_constants/separation = 12
 script = ExtResource("2_3lyd6")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Top Area UI" unique_id=146337005]
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/Top Area UI" unique_id=146337005]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Tool Display" type="Control" parent="CanvasLayer/Top Area UI/HBoxContainer" unique_id=1510456922]
+[node name="Tool Display" type="Control" parent="HUD/Top Area UI/HBoxContainer" unique_id=1510456922]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display" unique_id=1657314484]
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/Top Area UI/HBoxContainer/Tool Display" unique_id=1657314484]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Panel" type="Panel" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display/VBoxContainer" unique_id=20790880]
+[node name="Panel" type="Panel" parent="HUD/Top Area UI/HBoxContainer/Tool Display/VBoxContainer" unique_id=20790880]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="CanvasLayer/Top Area UI/HBoxContainer/Tool Display/VBoxContainer/Panel" unique_id=261963612]
+[node name="Label" type="Label" parent="HUD/Top Area UI/HBoxContainer/Tool Display/VBoxContainer/Panel" unique_id=261963612]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -580,15 +742,15 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_1k58v")
 
-[node name="Panel" type="Panel" parent="CanvasLayer/Top Area UI/HBoxContainer" unique_id=1464356861]
+[node name="Panel" type="Panel" parent="HUD/Top Area UI/HBoxContainer" unique_id=1464356861]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="CanvasLayer/Top Area UI/HBoxContainer" unique_id=958778049]
+[node name="Control" type="Control" parent="HUD/Top Area UI/HBoxContainer" unique_id=958778049]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="layersButton" type="Button" parent="CanvasLayer/Top Area UI/HBoxContainer/Control" unique_id=690513294]
+[node name="layersButton" type="Button" parent="HUD/Top Area UI/HBoxContainer/Control" unique_id=690513294]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -605,16 +767,16 @@ theme = ExtResource("3_cnbw5")
 icon = ExtResource("4_i5vsu")
 icon_alignment = 1
 
-[node name="Hotbar" parent="CanvasLayer/Top Area UI" unique_id=1476390264 instance=ExtResource("2_32ik4")]
+[node name="Hotbar" parent="HUD/Top Area UI" unique_id=1476390264 instance=ExtResource("2_32ik4")]
 layout_mode = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Top Area UI" unique_id=294669773]
+[node name="HBoxContainer2" type="HBoxContainer" parent="HUD/Top Area UI" unique_id=294669773]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="PropertiesSidebar" type="Control" parent="CanvasLayer" unique_id=1003501295]
+[node name="PropertiesSidebar" type="Control" parent="HUD" unique_id=1003501295]
 layout_mode = 3
 anchors_preset = 11
 anchor_left = 1.0
@@ -625,7 +787,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("3_exjlx")
 
-[node name="propertiesEditingLabelPanel" type="Panel" parent="CanvasLayer/PropertiesSidebar" unique_id=1522755482]
+[node name="propertiesEditingLabelPanel" type="Panel" parent="HUD/PropertiesSidebar" unique_id=1522755482]
 self_modulate = Color(1, 1, 1, 0)
 clip_contents = true
 layout_mode = 1
@@ -635,7 +797,7 @@ anchor_bottom = 0.13
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel" unique_id=207308021]
+[node name="PanelContainer" type="PanelContainer" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel" unique_id=207308021]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 3
@@ -651,21 +813,21 @@ pivot_offset = Vector2(2, 27.42667)
 theme = ExtResource("3_cnbw5")
 theme_type_variation = &"tab"
 
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer" unique_id=1533983739]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer" unique_id=1533983739]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="propertiesEditingLabel" type="Label" parent="CanvasLayer/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer/MarginContainer" unique_id=1242636918]
+[node name="propertiesEditingLabel" type="Label" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer/MarginContainer" unique_id=1242636918]
 layout_mode = 2
 text = "Player"
 horizontal_alignment = 1
 vertical_alignment = 2
 script = ExtResource("4_l4kvy")
 
-[node name="PropertiesPanel" type="Panel" parent="CanvasLayer/PropertiesSidebar" unique_id=1949280062]
+[node name="PropertiesPanel" type="Panel" parent="HUD/PropertiesSidebar" unique_id=1949280062]
 clip_contents = true
 layout_mode = 1
 anchors_preset = -1
@@ -677,7 +839,7 @@ grow_vertical = 2
 theme = ExtResource("3_cnbw5")
 theme_type_variation = &"propertiesPanel"
 
-[node name="closeButton" type="Button" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel" unique_id=600812247]
+[node name="closeButton" type="Button" parent="HUD/PropertiesSidebar/PropertiesPanel" unique_id=600812247]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 1
 anchors_preset = -1
@@ -688,7 +850,7 @@ focus_mode = 1
 theme = ExtResource("3_cnbw5")
 text = "x"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel" unique_id=228905550]
+[node name="ScrollContainer" type="ScrollContainer" parent="HUD/PropertiesSidebar/PropertiesPanel" unique_id=228905550]
 clip_contents = false
 layout_mode = 1
 anchors_preset = -1
@@ -699,7 +861,7 @@ anchor_bottom = 0.9
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Properties" type="VBoxContainer" parent="CanvasLayer/PropertiesSidebar/PropertiesPanel/ScrollContainer" unique_id=1328526897]
+[node name="Properties" type="VBoxContainer" parent="HUD/PropertiesSidebar/PropertiesPanel/ScrollContainer" unique_id=1328526897]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -760,7 +922,9 @@ script = SubResource("GDScript_0l4bc")
 [node name="Authentication" type="Node" parent="Backend" unique_id=666018684]
 script = SubResource("GDScript_i5vsu")
 
-[connection signal="pressed" from="CanvasLayer/Top Area UI/HBoxContainer/Control/layersButton" to="Level" method="_on_layers_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/PropertiesSidebar/PropertiesPanel/closeButton" to="CanvasLayer/PropertiesSidebar" method="_on_close_button_pressed"]
+[connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/MarginContainer/cancelButton" to="HUD/TextEditPopup" method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/MarginContainer2/confirmButton" to="HUD/TextEditPopup" method="_on_confirm_button_pressed"]
+[connection signal="pressed" from="HUD/Top Area UI/HBoxContainer/Control/layersButton" to="Level" method="_on_layers_button_pressed"]
+[connection signal="pressed" from="HUD/PropertiesSidebar/PropertiesPanel/closeButton" to="HUD/PropertiesSidebar" method="_on_close_button_pressed"]
 [connection signal="canceled" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_canceled"]
 [connection signal="confirmed" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_confirmed"]

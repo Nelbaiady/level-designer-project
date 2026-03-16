@@ -62,11 +62,10 @@ func resetPlay(animation:String):
 	restoreSpriteScale()
 	animationPlayer.play(animation)
 	#animationPlayer.advance(0)
+func playAnim(animation:String):
+	animationPlayer.play(animation)
 func restoreSpriteScale():
-	if globalEditor.playerProperties.has("scale"):
-		sprite.scale = globalEditor.playerProperties["scale"]
-	else:
-		sprite.scale = Vector2.ONE
+	sprite.scale = Vector2.ONE
 
 func chourcCheck():
 	for i in chourcChecker.get_overlapping_bodies():

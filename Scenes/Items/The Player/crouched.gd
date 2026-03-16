@@ -2,7 +2,7 @@
 extends PlayerState
 
 func enter(_previous_state_path: String, _data := {}) -> void:
-	player.resetPlay("crouching")
+	player.playAnim("crouching")
 	if !player.animationPlayer.animation_finished.is_connected(crouchTransition):
 		player.animationPlayer.animation_finished.connect(crouchTransition)
 	#if !player.uncrouchChecker. is_connected(crouchTransition):

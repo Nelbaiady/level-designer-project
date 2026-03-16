@@ -598,7 +598,6 @@ func onAuthSuccess(session):
 
 func onAuthError(error):
 	print(\"auth error: \",error)
-	
 "
 
 [node name="Node2D" type="Node" unique_id=1408597539]
@@ -904,6 +903,7 @@ dead_zone_height = 0.65
 metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525]
+top_level = true
 position = Vector2(544, 280)
 limit_enabled = false
 position_smoothing_speed = 20.0

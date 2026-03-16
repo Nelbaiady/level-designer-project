@@ -519,7 +519,7 @@ script/source = "#CHOURCED STATE
 extends PlayerState
 
 func enter(_previous_state_path: String, _data := {}) -> void:
-	player.resetPlay(\"chourcing\")
+	player.playAnim(\"chourcing\")
 	if !player.animationPlayer.animation_finished.is_connected(crouchTransition):
 		player.animationPlayer.animation_finished.connect(crouchTransition)
 	#if !player.uncrouchChecker. is_connected(crouchTransition):
@@ -574,9 +574,9 @@ script = ExtResource("6_mpkmv")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1771113116]
 use_parent_material = true
-position = Vector2(0, 47)
+position = Vector2(0, 48)
 texture = ExtResource("2_k1a7i")
-offset = Vector2(1, -41.945313)
+offset = Vector2(1, -42.945)
 hframes = 3
 vframes = 2
 

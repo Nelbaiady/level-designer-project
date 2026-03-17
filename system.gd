@@ -1,7 +1,16 @@
-class_name Settings extends Node
+class_name System extends Node
 
 var fullscreen := false
 var wasMaximized := false ##remembers if the window was maximized when it goes to fullscreen so it can go back if the user turns fullscreen back off
+
+var isPaused := false
+
+func _ready() -> void:
+	signalBus.togglePause.connect(togglePause)
+
+func togglePause():
+	isPaused = !isPaused
+	signalBus.pauseToggled.emit()
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("fullscreen"):
@@ -13,3 +22,5 @@ func _input(event: InputEvent) -> void:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
 			else:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	if event.is_action_pressed("pause"):
+		togglePause()

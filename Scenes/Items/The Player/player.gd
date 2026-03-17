@@ -72,3 +72,4 @@ func chourcCheck():
 		if i.is_in_group("solids") and i != self:
 			return false
 	return true
+	

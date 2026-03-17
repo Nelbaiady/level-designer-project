@@ -4,6 +4,7 @@ class_name SaveLoadManager extends Node
 
 var isSaving = false
 func _ready() -> void:
+	authentication.saveLoadManager = self
 	signalBus.loadLevel.connect(loadLevel)
 	
 func _input(event: InputEvent) -> void:
@@ -20,13 +21,15 @@ func _input(event: InputEvent) -> void:
 			file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 			file_dialog.show()
 			
-func _on_file_dialog_confirmed() -> void:
+
+func _on_file_dialog_file_selected(path: String) -> void:
 	globalEditor.saveLoadPopupIsOpen = false
 	if isSaving:
-		saveLevel(file_dialog.current_path)
+		#saveLevel(file_dialog.current_path)
+		saveLevel(path)
 	else:
-		loadLevel(file_dialog.current_path)
-
+		#loadLevel(file_dialog.current_path)
+		loadLevel(path)
 
 func _on_file_dialog_canceled() -> void:
 	globalEditor.saveLoadPopupIsOpen = false

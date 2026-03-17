@@ -68,3 +68,8 @@ signal startTextEditPopup(prompt)##tells the text edit popup to appear and prepa
 signal endTextEditPopup(text,isCancelled:bool)##tells the text edit popup to appear and prepare to send something back
 @warning_ignore("unused_signal")
 signal startTextPopup(text)##regular text popup without input
+
+@warning_ignore("unused_signal")
+signal pauseToggled()##emits to indicate that the game paused or unpaused
+@warning_ignore("unused_signal")
+signal togglePause()##emits to order a pause or unpause

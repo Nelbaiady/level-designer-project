@@ -27,7 +27,8 @@ config/icon="res://icon.svg"
 globalEditor="*res://Scenes/global_editor.gd"
 signalBus="*res://signal_bus.gd"
 PhantomCameraManager="*uid://duq6jhf6unyis"
-settings="*uid://cawo8dpq5yb6"
+system="*uid://dqxkj4f7i6wwh"
+authentication="*uid://ts3goyxmuwxh"
 
 [dotnet]
 

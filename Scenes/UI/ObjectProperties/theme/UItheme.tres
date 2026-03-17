@@ -25,7 +25,7 @@ corner_radius_bottom_left = 16
 
 [resource]
 default_base_scale = 1.0
-Button/font_sizes/font_size = 12
+Button/font_sizes/font_size = 18
 Button/fonts/font = SubResource("FontVariation_1unef")
 Button/styles/hover = SubResource("StyleBoxFlat_2725r")
 Button/styles/normal = ExtResource("1_ten13")

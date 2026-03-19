@@ -28,15 +28,15 @@ signal tokenRefreshed
 var sessionCache:Dictionary
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("4"):
-		signInWithGoogle()
-	if event.is_action_pressed("5"):
-		signalBus.uploadCurrentLevel.emit()
+	#if event.is_action_pressed("4"):
+		#signInWithGoogle()
+	#if event.is_action_pressed("5"):
+		#signalBus.uploadCurrentLevel.emit()
 	if event.is_action_pressed("6"):
 		downloadLevel()
-	if event.is_action_pressed("7"):
-		var levels = await rpcRequest({},"getalllevels", false)
-		print(levels[3].get_string_from_utf8())
+	#if event.is_action_pressed("7"):
+		#var levels = await rpcRequest({},"getalllevels", false)
+		#print(levels[3].get_string_from_utf8())
 func _ready() -> void:
 	httpRequest = HTTPRequest.new()
 	add_child(httpRequest)
@@ -47,10 +47,17 @@ func _ready() -> void:
 	signalBus.uploadCurrentLevel.connect(uploadLevel)
 	httpRequest.request_completed.connect(onHttpRequestCompleted)
 	
+	call_deferred("signInSignal")
+	
 	if OS.has_feature("web"):
 		handleWebRedirect()
 		
 	sessionCache = loadSession()
+
+#send a signal if signed in
+func signInSignal():
+	if isSessionValid():
+		signalBus.signedIn.emit()
 
 ##makes sure the account exists and has an entry in the database
 func ensureAccountExists():
@@ -117,35 +124,37 @@ func uploadLevel(levelName=""):
 			signalBus.startTextPopup.emit("Invalid level name.\n You cannot have an empty level name.")
 			return
 
-		var levelSaveStruct = saveLoadManager.parseLevelToJson()
-		var data = JSON.stringify(levelSaveStruct)
-		var url = SUPABASE_URL + "/storage/v1/object/Levels/"+levelName+".json"
-		var headers = [
-			"Content-Type: application/octet-stream",
-			"apikey: "+SUPABASE_ANON_KEY,
-			"Authorization: Bearer "+sessionCache.access_token
-		]
-		httpRequest.request(url,headers,HTTPClient.METHOD_POST,data)
-		var response = await httpRequest.request_completed
-		var responseCode = response[1]
-		if responseCode == 200:
-			var response2 = await rpcRequest({
-				"filepath":levelName,
-				"artist":sessionCache.user.id,
-				"name":levelName
-			}, "uploadLevel")
+		#upload the level database entry
+		var response1 = await rpcRequest({
+			"artist":sessionCache.user.id,
+			"name":levelName
+		}, "uploadLevel")
+		if response1[1] > 199 and response1[1] < 300:
+			#if the database entry successfully uploads, retrieve the level ID then upload the level file
+			var levelID = response1[3].get_string_from_utf8()
+			var levelSaveStruct = saveLoadManager.parseLevelToJson()
+			var data = JSON.stringify(levelSaveStruct)
+			var url = SUPABASE_URL + "/storage/v1/object/Levels/"+levelID+".json"
+			var headers = [
+				"Content-Type: application/octet-stream",
+				"apikey: "+SUPABASE_ANON_KEY,
+				"Authorization: Bearer "+sessionCache.access_token
+			]
+			httpRequest.request(url,headers,HTTPClient.METHOD_POST,data)
+			var response2 = await httpRequest.request_completed
 			if response2[1] > 199 and response2[1] < 300:
-				print("level uploaded successfully")
-			#httpReply.emit(str("Successfully uploaded level ",JSON.parse_string(body.get_string_from_utf8())["Key"].get_file() ) )
-		else:
-			authError.emit("Failed to upload level")
+				signalBus.startTextPopup.emit("Successfully uploaded level")
+				#httpReply.emit(str("Successfully uploaded level ",JSON.parse_string(body.get_string_from_utf8())["Key"].get_file() ) )
+			else:
+				httpReplyError.emit("Failed to upload level")
+				signalBus.startTextPopup.emit("Failed to upload level")
 	else:
 		authError.emit("flip dude, youre not signed in bro")
-func downloadLevel(levelName:="uploadedLevel"):
+func downloadLevel(levelID:="0"):
 	if isSessionValid():
 		var levelSaveStruct = saveLoadManager.parseLevelToJson()
 		var data = JSON.stringify(levelSaveStruct)
-		var url = SUPABASE_URL + "/storage/v1/object/Levels/"+levelName+".json"
+		var url = SUPABASE_URL + "/storage/v1/object/Levels/"+levelID+".json"
 		var headers = [
 			"Content-Type: application/octet-stream",
 			"apikey: "+SUPABASE_ANON_KEY,
@@ -159,7 +168,8 @@ func downloadLevel(levelName:="uploadedLevel"):
 			httpReply.emit(str("Successfully downloaded level "))
 			signalBus.loadLevel.emit(JSON.parse_string(body.get_string_from_utf8()))
 		else:
-			authError.emit("Failed to download level")
+			httpReplyError.emit("Failed to download level")
+			signalBus.startTextPopup.emit("Failed to load level.\nID likely incorrect")
 	else:
 		authError.emit("flip dude, youre not signed in bro")
 
@@ -214,7 +224,7 @@ func onHttpRequestCompleted(_result, responseCode, _headers, body):
 	clearTcpServer()
 	
 	if responseCode < 200 or responseCode > 299:
-		authError.emit("Authentication failed "+response)
+		httpReplyError.emit(response)
 		return
 		
 	json = JSON.new()
@@ -225,7 +235,7 @@ func onHttpRequestCompleted(_result, responseCode, _headers, body):
 		#return
 	var data = json.data
 	#when signing in through downloaded version of the game
-	if data and data.has("access_token"):
+	if data and typeof(data)==TYPE_DICTIONARY and data.has("access_token"):
 		session = {
 			"access_token": data.get("access_token", ""),
 			"refresh_token": data.get("refresh_token", ""),
@@ -438,6 +448,8 @@ func isSessionValid():
 	return true
 func ensureValidSession():
 	if !isSessionValid():
+		if !sessionCache.has("refresh_token"):
+			return false
 		refreshToken(sessionCache["refresh_token"])
 		await tokenRefreshed
 	else:
@@ -469,6 +481,7 @@ func signOut():
 	var dir = DirAccess.open("user://")
 	if dir:
 		dir.remove("auth_session.dat")
+	signalBus.signedOut.emit()
 
 func onHttpReply(_message):
 	#print("http just called, they said ",_message)
@@ -482,6 +495,7 @@ func onAuthSuccess(session):
 		sessionCache = session
 		tokenRefreshed.emit()
 		ensureAccountExists()
+		signalBus.signedIn.emit()
 	#signalBus.startTextPopup.emit(str("Welcome ",session["user"]["user_metadata"]["name"]))
 	#print("Welcome ",session["user"]["user_metadata"]["name"])
 

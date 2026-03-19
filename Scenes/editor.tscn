@@ -23,10 +23,13 @@
 resource_name = "pauseMenu"
 script/source = "class_name PauseMenu extends VBoxContainer
 
-
+var isSignedIn := false
+@onready var loginButton: Button = $Login/LoginButton
 
 func _ready():
 	signalBus.pauseToggled.connect(pauseCheck)
+	signalBus.signedIn.connect(setSignInButtonTrue)
+	signalBus.signedOut.connect(setSignInButtonFalse)
 	
 func pauseCheck():
 	if system.isPaused:
@@ -38,9 +41,49 @@ func pause():
 func unPause():
 	visible = false
 
+func setSignInButtonTrue():
+	isSignedIn = true
+	loginButton.text = \"Sign Out\"
+func setSignInButtonFalse():
+	loginButton.text = \"Sign In\"
+	isSignedIn = false
 
 func _on_unpause_button_pressed() -> void:
 	signalBus.togglePause.emit()
+
+
+func _on_login_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	if isSignedIn:
+		authentication.signOut()
+	else:
+		authentication.signInWithGoogle()
+
+func _on_upload_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	signalBus.uploadCurrentLevel.emit()
+
+func _on_browse_levels_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	var levels = await authentication.rpcRequest({},\"getalllevels\", false)
+	print(levels[3].get_string_from_utf8())
+
+func _on_load_level_by_id_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	signalBus.startTextEditPopup.emit(\"insert level ID\")
+	var reply = await signalBus.endTextEditPopup
+	var correct:bool = reply[0].is_valid_int()
+	var cancelled:bool = reply[1]
+	while !cancelled and !correct:
+		signalBus.startTextEditPopup.emit(\"Not a valid number. \\nInsert level ID\")
+		reply = await signalBus.endTextEditPopup
+		correct = false
+		cancelled = reply[1]
+		correct = reply[0].is_valid_int()
+	if !cancelled and correct:
+		authentication.downloadLevel(reply[0])
+	#print(\"31\".is_valid_int())
+	#print(\"93f\".is_valid_int())
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_0l4bc"]
@@ -193,6 +236,15 @@ size_flags_vertical = 8
 [node name="BrowseLevelsButton" type="Button" parent="HUD/PauseVBoxContainer/BrowseLevels" unique_id=957855919]
 layout_mode = 2
 text = "Browse Levels"
+
+[node name="LoadLevelByID" type="MarginContainer" parent="HUD/PauseVBoxContainer" unique_id=1437630887]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="LoadLevelByIDButton" type="Button" parent="HUD/PauseVBoxContainer/LoadLevelByID" unique_id=1611144296]
+layout_mode = 2
+text = "Find Level by ID"
 
 [node name="TextEditPopup" type="Control" parent="HUD" unique_id=38263661]
 visible = false
@@ -509,6 +561,10 @@ position = Vector2(544, 280)
 floor_snap_length = 12.0
 
 [connection signal="pressed" from="HUD/PauseVBoxContainer/Unpause/UnpauseButton" to="HUD/PauseVBoxContainer" method="_on_unpause_button_pressed"]
+[connection signal="pressed" from="HUD/PauseVBoxContainer/Login/LoginButton" to="HUD/PauseVBoxContainer" method="_on_login_button_pressed"]
+[connection signal="pressed" from="HUD/PauseVBoxContainer/uploadLevel/uploadButton" to="HUD/PauseVBoxContainer" method="_on_upload_button_pressed"]
+[connection signal="pressed" from="HUD/PauseVBoxContainer/BrowseLevels/BrowseLevelsButton" to="HUD/PauseVBoxContainer" method="_on_browse_levels_button_pressed"]
+[connection signal="pressed" from="HUD/PauseVBoxContainer/LoadLevelByID/LoadLevelByIDButton" to="HUD/PauseVBoxContainer" method="_on_load_level_by_id_button_pressed"]
 [connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/cancelButtonContainer/cancelButton" to="HUD/TextEditPopup" method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/confirmButtonContainer/confirmButton" to="HUD/TextEditPopup" method="_on_confirm_button_pressed"]
 [connection signal="pressed" from="HUD/Top Area UI/HBoxContainer/Control/layersButton" to="Level" method="_on_layers_button_pressed"]

@@ -11,7 +11,7 @@ signal uploadCurrentLevel()##called when a level has been loaded from a JSON
 @warning_ignore("unused_signal")
 signal loadLevel(data)##called when a level has been loaded from a JSON
 
-
+#editing tools
 @warning_ignore("unused_signal")
 signal setCurrentTool(tool)
 @warning_ignore("unused_signal")
@@ -19,6 +19,7 @@ signal eraseObject()
 @warning_ignore("unused_signal")
 signal placeObjectSignal(instanceID, object, properties)
 
+#game mode states
 @warning_ignore("unused_signal")
 signal startEditMode()##when switching to edit mode
 @warning_ignore("unused_signal")
@@ -59,9 +60,11 @@ signal deleteLayer(layerID)##signal for deleting a layer
 @warning_ignore("unused_signal")
 signal updateLayerUI()##signal for changing layer
 
+#specific stuff
 @warning_ignore("unused_signal")
 signal spinboxSpun()##when a spinbox with a specific script is spin, it emits this
 
+#popup prompts
 @warning_ignore("unused_signal")
 signal startTextEditPopup(prompt)##tells the text edit popup to appear and prepare to send something back
 @warning_ignore("unused_signal")
@@ -69,7 +72,14 @@ signal endTextEditPopup(text,isCancelled:bool)##tells the text edit popup to app
 @warning_ignore("unused_signal")
 signal startTextPopup(text)##regular text popup without input
 
+#pause menu
 @warning_ignore("unused_signal")
 signal pauseToggled()##emits to indicate that the game paused or unpaused
 @warning_ignore("unused_signal")
 signal togglePause()##emits to order a pause or unpause
+
+#authentication
+@warning_ignore("unused_signal")
+signal signedIn()##emits whenever the player is signed in
+@warning_ignore("unused_signal")
+signal signedOut()##emits whenever the player is signed out

@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://dm0nrwlnpl01u" path="res://Scenes/Items/The Player/player.gd" id="1_e8vge"]
 [ext_resource type="Texture2D" uid="uid://b1kn3s452k3i3" path="res://Scenes/Items/The Player/sprites/player_idle.png" id="2_k1a7i"]
-[ext_resource type="PackedScene" uid="uid://fij4t53a7ga" path="res://shaders and effects/selection_particles.tscn" id="3_jkifv"]
 [ext_resource type="Texture2D" uid="uid://ct3tpjr58vm1h" path="res://Scenes/Items/The Player/sprites/player_run.png" id="3_l5y80"]
 [ext_resource type="Texture2D" uid="uid://cgv67v8iol7sl" path="res://Scenes/Items/The Player/sprites/player_jumped.png" id="4_kvi7n"]
 [ext_resource type="Texture2D" uid="uid://dh4haxp1xh35w" path="res://Scenes/Items/The Player/sprites/player_jumpUp.png" id="5_kvi7n"]
@@ -569,8 +568,6 @@ script = ExtResource("1_e8vge")
 
 [node name="playerProperties" type="Node2D" parent="." unique_id=1069572556]
 script = ExtResource("6_mpkmv")
-
-[node name="selectionParticles" parent="playerProperties" unique_id=1909001571 instance=ExtResource("3_jkifv")]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1771113116]
 use_parent_material = true

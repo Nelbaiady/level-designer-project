@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://2q1oyw00iuvq" path="res://Scenes/Items/Objects/Spring/spring.gd" id="1_3rwud"]
 [ext_resource type="Texture2D" uid="uid://bmpv2scxavoir" path="res://Scenes/Items/Objects/Spring/Spring.png" id="1_kccgo"]
-[ext_resource type="Shader" uid="uid://cbnkbef0ahxkp" path="res://shaders and effects/colorPulse.gdshader" id="1_wnvis"]
 [ext_resource type="PackedScene" uid="uid://c4aci6f2wscx5" path="res://Scenes/Items/Objects/objectMod.tscn" id="2_n374f"]
 [ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="3_mrp00"]
 [ext_resource type="Resource" uid="uid://bh2hcytk84e13" path="res://Scenes/UI/ObjectProperties/properties/positionProperty.tres" id="4_vclpx"]
@@ -11,14 +10,6 @@
 [ext_resource type="Resource" uid="uid://byn3kv4q02kpl" path="res://Scenes/UI/ObjectProperties/properties/colorProperty.tres" id="6_yfou2"]
 [ext_resource type="Resource" uid="uid://dt3gvme5p3joj" path="res://Scenes/UI/ObjectProperties/properties/rotationProperty.tres" id="7_vmnu4"]
 [ext_resource type="Resource" uid="uid://bimwvakfjiujp" path="res://Scenes/UI/ObjectProperties/properties/powerProperty.tres" id="8_vclpx"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wnvis"]
-shader = ExtResource("1_wnvis")
-shader_parameter/shine_color = Color(1, 0.8627451, 0.9843137, 0.39215687)
-shader_parameter/alpha_limit = 0.0
-shader_parameter/cycle_speed = 7.0000001043084
-shader_parameter/full_pulse_cycle = false
-shader_parameter/mode = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n374f"]
 size = Vector2(64, 64)
@@ -95,7 +86,6 @@ _data = {
 }
 
 [node name="Spring" type="RigidBody2D" unique_id=741611201 groups=["solids"]]
-material = SubResource("ShaderMaterial_wnvis")
 input_pickable = true
 freeze = true
 script = ExtResource("1_3rwud")
@@ -120,6 +110,7 @@ vframes = 5
 region_rect = Rect2(0, 0, 384, 640)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D" unique_id=1009681883]
+process_mode = 3
 libraries/ = SubResource("AnimationLibrary_e7gxc")
 autoplay = &"Spring_idle"
 

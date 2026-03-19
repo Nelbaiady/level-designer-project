@@ -1,6 +1,8 @@
 class_name ObjectInstance extends Node2D
 
-@onready var selectionParticles: GPUParticles2D = $selectionParticles
+#@onready var selectionParticles: GPUParticles2D = $selectionParticles
+const COLOR_PULSE = preload("uid://cbnkbef0ahxkp")
+
 @export var clickCollision:Area2D
 @export var properties: Array[ObjectProperty] = [
 	preload("uid://bh2hcytk84e13") #position
@@ -19,6 +21,8 @@ var layer:LevelLayer
 
 func _ready() -> void:
 	rootNode= get_parent()
+	if globalEditor.isEditing:
+		rootNode.process_mode=Node.PROCESS_MODE_DISABLED
 	signalBus.placeObjectSignal.connect(setStartingStuff)
 	if !clickCollision:
 		printerr("Object ",rootNode.name, " instance number ", instanceID, " has no click collision")
@@ -30,34 +34,45 @@ func _ready() -> void:
 		signalBus.editingObject.connect(objectEditingStarted)
 		signalBus.hidePropertiesSidebar.connect(objectEditingStopped)
 		signalBus.startEditMode.connect(editModeStarted)
-		#signalBus.startPlayMode.connect(playModeStarted)
+		signalBus.startPlayMode.connect(playModeStarted)
 
-##outline when selecting an object
+##effect when selecting an object
 func objectEditingStarted(_name, _id):
-	if globalEditor.objectBeingEdited == self:
-		selectionParticles.emitting = true
+	if _id == instanceID:
+		rootNode.material = ShaderMaterial.new()
+		rootNode.material.shader = COLOR_PULSE
+		rootNode.material.set_shader_parameter("mode",1)
+		rootNode.material.set_shader_parameter("cycle_speed",8)
+		rootNode.material.set_shader_parameter("shine_color",Color(0.8, 0.9, 1.0, 0.7))
 	else:
-		selectionParticles.emitting = false
+		objectEditingStopped()
+	#if globalEditor.objectBeingEdited == self:
+		#selectionParticles.emitting = true
+	#else:
+		#selectionParticles.emitting = false
 func objectEditingStopped():
-	selectionParticles.emitting = false
+	rootNode.material = null
+	#selectionParticles.emitting = false
 	
 func setStartingStuff(instID, obj, loadedProperties:Dictionary):
+	signalBus.placeObjectSignal.disconnect(setStartingStuff)
 	layer = rootNode.get_parent().get_parent()
+	if layer.index !=0:
+		rootNode.process_mode=Node.PROCESS_MODE_DISABLED
 	if obj == rootNode:
 		instanceID = instID
 		if loadedProperties:
 			for i in loadedProperties:
 				setProperty(i,loadedProperties[i])
-	#print(globalEditor.level.rooms)
 	rosterID = globalEditor.getCurrentLevelLayerDict()["objects"][instanceID]["rosterID"]
-	signalBus.placeObjectSignal.disconnect(setStartingStuff)
 
 func editModeStarted():
-	#rootNode.process_mode = Node.PROCESS_MODE_DISABLED
+	rootNode.process_mode = Node.PROCESS_MODE_DISABLED
 	for property in properties:
 		setProperty(property.codeName, getProperty(property.codeName), true)
-#func playModeStarted():
-	#pass
+func playModeStarted():
+	if layer.index == 0:
+		rootNode.process_mode = Node.PROCESS_MODE_INHERIT
 
 func getProperty(property:String):
 	if getObjectFromLevelStruct()["properties"].has(property):

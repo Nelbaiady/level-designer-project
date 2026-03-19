@@ -1,6 +1,7 @@
 class_name PlayerProperties extends Node
 
-@onready var selectionParticles: GPUParticles2D = $selectionParticles
+#@onready var selectionParticles: GPUParticles2D = $selectionParticles
+const COLOR_PULSE = preload("uid://cbnkbef0ahxkp")
 @onready var clickCollision: Area2D = $"../Area2D"
 @onready var rootNode: CharacterBody2D = $".."
 @export var properties: Array[ObjectProperty] = [
@@ -25,15 +26,21 @@ func _ready() -> void:
 	signalBus.reloadPlayer.connect(loadPlayer)
 	signalBus.editingObject.connect(objectEditingStarted)
 	signalBus.hidePropertiesSidebar.connect(objectEditingStopped)
-#
+
+
+
 ##outline when selecting an object
 func objectEditingStarted(_name, _id):
 	if globalEditor.objectBeingEdited == self:
-		selectionParticles.emitting = true
+		rootNode.material = ShaderMaterial.new()
+		rootNode.material.shader = COLOR_PULSE
+		rootNode.material.set_shader_parameter("mode",1)
+		rootNode.material.set_shader_parameter("cycle_speed",8)
+		rootNode.material.set_shader_parameter("shine_color",Color(0.8, 0.9, 1.0, 0.7))
 	else:
-		selectionParticles.emitting = false
+		objectEditingStopped()
 func objectEditingStopped():
-	selectionParticles.emitting = false
+	rootNode.material = null
 
 func loadPlayer():
 	for i in globalEditor.playerProperties:

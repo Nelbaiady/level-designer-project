@@ -105,7 +105,7 @@ func reloadPlayer():
 	prevPlayerParent.add_child(newPlayer)
 	player.position = Vector2(544.0,280.0)
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if isEditing:
 		#selecting items in the hotbar using the number keys
 		for i in range(10):

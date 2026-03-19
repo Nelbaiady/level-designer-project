@@ -76,10 +76,10 @@ script = SubResource("GDScript_fgj4o")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=917958512]
 process_mode = 3
+use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_5icnn")
 autoplay = "default"
-frame = 1
-frame_progress = 0.44440424
+frame_progress = 0.7402808
 
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_myemf")]
 position = Vector2(0, -8)

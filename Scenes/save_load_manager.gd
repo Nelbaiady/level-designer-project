@@ -66,6 +66,7 @@ func parseLevelToJson():
 				var currentSavingObject = layer["objects"][i]#globalEditor.objectsHash[i]
 				levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["objects"].append({"instanceID":i,"rosterID":currentSavingObject.rosterID,"properties":var_to_str(currentSavingObject.properties) })
 			levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["layerProperties"]=var_to_str(globalEditor.level.rooms[roomIndex]["layers"][layerIndex]["layerProperties"])
+			levelSaveStruct["objectInstancesCount"] = globalEditor.objectInstancesCount
 	levelSaveStruct.playerProperties = var_to_str(globalEditor.playerProperties)
 	return levelSaveStruct
 
@@ -118,8 +119,9 @@ func loadLevel(data):
 			var currentLoadingLayerProperties = str_to_var(loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["layerProperties"])
 			for prop in currentLoadingLayerProperties:
 				globalEditor.level.setProperty(prop,currentLoadingLayerProperties[prop],layerIndex)
-			
+	if loadedData.has("objectInstancesCount"):
+		globalEditor.objectInstancesCount = loadedData["objectInstancesCount"]
 	globalEditor.currentLayer = 0
-	globalEditor.playerProperties = str_to_var( loadedData.playerProperties )
+	globalEditor.playerProperties = str_to_var( loadedData["playerProperties"] )
 	signalBus.loadedLevel.emit()
 	signalBus.reloadPlayer.emit()

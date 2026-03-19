@@ -38,7 +38,7 @@ func levelReady(_level):
 	
 ## this gets the offset (difference) between the camera starting position (from the top left) and the parallax layer, which is usually the origin point
 func updateCameraParallaxDifference():
-	cameraParallaxDifference = get_viewport_rect().size/2 #- getCurrentLayerNode().screen_offset #this ended up being redundant
+	cameraParallaxDifference = get_viewport_rect().size/2
 func _process(_delta: float) -> void:
 	if !globalEditor.popupIsOpen:
 		if globalEditor.isEditing:
@@ -130,7 +130,6 @@ func placeItem():
 		if clickFrame or (previousPlacePos.is_finite() and (cursorParallaxPosition.x > previousPlacePos.x+globalEditor.gridSize or cursorParallaxPosition.x < previousPlacePos.x-globalEditor.gridSize or cursorParallaxPosition.y > previousPlacePos.y+globalEditor.gridSize or cursorParallaxPosition.y < previousPlacePos.y-globalEditor.gridSize )):
 			previousPlacePos = cursorParallaxPosition
 			globalEditor.placeObject(selectedItem,cursorParallaxPosition)
-			#print(getCurrentLayerNode().screen_offset * getCurrentLayerNode().scroll_scale)
 
 func eraseItem():
 	if selectedItem is terrainItem:

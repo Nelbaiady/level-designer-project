@@ -46,6 +46,10 @@ func deleteLayer(layerID):
 ##Moves a layer up one step, adapting the indices so that layer 0 is always the same, and updates data structures and ui
 func moveLayerUp(layerID):
 	globalEditor.currentLayer+= (2 if layerID==-1 else 1) if layerID==globalEditor.currentLayer else 0
+	#fixes a bug where currentLayer would be set to a nonexistent layer
+	if globalEditor.currentLayer <= layers.keys().min():
+		globalEditor.currentLayer=layers.keys().min()+1
+		
 	storeTempProperties()
 	#	get the layer node's index position relative to its siblings
 	var targetNodeIndex:int
@@ -55,6 +59,9 @@ func moveLayerUp(layerID):
 	refreshEverything()
 func moveLayerDown(layerID):
 	globalEditor.currentLayer-= (2 if layerID==1 else 1) if layerID==globalEditor.currentLayer else 0
+	#fixes a bug where currentLayer would be set to a nonexistent layer
+	if globalEditor.currentLayer >= layers.keys().max():
+		globalEditor.currentLayer=layers.keys().max()-1
 	storeTempProperties()
 	#	get the layer node's index position relative to its siblings
 	var targetNodeIndex:int

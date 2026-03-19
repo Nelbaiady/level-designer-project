@@ -79,7 +79,7 @@ process_mode = 3
 use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_5icnn")
 autoplay = "default"
-frame_progress = 0.7402808
+frame_progress = 0.6110057
 
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_myemf")]
 position = Vector2(0, -8)

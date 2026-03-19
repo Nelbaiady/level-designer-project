@@ -38,6 +38,11 @@ func deleteLayer(layerID):
 	storeTempProperties()
 	if layerID == globalEditor.currentLayer: #making sure we don't have a nonexistant layer selected after this
 		globalEditor.currentLayer = 0
+	#fixes a bug where currentLayer would be set to a nonexistent layer
+	if globalEditor.currentLayer <= layers.keys().min():
+		globalEditor.currentLayer=layers.keys().min()+1
+	if globalEditor.currentLayer >= layers.keys().max():
+		globalEditor.currentLayer=layers.keys().max()-1
 	var layerToDelete = layers[layerID]
 	layerToDelete.queue_free()
 	remove_child(layerToDelete) #apparently queue_free sometimes keeps the node as a null child

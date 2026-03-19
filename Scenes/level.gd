@@ -19,6 +19,12 @@ func _ready() -> void:
 	signalBus.addLayerBelow.connect(addLayerBelow)
 	signalBus.deleteLayer.connect(deleteLayer)
 
+##corrects a bug where currentLayer would be set to a nonexistent layer
+func clampLayer():
+	if globalEditor.currentLayer <= layers.keys().min() and layers.keys().min()!=0:
+		globalEditor.currentLayer=layers.keys().min()+1
+	if globalEditor.currentLayer >= layers.keys().max() and layers.keys().max()!=0:
+		globalEditor.currentLayer=layers.keys().max()-1
 ##adds a layer at the very top, since only the top layer has this button
 func addLayerAbove(layerID):
 	storeTempProperties()
@@ -38,11 +44,8 @@ func deleteLayer(layerID):
 	storeTempProperties()
 	if layerID == globalEditor.currentLayer: #making sure we don't have a nonexistant layer selected after this
 		globalEditor.currentLayer = 0
-	#fixes a bug where currentLayer would be set to a nonexistent layer
-	if globalEditor.currentLayer <= layers.keys().min():
-		globalEditor.currentLayer=layers.keys().min()+1
-	if globalEditor.currentLayer >= layers.keys().max():
-		globalEditor.currentLayer=layers.keys().max()-1
+	clampLayer()
+	
 	var layerToDelete = layers[layerID]
 	layerToDelete.queue_free()
 	remove_child(layerToDelete) #apparently queue_free sometimes keeps the node as a null child
@@ -52,8 +55,9 @@ func deleteLayer(layerID):
 func moveLayerUp(layerID):
 	globalEditor.currentLayer+= (2 if layerID==-1 else 1) if layerID==globalEditor.currentLayer else 0
 	#fixes a bug where currentLayer would be set to a nonexistent layer
-	if globalEditor.currentLayer <= layers.keys().min():
-		globalEditor.currentLayer=layers.keys().min()+1
+	#if globalEditor.currentLayer <= layers.keys().min():
+		#globalEditor.currentLayer=layers.keys().min()+1
+	clampLayer()
 		
 	storeTempProperties()
 	#	get the layer node's index position relative to its siblings
@@ -67,6 +71,8 @@ func moveLayerDown(layerID):
 	#fixes a bug where currentLayer would be set to a nonexistent layer
 	if globalEditor.currentLayer >= layers.keys().max():
 		globalEditor.currentLayer=layers.keys().max()-1
+	clampLayer()
+	
 	storeTempProperties()
 	#	get the layer node's index position relative to its siblings
 	var targetNodeIndex:int

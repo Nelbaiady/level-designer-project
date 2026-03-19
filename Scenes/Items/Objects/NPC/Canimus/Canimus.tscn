@@ -75,6 +75,7 @@ radius = 40.0
 script = SubResource("GDScript_fgj4o")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=917958512]
+process_mode = 3
 sprite_frames = SubResource("SpriteFrames_5icnn")
 autoplay = "default"
 frame = 1

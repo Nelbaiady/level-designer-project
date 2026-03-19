@@ -23,6 +23,10 @@ func _ready() -> void:
 	rootNode= get_parent()
 	if globalEditor.isEditing:
 		rootNode.process_mode=Node.PROCESS_MODE_DISABLED
+		clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
+	else:
+		rootNode.process_mode=Node.PROCESS_MODE_INHERIT
+		clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
 	signalBus.placeObjectSignal.connect(setStartingStuff)
 	if !clickCollision:
 		printerr("Object ",rootNode.name, " instance number ", instanceID, " has no click collision")
@@ -68,11 +72,13 @@ func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 
 func editModeStarted():
 	rootNode.process_mode = Node.PROCESS_MODE_DISABLED
+	clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
 	for property in properties:
 		setProperty(property.codeName, getProperty(property.codeName), true)
 func playModeStarted():
 	if layer.index == 0:
 		rootNode.process_mode = Node.PROCESS_MODE_INHERIT
+		clickCollision.process_mode = Node.PROCESS_MODE_DISABLED
 
 func getProperty(property:String):
 	if getObjectFromLevelStruct()["properties"].has(property):

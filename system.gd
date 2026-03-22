@@ -23,4 +23,5 @@ func _input(event: InputEvent) -> void:
 			else:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	if event.is_action_pressed("pause"):
-		togglePause()
+		if globalEditor.isEditing: #temporary condition until we figure out a pause menu for gameplay
+			togglePause()

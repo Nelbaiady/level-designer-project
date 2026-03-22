@@ -29,7 +29,6 @@ theme_type_variation = &"hotbarPanel"
 script = ExtResource("1_ss4vx")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel" unique_id=1443796968]
-z_index = 1
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 1
 anchors_preset = -1

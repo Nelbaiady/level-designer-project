@@ -78,8 +78,17 @@ signal pauseToggled()##emits to indicate that the game paused or unpaused
 @warning_ignore("unused_signal")
 signal togglePause()##emits to order a pause or unpause
 
+#other menus
+@warning_ignore("unused_signal")
+signal startBrowsingLevels()##opens and populates the level browsing menu
+@warning_ignore("unused_signal")
+signal stopBrowsingLevels()##closes and empties the level browsing menu
+
+
 #authentication
 @warning_ignore("unused_signal")
 signal signedIn()##emits whenever the player is signed in
 @warning_ignore("unused_signal")
 signal signedOut()##emits whenever the player is signed out
+@warning_ignore("unused_signal")
+signal signInStatusUpdated()##emits after user data is collected after sign in or out

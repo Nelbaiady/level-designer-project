@@ -41,7 +41,7 @@ func updateCameraParallaxDifference():
 	cameraParallaxDifference = get_viewport_rect().size/2
 func _process(_delta: float) -> void:
 	if !globalEditor.popupIsOpen:
-		if globalEditor.isEditing:
+		if globalEditor.isEditing and !globalEditor.popupIsOpen:
 			previousCursorCellCoords = cursorCellCoords
 #			Cursor's position shifted with the current parallax layer
 			cursorParallaxPosition = cursor.global_position + getCurrentLayerNode().screen_offset * (getCurrentLayerNode().scroll_scale-Vector2.ONE)
@@ -80,7 +80,7 @@ func _process(_delta: float) -> void:
 	if clickFrame:
 		clickFrame = false
 	#COMMON CODE FOR EDIT AND PLAY MODE
-	cursorItemIcon.visible = cursor.visible and globalEditor.isEditing
+	cursorItemIcon.visible = cursor.visible and globalEditor.isEditing and !globalEditor.popupIsOpen
 	previousCursorPos = cursorParallaxPosition
 	#END OF PHYSICS PROCESS
 
@@ -113,7 +113,7 @@ func setSelectedItem(newItem: Item):
 
 func _unhandled_input(event: InputEvent) -> void:
 	#toggle between edit mode and play mode
-	if Input.is_action_just_pressed("toggleEditing"):
+	if Input.is_action_just_pressed("toggleEditing") and !globalEditor.popupIsOpen:
 		if globalEditor.isEditing:
 			globalEditor.isEditing = false
 			signalBus.startPlayMode.emit()

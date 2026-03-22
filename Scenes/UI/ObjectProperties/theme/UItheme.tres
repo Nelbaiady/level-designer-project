@@ -15,6 +15,35 @@ corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hi8js"]
+bg_color = Color(0.015686275, 0.16470589, 0.22352941, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 4.0
+expand_margin_top = 32.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_11aod"]
+bg_color = Color(0.03562205, 0.1973323, 0.46018225, 0.8901961)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+expand_margin_left = 4.0
+expand_margin_top = 32.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5nlin"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.013933979, 0.16410321, 0.22551477, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1unef"]
 bg_color = Color(0, 0.66910195, 0.7954759, 0.21176471)
 
@@ -29,6 +58,9 @@ Button/font_sizes/font_size = 18
 Button/fonts/font = SubResource("FontVariation_1unef")
 Button/styles/hover = SubResource("StyleBoxFlat_2725r")
 Button/styles/normal = ExtResource("1_ten13")
+FileDialog/styles/embedded_border = SubResource("StyleBoxFlat_hi8js")
+FileDialog/styles/embedded_unfocused_border = SubResource("StyleBoxFlat_11aod")
+FileDialog/styles/panel = SubResource("StyleBoxFlat_5nlin")
 Panel/styles/panel = SubResource("StyleBoxFlat_1unef")
 PanelContainer/styles/panel = ExtResource("1_ten13")
 SpinBoxInnerLineEdit/base_type = &"LineEdit"

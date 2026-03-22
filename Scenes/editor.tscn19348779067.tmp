@@ -13,7 +13,6 @@
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/The Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://cufwjh7b2h1io" path="res://Scenes/UI/basic Icons/layersIcon.png" id="4_i5vsu"]
 [ext_resource type="Script" uid="uid://ffyc5hsflkqu" path="res://Scenes/propertiesEditingLabel.gd" id="4_l4kvy"]
-[ext_resource type="Script" uid="uid://nqbaqgjq17xc" path="res://Scenes/UI/misc UI scenes/pauseMenu.gd" id="7_i5vsu"]
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="7_nfgmo"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="8_cnbw5"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="8_op3c8"]
@@ -30,15 +29,13 @@ const LEVEL_CARD = preload(\"uid://cjicoi1w8hc3s\")
 
 func _ready():
 	signalBus.startBrowsingLevels.connect(populateLevels)
-	signalBus.stopBrowsingLevels.connect(_on_close_button_pressed)
 	
 func populateLevels():
 	visible = true
 	globalEditor.levelBrowsingPopupIsOpen = true
 	var levels = await authentication.rpcRequest({},\"getalllevels\", false)
-	#print(levels[3].get_string_from_utf8())
-	for i in JSON.parse_string(levels[3].get_string_from_utf8()):
-		print(i)
+	print(levels[3].get_string_from_utf8())
+	for i in levels:
 		var levelCard:LevelCard = LEVEL_CARD.instantiate()
 		levelCard.levelDict = i
 		levelCards.add_child(levelCard)
@@ -46,8 +43,75 @@ func populateLevels():
 func _on_close_button_pressed() -> void:
 	visible = false
 	globalEditor.levelBrowsingPopupIsOpen = false
-	for i in levelCards.get_children():
-		i.queue_free()
+"
+
+[sub_resource type="GDScript" id="GDScript_0l4bc"]
+resource_name = "pauseMenu"
+script/source = "class_name PauseMenu extends VBoxContainer
+
+var isSignedIn := false
+@onready var loginButton: Button = $Login/LoginButton
+
+
+func _ready():
+	signalBus.pauseToggled.connect(pauseCheck)
+	signalBus.signedIn.connect(setSignInButtonTrue)
+	signalBus.signedOut.connect(setSignInButtonFalse)
+	
+func pauseCheck():
+	if system.isPaused:
+		pause()
+	else:
+		unPause()
+func pause():
+	visible = true
+func unPause():
+	visible = false
+
+func setSignInButtonTrue():
+	isSignedIn = true
+	loginButton.text = \"Sign Out\"
+func setSignInButtonFalse():
+	loginButton.text = \"Sign In\"
+	isSignedIn = false
+
+func _on_unpause_button_pressed() -> void:
+	signalBus.togglePause.emit()
+
+
+func _on_login_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	if isSignedIn:
+		authentication.signOut()
+	else:
+		authentication.signInWithGoogle()
+
+func _on_upload_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	signalBus.uploadCurrentLevel.emit()
+
+func _on_browse_levels_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	signalBus.startBrowsingLevels.emit()
+	#var levels = await authentication.rpcRequest({},\"getalllevels\", false)
+	#print(levels[3].get_string_from_utf8())
+
+func _on_load_level_by_id_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	signalBus.startTextEditPopup.emit(\"insert level ID\")
+	var reply = await signalBus.endTextEditPopup
+	var correct:bool = reply[0].is_valid_int()
+	var cancelled:bool = reply[1]
+	while !cancelled and !correct:
+		signalBus.startTextEditPopup.emit(\"Not a valid number. \\nInsert level ID\")
+		reply = await signalBus.endTextEditPopup
+		correct = false
+		cancelled = reply[1]
+		correct = reply[0].is_valid_int()
+	if !cancelled and correct:
+		authentication.downloadLevel(reply[0])
+	#print(\"31\".is_valid_int())
+	#print(\"93f\".is_valid_int())
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_0l4bc"]
@@ -224,25 +288,7 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD/Top Area UI/HBoxContainer2" unique_id=917574003]
-layout_mode = 2
-size_flags_horizontal = 10
-size_flags_vertical = 0
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-
-[node name="pauseButton" type="Button" parent="HUD/Top Area UI/HBoxContainer2/MarginContainer" unique_id=1942716341]
-custom_minimum_size = Vector2(48, 48)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-focus_mode = 3
-theme = ExtResource("3_cnbw5")
-theme_override_font_sizes/font_size = 24
-text = "l l"
-
 [node name="levelSelectPopup" type="Panel" parent="HUD" unique_id=58127126]
-visible = false
 top_level = true
 z_index = 1
 clip_contents = true
@@ -283,18 +329,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="PausePanel" type="Panel" parent="HUD" unique_id=691078316]
+[node name="PauseVBoxContainer" type="VBoxContainer" parent="HUD" unique_id=1463991541]
 visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("3_cnbw5")
-script = ExtResource("7_i5vsu")
-
-[node name="PauseVBoxContainer" type="VBoxContainer" parent="HUD/PausePanel" unique_id=1463991541]
-layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -305,67 +341,57 @@ size_flags_vertical = 3
 theme = ExtResource("3_cnbw5")
 theme_override_constants/separation = 16
 alignment = 1
+script = SubResource("GDScript_0l4bc")
 
-[node name="userInfoText" type="RichTextLabel" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=995079693]
-custom_minimum_size = Vector2(0, 64)
-layout_mode = 2
-size_flags_vertical = 8
-focus_mode = 2
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 6
-horizontal_alignment = 1
-vertical_alignment = 1
-selection_enabled = true
-
-[node name="Label" type="Label" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=1654464693]
+[node name="Label" type="Label" parent="HUD/PauseVBoxContainer" unique_id=1654464693]
 layout_mode = 2
 text = "Paused"
 label_settings = SubResource("LabelSettings_0l4bc")
 horizontal_alignment = 1
 uppercase = true
 
-[node name="Unpause" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=1626968206]
+[node name="Unpause" type="MarginContainer" parent="HUD/PauseVBoxContainer" unique_id=1626968206]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="UnpauseButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/Unpause" unique_id=1821917658]
+[node name="UnpauseButton" type="Button" parent="HUD/PauseVBoxContainer/Unpause" unique_id=1821917658]
 layout_mode = 2
 text = "Unpause"
 
-[node name="Login" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=722089432]
+[node name="Login" type="MarginContainer" parent="HUD/PauseVBoxContainer" unique_id=722089432]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="LoginButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/Login" unique_id=1207319776]
+[node name="LoginButton" type="Button" parent="HUD/PauseVBoxContainer/Login" unique_id=1207319776]
 layout_mode = 2
 text = "Sign In"
 
-[node name="uploadLevel" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=1055362265]
+[node name="uploadLevel" type="MarginContainer" parent="HUD/PauseVBoxContainer" unique_id=1055362265]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="uploadButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/uploadLevel" unique_id=710410053]
+[node name="uploadButton" type="Button" parent="HUD/PauseVBoxContainer/uploadLevel" unique_id=710410053]
 layout_mode = 2
 text = "Upload Level"
 
-[node name="BrowseLevels" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=1774625358]
+[node name="BrowseLevels" type="MarginContainer" parent="HUD/PauseVBoxContainer" unique_id=1774625358]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="BrowseLevelsButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/BrowseLevels" unique_id=957855919]
+[node name="BrowseLevelsButton" type="Button" parent="HUD/PauseVBoxContainer/BrowseLevels" unique_id=957855919]
 layout_mode = 2
 text = "Browse Levels"
 
-[node name="LoadLevelByID" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=1437630887]
+[node name="LoadLevelByID" type="MarginContainer" parent="HUD/PauseVBoxContainer" unique_id=1437630887]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="LoadLevelByIDButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/LoadLevelByID" unique_id=1611144296]
+[node name="LoadLevelByIDButton" type="Button" parent="HUD/PauseVBoxContainer/LoadLevelByID" unique_id=1611144296]
 layout_mode = 2
 text = "Find Level by ID"
 
@@ -564,7 +590,6 @@ dead_zone_height = 0.65
 metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525]
-top_level = true
 position = Vector2(544, 280)
 limit_enabled = false
 position_smoothing_speed = 20.0
@@ -586,7 +611,6 @@ script = ExtResource("3_7fkqn")
 oversampling_override = 1.0
 title = "Save a Level"
 initial_position = 1
-size = Vector2i(640, 442)
 theme = ExtResource("3_cnbw5")
 ok_button_text = "OK"
 root_subfolder = "savedLevels"
@@ -605,13 +629,12 @@ position = Vector2(544, 280)
 floor_snap_length = 12.0
 
 [connection signal="pressed" from="HUD/Top Area UI/HBoxContainer/Control/layersButton" to="Level" method="_on_layers_button_pressed"]
-[connection signal="pressed" from="HUD/Top Area UI/HBoxContainer2/MarginContainer/pauseButton" to="HUD/PausePanel" method="_on_pause_button_pressed"]
 [connection signal="pressed" from="HUD/levelSelectPopup/closeButton" to="HUD/levelSelectPopup" method="_on_close_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/Unpause/UnpauseButton" to="HUD/PausePanel" method="_on_unpause_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/Login/LoginButton" to="HUD/PausePanel" method="_on_login_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/uploadLevel/uploadButton" to="HUD/PausePanel" method="_on_upload_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/BrowseLevels/BrowseLevelsButton" to="HUD/PausePanel" method="_on_browse_levels_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/LoadLevelByID/LoadLevelByIDButton" to="HUD/PausePanel" method="_on_load_level_by_id_button_pressed"]
+[connection signal="pressed" from="HUD/PauseVBoxContainer/Unpause/UnpauseButton" to="HUD/PauseVBoxContainer" method="_on_unpause_button_pressed"]
+[connection signal="pressed" from="HUD/PauseVBoxContainer/Login/LoginButton" to="HUD/PauseVBoxContainer" method="_on_login_button_pressed"]
+[connection signal="pressed" from="HUD/PauseVBoxContainer/uploadLevel/uploadButton" to="HUD/PauseVBoxContainer" method="_on_upload_button_pressed"]
+[connection signal="pressed" from="HUD/PauseVBoxContainer/BrowseLevels/BrowseLevelsButton" to="HUD/PauseVBoxContainer" method="_on_browse_levels_button_pressed"]
+[connection signal="pressed" from="HUD/PauseVBoxContainer/LoadLevelByID/LoadLevelByIDButton" to="HUD/PauseVBoxContainer" method="_on_load_level_by_id_button_pressed"]
 [connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/cancelButtonContainer/cancelButton" to="HUD/TextEditPopup" method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/confirmButtonContainer/confirmButton" to="HUD/TextEditPopup" method="_on_confirm_button_pressed"]
 [connection signal="pressed" from="HUD/PropertiesSidebar/PropertiesPanel/closeButton" to="HUD/PropertiesSidebar" method="_on_close_button_pressed"]

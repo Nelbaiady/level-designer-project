@@ -27,13 +27,16 @@ signal tokenRefreshed
 
 var sessionCache:Dictionary
 
-func _unhandled_input(event: InputEvent) -> void:
+var user: Dictionary
+var isSignedIn: bool = false
+
+#func _unhandled_input(event: InputEvent) -> void:
 	#if event.is_action_pressed("4"):
 		#signInWithGoogle()
 	#if event.is_action_pressed("5"):
 		#signalBus.uploadCurrentLevel.emit()
-	if event.is_action_pressed("6"):
-		downloadLevel()
+	#if event.is_action_pressed("6"):
+		#downloadLevel()
 	#if event.is_action_pressed("7"):
 		#var levels = await rpcRequest({},"getalllevels", false)
 		#print(levels[3].get_string_from_utf8())
@@ -53,6 +56,19 @@ func _ready() -> void:
 		handleWebRedirect()
 		
 	sessionCache = loadSession()
+	
+	signalBus.signedIn.connect(
+		func(): 
+			isSignedIn = true
+			user = JSON.parse_string((await getOwnUser()).get_string_from_utf8())
+			signalBus.signInStatusUpdated.emit()
+			)
+	signalBus.signedOut.connect(
+		func(): 
+			isSignedIn = false
+			user = {}
+			signalBus.signInStatusUpdated.emit()
+			)
 
 #send a signal if signed in
 func signInSignal():
@@ -71,6 +87,11 @@ func ensureAccountExists():
 		await signUp()
 	else:
 		print("user found: ", body.get_string_from_utf8())
+
+func getOwnUser():
+	var response = await rpcRequest({},"getCurrentUser")
+	return response[3]
+
 func signUp(username:String=""):
 	if username=="":
 		signalBus.startTextEditPopup.emit("Welcome new player! \nWhat would you like your display name to be?")
@@ -149,29 +170,26 @@ func uploadLevel(levelName=""):
 				httpReplyError.emit("Failed to upload level")
 				signalBus.startTextPopup.emit("Failed to upload level")
 	else:
-		authError.emit("flip dude, youre not signed in bro")
+		#authError.emit("flip dude, youre not signed in bro")
+		signalBus.startTextPopup.emit("Bummer, I don't think you're signed in")
 func downloadLevel(levelID:="0"):
-	if isSessionValid():
-		var levelSaveStruct = saveLoadManager.parseLevelToJson()
-		var data = JSON.stringify(levelSaveStruct)
-		var url = SUPABASE_URL + "/storage/v1/object/Levels/"+levelID+".json"
-		var headers = [
-			"Content-Type: application/octet-stream",
-			"apikey: "+SUPABASE_ANON_KEY,
-			"Authorization: Bearer "+loadSession().access_token
-		]
-		httpRequest.request(url,headers,HTTPClient.METHOD_GET,data)
-		var response = await httpRequest.request_completed
-		var responseCode = response[1]
-		var body = response[3]
-		if responseCode == 200:
-			httpReply.emit(str("Successfully downloaded level "))
-			signalBus.loadLevel.emit(JSON.parse_string(body.get_string_from_utf8()))
-		else:
-			httpReplyError.emit("Failed to download level")
-			signalBus.startTextPopup.emit("Failed to load level.\nID likely incorrect")
+	var levelSaveStruct = saveLoadManager.parseLevelToJson()
+	var data = JSON.stringify(levelSaveStruct)
+	var url = SUPABASE_URL + "/storage/v1/object/Levels/"+levelID+".json"
+	var headers = [
+		"Content-Type: application/octet-stream",
+		"apikey: "+SUPABASE_ANON_KEY,
+	]
+	httpRequest.request(url,headers,HTTPClient.METHOD_GET,data)
+	var response = await httpRequest.request_completed
+	var responseCode = response[1]
+	var body = response[3]
+	if responseCode == 200:
+		httpReply.emit(str("Successfully downloaded level "))
+		signalBus.loadLevel.emit(JSON.parse_string(body.get_string_from_utf8()))
 	else:
-		authError.emit("flip dude, youre not signed in bro")
+		httpReplyError.emit("Failed to download level")
+		signalBus.startTextPopup.emit(str("Failed to load level.\nCould not find level with the ID ",levelID))
 
 func handleWebRedirect():
 	var urlPart = JavaScriptBridge.eval("window.location.hash", true)

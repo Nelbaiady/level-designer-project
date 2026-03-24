@@ -5,6 +5,8 @@ var wasMaximized := false ##remembers if the window was maximized when it goes t
 
 var isPaused := false
 
+var isWebVersion:=OS.has_feature("web")
+
 func _ready() -> void:
 	signalBus.togglePause.connect(togglePause)
 

@@ -52,7 +52,7 @@ func _on_close_button_pressed() -> void:
 [sub_resource type="LabelSettings" id="LabelSettings_0l4bc"]
 font_size = 48
 font_color = Color(1, 0.94914633, 0.8754653, 1)
-outline_size = 32
+outline_size = 22
 outline_color = Color(0.578717, 0.40745404, 0.52866435, 1)
 
 [sub_resource type="GDScript" id="GDScript_3lyd6"]
@@ -333,15 +333,17 @@ layout_mode = 2
 text = "Unpause"
 
 [node name="Login" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=722089432]
+visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
 [node name="LoginButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/Login" unique_id=1207319776]
 layout_mode = 2
-text = "Sign In"
+text = "Sign In/Up"
 
 [node name="uploadLevel" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=1055362265]
+visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
@@ -367,6 +369,25 @@ size_flags_vertical = 8
 [node name="LoadLevelByIDButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/LoadLevelByID" unique_id=1611144296]
 layout_mode = 2
 text = "Find Level by ID"
+
+[node name="SaveLevel" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=42092402]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="SaveLevelButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/SaveLevel" unique_id=1316137415]
+layout_mode = 2
+text = "Save Level"
+
+[node name="DownloadLevel" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=1921119199]
+visible = false
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="DownloadLevelButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/DownloadLevel" unique_id=332347246]
+layout_mode = 2
+text = "Download Level File"
 
 [node name="TextEditPopup" type="Control" parent="HUD" unique_id=38263661]
 visible = false
@@ -611,6 +632,8 @@ floor_snap_length = 12.0
 [connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/uploadLevel/uploadButton" to="HUD/PausePanel" method="_on_upload_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/BrowseLevels/BrowseLevelsButton" to="HUD/PausePanel" method="_on_browse_levels_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/LoadLevelByID/LoadLevelByIDButton" to="HUD/PausePanel" method="_on_load_level_by_id_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/SaveLevel/SaveLevelButton" to="HUD/PausePanel" method="_on_save_level_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/DownloadLevel/DownloadLevelButton" to="HUD/PausePanel" method="_on_download_level_button_pressed"]
 [connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/cancelButtonContainer/cancelButton" to="HUD/TextEditPopup" method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/confirmButtonContainer/confirmButton" to="HUD/TextEditPopup" method="_on_confirm_button_pressed"]
 [connection signal="pressed" from="HUD/PropertiesSidebar/PropertiesPanel/closeButton" to="HUD/PropertiesSidebar" method="_on_close_button_pressed"]

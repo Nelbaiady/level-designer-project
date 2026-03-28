@@ -4,10 +4,16 @@ class_name PauseMenu extends Panel
 @onready var loginButton: Button = $PauseVBoxContainer/Login/LoginButton
 @onready var userInfoText: RichTextLabel = $PauseVBoxContainer/userInfoText
 
+#button containers
+@onready var downloadLevel: MarginContainer = $PauseVBoxContainer/DownloadLevel
+@onready var login: MarginContainer = $PauseVBoxContainer/Login
+@onready var uploadLevel: MarginContainer = $PauseVBoxContainer/uploadLevel
 
 func _ready():
+	downloadLevel.visible = OS.has_feature("web")
+	login.visible = !OS.has_feature("web")
+	uploadLevel.visible = !OS.has_feature("web")
 	signalBus.pauseToggled.connect(pauseCheck)
-	
 	signalBus.signedIn.connect(setSignInButtonTrue)
 	signalBus.signedOut.connect(setSignInButtonFalse)
 	signalBus.signInStatusUpdated.connect(updateUserInfo)
@@ -57,8 +63,6 @@ func _on_upload_button_pressed() -> void:
 func _on_browse_levels_button_pressed() -> void:
 	signalBus.togglePause.emit()
 	signalBus.startBrowsingLevels.emit()
-	#var levels = await authentication.rpcRequest({},"getalllevels", false)
-	#print(levels[3].get_string_from_utf8())
 
 func _on_load_level_by_id_button_pressed() -> void:
 	signalBus.togglePause.emit()
@@ -74,9 +78,15 @@ func _on_load_level_by_id_button_pressed() -> void:
 		correct = reply[0].is_valid_int()
 	if !cancelled and correct:
 		authentication.downloadLevel(reply[0])
-	#print("31".is_valid_int())
-	#print("93f".is_valid_int())
 
 
 func _on_pause_button_pressed() -> void:
 	signalBus.togglePause.emit()
+
+func _on_download_level_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	signalBus.downloadLevelFile.emit()
+
+func _on_save_level_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	signalBus.startSavingLevel.emit()

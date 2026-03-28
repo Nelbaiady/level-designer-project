@@ -6,21 +6,51 @@ var isSaving = false
 func _ready() -> void:
 	authentication.saveLoadManager = self
 	signalBus.loadLevel.connect(loadLevel)
-	
-func _input(event: InputEvent) -> void:
-	if globalEditor.isEditing:
-		if event.is_action_pressed("save"):
-			globalEditor.saveLoadPopupIsOpen = true
-			isSaving = true
-			file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE 
-			file_dialog.show()
-			
-		if event.is_action_pressed("load"):
-			globalEditor.saveLoadPopupIsOpen = true
-			isSaving = false
-			file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
-			file_dialog.show()
-			
+	signalBus.startSavingLevel.connect(startSavingLevel)
+	signalBus.startLoadingLevel.connect(startLoadingLevel)
+	signalBus.downloadLevelFile.connect(downloadLevelFile)
+
+#remove this
+#func _input(event: InputEvent) -> void:
+	#if globalEditor.isEditing:
+		#if event.is_action_pressed("save"):
+			#if OS.has_feature("web"):
+				#downloadLevelFile()
+			#else:
+				#startSavingLevel()
+		#if event.is_action_pressed("load"):
+			#startLoadingLevel()
+
+##opens the file dialog and starts the process of saving a level
+func startSavingLevel():
+	globalEditor.saveLoadPopupIsOpen = true
+	isSaving = true
+	file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE 
+	file_dialog.show()
+	##opens the file dialog and starts the process of loading a level
+func startLoadingLevel():
+	globalEditor.saveLoadPopupIsOpen = true
+	isSaving = false
+	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	file_dialog.show()
+func downloadLevelFile():
+	if OS.has_feature("web"):
+		var levelSaveStruct : Dictionary = parseLevelToJson()
+		print(JSON.stringify(levelSaveStruct))
+		JavaScriptBridge.eval("""
+			(function() {
+				const content = JSON.stringify(%s);
+				const blob = new Blob([content], { type: 'application/json' });
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.href = url;
+				a.download = 'level.json';
+				a.click();
+				URL.revokeObjectURL(url);
+			})();
+		""" % levelSaveStruct)
+	else:
+		signalBus.startTextPopup.emit("You cannot download level files unless you are on a browser.")
 
 func _on_file_dialog_file_selected(path: String) -> void:
 	globalEditor.saveLoadPopupIsOpen = false

@@ -5,6 +5,13 @@ class_name SignalBus extends Node
 signal onLevelReady(level)##called when a level is ready in the scene tree
 @warning_ignore("unused_signal")
 signal loadedLevel()##called when a level has been loaded from a JSON
+@warning_ignore("unused_signal")
+signal startSavingLevel()##sends a signal to open the file dialog for level saving
+@warning_ignore("unused_signal")
+signal startLoadingLevel()##sends a signal to open the file dialog for level loading
+@warning_ignore("unused_signal")
+signal downloadLevelFile()##sends a signal to download the level file
+
 
 @warning_ignore("unused_signal")
 signal uploadCurrentLevel()##called when a level has been loaded from a JSON

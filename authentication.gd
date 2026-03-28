@@ -54,6 +54,8 @@ func setSignedOut():
 	signalBus.signInStatusUpdated.emit()
 	
 func _ready() -> void:
+	if system.isWebVersion:
+		handleWebRedirect()
 	httpRequest = HTTPRequest.new()
 	add_child(httpRequest)
 	authSuccess.connect(onAuthSuccess)
@@ -65,8 +67,6 @@ func _ready() -> void:
 	
 	signalBus.signedIn.connect(setSignedIn)
 	signalBus.signedOut.connect(setSignedOut)
-	if system.isWebVersion:
-		handleWebRedirect()
 	
 	call_deferred("sendSignInSignal")
 		
@@ -402,7 +402,8 @@ func signInWithGoogle():
 	var params = {}
 	redirectUrl = ""
 	if system.isWebVersion:
-		redirectUrl = JavaScriptBridge.eval("window.location.href")
+		redirectUrl = JavaScriptBridge.eval("window.location.origin + window.location.pathname")
+		JavaScriptBridge.eval("alert('redirectUrl: ' + '" + redirectUrl + "')")
 		params = {
 			"provider": "google",
 			"redirect_to": redirectUrl,
@@ -455,8 +456,10 @@ func signInWithGoogle():
 		queryString += str(param,"=",params[param].uri_encode())
 	var authUrl = SUPABASE_URL + "/auth/v1/authorize?" + queryString
 	
-	#open the shell
-	OS.shell_open(authUrl)
+	if system.isWebVersion:
+		JavaScriptBridge.eval("window.open('" + authUrl + "', '_blank')")
+	else:
+		OS.shell_open(authUrl)
 
 func _process(_delta: float) -> void:
 	

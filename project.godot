@@ -44,6 +44,8 @@ enabled=PackedStringArray("res://addons/phantom_camera/plugin.cfg")
 player="any playable character"
 solids="anything that would stop a moving movable object from moving"
 movables=""
+hurtbox=""
+hitbox=""
 
 [gui]
 

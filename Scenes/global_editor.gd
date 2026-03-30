@@ -18,8 +18,8 @@ var objectInstancesCount:int = 0
 var itemRoster:Array[Item] = []#[preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
 @onready var level: Level
 var hotbarIndex: int = 0
-var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
-#var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),null,null,null,null,null,null,null]
+#var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
+var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),null,null,null,null,null,null,null]
 var currentLayer: int = 0
 var currentRoom: int = 0
 

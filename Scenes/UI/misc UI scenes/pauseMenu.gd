@@ -79,7 +79,6 @@ func _on_load_level_by_id_button_pressed() -> void:
 	if !cancelled and correct:
 		authentication.downloadLevel(reply[0])
 
-
 func _on_pause_button_pressed() -> void:
 	signalBus.togglePause.emit()
 
@@ -90,3 +89,7 @@ func _on_download_level_button_pressed() -> void:
 func _on_save_level_button_pressed() -> void:
 	signalBus.togglePause.emit()
 	signalBus.startSavingLevel.emit()
+
+func _on_load_level_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	signalBus.startLoadingLevel.emit()

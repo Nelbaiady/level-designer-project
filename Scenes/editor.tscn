@@ -379,6 +379,15 @@ size_flags_vertical = 8
 layout_mode = 2
 text = "Save Level"
 
+[node name="LoadLevel" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=2119631058]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="LoadLevelButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/LoadLevel" unique_id=1263896398]
+layout_mode = 2
+text = "Load Level"
+
 [node name="DownloadLevel" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=1921119199]
 visible = false
 custom_minimum_size = Vector2(32, 32)
@@ -633,6 +642,7 @@ floor_snap_length = 12.0
 [connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/BrowseLevels/BrowseLevelsButton" to="HUD/PausePanel" method="_on_browse_levels_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/LoadLevelByID/LoadLevelByIDButton" to="HUD/PausePanel" method="_on_load_level_by_id_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/SaveLevel/SaveLevelButton" to="HUD/PausePanel" method="_on_save_level_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/LoadLevel/LoadLevelButton" to="HUD/PausePanel" method="_on_load_level_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/DownloadLevel/DownloadLevelButton" to="HUD/PausePanel" method="_on_download_level_button_pressed"]
 [connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/cancelButtonContainer/cancelButton" to="HUD/TextEditPopup" method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/confirmButtonContainer/confirmButton" to="HUD/TextEditPopup" method="_on_confirm_button_pressed"]

@@ -1,19 +1,112 @@
 [gd_scene format=3 uid="uid://caa3am7a5y5av"]
 
+[ext_resource type="Texture2D" uid="uid://mur08phi7tt5" path="res://Scenes/Items/Objects/NPC/Canimus/canimusCrush.png" id="1_13ulp"]
 [ext_resource type="Texture2D" uid="uid://fqa88r2pdjb4" path="res://Scenes/Items/Objects/NPC/Canimus/canimusIdle.png" id="1_fgj4o"]
+[ext_resource type="Texture2D" uid="uid://ivcdy10irvqu" path="res://Scenes/Items/Objects/NPC/Canimus/canimusRunning.png" id="2_j2sd1"]
 [ext_resource type="PackedScene" uid="uid://c4aci6f2wscx5" path="res://Scenes/Items/Objects/objectMod.tscn" id="2_myemf"]
+[ext_resource type="Texture2D" uid="uid://dfwltlq5bulsp" path="res://Scenes/Items/Objects/NPC/Canimus/canimusRun.png" id="3_wm4yp"]
 
 [sub_resource type="GDScript" id="GDScript_fgj4o"]
 resource_name = "Canimus"
-script/source = "extends CharacterBody2D
+script/source = "class_name Canimus extends CharacterBody2D
+@onready var animatedSprite: AnimatedSprite2D = $AnimatedSprite2D
 
-func _process(_delta: float) -> void:
-	if !globalEditor.isEditing:
-		velocity.y += 10
-		move_and_slide()
-	else:
+@export var flippableColliders:Array[Area2D] = []
+
+var roamTime : float = 0
+var roamTimer:float = 0
+
+var targetSpeed = 0
+var maxSpeed:=150
+var acceleration:=300
+var facingRight:=false
+
+##how quickly this creature switches between random states
+var restlessness:float = 1
+
+enum states {IDLE, ROAMING, CHASING}
+var state = states.IDLE
+
+func _ready() -> void:
+	roamTime = randf_range(1,6/restlessness)
+	signalBus.startEditMode.connect(func():
+		animatedSprite.animation = \"idle\")
+
+func _process(delta: float) -> void:
+	if globalEditor.isEditing:
 		velocity = Vector2.ZERO
+	else:
+		#gravity
+		velocity.y += 10
+
+		velocity.x = move_toward(velocity.x,float(targetSpeed),acceleration*delta)
+		#if the creature is not moving (difference in position < 12) make sure the creature plays the idle animation
+		if animatedSprite.animation != \"running\" and state == states.ROAMING and abs(get_real_velocity().x) >= 12:
+			animatedSprite.animation = \"run\"
+		if animatedSprite.animation != \"idle\" and abs(get_real_velocity().x) < 12:
+			animatedSprite.animation = \"unrun\"
+		if animatedSprite.animation in [\"running\",\"run\",\"unrun\"] :
+			var desiredAnimSpeed = abs(velocity.x/maxSpeed)
+			if desiredAnimSpeed < 0.8:
+				desiredAnimSpeed = 0.8
+			animatedSprite.speed_scale = desiredAnimSpeed
+		else:
+			animatedSprite.speed_scale = 1
+		
+		#random timed intervals between idling and moving around
+		if roamTimer >= roamTime:
+			roamTimer = 0
+			if state == states.ROAMING:
+				roamTime = snapped( randf_range(1,6/restlessness) , 0.1 )
+				setState(states.IDLE)
+			elif state == states.IDLE:
+				roamTime = snapped( randf_range(1,3/restlessness) , 0.1 )
+				setState(states.ROAMING)
+		else:
+			roamTimer+=delta
+		
+		move_and_slide()
+
+func setState(newState:states):
+	state = newState
+	match newState:
+		states.IDLE:
+			targetSpeed = 0
+			#animatedSprite.animation = \"unrun\"
+		states.ROAMING:
+			facingRight = randi_range(0 , 1)
+			var direMult = 1 if facingRight else -1
+			targetSpeed = maxSpeed * direMult
+			if animatedSprite.flip_h != facingRight:
+				for i in flippableColliders:
+					i.scale.x *= -1
+				animatedSprite.flip_h = facingRight
+			#animatedSprite.animation = \"run\"
+
+func _on_animated_sprite_2d_animation_finished() -> void:
+	match animatedSprite.animation:
+		\"run\":
+			animatedSprite.animation = \"running\"
+		\"unrun\":
+			animatedSprite.animation = \"idle\"
+	animatedSprite.play()
 "
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g72bb"]
+atlas = ExtResource("1_13ulp")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_defcg"]
+atlas = ExtResource("1_13ulp")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rq1fw"]
+atlas = ExtResource("1_13ulp")
+region = Rect2(0, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y60ok"]
+atlas = ExtResource("1_13ulp")
+region = Rect2(192, 192, 192, 192)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j2sd1"]
 atlas = ExtResource("1_fgj4o")
@@ -39,8 +132,53 @@ region = Rect2(192, 192, 192, 192)
 atlas = ExtResource("1_fgj4o")
 region = Rect2(384, 192, 192, 192)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_2dmeu"]
+atlas = ExtResource("3_wm4yp")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3inyy"]
+atlas = ExtResource("3_wm4yp")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5icnn"]
+atlas = ExtResource("2_j2sd1")
+region = Rect2(0, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5lns4"]
+atlas = ExtResource("2_j2sd1")
+region = Rect2(192, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dff58"]
+atlas = ExtResource("2_j2sd1")
+region = Rect2(384, 0, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7lup"]
+atlas = ExtResource("2_j2sd1")
+region = Rect2(0, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ppoo"]
+atlas = ExtResource("2_j2sd1")
+region = Rect2(192, 192, 192, 192)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_5icnn"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g72bb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_defcg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rq1fw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y60ok")
+}],
+"loop": false,
+"name": &"crush",
+"speed": 12.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_j2sd1")
@@ -61,25 +199,75 @@ animations = [{
 "texture": SubResource("AtlasTexture_gd7os")
 }],
 "loop": true,
-"name": &"default",
+"name": &"idle",
 "speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2dmeu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3inyy")
+}],
+"loop": false,
+"name": &"run",
+"speed": 24.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5icnn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5lns4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dff58")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q7lup")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ppoo")
+}],
+"loop": true,
+"name": &"running",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5icnn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2dmeu")
+}],
+"loop": false,
+"name": &"unrun",
+"speed": 24.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5lns4"]
 size = Vector2(104, 80)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_dff58"]
-radius = 40.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g72bb"]
+size = Vector2(104, 28)
 
-[node name="Canimus" type="CharacterBody2D" unique_id=1317101315 groups=["movables", "solids"]]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_13ulp"]
+size = Vector2(68, 56)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dff58"]
+radius = 36.0
+
+[node name="Canimus" type="CharacterBody2D" unique_id=1317101315 node_paths=PackedStringArray("flippableColliders") groups=["movables", "solids"]]
 script = SubResource("GDScript_fgj4o")
+flippableColliders = [NodePath("Object/Area2D"), NodePath("hurtBoxArea"), NodePath("hitBoxArea"), NodePath("VisionArea")]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=917958512]
 process_mode = 3
 use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_5icnn")
-autoplay = "default"
-frame_progress = 0.4896845
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.005139523
 
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_myemf")]
 position = Vector2(0, -8)
@@ -89,10 +277,34 @@ category = 1
 [node name="Area2D" type="Area2D" parent="Object" unique_id=12686494]
 position = Vector2(0, 8)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Object/Area2D" unique_id=1321507038]
+[node name="clickbox" type="CollisionShape2D" parent="Object/Area2D" unique_id=1321507038]
 position = Vector2(4, -8)
 shape = SubResource("RectangleShape2D_5lns4")
 
+[node name="hurtBoxArea" type="Area2D" parent="." unique_id=1251664224 groups=["hurtbox"]]
+process_mode = 4
+visible = false
+position = Vector2(0, 8)
+
+[node name="hurtBox" type="CollisionShape2D" parent="hurtBoxArea" unique_id=450273891]
+position = Vector2(4, -42)
+shape = SubResource("RectangleShape2D_g72bb")
+
+[node name="hitBoxArea" type="Area2D" parent="." unique_id=421457549 groups=["hitbox"]]
+position = Vector2(0, 16)
+
+[node name="hitBox" type="CollisionShape2D" parent="hitBoxArea" unique_id=1992963439]
+position = Vector2(2, -20)
+shape = SubResource("RectangleShape2D_13ulp")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=834873578]
-position = Vector2(0, -8)
+position = Vector2(2, -4)
 shape = SubResource("CircleShape2D_dff58")
+
+[node name="VisionArea" type="Area2D" parent="." unique_id=1489425719]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VisionArea" unique_id=814966107]
+polygon = PackedVector2Array(0, -32, -144, -80, -144, 64, 0, 16)
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]

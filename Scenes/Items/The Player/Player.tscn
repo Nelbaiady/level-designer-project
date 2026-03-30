@@ -615,6 +615,12 @@ autoplay = &"idle"
 position = Vector2(0, 9)
 shape = SubResource("CapsuleShape2D_gntrk")
 
+[node name="Area2D2" type="Area2D" parent="." unique_id=314266595]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D2" unique_id=1687249328]
+position = Vector2(0, 9)
+shape = SubResource("CapsuleShape2D_gntrk")
+
 [node name="StateMachine" type="Node" parent="." unique_id=1748929628 node_paths=PackedStringArray("initialState")]
 script = ExtResource("7_4cmne")
 initialState = NodePath("Editing")

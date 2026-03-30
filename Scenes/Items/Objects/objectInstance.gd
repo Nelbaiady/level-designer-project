@@ -19,6 +19,9 @@ var rosterID:int
 var instanceID:int = -1
 var layer:LevelLayer
 
+##used to tween object properties
+var propertyTween:Tween
+
 func _ready() -> void:
 	rootNode= get_parent()
 	if globalEditor.isEditing:
@@ -50,13 +53,9 @@ func objectEditingStarted(_name, _id):
 		rootNode.material.set_shader_parameter("shine_color",Color(0.8, 0.9, 1.0, 0.7))
 	else:
 		objectEditingStopped()
-	#if globalEditor.objectBeingEdited == self:
-		#selectionParticles.emitting = true
-	#else:
-		#selectionParticles.emitting = false
+
 func objectEditingStopped():
 	rootNode.material = null
-	#selectionParticles.emitting = false
 	
 func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 	signalBus.placeObjectSignal.disconnect(setStartingStuff)
@@ -71,10 +70,11 @@ func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 	rosterID = globalEditor.getCurrentLevelLayerDict()["objects"][instanceID]["rosterID"]
 
 func editModeStarted():
-	rootNode.process_mode = Node.PROCESS_MODE_DISABLED
-	clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
 	for property in properties:
 		setProperty(property.codeName, getProperty(property.codeName), true)
+	await propertyTween.finished
+	rootNode.process_mode = Node.PROCESS_MODE_DISABLED
+	clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
 func playModeStarted():
 	if layer.index == 0:
 		rootNode.process_mode = Node.PROCESS_MODE_INHERIT
@@ -85,15 +85,16 @@ func getProperty(property:String):
 		return getObjectFromLevelStruct()["properties"][property]
 	else:
 		return rootNode.get(property)
+
 func setProperty(property:String, value, tween = false):
 	if property == "scale":
 		value = abs(value)
 	getObjectFromLevelStruct()["properties"][property] = value
 	if tween:
-		var propertyTween = create_tween()
+		propertyTween = create_tween()
 		propertyTween.set_trans(Tween.TRANS_CUBIC)
 		propertyTween.set_ease(Tween.EASE_OUT)
-		propertyTween.tween_property(rootNode,property,value ,0.3)
+		propertyTween.parallel().tween_property(rootNode,property,value ,0.3)
 	else:
 		rootNode.set(property, value )
 

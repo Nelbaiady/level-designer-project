@@ -24,13 +24,24 @@ var facingRight:=false
 ##how quickly this creature switches between random states
 var restlessness:float = 1
 
-enum states {IDLE, ROAMING, CHASING}
+enum states {IDLE, ROAMING, CHASING, DYING}
 var state = states.IDLE
 
 func _ready() -> void:
+	reset()
+	signalBus.startEditMode.connect(reset)
+
+##whenever edit mode is entered, make sure everything re
+func reset():
 	roamTime = randf_range(1,6/restlessness)
-	signalBus.startEditMode.connect(func():
-		animatedSprite.animation = \"idle\")
+	state = states.IDLE
+	animatedSprite.animation = \"idle\"
+	visible = true
+	targetSpeed = 0
+	facingRight = false
+	orientDirection()
+	roamTimer = 0
+	velocity = Vector2.ZERO
 
 func _process(delta: float) -> void:
 	if globalEditor.isEditing:
@@ -40,12 +51,14 @@ func _process(delta: float) -> void:
 		velocity.y += 10
 
 		velocity.x = move_toward(velocity.x,float(targetSpeed),acceleration*delta)
+		if state == states.DYING:
+			velocity.x = 0
 		#if the creature is not moving (difference in position < 12) make sure the creature plays the idle animation
 		if animatedSprite.animation != \"running\" and state == states.ROAMING and abs(get_real_velocity().x) >= 12:
 			animatedSprite.animation = \"run\"
-		if animatedSprite.animation != \"idle\" and abs(get_real_velocity().x) < 12:
+		if animatedSprite.animation != \"idle\" and abs(get_real_velocity().x) < 12 and state in[states.ROAMING, states.CHASING]:
 			animatedSprite.animation = \"unrun\"
-		if animatedSprite.animation in [\"running\",\"run\",\"unrun\"] :
+		if animatedSprite.animation in [\"running\",\"run\",\"unrun\"]:
 			var desiredAnimSpeed = abs(velocity.x/maxSpeed)
 			if desiredAnimSpeed < 0.8:
 				desiredAnimSpeed = 0.8
@@ -77,11 +90,17 @@ func setState(newState:states):
 			facingRight = randi_range(0 , 1)
 			var direMult = 1 if facingRight else -1
 			targetSpeed = maxSpeed * direMult
-			if animatedSprite.flip_h != facingRight:
-				for i in flippableColliders:
-					i.scale.x *= -1
-				animatedSprite.flip_h = facingRight
+			orientDirection()
 			#animatedSprite.animation = \"run\"
+		states.DYING:
+			animatedSprite.animation = \"crush\"
+
+##makes the object face the direction its supposed to, including sprite and collision
+func orientDirection():
+	if animatedSprite.flip_h != facingRight:
+		for i in flippableColliders:
+			i.scale.x *= -1
+		animatedSprite.flip_h = facingRight
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	match animatedSprite.animation:
@@ -89,7 +108,33 @@ func _on_animated_sprite_2d_animation_finished() -> void:
 			animatedSprite.animation = \"running\"
 		\"unrun\":
 			animatedSprite.animation = \"idle\"
+		\"crush\":
+			#dead
+			visible = false
+			pass
+			
 	animatedSprite.play()
+
+
+func _on_hit_box_area_body_entered(body: Node2D) -> void:
+	if body.is_in_group(\"player\") and state != states.DYING:
+		#print(\"hayyyah!!\")
+		pass
+
+
+func _on_hurt_box_area_area_entered(area: Area2D) -> void:
+	if area.is_in_group(\"player\") and area.is_in_group(\"hitbox\"):
+		print(\"YYYEEOOWWWCH\")
+		if area.is_in_group(\"player\"):
+			startDying()
+func startDying():
+	setState(states.DYING)
+	velocity.x = 0
+	targetSpeed = 0
+	call_deferred(\"disableProcess\")
+	print(process_mode)
+func disableProcess():
+	process_mode = Node.PROCESS_MODE_DISABLED
 "
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g72bb"]
@@ -140,25 +185,29 @@ region = Rect2(0, 0, 192, 192)
 atlas = ExtResource("3_wm4yp")
 region = Rect2(192, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5icnn"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_5lns4"]
 atlas = ExtResource("2_j2sd1")
 region = Rect2(0, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5lns4"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_dff58"]
 atlas = ExtResource("2_j2sd1")
 region = Rect2(192, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dff58"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7lup"]
 atlas = ExtResource("2_j2sd1")
 region = Rect2(384, 0, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_q7lup"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ppoo"]
 atlas = ExtResource("2_j2sd1")
 region = Rect2(0, 192, 192, 192)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2ppoo"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ahiqk"]
 atlas = ExtResource("2_j2sd1")
 region = Rect2(192, 192, 192, 192)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5icnn"]
+atlas = ExtResource("2_j2sd1")
+region = Rect2(0, 0, 192, 192)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_5icnn"]
 animations = [{
@@ -172,8 +221,11 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_rq1fw")
 }, {
-"duration": 1.0,
+"duration": 12.0,
 "texture": SubResource("AtlasTexture_y60ok")
+}, {
+"duration": 1.0,
+"texture": null
 }],
 "loop": false,
 "name": &"crush",
@@ -215,9 +267,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_5icnn")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_5lns4")
 }, {
 "duration": 1.0,
@@ -228,6 +277,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_2ppoo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ahiqk")
 }],
 "loop": true,
 "name": &"running",
@@ -249,7 +301,7 @@ animations = [{
 size = Vector2(104, 80)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g72bb"]
-size = Vector2(104, 28)
+size = Vector2(104, 8)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_13ulp"]
 size = Vector2(68, 56)
@@ -258,6 +310,8 @@ size = Vector2(68, 56)
 radius = 36.0
 
 [node name="Canimus" type="CharacterBody2D" unique_id=1317101315 node_paths=PackedStringArray("flippableColliders") groups=["movables", "solids"]]
+collision_layer = 128
+collision_mask = 128
 script = SubResource("GDScript_fgj4o")
 flippableColliders = [NodePath("Object/Area2D"), NodePath("hurtBoxArea"), NodePath("hitBoxArea"), NodePath("VisionArea")]
 
@@ -265,11 +319,11 @@ flippableColliders = [NodePath("Object/Area2D"), NodePath("hurtBoxArea"), NodePa
 process_mode = 3
 use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_5icnn")
-animation = &"idle"
+animation = &"crush"
 autoplay = "idle"
-frame_progress = 0.005139523
 
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_myemf")]
+process_mode = 3
 position = Vector2(0, -8)
 clickCollision = NodePath("Area2D")
 category = 1
@@ -282,12 +336,10 @@ position = Vector2(4, -8)
 shape = SubResource("RectangleShape2D_5lns4")
 
 [node name="hurtBoxArea" type="Area2D" parent="." unique_id=1251664224 groups=["hurtbox"]]
-process_mode = 4
-visible = false
 position = Vector2(0, 8)
 
 [node name="hurtBox" type="CollisionShape2D" parent="hurtBoxArea" unique_id=450273891]
-position = Vector2(4, -42)
+position = Vector2(4, -40)
 shape = SubResource("RectangleShape2D_g72bb")
 
 [node name="hitBoxArea" type="Area2D" parent="." unique_id=421457549 groups=["hitbox"]]
@@ -308,3 +360,5 @@ polygon = PackedVector2Array(0, -32, -144, -80, -144, 64, 0, 16)
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]
+[connection signal="area_entered" from="hurtBoxArea" to="." method="_on_hurt_box_area_area_entered"]
+[connection signal="body_entered" from="hitBoxArea" to="." method="_on_hit_box_area_body_entered"]

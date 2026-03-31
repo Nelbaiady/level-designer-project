@@ -72,7 +72,7 @@ func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 func editModeStarted():
 	for property in properties:
 		setProperty(property.codeName, getProperty(property.codeName), true)
-	await propertyTween.finished
+	#await propertyTween.finished
 	rootNode.process_mode = Node.PROCESS_MODE_DISABLED
 	clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
 func playModeStarted():

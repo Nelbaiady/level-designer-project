@@ -35,11 +35,18 @@ var directionInput = Vector2.ZERO
 @onready var stateMachine: StateMachine = $StateMachine
 @onready var playerProperties: PlayerProperties = $playerProperties
 
+##signal for when the player is bounced
+signal getBounced(velocity)
 
 func _ready() -> void:
 	globalEditor.player = self
+	getBounced.connect(bounce)
+	
 	signalBus.startEditMode.connect(enterEditState)
 	signalBus.startPlayMode.connect(enterPlayState)
+
+func bounce(bounceVelocity):
+	velocity = bounceVelocity
 
 func enterEditState():
 	stateMachine._transitionToNextState("Editing")
@@ -72,4 +79,9 @@ func chourcCheck():
 		if i.is_in_group("solids") and i != self:
 			return false
 	return true
-	
+
+
+func _on_hitbox_area_2d_area_entered(area: Area2D) -> void:
+	if area.is_in_group("hurtbox"):
+		getBounced.emit(velocity.slide(Vector2.UP.rotated(area.rotation)) + Vector2.UP.rotated(area.rotation) * (500))
+		

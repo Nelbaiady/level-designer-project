@@ -111,6 +111,46 @@ func _on_cancel_button_pressed() -> void:
 	endInputPopup(true)
 "
 
+[sub_resource type="GDScript" id="GDScript_pee1p"]
+resource_name = "playModeTopArea"
+script/source = "class_name PlayModeTopArea extends HBoxContainer
+
+var hotbarTween:Tween
+
+func _ready() -> void:
+	signalBus.startEditMode.connect(hideHud)
+	signalBus.startPlayMode.connect(showHud)
+
+func hideHud():
+		hotbarTween = create_tween()
+		hotbarTween.set_trans(Tween.TRANS_CUBIC)
+		hotbarTween.set_ease(Tween.EASE_IN)
+		hotbarTween.tween_property(self,\"offset_top\",-size.y,0.15)
+func showHud():
+	hotbarTween = create_tween()
+	hotbarTween.set_trans(Tween.TRANS_CUBIC)
+	hotbarTween.set_ease(Tween.EASE_OUT)
+	hotbarTween.tween_property(self,\"offset_top\",0,0.15)
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_i5vsu"]
+font_size = 32
+font_color = Color(0, 0.4434056, 0.41036707, 1)
+outline_size = 10
+outline_color = Color(0.7303834, 0.923467, 0.86802703, 1)
+
+[sub_resource type="GDScript" id="GDScript_o8yew"]
+resource_name = "healthBar"
+script/source = "class_name HealthBar extends Label
+
+func _ready() -> void:
+	signalBus.updatePlayerHealth.connect(updateHealthDisplay)
+	signalBus.startPlayMode.connect(updateHealthDisplay)
+	
+func updateHealthDisplay():
+	text = str(\"Health: \",globalEditor.player.currentHealth, \" / \" ,globalEditor.player.maxHealth)
+"
+
 [sub_resource type="Resource" id="Resource_nfgmo"]
 script = ExtResource("8_op3c8")
 duration = 0.5
@@ -148,7 +188,6 @@ clip_contents = true
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.314
-offset_bottom = -64.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
@@ -579,6 +618,33 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="PlayModeHud" type="HBoxContainer" parent="HUD" unique_id=653226853]
+clip_contents = true
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.314
+offset_top = -203.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+mouse_behavior_recursive = 1
+theme_override_constants/separation = 12
+script = SubResource("GDScript_pee1p")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/PlayModeHud" unique_id=1864529040]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+
+[node name="Label" type="Label" parent="HUD/PlayModeHud/MarginContainer" unique_id=849705467]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Health: 3/3"
+label_settings = SubResource("LabelSettings_i5vsu")
+script = SubResource("GDScript_o8yew")
 
 [node name="PhantomCamera2D" type="Node2D" parent="." unique_id=1919693164]
 top_level = true

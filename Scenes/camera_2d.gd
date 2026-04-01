@@ -79,6 +79,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			inputNegY = 0
 		inputVector = Vector2(inputPosX-inputNegX,inputNegY-inputPosY)
 
+##for movement in edit mode
 func transLateCamera(direction: Vector2):
 	phantomCamera.position += direction
 	

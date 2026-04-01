@@ -9,6 +9,8 @@ class_name Player extends CharacterBody2D
 @onready var chourcChecker: Area2D = $chourcChecker
 @onready var stateMachine: StateMachine = $StateMachine
 @onready var playerProperties: PlayerProperties = $playerProperties
+#@onready var audioStreamPlayer: AudioStreamPlayer2D = $AudioStreamPlayer2D
+@onready var audioStreamPlayer: AudioStreamPlayer2D = $Sprite2D/AudioStreamPlayer2D
 
 #Exported stats
 @export var maxHealth : int = 3
@@ -52,7 +54,9 @@ func _ready() -> void:
 	signalBus.startPlayMode.connect(enterPlayState)
 
 func bounce(bounceVelocity):
-	stateMachine._transitionToNextState("Rising",{"bounced":true,"bounceVelocity":bounceVelocity})
+	if !bouncedThisFrame:
+		bouncedThisFrame = true
+		stateMachine._transitionToNextState("Rising",{"bounced":true,"bounceVelocity":bounceVelocity})
 	
 	velocity = bounceVelocity
 
@@ -64,8 +68,9 @@ func enterPlayState():
 	reset()
 	stateMachine._transitionToNextState("Idle")
 
-##resets stats
+##resets stats when transitioning between edit/play modes
 func reset():
+	sprite.rotation = 0
 	currentHealth = maxHealth
 	invulnerabilityTimer = invulnerabilityTime
 	gravityMult = 1
@@ -104,11 +109,12 @@ func chourcCheck():
 			return false
 	return true
 
-
-##Dealing damage
+###Dealing damage
 #func _on_hitbox_area_2d_area_entered(area: Area2D) -> void:
+	#pass
 	#if area.is_in_group("hurtbox") and !area.is_in_group("player"):
-		##if area.position.y > $hitboxArea2D/hitbox.position.y:
+		#if area.position.y > $hitboxArea2D/hitbox.position.y:
+			#pass
 
 ##Taking damage
 func _on_hurtbox_area_2d_area_entered(area: Area2D) -> void:
@@ -117,15 +123,17 @@ func _on_hurtbox_area_2d_area_entered(area: Area2D) -> void:
 			knockBack(area.global_position)
 			takeDamage()
 func takeDamage(damage:=1):
-	##make sure the player isnt invulnerable
-	currentHealth -= damage
-	if currentHealth <= 0:
-		die()
-	else:
-		invulnerabilityTimer = 0
+	if stateMachine.state.name!="Dying":
+		##make sure the player isnt invulnerable
+		currentHealth -= damage
+		if currentHealth<0: currentHealth = 0
+		signalBus.updatePlayerHealth.emit()
+		if currentHealth <= 0:
+			die()
+		else:
+			invulnerabilityTimer = 0
 func knockBack(sourceLocation:Vector2, power=800):
 	##knock the player away from the source (plus a corrective y value to make sure the player isnt knocked into the air for no reason)
 	velocity = ((position-sourceLocation).normalized() + Vector2(0,0.5)) * power 
 func die():
-	print("bleh )X (you died)")
-	signalBus.startEditMode.emit()
+	stateMachine._transitionToNextState("Dying")

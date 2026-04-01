@@ -12,6 +12,9 @@ signal startLoadingLevel()##sends a signal to open the file dialog for level loa
 @warning_ignore("unused_signal")
 signal downloadLevelFile()##sends a signal to download the level file
 
+#signals that play during gameplay
+@warning_ignore("unused_signal")
+signal updatePlayerHealth()##lets the ui know that player health has changed
 
 @warning_ignore("unused_signal")
 signal uploadCurrentLevel()##called when a level has been loaded from a JSON

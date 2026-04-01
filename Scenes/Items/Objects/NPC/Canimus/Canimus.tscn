@@ -10,15 +10,16 @@
 resource_name = "Canimus"
 script/source = "class_name Canimus extends CharacterBody2D
 @onready var animatedSprite: AnimatedSprite2D = $AnimatedSprite2D
-
+@onready var visionArea: Area2D = $VisionArea
 @export var flippableColliders:Array[Area2D] = []
 
 var roamTime : float = 0
 var roamTimer:float = 0
 
 var targetSpeed = 0
-var maxSpeed:=150
-var acceleration:=300
+var maxSpeed:=250
+var acceleration:=600
+var deceleration:=acceleration
 var facingRight:=false
 
 ##how quickly this creature switches between random states
@@ -36,6 +37,7 @@ func reset():
 	roamTime = randf_range(1,6/restlessness)
 	state = states.IDLE
 	animatedSprite.animation = \"idle\"
+	animatedSprite.speed_scale = 1
 	visible = true
 	targetSpeed = 0
 	facingRight = false
@@ -50,13 +52,22 @@ func _process(delta: float) -> void:
 		#gravity
 		velocity.y += 10
 
-		velocity.x = move_toward(velocity.x,float(targetSpeed),acceleration*delta)
-		if state == states.DYING:
-			velocity.x = 0
+		var usedAcc = deceleration if abs(velocity.x) >= abs(targetSpeed) else acceleration #whether to use acceleration or deceleration at the moment
+		velocity.x = move_toward(velocity.x,float(targetSpeed),usedAcc*delta)
+		
+		match state:
+			states.DYING:
+				velocity.x = 0
+			states.CHASING:
+				if chaseTarget:
+					facingRight = chaseTarget.position.x > position.x
+					orientDirection()
+					var direMult = 1 if facingRight else -1
+					targetSpeed = maxSpeed * direMult
 		#if the creature is not moving (difference in position < 12) make sure the creature plays the idle animation
-		if animatedSprite.animation != \"running\" and state == states.ROAMING and abs(get_real_velocity().x) >= 12:
+		if animatedSprite.animation != \"running\" and state in [states.ROAMING,states.CHASING] and abs(get_real_velocity().x) >= 12:
 			animatedSprite.animation = \"run\"
-		if (animatedSprite.animation != \"idle\" and abs(velocity.x)==0) or (animatedSprite.animation != \"idle\" and abs(get_real_velocity().x) < 12 and state in[states.ROAMING, states.CHASING]):
+		if (animatedSprite.animation != \"idle\" and abs(velocity.x)==0) or (animatedSprite.animation != \"idle\" and abs(get_real_velocity().x) < 6 and state in[states.ROAMING, states.CHASING]):
 			animatedSprite.animation = \"unrun\"
 		if animatedSprite.animation in [\"running\",\"run\",\"unrun\"]:
 			var desiredAnimSpeed = abs(velocity.x/maxSpeed)
@@ -88,9 +99,9 @@ func setState(newState:states):
 			#animatedSprite.animation = \"unrun\"
 		states.ROAMING:
 			facingRight = randi_range(0 , 1)
+			orientDirection()
 			var direMult = 1 if facingRight else -1
 			targetSpeed = maxSpeed * direMult
-			orientDirection()
 			#animatedSprite.animation = \"run\"
 		states.DYING:
 			animatedSprite.animation = \"crush\"
@@ -123,21 +134,28 @@ func _on_hit_box_area_body_entered(body: Node2D) -> void:
 
 
 func _on_hurt_box_area_area_entered(area: Area2D) -> void:
-	if area.is_in_group(\"player\") and area.is_in_group(\"hitbox\"):
-		#print(\"YYYEEOOWWWCH\")
-		print(area.rootNode.velocity.y)
-		if area.is_in_group(\"player\") and area.rootNode.velocity.y > 0:
-			if !area.rootNode.bouncedThisFrame:
-				area.rootNode.bouncedThisFrame = true
+	if area.is_in_group(\"player\") and area.is_in_group(\"hitbox\") and \"rootNode\" in area and area.rootNode is Player:
+		if area.rootNode.velocity.y > 0 and !area.rootNode.bouncedThisFrame:
+				#area.rootNode.bouncedThisFrame = true
 				area.rootNode.getBounced.emit(velocity.slide(Vector2.UP.rotated(area.rotation)) + Vector2.UP.rotated(area.rotation) * (700))
-				startDying()
-func startDying():
+				die()
+func die():
 	setState(states.DYING)
 	velocity.x = 0
 	targetSpeed = 0
-	call_deferred(\"disableProcess\")
-func disableProcess():
-	process_mode = Node.PROCESS_MODE_DISABLED
+	(func(): process_mode = Node.PROCESS_MODE_DISABLED).call_deferred()
+
+
+var chaseTarget = null
+func _on_vision_area_body_entered(body: Node2D) -> void:
+	if body is Player:
+		chaseTarget = body
+		setState(states.CHASING)
+
+func _on_vision_exit_area_body_exited(body: Node2D) -> void:
+	if body == chaseTarget:
+		chaseTarget = null
+		setState(states.IDLE)
 "
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g72bb"]
@@ -312,11 +330,14 @@ size = Vector2(64, 44)
 [sub_resource type="CircleShape2D" id="CircleShape2D_dff58"]
 radius = 36.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_13ulp"]
+radius = 176.0
+
 [node name="Canimus" type="CharacterBody2D" unique_id=1317101315 node_paths=PackedStringArray("flippableColliders") groups=["movables", "solids"]]
 collision_layer = 128
 collision_mask = 128
 script = SubResource("GDScript_fgj4o")
-flippableColliders = [NodePath("Object/Area2D"), NodePath("hurtBoxArea"), NodePath("hitBoxArea"), NodePath("VisionArea")]
+flippableColliders = [NodePath("Object/Area2D"), NodePath("hurtBoxArea"), NodePath("hitBoxArea"), NodePath("VisionArea"), NodePath("VisionExitArea")]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=917958512]
 process_mode = 3
@@ -358,10 +379,20 @@ shape = SubResource("CircleShape2D_dff58")
 
 [node name="VisionArea" type="Area2D" parent="." unique_id=1489425719]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="VisionArea" unique_id=814966107]
-polygon = PackedVector2Array(0, -32, -144, -80, -144, 64, 0, 16)
+[node name="visionCone" type="CollisionPolygon2D" parent="VisionArea" unique_id=196656458]
+polygon = PackedVector2Array(0, -32, -412, -96, -412, 80, 0, 16)
+
+[node name="VisionExitArea" type="Area2D" parent="." unique_id=2069075605]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisionExitArea" unique_id=756385094]
+shape = SubResource("CircleShape2D_13ulp")
+
+[node name="visionCone" type="CollisionPolygon2D" parent="VisionExitArea" unique_id=1997293645]
+polygon = PackedVector2Array(0, -32, -412, -96, -412, 80, 0, 16)
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]
 [connection signal="area_entered" from="hurtBoxArea" to="." method="_on_hurt_box_area_area_entered"]
 [connection signal="body_entered" from="hitBoxArea" to="." method="_on_hit_box_area_body_entered"]
+[connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]
+[connection signal="body_exited" from="VisionExitArea" to="." method="_on_vision_exit_area_body_exited"]

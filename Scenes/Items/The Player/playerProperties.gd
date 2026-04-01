@@ -2,8 +2,8 @@ class_name PlayerProperties extends Node
 
 #@onready var selectionParticles: GPUParticles2D = $selectionParticles
 const COLOR_PULSE = preload("uid://cbnkbef0ahxkp")
-@onready var clickCollision: Area2D = $"../Area2D"
-@onready var rootNode: CharacterBody2D = $".."
+@onready var clickCollision: Area2D = $"../clickBoxArea"
+@onready var rootNode: Player = $".."
 @export var properties: Array[ObjectProperty] = [
 	preload("uid://bh2hcytk84e13") #position
 	,preload("uid://dqbrp3ghialya") #size/scale
@@ -48,12 +48,14 @@ func loadPlayer():
 func resetPlayer():
 	rootNode.velocity = Vector2.ZERO
 	rootNode.animationPlayer.current_animation="idle"
+	
+	var resetPlayerTween = create_tween()
+	resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
+	resetPlayerTween.set_ease(Tween.EASE_OUT)
+	resetPlayerTween.parallel().tween_property(rootNode.sprite,"position",Vector2(0,44),0.3)
 	for i in globalEditor.playerProperties:
 		var value = globalEditor.playerProperties[i] 
-		var resetPlayerTween = create_tween()
-		resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
-		resetPlayerTween.set_ease(Tween.EASE_OUT)
-		resetPlayerTween.tween_property(rootNode,i,value ,0.3)
+		resetPlayerTween.parallel().tween_property(rootNode,i,value ,0.3)
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):

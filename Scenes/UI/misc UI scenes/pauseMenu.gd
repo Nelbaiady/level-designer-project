@@ -11,8 +11,12 @@ class_name PauseMenu extends Panel
 
 func _ready():
 	downloadLevel.visible = OS.has_feature("web")
-	login.visible = !OS.has_feature("web")
-	uploadLevel.visible = !OS.has_feature("web")
+	#login.visible = !OS.has_feature("web")
+	#uploadLevel.visible = !OS.has_feature("web")
+	#DISABLE UNTIL A LOGIN SOLUTION IS FOUND
+	login.visible = false
+	uploadLevel.visible = false
+	
 	signalBus.pauseToggled.connect(pauseCheck)
 	signalBus.signedIn.connect(setSignInButtonTrue)
 	signalBus.signedOut.connect(setSignInButtonFalse)

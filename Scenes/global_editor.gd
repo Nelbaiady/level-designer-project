@@ -37,7 +37,7 @@ var objectBeingEdited
 ##if the sidebar is open (sorry for the horrible name)
 var isObjectBeingEdited = false 
 
-@onready var player: CharacterBody2D
+@onready var player: Player
 const PLAYER = preload("uid://ce1i72nmpos1n")
 
 

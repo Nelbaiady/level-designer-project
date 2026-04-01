@@ -561,8 +561,17 @@ func crouchTransition(anim:String):
 		player.animationPlayer.play(\"idle\")
 "
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jkifv"]
+size = Vector2(40, 56)
+
+[sub_resource type="GDScript" id="GDScript_meww7"]
+resource_name = "playerHitboxArea"
+script/source = "extends Area2D
+@onready var rootNode: Player = $\"..\"
+"
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_meww7"]
-size = Vector2(64, 12)
+size = Vector2(64, 28)
 
 [node name="Player" type="CharacterBody2D" unique_id=668648745 groups=["movables", "player", "solids"]]
 physics_interpolation_mode = 1
@@ -651,11 +660,21 @@ metadata/_custom_type_script = "uid://bvj7h8be6v0io"
 [node name="Running" type="Node" parent="StateMachine" unique_id=1173330553]
 script = ExtResource("12_6170r")
 
-[node name="hitboxArea2D" type="Area2D" parent="." unique_id=992519540 groups=["hitbox", "player"]]
+[node name="hurtboxArea2D" type="Area2D" parent="." unique_id=416494424 groups=["hurtbox", "player"]]
 collision_layer = 129
 
+[node name="hurtbox" type="CollisionShape2D" parent="hurtboxArea2D" unique_id=1980712613]
+position = Vector2(0, 12)
+shape = SubResource("RectangleShape2D_jkifv")
+
+[node name="hitboxArea2D" type="Area2D" parent="." unique_id=992519540 groups=["hitbox", "player"]]
+collision_layer = 129
+collision_mask = 129
+script = SubResource("GDScript_meww7")
+
 [node name="hitbox" type="CollisionShape2D" parent="hitboxArea2D" unique_id=511544400]
-position = Vector2(0, 46)
+position = Vector2(0, 38)
 shape = SubResource("RectangleShape2D_meww7")
 
+[connection signal="area_entered" from="hurtboxArea2D" to="." method="_on_hurtbox_area_2d_area_entered"]
 [connection signal="area_entered" from="hitboxArea2D" to="." method="_on_hitbox_area_2d_area_entered"]

@@ -31,7 +31,7 @@ func _ready() -> void:
 	reset()
 	signalBus.startEditMode.connect(reset)
 
-##whenever edit mode is entered, make sure everything re
+##whenever edit mode is entered, make sure everything reset
 func reset():
 	roamTime = randf_range(1,6/restlessness)
 	state = states.IDLE
@@ -56,7 +56,7 @@ func _process(delta: float) -> void:
 		#if the creature is not moving (difference in position < 12) make sure the creature plays the idle animation
 		if animatedSprite.animation != \"running\" and state == states.ROAMING and abs(get_real_velocity().x) >= 12:
 			animatedSprite.animation = \"run\"
-		if animatedSprite.animation != \"idle\" and abs(get_real_velocity().x) < 12 and state in[states.ROAMING, states.CHASING]:
+		if (animatedSprite.animation != \"idle\" and abs(velocity.x)==0) or (animatedSprite.animation != \"idle\" and abs(get_real_velocity().x) < 12 and state in[states.ROAMING, states.CHASING]):
 			animatedSprite.animation = \"unrun\"
 		if animatedSprite.animation in [\"running\",\"run\",\"unrun\"]:
 			var desiredAnimSpeed = abs(velocity.x/maxSpeed)
@@ -124,15 +124,18 @@ func _on_hit_box_area_body_entered(body: Node2D) -> void:
 
 func _on_hurt_box_area_area_entered(area: Area2D) -> void:
 	if area.is_in_group(\"player\") and area.is_in_group(\"hitbox\"):
-		print(\"YYYEEOOWWWCH\")
-		if area.is_in_group(\"player\"):
-			startDying()
+		#print(\"YYYEEOOWWWCH\")
+		print(area.rootNode.velocity.y)
+		if area.is_in_group(\"player\") and area.rootNode.velocity.y > 0:
+			if !area.rootNode.bouncedThisFrame:
+				area.rootNode.bouncedThisFrame = true
+				area.rootNode.getBounced.emit(velocity.slide(Vector2.UP.rotated(area.rotation)) + Vector2.UP.rotated(area.rotation) * (700))
+				startDying()
 func startDying():
 	setState(states.DYING)
 	velocity.x = 0
 	targetSpeed = 0
 	call_deferred(\"disableProcess\")
-	print(process_mode)
 func disableProcess():
 	process_mode = Node.PROCESS_MODE_DISABLED
 "
@@ -300,11 +303,11 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5lns4"]
 size = Vector2(104, 80)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_g72bb"]
-size = Vector2(104, 8)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wm4yp"]
+size = Vector2(64, 8)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_13ulp"]
-size = Vector2(68, 56)
+size = Vector2(64, 44)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dff58"]
 radius = 36.0
@@ -319,7 +322,7 @@ flippableColliders = [NodePath("Object/Area2D"), NodePath("hurtBoxArea"), NodePa
 process_mode = 3
 use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_5icnn")
-animation = &"crush"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_myemf")]
@@ -339,14 +342,14 @@ shape = SubResource("RectangleShape2D_5lns4")
 position = Vector2(0, 8)
 
 [node name="hurtBox" type="CollisionShape2D" parent="hurtBoxArea" unique_id=450273891]
-position = Vector2(4, -40)
-shape = SubResource("RectangleShape2D_g72bb")
+position = Vector2(0, -40)
+shape = SubResource("RectangleShape2D_wm4yp")
 
 [node name="hitBoxArea" type="Area2D" parent="." unique_id=421457549 groups=["hitbox"]]
 position = Vector2(0, 16)
 
 [node name="hitBox" type="CollisionShape2D" parent="hitBoxArea" unique_id=1992963439]
-position = Vector2(2, -20)
+position = Vector2(0, -14)
 shape = SubResource("RectangleShape2D_13ulp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=834873578]

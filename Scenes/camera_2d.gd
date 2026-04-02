@@ -40,6 +40,7 @@ func _on_dead_zone_changed(zoneVector):
 		phantomCamera.set_follow_offset(newFollowOffset)
 func _physics_process(_delta: float) -> void:
 	if globalEditor.popupIsOpen:
+		inputVector = Vector2.ZERO
 		inputPosX = 0
 		inputNegX = 0
 		inputPosY = 0

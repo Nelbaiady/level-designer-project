@@ -30,6 +30,7 @@ signalBus="*res://signal_bus.gd"
 PhantomCameraManager="*uid://duq6jhf6unyis"
 system="*uid://dqxkj4f7i6wwh"
 authentication="*uid://ts3goyxmuwxh"
+cursorCanvas="*uid://dw4ojydnn8mlq"
 
 [dotnet]
 

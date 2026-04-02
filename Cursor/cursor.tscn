@@ -1,6 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://dw4ojydnn8mlq"]
+[gd_scene format=3 uid="uid://dw4ojydnn8mlq"]
 
 [ext_resource type="Script" uid="uid://nex04i5f5a5f" path="res://Scenes/cursor.gd" id="1_nehsy"]
+
+[sub_resource type="GDScript" id="GDScript_yrxwg"]
+resource_name = "cursorCanvas"
+script/source = "class_name CursorCanvas extends CanvasLayer
+
+@onready var cursor: Cursor = $Cursor
+"
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yrxwg"]
 load_path = "res://.godot/imported/cursor.png-81b85aec819db670ac0e28f271710396.ctex"
@@ -34,11 +41,15 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Cursor" type="Marker2D"]
+[node name="CanvasLayer" type="CanvasLayer" unique_id=389373312]
+layer = 2048
+script = SubResource("GDScript_yrxwg")
+
+[node name="Cursor" type="Marker2D" parent="." unique_id=1232085793]
 top_level = true
 script = ExtResource("1_nehsy")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Cursor" unique_id=1882932888]
 z_index = 215
 z_as_relative = false
 position = Vector2(6, 12)

@@ -3,7 +3,7 @@ extends Node2D
 #@onready var level: Node2D = $"../Level"
 #@onready var tileMap: TileMapLayer = $"../Level/Layer0/TileMapLayer"
 #@onready var tileMaps: Dictionary[int, TileMapLayer] = {0:$"../Level/Layer0/TileMapLayer"}
-@onready var cursor: Node2D = $"../CursorCanvas/Cursor"
+#@onready var cursor: Node2D = $"../CursorCanvas/Cursor"
 #@onready var cursor: Node2D =$"../Cursor"
 @onready var cursorItemIcon: TextureRect = $"../cursorItemIcon"
 
@@ -44,21 +44,20 @@ func _process(_delta: float) -> void:
 		if globalEditor.isEditing and !globalEditor.popupIsOpen:
 			previousCursorCellCoords = cursorCellCoords
 #			Cursor's position shifted with the current parallax layer
-			cursorParallaxPosition = cursor.global_position + getCurrentLayerNode().screen_offset * (getCurrentLayerNode().scroll_scale-Vector2.ONE)
+			cursorParallaxPosition = cursorCanvas.cursor.global_position + getCurrentLayerNode().screen_offset * (getCurrentLayerNode().scroll_scale-Vector2.ONE)
 			cursorCellCoords = getCurrentLayerTilemap().local_to_map( cursorParallaxPosition )
 			#cursorCellCoords = getCurrentLayerTilemap().local_to_map(getCurrentLayerTilemap().to_local(cursor.global_position)) #evil stupid version
 			#if the cursor moved to a different tile or the camera's target position is not the same as the current one (it is easing in), adjust the tile preview
 			if (cursorCellCoords!=previousCursorCellCoords or (round(camera.phantomCamera.position*100) != round(camera.position*100)) ) and selectedItem is terrainItem:
 				tweenCursorItemIcon()
 			elif selectedItem is objectItem:
-				#cursorItemIcon.position = (cursor.global_position - (Vector2.ONE * globalEditor.gridSize/2) + selectedItem.textureOffset)
-				cursorItemIcon.position = (cursor.global_position - (Vector2.ONE * (cursorItemIcon.texture.get_size()/2) if selectedItem.centerPreview else Vector2.ZERO) + selectedItem.textureOffset)
+				cursorItemIcon.position = (cursorCanvas.cursor.global_position - (Vector2.ONE * (cursorItemIcon.texture.get_size()/2) if selectedItem.centerPreview else Vector2.ZERO) + selectedItem.textureOffset)
 			
 			#place an object
 			if Input.is_action_just_released("mouseClickLeft"):
 				placeButtonIsHeld = false
 				previousPlacePos = Vector2.INF
-			if placeButtonIsHeld and cursor.cursorOnScreen: #TIGHT COUPLING HERE MIGHT NOT BE IDEAL
+			if placeButtonIsHeld and cursorCanvas.cursor.cursorOnScreen: #TIGHT COUPLING HERE MIGHT NOT BE IDEAL
 				match globalEditor.currentTool:
 					globalEditor.Tools.place:
 						placeItem()
@@ -75,17 +74,16 @@ func _process(_delta: float) -> void:
 			pass
 			
 
-
-
 	if clickFrame:
 		clickFrame = false
 	#COMMON CODE FOR EDIT AND PLAY MODE
-	cursorItemIcon.visible = cursor.visible and globalEditor.isEditing and !globalEditor.popupIsOpen
+	cursorItemIcon.visible = cursorCanvas.cursor.visible and globalEditor.isEditing and !globalEditor.popupIsOpen
 	previousCursorPos = cursorParallaxPosition
 	#END OF PHYSICS PROCESS
 
 func tweenCursorItemIcon():
 	updateCameraParallaxDifference()
+	if cursorItemIconTween: cursorItemIconTween.kill()
 	cursorItemIconTween = create_tween()
 	cursorItemIconTween.set_trans(Tween.TRANS_CUBIC)
 	cursorItemIconTween.set_ease(Tween.EASE_OUT)
@@ -102,9 +100,9 @@ func setSelectedItem(newItem: Item):
 	cursorItemIcon.texture = selectedItem.icon if selectedItem.previewTexture==null else selectedItem.previewTexture
 	cursorItemIcon.size = cursorItemIcon.texture.get_size()
 	if cursorItemIconTween!=null and cursorItemIconTween.is_running():
-		cursorItemIconTween.stop()
+		#cursorItemIconTween.stop()
 		cursorItemIconTween.kill()
-		tweenCursorItemIcon()
+		#tweenCursorItemIcon()
 	else:
 		if globalEditor.level:
 			cursorItemIcon.position = Vector2(cursorCellCoords * (globalEditor.gridSize) ) - getCurrentLayerNode().screen_offset * (getCurrentLayerNode().scroll_scale-Vector2.ONE) + selectedItem.textureOffset
@@ -119,7 +117,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			signalBus.startPlayMode.emit()
 		else:
 			signalBus.startEditMode.emit()
-	if event.is_action("mouseClickLeft") and cursor.cursorOnScreen and globalEditor.isEditing:
+	if event.is_action("mouseClickLeft") and cursorCanvas.cursor.cursorOnScreen and globalEditor.isEditing:
 		placeButtonIsHeld = true
 		clickFrame = true
 

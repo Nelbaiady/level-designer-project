@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bgavxi5l77ibl"]
 
 [ext_resource type="Script" uid="uid://dl206p1i47psq" path="res://Scenes/camera_2d.gd" id="1_8howc"]
-[ext_resource type="PackedScene" uid="uid://dw4ojydnn8mlq" path="res://Cursor/cursor.tscn" id="1_eo2o7"]
 [ext_resource type="Script" uid="uid://buy227idb1d0c" path="res://Scenes/editor.gd" id="1_eyy8u"]
 [ext_resource type="Script" uid="uid://cd2xhslepnrjh" path="res://Scenes/top_area_ui.gd" id="2_3lyd6"]
 [ext_resource type="Script" uid="uid://y0j4pcn25wfi" path="res://Scenes/level.gd" id="2_24ceq"]
@@ -17,6 +16,7 @@
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="7_nfgmo"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="8_cnbw5"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="8_op3c8"]
+[ext_resource type="FontFile" uid="uid://dldjup34y8kp1" path="res://Scenes/UI/basic Icons/Kenney Nintendo Switch/Fonts/kenney_input_nintendo_switch.otf" id="10_3lyd6"]
 [ext_resource type="Script" uid="uid://ul8eb8jem2l" path="res://Scenes/properties_handler.gd" id="15_i5vsu"]
 [ext_resource type="PackedScene" uid="uid://j4eyk5hksqrt" path="res://Scenes/layer.tscn" id="17_0l4bc"]
 
@@ -174,12 +174,6 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 metadata/_edit_use_anchors_ = true
-
-[node name="CursorCanvas" type="CanvasLayer" parent="." unique_id=1354198706]
-layer = 2048
-follow_viewport_enabled = true
-
-[node name="Cursor" parent="CursorCanvas" unique_id=921979480 instance=ExtResource("1_eo2o7")]
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=268677100]
 
@@ -645,6 +639,29 @@ size_flags_vertical = 3
 text = "Health: 3/3"
 label_settings = SubResource("LabelSettings_i5vsu")
 script = SubResource("GDScript_o8yew")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HUD" unique_id=1133048131]
+anchors_preset = -1
+anchor_left = 0.055555556
+anchor_top = 0.8391235
+anchor_right = 0.9513889
+anchor_bottom = 0.92746913
+offset_top = 0.24798584
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_colors/default_color = Color(0.99029034, 0.9704277, 0.89833003, 1)
+theme_override_colors/font_outline_color = Color(0.11911302, 0.2589021, 0.33562654, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/normal_font = ExtResource("10_3lyd6")
+theme_override_font_sizes/normal_font_size = 36
+bbcode_enabled = true
+text = "Place [font_size=48][char=E010][/font_size]
+"
+fit_content = true
+scroll_active = false
+metadata/_edit_use_anchors_ = true
 
 [node name="PhantomCamera2D" type="Node2D" parent="." unique_id=1919693164]
 top_level = true

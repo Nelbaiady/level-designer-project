@@ -9,6 +9,7 @@ var cursorOnScreen: bool = false
 var prioritizeController:bool = false
 var isSpinBoxing: bool = false
 var screenPosition:Vector2 = Vector2.ZERO ##variable to represent cursor position in screen space
+@onready var cursorSprite: AnimatedSprite2D = $AnimatedSprite2D
 
 #the below two vars deal with an issue where the browser thinks the actual mouse moved to the position a click was triggered in
 
@@ -16,6 +17,8 @@ func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	signalBus.spinboxSpun.connect( spinBoxing )
 func updateCursorPosition():
+	var camPosition := Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2
+	if get_viewport().get_camera_2d(): camPosition = get_viewport().get_camera_2d().position 
 	if globalEditor.isEditing or globalEditor.isObjectBeingEdited:
 		#To make UI block controller input, we make the controller trigger a real mouse click
 		if Input.is_action_just_pressed("controllerClickLeft"):
@@ -33,7 +36,7 @@ func updateCursorPosition():
 		if cursorMoveVector:
 			if !prioritizeController:
 				prioritizeController = true
-				screenPosition = position - get_viewport().get_camera_2d().position
+				screenPosition = position - camPosition
 			mousePosition = get_viewport().get_mouse_position()
 			cursorOnScreen = true
 		#code for moving the cursor with controllers
@@ -42,7 +45,7 @@ func updateCursorPosition():
 			if cursorMoveSpeedMult < 0.15:
 				cursorMoveSpeedMult = 0.15
 			screenPosition += cursorMoveVector * cursorMoveSpeed * cursorMoveSpeedMult
-			position = screenPosition + get_viewport().get_camera_2d().position
+			position = screenPosition + camPosition
 			#Make sure the cursor does not go off screen
 			screenPosition.x = clamp(screenPosition.x,-get_viewport_rect().size.x / 2, get_viewport_rect().size.x / 2 - 1)#-1 on the max of both clamps because the mouse otherwise goes off screen
 			screenPosition.y = clamp(screenPosition.y,-get_viewport_rect().size.y / 2, get_viewport_rect().size.y / 2 - 1)
@@ -52,12 +55,13 @@ func updateCursorPosition():
 		else:
 			mousePosition = get_viewport().get_mouse_position()
 			#mouse position relative to viewport + viewport distance from origin
-			position = mousePosition + get_viewport().get_camera_2d().position-get_viewport().get_visible_rect().size/2
+			position = mousePosition + camPosition-get_viewport().get_visible_rect().size/2
 		#If the mouse moved and is on screen and the controller's inputs arent being used, use mouse controls
 		if (mousePosition != get_viewport().get_mouse_position()) and mouseOnScreen and !cursorMoveVector and !Input.is_action_just_released("controllerClickLeft") and !Input.is_action_just_released("controllerClickRight") and !Input.is_action_pressed("controllerClickLeft") and !Input.is_action_pressed("controllerClickRight"): 
 			prioritizeController = false
 func _process(_delta: float) -> void:
 	updateCursorPosition()
+	cursorSprite.position = get_local_mouse_position() + Vector2(4,8)
 	visible = cursorOnScreen and (globalEditor.isEditing or globalEditor.isObjectBeingEdited) and !isSpinBoxing
 
 func _notification(event):

@@ -112,14 +112,17 @@ func setSelectedItem(newItem: Item):
 func _unhandled_input(event: InputEvent) -> void:
 	#toggle between edit mode and play mode
 	if Input.is_action_just_pressed("toggleEditing") and !globalEditor.popupIsOpen:
-		if globalEditor.isEditing:
-			globalEditor.isEditing = false
-			signalBus.startPlayMode.emit()
-		else:
-			signalBus.startEditMode.emit()
+		toggleGameMode()
 	if event.is_action("mouseClickLeft") and cursorCanvas.cursor.cursorOnScreen and globalEditor.isEditing:
 		placeButtonIsHeld = true
 		clickFrame = true
+
+func toggleGameMode():
+	if globalEditor.isEditing:
+		globalEditor.isEditing = false
+		signalBus.startPlayMode.emit()
+	else:
+		signalBus.startEditMode.emit()
 
 func placeItem():
 	if selectedItem is terrainItem:

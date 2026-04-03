@@ -12,12 +12,45 @@
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/The Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://cufwjh7b2h1io" path="res://Scenes/UI/basic Icons/layersIcon.png" id="4_i5vsu"]
 [ext_resource type="Script" uid="uid://ffyc5hsflkqu" path="res://Scenes/propertiesEditingLabel.gd" id="4_l4kvy"]
+[ext_resource type="Texture2D" uid="uid://bet7g48q1u37j" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/forward.png" id="6_3lyd6"]
 [ext_resource type="Script" uid="uid://nqbaqgjq17xc" path="res://Scenes/UI/misc UI scenes/pauseMenu.gd" id="7_i5vsu"]
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="7_nfgmo"]
+[ext_resource type="FontFile" uid="uid://bp4pn6tp2pbqa" path="res://Scenes/UI/basic Icons/Kenney Keyboard & Mouse/Fonts/kenney_input_keyboard_&_mouse.otf" id="7_o8yew"]
+[ext_resource type="Texture2D" uid="uid://0o1ifsy16rwj" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/wrench.png" id="7_pee1p"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="8_cnbw5"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="8_op3c8"]
+[ext_resource type="Texture2D" uid="uid://56hly1wm5s04" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/stop.png" id="12_o8yew"]
+[ext_resource type="Texture2D" uid="uid://cjapidryl0sof" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/pause.png" id="13_u6te5"]
 [ext_resource type="Script" uid="uid://ul8eb8jem2l" path="res://Scenes/properties_handler.gd" id="15_i5vsu"]
 [ext_resource type="PackedScene" uid="uid://j4eyk5hksqrt" path="res://Scenes/layer.tscn" id="17_0l4bc"]
+
+[sub_resource type="GDScript" id="GDScript_efg2m"]
+resource_name = "playButtonInputPrompt"
+script/source = "extends RichTextLabel
+
+func _ready() -> void:
+	signalBus.controlIconsUpdated.connect(setText)
+	
+func setText():
+	add_theme_font_override(\"normal_font\",controlMapping.currentFont)
+	text = str(
+	\"[font_size=64][char=\",controlMapping.toggleGameModeIcon,\"][/font_size]\\n\"
+	)
+"
+
+[sub_resource type="GDScript" id="GDScript_iis80"]
+resource_name = "pauseButtonInputPrompt"
+script/source = "extends RichTextLabel
+
+func _ready() -> void:
+	signalBus.controlIconsUpdated.connect(setText)
+	
+func setText():
+	add_theme_font_override(\"normal_font\",controlMapping.currentFont)
+	text = str(
+	\"[font_size=64][char=\",controlMapping.pauseIcon,\"][/font_size]\\n\"
+	)
+"
 
 [sub_resource type="GDScript" id="GDScript_i5vsu"]
 resource_name = "levelBrowser"
@@ -169,8 +202,8 @@ func setText():
 	+\"Select Tool [font_size=48][char=\",controlMapping.selectToolIcon,\"][/font_size]\\n\"
 	+\"Select Item [font_size=48][char=\",controlMapping.selectItemIcon,\"][/font_size]\\n\"
 	+\"Edit Object [font_size=48][char=\",controlMapping.editObjectIcon,\"][/font_size]\\n\"
-	+\"Toggle Game Mode [font_size=48][char=\",controlMapping.toggleGameModeIcon,\"][/font_size]\\n\"
-	+\"Pause [font_size=48][char=\",controlMapping.pauseIcon,\"][/font_size]\\n\"
+	#+\"Toggle Game Mode [font_size=48][char=\",controlMapping.toggleGameModeIcon,\"][/font_size]\\n\"
+	#+\"Pause [font_size=48][char=\",controlMapping.pauseIcon,\"][/font_size]\\n\"
 	)
 "
 
@@ -275,18 +308,18 @@ layout_mode = 2
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="HUD/Top Area UI" unique_id=294669773]
+[node name="menuButtons" type="HBoxContainer" parent="HUD/Top Area UI" unique_id=294669773]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD/Top Area UI/HBoxContainer2" unique_id=917574003]
+[node name="playButtonMarginContainer" type="MarginContainer" parent="HUD/Top Area UI/menuButtons" unique_id=1636623915]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 
-[node name="pauseButton" type="Button" parent="HUD/Top Area UI/HBoxContainer2/MarginContainer" unique_id=1942716341]
+[node name="playButton" type="Button" parent="HUD/Top Area UI/menuButtons/playButtonMarginContainer" unique_id=1920785992]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -294,7 +327,62 @@ size_flags_vertical = 0
 focus_mode = 3
 theme = ExtResource("3_cnbw5")
 theme_override_font_sizes/font_size = 24
-text = "l l"
+icon = ExtResource("6_3lyd6")
+
+[node name="playButtonPrompt" type="RichTextLabel" parent="HUD/Top Area UI/menuButtons/playButtonMarginContainer/playButton" unique_id=660696965]
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_top = 0.22
+anchor_right = 1.7200001
+anchor_bottom = 1.34
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("7_o8yew")
+bbcode_enabled = true
+text = "[font_size=64][char=E0C5][/font_size]"
+scroll_active = false
+horizontal_alignment = 1
+script = SubResource("GDScript_efg2m")
+metadata/_edit_use_anchors_ = true
+
+[node name="pauseButtonMarginContainer" type="MarginContainer" parent="HUD/Top Area UI/menuButtons" unique_id=917574003]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+
+[node name="pauseButton" type="Button" parent="HUD/Top Area UI/menuButtons/pauseButtonMarginContainer" unique_id=1942716341]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+focus_mode = 3
+theme = ExtResource("3_cnbw5")
+theme_override_font_sizes/font_size = 24
+icon = ExtResource("7_pee1p")
+
+[node name="pauseButtonPrompt" type="RichTextLabel" parent="HUD/Top Area UI/menuButtons/pauseButtonMarginContainer/pauseButton" unique_id=2053487807]
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_top = 0.22
+anchor_right = 1.7200001
+anchor_bottom = 1.34
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("7_o8yew")
+bbcode_enabled = true
+text = "[font_size=64][char=E0C5][/font_size]"
+scroll_active = false
+horizontal_alignment = 1
+script = SubResource("GDScript_iis80")
+metadata/_edit_use_anchors_ = true
 
 [node name="levelSelectPopup" type="Panel" parent="HUD" unique_id=58127126]
 visible = false
@@ -340,6 +428,7 @@ size_flags_vertical = 3
 
 [node name="PausePanel" type="Panel" parent="HUD" unique_id=691078316]
 visible = false
+z_index = 128
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -663,6 +752,77 @@ text = "Health: 3/3"
 label_settings = SubResource("LabelSettings_i5vsu")
 script = SubResource("GDScript_o8yew")
 
+[node name="playButtonMarginContainer" type="MarginContainer" parent="HUD/PlayModeHud" unique_id=2081846835]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+
+[node name="playButton" type="Button" parent="HUD/PlayModeHud/playButtonMarginContainer" unique_id=370429537]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 0
+focus_mode = 3
+theme = ExtResource("3_cnbw5")
+theme_override_font_sizes/font_size = 24
+icon = ExtResource("12_o8yew")
+
+[node name="playButtonPrompt" type="RichTextLabel" parent="HUD/PlayModeHud/playButtonMarginContainer/playButton" unique_id=1565802588]
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_top = 0.22
+anchor_right = 1.7200001
+anchor_bottom = 1.34
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("7_o8yew")
+bbcode_enabled = true
+text = "[font_size=64][char=E0C5][/font_size]"
+scroll_active = false
+horizontal_alignment = 1
+script = SubResource("GDScript_efg2m")
+metadata/_edit_use_anchors_ = true
+
+[node name="pauseButtonMarginContainer" type="MarginContainer" parent="HUD/PlayModeHud" unique_id=731597193]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+
+[node name="pauseButton" type="Button" parent="HUD/PlayModeHud/pauseButtonMarginContainer" unique_id=913850963]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+focus_mode = 3
+theme = ExtResource("3_cnbw5")
+theme_override_font_sizes/font_size = 24
+icon = ExtResource("13_u6te5")
+
+[node name="pauseButtonPrompt" type="RichTextLabel" parent="HUD/PlayModeHud/pauseButtonMarginContainer/pauseButton" unique_id=170143859]
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_top = 0.22
+anchor_right = 1.7200001
+anchor_bottom = 1.34
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("7_o8yew")
+bbcode_enabled = true
+text = "[font_size=64][char=E0C5][/font_size]"
+scroll_active = false
+horizontal_alignment = 1
+script = SubResource("GDScript_iis80")
+metadata/_edit_use_anchors_ = true
+
 [node name="mainControlsLabel" type="RichTextLabel" parent="HUD" unique_id=1133048131]
 clip_contents = false
 anchors_preset = -1
@@ -741,7 +901,8 @@ position = Vector2(544, 280)
 floor_snap_length = 12.0
 
 [connection signal="pressed" from="HUD/Top Area UI/HBoxContainer/Control/layersButton" to="Level" method="_on_layers_button_pressed"]
-[connection signal="pressed" from="HUD/Top Area UI/HBoxContainer2/MarginContainer/pauseButton" to="HUD/PausePanel" method="_on_pause_button_pressed"]
+[connection signal="pressed" from="HUD/Top Area UI/menuButtons/playButtonMarginContainer/playButton" to="Editor" method="toggleGameMode"]
+[connection signal="pressed" from="HUD/Top Area UI/menuButtons/pauseButtonMarginContainer/pauseButton" to="HUD/PausePanel" method="_on_pause_button_pressed"]
 [connection signal="pressed" from="HUD/levelSelectPopup/closeButton" to="HUD/levelSelectPopup" method="_on_close_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/Unpause/UnpauseButton" to="HUD/PausePanel" method="_on_unpause_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/Login/LoginButton" to="HUD/PausePanel" method="_on_login_button_pressed"]

@@ -61,8 +61,8 @@ func _process(_delta: float) -> void:
 				match globalEditor.currentTool:
 					globalEditor.Tools.place:
 						placeItem()
-					globalEditor.Tools.move:
-						pass #UNTIL MOVE TOOL IS IMPLEMENTED
+					#globalEditor.Tools.move:
+						#pass #UNTIL MOVE TOOL IS IMPLEMENTED
 					globalEditor.Tools.erase:
 						eraseItem()
 

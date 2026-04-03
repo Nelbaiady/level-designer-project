@@ -157,13 +157,14 @@ const SPRING_ICON = preload(\"uid://dycbcfmvewimq\")
 
 func _ready() -> void:
 	signalBus.controlIconsUpdated.connect(setText)
-	add_image(SPRING_ICON)
 	
 	
 func setText():
+	add_image(SPRING_ICON)
 	add_theme_font_override(\"normal_font\",controlMapping.currentFont)
 	text = str(
-	\"Place [font_size=48][char=\",controlMapping.placeItemIcon,\"][/font_size]\\n\"
+	\"springe: [img]\",SPRING_ICON,\"[/img] yea\\n\"
+	+\"Place [font_size=48][char=\",controlMapping.placeItemIcon,\"][/font_size]\\n\"
 	+\"Move Camera [font_size=48][char=\",controlMapping.moveCameraIcon,\"][/font_size]\\n\"
 	+\"MoveCursor [font_size=48][char=\",controlMapping.moveCursorIcon,\"][/font_size]\\n\"
 	+\"Select Tool [font_size=48][char=\",controlMapping.selectToolIcon,\"][/font_size]\\n\"

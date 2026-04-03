@@ -49,7 +49,7 @@ script = SubResource("GDScript_yrxwg")
 top_level = true
 script = ExtResource("1_nehsy")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Cursor" unique_id=1882932888]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1882932888]
 z_index = 215
 z_as_relative = false
 position = Vector2(6, 12)

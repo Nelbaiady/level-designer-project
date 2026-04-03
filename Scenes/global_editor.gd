@@ -41,7 +41,7 @@ var isObjectBeingEdited = false
 const PLAYER = preload("uid://ce1i72nmpos1n")
 
 
-enum Tools {place, erase, move}
+enum Tools {place, erase}#, move}
 @export var currentTool: Tools
 
 

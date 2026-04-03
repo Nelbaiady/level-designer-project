@@ -9,15 +9,15 @@ var cursorOnScreen: bool = false
 var prioritizeController:bool = false
 var isSpinBoxing: bool = false
 var screenPosition:Vector2 = Vector2.ZERO ##variable to represent cursor position in screen space
-@onready var cursorSprite: AnimatedSprite2D = $AnimatedSprite2D
-
+@onready var cursorSprite: AnimatedSprite2D = $"../AnimatedSprite2D"
+var camPosition : Vector2 ##position of the viewport in the global world space
 #the below two vars deal with an issue where the browser thinks the actual mouse moved to the position a click was triggered in
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	signalBus.spinboxSpun.connect( spinBoxing )
 func updateCursorPosition():
-	var camPosition := Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2
+	camPosition = Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2
 	if get_viewport().get_camera_2d(): camPosition = get_viewport().get_camera_2d().position 
 	if globalEditor.isEditing or globalEditor.isObjectBeingEdited:
 		#To make UI block controller input, we make the controller trigger a real mouse click
@@ -61,8 +61,10 @@ func updateCursorPosition():
 			prioritizeController = false
 func _process(_delta: float) -> void:
 	updateCursorPosition()
-	cursorSprite.position = get_local_mouse_position() + Vector2(4,8)
+	#cursorSprite.position = get_local_mouse_position() + Vector2(4,8)
+	cursorSprite.position = position-camPosition+Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2 + Vector2(4,8)
 	visible = cursorOnScreen and (globalEditor.isEditing or globalEditor.isObjectBeingEdited) and !isSpinBoxing
+	cursorSprite.visible = visible
 
 func _notification(event):
 	#mouse enters the window

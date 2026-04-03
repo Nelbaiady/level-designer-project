@@ -132,7 +132,7 @@ func takeDamage(damage:=1):
 			die()
 		else:
 			invulnerabilityTimer = 0
-func knockBack(sourceLocation:Vector2, power=800):
+func knockBack(sourceLocation:Vector2, power=1000):
 	##knock the player away from the source (plus a corrective y value to make sure the player isnt knocked into the air for no reason)
 	velocity = ((position-sourceLocation).normalized() + Vector2(0,0.5)) * power 
 func die():

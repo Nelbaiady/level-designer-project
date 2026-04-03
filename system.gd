@@ -5,6 +5,8 @@ var wasMaximized := false ##remembers if the window was maximized when it goes t
 
 var isPaused := false
 
+var isUsingController := false
+
 var isWebVersion:=OS.has_feature("web")
 
 func _ready() -> void:
@@ -27,3 +29,14 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
 		if globalEditor.isEditing: #temporary condition until we figure out a pause menu for gameplay
 			togglePause()
+
+	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
+		var settingChanged:=false
+		if !isUsingController: settingChanged = true #the variable will change from what it was, which we need to know so we dont update all icons constantly
+		isUsingController = true
+		if settingChanged: signalBus.updateControlIcons.emit()#make sure to update controller icons
+	elif event is InputEventKey or event is InputEventMouseMotion:
+		var settingChanged:=false
+		if isUsingController: settingChanged = true #the variable will change from what it was, which we need to know so we dont update all icons constantly
+		isUsingController = false
+		if settingChanged: signalBus.updateControlIcons.emit()#make sure to update controller icons

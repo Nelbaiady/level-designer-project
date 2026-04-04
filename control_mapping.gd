@@ -11,6 +11,8 @@ var pauseIcon : String
 const controllerFont = preload("uid://dldjup34y8kp1")
 const keyboardFont = preload("uid://bp4pn6tp2pbqa")
 
+
+
 var currentFont = keyboardFont
 
 
@@ -37,7 +39,7 @@ func setIcons():
 		moveCameraIcon = "E0D7][char=E015][char=E0B9][char=E056"
 		moveCursorIcon = "E0E5"
 		selectToolIcon = "E0AF][char=E05A"
-		selectItemIcon = "E0E9"
+		selectItemIcon = "E0F0"
 		editObjectIcon = "E0E8"
 		toggleGameModeIcon = "E0C5"
 		pauseIcon = "E062"

@@ -1,13 +1,16 @@
 class_name PauseMenu extends Panel
 
 
-@onready var loginButton: Button = $PauseVBoxContainer/Login/LoginButton
-@onready var userInfoText: RichTextLabel = $PauseVBoxContainer/userInfoText
+@export var userInfoText: RichTextLabel #= $PauseVBoxContainer/userInfoText
+@export var loginButton: Button #= $PauseVBoxContainer/Login/LoginButton
+
+@export var editModePauseVBoxContainer: VBoxContainer
+@export var playModePauseVBoxContainer: VBoxContainer
 
 #button containers
-@onready var downloadLevel: MarginContainer = $PauseVBoxContainer/DownloadLevel
-@onready var login: MarginContainer = $PauseVBoxContainer/Login
-@onready var uploadLevel: MarginContainer = $PauseVBoxContainer/uploadLevel
+@export var downloadLevel: MarginContainer# = $PauseVBoxContainer/DownloadLevel
+@export var login: MarginContainer# = $PauseVBoxContainer/Login
+@export var uploadLevel: MarginContainer# = $PauseVBoxContainer/uploadLevel
 
 func _ready():
 	downloadLevel.visible = OS.has_feature("web")
@@ -22,6 +25,16 @@ func _ready():
 	signalBus.signedOut.connect(setSignInButtonFalse)
 	signalBus.signInStatusUpdated.connect(updateUserInfo)
 	
+	signalBus.startEditMode.connect(showEditModeMenu)
+	signalBus.startPlayMode.connect(showPlayModeMenu)
+
+func showEditModeMenu():
+	editModePauseVBoxContainer.visible = true
+	playModePauseVBoxContainer.visible = false
+func showPlayModeMenu():
+	playModePauseVBoxContainer.visible = true
+	editModePauseVBoxContainer.visible = false
+
 func updateUserInfo():
 	if authentication.isSignedIn:
 		var username = authentication.user.username
@@ -97,3 +110,8 @@ func _on_save_level_button_pressed() -> void:
 func _on_load_level_button_pressed() -> void:
 	signalBus.togglePause.emit()
 	signalBus.startLoadingLevel.emit()
+
+
+func _on_exit_play_mode_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	signalBus.startEditMode.emit()

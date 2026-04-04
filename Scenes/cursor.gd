@@ -19,7 +19,7 @@ func _ready() -> void:
 func updateCursorPosition():
 	camPosition = Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2
 	if get_viewport().get_camera_2d(): camPosition = get_viewport().get_camera_2d().position 
-	if globalEditor.isEditing or globalEditor.isObjectBeingEdited:
+	if globalEditor.isEditing or globalEditor.isObjectBeingEdited or globalEditor.popupIsOpen:
 		#To make UI block controller input, we make the controller trigger a real mouse click
 		if Input.is_action_just_pressed("controllerClickLeft"):
 			click()
@@ -63,7 +63,7 @@ func _process(_delta: float) -> void:
 	updateCursorPosition()
 	#cursorSprite.position = get_local_mouse_position() + Vector2(4,8)
 	cursorSprite.position = position-camPosition+Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2 + Vector2(4,8)
-	visible = cursorOnScreen and (globalEditor.isEditing or globalEditor.isObjectBeingEdited) and !isSpinBoxing
+	visible = cursorOnScreen and (globalEditor.isEditing or globalEditor.isObjectBeingEdited or globalEditor.popupIsOpen) and !isSpinBoxing
 	cursorSprite.visible = visible
 
 func _notification(event):

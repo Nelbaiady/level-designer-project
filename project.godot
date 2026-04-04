@@ -332,5 +332,5 @@ common/physics_interpolation=true
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
-environment/defaults/default_clear_color=Color(0.9929964, 0.9045248, 0.82188815, 1)
+environment/defaults/default_clear_color=Color(0.16078432, 0.2, 0.18039216, 1)
 2d/snap/snap_2d_transforms_to_pixel=true

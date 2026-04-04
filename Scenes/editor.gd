@@ -26,12 +26,21 @@ var cursorItemIconTween: Tween
 func _ready() -> void:
 	selectedItem = globalEditor.hotbar[globalEditor.hotbarIndex]
 	setSelectedItem(selectedItem)
+	signalBus.startPlayMode.connect(func():globalEditor.isEditing = false)
 	globalEditor.setItem.connect(setSelectedItem)
 	signalBus.startEditMode.connect(resetStage)
 	globalEditor.propertiesUI = $"../HUD/PropertiesSidebar/PropertiesPanel/ScrollContainer/Properties"
 	#globalEditor.tileMaps = tileMaps
 	#globalEditor.level = $"../Level"
 	signalBus.onLevelReady.connect(levelReady)
+	
+	signalBus.pauseToggled.connect(handlePausing)
+	
+func handlePausing():
+	if system.isPaused:
+		globalEditor.level.process_mode = Node.PROCESS_MODE_DISABLED
+	else:
+		globalEditor.level.process_mode = Node.PROCESS_MODE_INHERIT
 
 func levelReady(_level):
 	updateCameraParallaxDifference()
@@ -119,7 +128,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func toggleGameMode():
 	if globalEditor.isEditing:
-		globalEditor.isEditing = false
+		#globalEditor.isEditing = false
 		signalBus.startPlayMode.emit()
 	else:
 		signalBus.startEditMode.emit()

@@ -27,14 +27,17 @@ func _input(event: InputEvent) -> void:
 			else:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	if event.is_action_pressed("pause"):
-		if globalEditor.isEditing: #temporary condition until we figure out a pause menu for gameplay
-			togglePause()
+		togglePause()
 
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
-		var settingChanged:=false
-		if !isUsingController: settingChanged = true #the variable will change from what it was, which we need to know so we dont update all icons constantly
-		isUsingController = true
-		if settingChanged: signalBus.updateControlIcons.emit()#make sure to update controller icons
+		#account for slight drift
+		if event is InputEventJoypadMotion and abs(event.axis_value)<0.1:
+			pass
+		else:
+			var settingChanged:=false
+			if !isUsingController: settingChanged = true #the variable will change from what it was, which we need to know so we dont update all icons constantly
+			isUsingController = true
+			if settingChanged: signalBus.updateControlIcons.emit()#make sure to update controller icons
 	elif event is InputEventKey or event is InputEventMouseMotion:
 		var settingChanged:=false
 		if isUsingController: settingChanged = true #the variable will change from what it was, which we need to know so we dont update all icons constantly

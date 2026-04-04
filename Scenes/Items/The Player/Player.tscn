@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://ce1i72nmpos1n"]
 
 [ext_resource type="Script" uid="uid://dm0nrwlnpl01u" path="res://Scenes/Items/The Player/player.gd" id="1_e8vge"]
-[ext_resource type="AudioStream" uid="uid://cnsei4kjtlsmn" path="res://audio/sfx/Kirby falling meme.ogg" id="2_jkifv"]
 [ext_resource type="Texture2D" uid="uid://b1kn3s452k3i3" path="res://Scenes/Items/The Player/sprites/player_idle.png" id="2_k1a7i"]
 [ext_resource type="Texture2D" uid="uid://ct3tpjr58vm1h" path="res://Scenes/Items/The Player/sprites/player_run.png" id="3_l5y80"]
 [ext_resource type="Texture2D" uid="uid://cgv67v8iol7sl" path="res://Scenes/Items/The Player/sprites/player_jumped.png" id="4_kvi7n"]
@@ -707,7 +706,6 @@ vframes = 2
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Sprite2D" unique_id=867079957]
 position = Vector2(0, -48)
-stream = ExtResource("2_jkifv")
 volume_db = -10.0
 
 [node name="chourcChecker" type="Area2D" parent="." unique_id=756982984]

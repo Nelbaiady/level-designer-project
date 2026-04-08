@@ -21,16 +21,17 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 var saveLoadManager: SaveLoadManager
 
-#local server
-var tcpServer:TCPServer
-var localPort = 54321
-var redirectUrl = str("http://localhost:",localPort)
+##local server
+#var tcpServer:TCPServer
+#var localPort = 54321
+#var redirectUrl = str("http://localhost:",localPort)
 
 #pkce
 var codeVerifier:String
 var codeChallenge:String
 
-var httpRequest: HTTPRequest
+#outdated. Was used when there was only one httpRequest node but was removed to avoid race conditions
+#var httpRequest: HTTPRequest
 
 signal authSuccess(session)
 signal authError(error)
@@ -54,29 +55,30 @@ func setSignedOut():
 	signalBus.signInStatusUpdated.emit()
 	
 func _ready() -> void:
-	if system.isWebVersion:
-		handleWebRedirect()
-	httpRequest = HTTPRequest.new()
-	add_child(httpRequest)
+	#if system.isWebVersion:
+		#handleWebRedirect()
+	#httpRequest = HTTPRequest.new()
+	#add_child(httpRequest)
+	#httpRequest.request_completed.connect(onHttpRequestCompleted)
 	authSuccess.connect(onAuthSuccess)
 	authError.connect(onAuthError)
 	httpReply.connect(onHttpReply)
 	httpReplyError.connect(onHttpReplyError)
-	signalBus.uploadCurrentLevel.connect(uploadLevel)
-	httpRequest.request_completed.connect(onHttpRequestCompleted)
 	
+	signalBus.uploadCurrentLevel.connect(uploadLevel)
 	signalBus.signedIn.connect(setSignedIn)
 	signalBus.signedOut.connect(setSignedOut)
-	
-	call_deferred("sendSignInSignal")
 		
 	sessionCache = await loadSession()
+	call_deferred("sendSignInSignal")
+	
 	await signalBus.signInStatusUpdated
 	print(user)
 
 ##send a signal if signed in
 func sendSignInSignal():
-	if isSessionValid():
+	#if isSessionValid():
+	if await ensureValidSession():
 		isSignedIn = true
 		var userBody = await getCurrentUser()
 		if userBody!="null":
@@ -98,7 +100,6 @@ func getCurrentUser(getFullResponse = false):
 func ensureAccountExists():
 	var response = await getCurrentUser(true)
 	var body = response[3].get_string_from_utf8()
-	
 	#if the account does not have a database entry
 	if body == "[]" or body=="null" and response[1]==200:
 		return await signUpPartTwo()
@@ -291,13 +292,13 @@ func signIn(email:String,password:String):
 			authError.emit(body["msg"])
 	elif response[1]==200:
 		#print(body)
-		#var session = {
-			#"access_token": body.get("access_token", ""),
-			#"refresh_token": body.get("refresh_token", ""),
-			#"expires_in": body.get("expires_in", 0),
-			#"user": body.get("user", {})
-		#}
-		#authSuccess.emit(session)
+		var session = {
+			"access_token": body.get("access_token", ""),
+			"refresh_token": body.get("refresh_token", ""),
+			"expires_in": body.get("expires_in", 0),
+			"user": body.get("user", {})
+		}
+		authSuccess.emit(session)
 		#signalBus.startTextPopup.emit("successfully signed in")
 		#await signalBus.endTextPopup
 		return await ensureAccountExists()
@@ -308,8 +309,8 @@ func signIn(email:String,password:String):
 ##Response[2]: headers[br]
 ##Response[3]: body[br]
 func rpcRequest(params:Dictionary,functionName:String):
-	if system.isWebVersion:
-		return await rpcRequestWeb(params, functionName)
+	#if system.isWebVersion:
+		#return await rpcrequestweb(params, functionname)
 		
 	var url = SUPABASE_URL + "/rest/v1/rpc/"+functionName
 	var headers = [
@@ -321,17 +322,27 @@ func rpcRequest(params:Dictionary,functionName:String):
 		"Content-Type: application/json"
 	]
 	var body = JSON.stringify(params)
-	httpRequest.request(url, headers, HTTPClient.METHOD_POST, body)
-	var response = await httpRequest.request_completed
+	#httpRequest.request(url, headers, HTTPClient.METHOD_POST, body)
+	var response = await genericHttpRequest(url, headers, HTTPClient.METHOD_POST, body)
+	#var response = await httpRequest.request_completed
 	return response
 
-##Http request that behaves the same on web and desktop versions
+func newHttpRequest(url:String,headers:PackedStringArray,method:HTTPClient.Method,requestData:String=""):
+	var request = HTTPRequest.new()
+	add_child(request)
+	request.request(url,headers,method,requestData)
+	var response = await request.request_completed
+	request.queue_free()
+	return response
+
+##Web request that behaves the same on web and desktop versions. Not actually an http request if using web.
 func genericHttpRequest(url:String,headers:PackedStringArray,method:HTTPClient.Method,requestData:String=""):
 	if system.isWebVersion:
 		return await webRequest(url,headers,method,requestData)
 	else:
-		httpRequest.request(url, headers, method, requestData)
-		return await httpRequest.request_completed
+		#httpRequest.request(url, headers, method, requestData)
+		#return await httpRequest.request_completed
+		return await newHttpRequest(url, headers, method, requestData)
 
 ##like an Http request but adapted to work on browsers
 func webRequest(url:String,headers:PackedStringArray,method:HTTPClient.Method,requestData:String=""):
@@ -353,8 +364,13 @@ func webRequest(url:String,headers:PackedStringArray,method:HTTPClient.Method,re
 		+ "  headers: " + headersString + ","
 		+ body
 		+ "})"
-		+ ".then(r => r.text())"
-		+ ".then(t => { window._godot_rpc_result = t; })"
+		#+ ".then(r => r.text())"
+		+ ".then(async r => {"
+		+ "const text = await r.text();"
+		+ "window._godot_rpc_result = JSON.stringify({"
+		+ "status: r.status,"
+		+ "body: text});})"
+		#+ ".then(t => { window._godot_rpc_result = t; })"
 		+ ".catch(e => { window._godot_rpc_error = e.toString(); })"
 	)
 	var timeout = 0.0
@@ -369,46 +385,50 @@ func webRequest(url:String,headers:PackedStringArray,method:HTTPClient.Method,re
 		printerr("webFetch JS error: ", JavaScriptBridge.eval("window._godot_rpc_error"))
 		return [FAILED, 0, [], PackedByteArray()]
 	
-	var result = str(JavaScriptBridge.eval("window._godot_rpc_result"))
-	JavaScriptBridge.eval("delete window._godot_rpc_result; delete window._godot_fetch_body;")
-	return [OK, 200, [], result.to_utf8_buffer()]
+	var result = JSON.parse_string(JavaScriptBridge.eval("window._godot_rpc_result"))
+	
+	#JavaScriptBridge.eval("delete window._godot_rpc_result; delete window._godot_fetch_body;")
+	#return [OK, 200, [], result.to_utf8_buffer()]
+	#print( [OK, result["status"], [], JSON.parse_string(result["body"]))]
+	return [OK, result["status"], [], result["body"].to_utf8_buffer()]
 
-
-func rpcRequestWeb(params: Dictionary, functionName: String):
-	var url = SUPABASE_URL + "/rest/v1/rpc/" + functionName
-	var token = sessionCache.get("access_token", "")
-	var body = JSON.stringify(params)
-	JavaScriptBridge.eval("window._godot_fetch_body = " + body + ";")
-	var _headers = "{'apikey': '" + SUPABASE_ANON_KEY + "', 'Content-Type': 'application/json'"
-	if isSignedIn:
-		_headers += ", 'Authorization': 'Bearer " + token + "'"
-	_headers += "}"
-	JavaScriptBridge.eval(
-		"window._godot_rpc_result = undefined;"
-		+ "window._godot_rpc_error = undefined;"
-		+ "fetch('" + url + "', {"
-		+ "  method: 'POST',"
-		+ "  headers: " + _headers + ","
-		+ "  body: JSON.stringify(window._godot_fetch_body)"
-		+ "})"
-		+ ".then(r => r.text())"
-		+ ".then(t => { window._godot_rpc_result = t; })"
-		+ ".catch(e => { window._godot_rpc_error = e.toString(); })"
-	)
-	var timeout = 0.0
-	while JavaScriptBridge.eval("window._godot_rpc_result === undefined && window._godot_rpc_error === undefined"):
-		await get_tree().create_timer(0.05).timeout
-		timeout += 0.05
-		if timeout > 10.0:
-			printerr("rpcRequestWeb timed out: ", functionName)
-			return [FAILED, 0, [], PackedByteArray()]
-	if JavaScriptBridge.eval("window._godot_rpc_error !== undefined"):
-		printerr("rpcRequestWeb JS error: ", JavaScriptBridge.eval("window._godot_rpc_error"))
-		return [FAILED, 0, [], PackedByteArray()]
-	var result = JavaScriptBridge.eval("window._godot_rpc_result")
-	JavaScriptBridge.eval("delete window._godot_rpc_result; delete window._godot_rpc_error;")
-	var resultBytes = (result as String).to_utf8_buffer() if result else PackedByteArray()
-	return [OK, 200, [], resultBytes]
+#
+#func rpcRequestWeb(params: Dictionary, functionName: String):
+	#var url = SUPABASE_URL + "/rest/v1/rpc/" + functionName
+	#var token = sessionCache.get("access_token", "")
+	#var body = JSON.stringify(params)
+	#JavaScriptBridge.eval("window._godot_fetch_body = " + body + ";")
+	#var _headers = "{'apikey': '" + SUPABASE_ANON_KEY + "', 'Content-Type': 'application/json'"
+	#if isSignedIn:
+		#_headers += ", 'Authorization': 'Bearer " + token + "'"
+	#_headers += "}"
+	#JavaScriptBridge.eval(
+		#"window._godot_rpc_result = undefined;"
+		#+ "window._godot_rpc_error = undefined;"
+		#+ "fetch('" + url + "', {"
+		#+ "  method: 'POST',"
+		#+ "  headers: " + _headers + ","
+		#+ "  body: JSON.stringify(window._godot_fetch_body)"
+		#+ "})"
+		#+ ".then(r => r.text())"
+		#+ ".then(t => { window._godot_rpc_result = t; })"
+		#+ ".catch(e => { window._godot_rpc_error = e.toString(); })"
+	#)
+	#var timeout = 0.0
+	#while JavaScriptBridge.eval("window._godot_rpc_result === undefined && window._godot_rpc_error === undefined"):
+		#await get_tree().create_timer(0.05).timeout
+		#timeout += 0.05
+		#if timeout > 10.0:
+			#printerr("rpcRequestWeb timed out: ", functionName)
+			#return [FAILED, 0, [], PackedByteArray()]
+	#if JavaScriptBridge.eval("window._godot_rpc_error !== undefined"):
+		#printerr("rpcRequestWeb JS error: ", JavaScriptBridge.eval("window._godot_rpc_error"))
+		#return [FAILED, 0, [], PackedByteArray()]
+	#var result = JavaScriptBridge.eval("window._godot_rpc_result")
+	#JavaScriptBridge.eval("delete window._godot_rpc_result; delete window._godot_rpc_error;")
+	#var resultBytes = (result as String).to_utf8_buffer() if result else PackedByteArray()
+	#print(JSON.parse_string(resultBytes.get_string_from_utf8()))
+	#return [OK, 200, [], resultBytes]
 
 func uploadLevel(levelName=""):
 	await ensureValidSession()
@@ -441,8 +461,9 @@ func uploadLevel(levelName=""):
 				"apikey: "+SUPABASE_ANON_KEY,
 				"Authorization: Bearer "+sessionCache.access_token
 			]
-			httpRequest.request(url,headers,HTTPClient.METHOD_POST,data)
-			var response2 = await httpRequest.request_completed
+			#httpRequest.request(url,headers,HTTPClient.METHOD_POST,data)
+			#var response2 = await httpRequest.request_completed
+			var response2 = await genericHttpRequest(url,headers,HTTPClient.METHOD_POST,data)
 			if response2[1] > 199 and response2[1] < 300:
 				signalBus.startTextPopup.emit("Successfully uploaded level")
 				#httpReply.emit(str("Successfully uploaded level ",JSON.parse_string(body.get_string_from_utf8())["Key"].get_file() ) )
@@ -468,191 +489,191 @@ func downloadLevel(levelID:="0"):
 		httpReplyError.emit("Failed to download level")
 		signalBus.startTextPopup.emit(str("Failed to load level.\nCould not find level with the ID ",levelID))
 
-func handleWebRedirect():
-	var urlPart = JavaScriptBridge.eval("window.location.hash", true)
-	if urlPart == "" or not urlPart.begins_with("#"):
-		return
+#func handleWebRedirect():
+	#var urlPart = JavaScriptBridge.eval("window.location.hash", true)
+	#if urlPart == "" or not urlPart.begins_with("#"):
+		#return
+#
+	#var query = urlPart.substr(1)
+	#var params = {} 
+	#var pairs = query.split("&")
+	#for pair in pairs:
+		#var keyValue = pair.split("=")
+		#if keyValue.size() == 2:
+			#params[keyValue[0].uri_decode()] = keyValue[1].uri_decode()
+	#if params.has("error"):
+		#authError.emit(params.error_description)
+		#return
+	#var session = {
+		#"access_token": params.get("access_token", ""),
+		#"refresh_token": params.get("refresh_token", ""),
+		#"expires_in": params.get("expires_in", 0),
+		#"user": params.get("user", {})
+	#}
+	#var url = SUPABASE_URL+"/auth/v1/user"
+#
+	#var headers = PackedStringArray([
+		#"Content-Type: application/json",
+		#"apikey: "+SUPABASE_ANON_KEY,
+		#"Authorization: Bearer "+session.access_token
+	#])
+	#var response = await genericHttpRequest(url, headers, HTTPClient.METHOD_GET)
+	#if response[1]>199 and response[1]<300:
+		#var body = response[3].get_string_from_utf8()
+		#if body!="null":
+			#session["user"] = JSON.parse_string(body)
+			#authSuccess.emit(session)
+	#else:
+		#authError.emit("failed to fetch user")
+	#JavaScriptBridge.eval("history.replaceState(null, '', window.location.pathname)")
 
-	var query = urlPart.substr(1)
-	var params = {} 
-	var pairs = query.split("&")
-	for pair in pairs:
-		var keyValue = pair.split("=")
-		if keyValue.size() == 2:
-			params[keyValue[0].uri_decode()] = keyValue[1].uri_decode()
-	if params.has("error"):
-		authError.emit(params.error_description)
-		return
-	var session = {
-		"access_token": params.get("access_token", ""),
-		"refresh_token": params.get("refresh_token", ""),
-		"expires_in": params.get("expires_in", 0),
-		"user": params.get("user", {})
-	}
-	var url = SUPABASE_URL+"/auth/v1/user"
+#func onHttpRequestCompleted(_result, responseCode, _headers, body):
+	#var session
+	#var json
+	#var response = body.get_string_from_utf8()
+	##when signing in through browser
+	#if has_meta("temp_session"):
+		##print("temp_session responseCode: ", responseCode, " body: ", response)
+		#session = get_meta("temp_session")
+		#remove_meta("temp_session")
+		#if responseCode == 200:
+			#json = JSON.new()
+			#session["user"]=json.data
+			#if json.parse(response) == OK:
+				#authSuccess.emit(session)
+		#else:
+			#authError.emit("Failed to get user info")
+		##clearTcpServer()
+		#return
+	##clearTcpServer()
+	#
+	#if responseCode < 200 or responseCode > 299:
+		#httpReplyError.emit(response)
+		#return
+		#
+	#json = JSON.new()
+	#json.parse(response)
+#
+	#var data = json.data
+	##when signing in through downloaded version of the game
+	#if data and typeof(data)==TYPE_DICTIONARY and data.has("access_token"):
+		#session = {
+			#"access_token": data.get("access_token", ""),
+			#"refresh_token": data.get("refresh_token", ""),
+			#"expires_in": data.get("expires_in", 0),
+			#"user": data.get("user", {})
+		#}
+		#authSuccess.emit(session)
+	##else:
+		##if data and data.has("user"):
+		##print(response)
+		##httpReply.emit(response)
 
-	var headers = PackedStringArray([
-		"Content-Type: application/json",
-		"apikey: "+SUPABASE_ANON_KEY,
-		"Authorization: Bearer "+session.access_token
-	])
-	var response = await genericHttpRequest(url, headers, HTTPClient.METHOD_GET)
-	if response[1]>199 and response[1]<300:
-		var body = response[3].get_string_from_utf8()
-		if body!="null":
-			session["user"] = JSON.parse_string(body)
-			authSuccess.emit(session)
-	else:
-		authError.emit("failed to fetch user")
-	JavaScriptBridge.eval("history.replaceState(null, '', window.location.pathname)")
+#func _process(_delta: float) -> void:
+	#if not tcpServer or not tcpServer.is_listening():
+		#return
+	#if tcpServer.is_connection_available():
+		#var connection := tcpServer.take_connection()
+		#if connection:
+			##handle the callback
+			#var buffer = PackedByteArray()
+			#var timeout = 0.0
+			#while connection.get_status() == StreamPeerTCP.STATUS_CONNECTED and timeout < 2.0:
+				#var available = connection.get_available_bytes()
+				#if available > 0:
+					#buffer.append_array( connection.get_data(available)[1] )
+					#var request = buffer.get_string_from_utf8()
+					#
+					#if request.contains("\r\n\r\n"):
+						#
+						##process the callback request
+						#var requestLines = request.split('\n')
+						#var requestLine = requestLines[0] if requestLines.size() > 0 else ""
+						#if requestLine.begins_with("GET"):
+							#var urlPart = requestLine.split(" ")[1]
+							#var queryStart = urlPart.find("?")
+							#var query = urlPart.substr(queryStart+1)
+							##parse query params
+							#var params = {} 
+							#var pairs = query.split("&")
+							#for pair in pairs:
+								#var keyValue = pair.split("=")
+								#if keyValue.size() == 2:
+									#params[keyValue[0].uri_decode()] = keyValue[1].uri_decode()
+							#
+							#if params.has("error"):
+								#sendCallbackResponse(connection,false,params.get("error_description","Authentication failed"))
+								#authError.emit(params.get("error_description","Authentication failed"))
+								#
+								#clearTcpServer()
+								#return
+								#
+							##get auth code
+							#var code =  params.get("code","")
+							#if code != "":
+								#sendCallbackResponse(connection)
+								##exchange code for session
+								#var url = SUPABASE_URL + "/auth/v1/token?grant_type=pkce"
+								#var headers = [
+									#"Content-Type: application/json",
+									#"apikey: "+SUPABASE_ANON_KEY
+								#]
+								#var body = JSON.stringify({
+									#"auth_code":code,
+									#"code_verifier":codeVerifier
+								#})
+								#
+								##var session = {
+									##"access_token": params.get("access_token", ""),
+									##"refresh_token": params.get("refresh_token", ""),
+									##"expires_in": params.get("expires_in", 0),
+									##"user": params.get("user", {})
+								##}
+								##set_meta("temp_session", session)
+								#
+								#httpRequest.request(url,headers,HTTPClient.METHOD_POST,body)
+								#await httpRequest.request_completed
+							#else:
+								#sendCallbackResponse(connection,false,"No auth code received")
+						#break
+				#else:
+					#await get_tree().create_timer(0.01).timeout
+					#timeout+=0.1
 
-func onHttpRequestCompleted(_result, responseCode, _headers, body):
-	var session
-	var json
-	var response = body.get_string_from_utf8()
-	#when signing in through browser
-	if has_meta("temp_session"):
-		print("temp_session responseCode: ", responseCode, " body: ", response)
-		session = get_meta("temp_session")
-		remove_meta("temp_session")
-		if responseCode == 200:
-			json = JSON.new()
-			session["user"]=json.data
-			if json.parse(response) == OK:
-				authSuccess.emit(session)
-		else:
-			authError.emit("Failed to get user info")
-		clearTcpServer()
-		return
-	clearTcpServer()
-	
-	if responseCode < 200 or responseCode > 299:
-		httpReplyError.emit(response)
-		return
-		
-	json = JSON.new()
-	json.parse(response)
-
-	var data = json.data
-	#when signing in through downloaded version of the game
-	if data and typeof(data)==TYPE_DICTIONARY and data.has("access_token"):
-		session = {
-			"access_token": data.get("access_token", ""),
-			"refresh_token": data.get("refresh_token", ""),
-			"expires_in": data.get("expires_in", 0),
-			"user": data.get("user", {})
-		}
-		authSuccess.emit(session)
-	else:
-		#if data and data.has("user"):
-		#print(response)
-		httpReply.emit(response)
-
-func _process(_delta: float) -> void:
-	if not tcpServer or not tcpServer.is_listening():
-		return
-	if tcpServer.is_connection_available():
-		var connection := tcpServer.take_connection()
-		if connection:
-			#handle the callback
-			var buffer = PackedByteArray()
-			var timeout = 0.0
-			while connection.get_status() == StreamPeerTCP.STATUS_CONNECTED and timeout < 2.0:
-				var available = connection.get_available_bytes()
-				if available > 0:
-					buffer.append_array( connection.get_data(available)[1] )
-					var request = buffer.get_string_from_utf8()
-					
-					if request.contains("\r\n\r\n"):
-						
-						#process the callback request
-						var requestLines = request.split('\n')
-						var requestLine = requestLines[0] if requestLines.size() > 0 else ""
-						if requestLine.begins_with("GET"):
-							var urlPart = requestLine.split(" ")[1]
-							var queryStart = urlPart.find("?")
-							var query = urlPart.substr(queryStart+1)
-							#parse query params
-							var params = {} 
-							var pairs = query.split("&")
-							for pair in pairs:
-								var keyValue = pair.split("=")
-								if keyValue.size() == 2:
-									params[keyValue[0].uri_decode()] = keyValue[1].uri_decode()
-							
-							if params.has("error"):
-								sendCallbackResponse(connection,false,params.get("error_description","Authentication failed"))
-								authError.emit(params.get("error_description","Authentication failed"))
-								
-								clearTcpServer()
-								return
-								
-							#get auth code
-							var code =  params.get("code","")
-							if code != "":
-								sendCallbackResponse(connection)
-								#exchange code for session
-								var url = SUPABASE_URL + "/auth/v1/token?grant_type=pkce"
-								var headers = [
-									"Content-Type: application/json",
-									"apikey: "+SUPABASE_ANON_KEY
-								]
-								var body = JSON.stringify({
-									"auth_code":code,
-									"code_verifier":codeVerifier
-								})
-								
-								#var session = {
-									#"access_token": params.get("access_token", ""),
-									#"refresh_token": params.get("refresh_token", ""),
-									#"expires_in": params.get("expires_in", 0),
-									#"user": params.get("user", {})
-								#}
-								#set_meta("temp_session", session)
-								
-								httpRequest.request(url,headers,HTTPClient.METHOD_POST,body)
-								await httpRequest.request_completed
-							else:
-								sendCallbackResponse(connection,false,"No auth code received")
-						break
-				else:
-					await get_tree().create_timer(0.01).timeout
-					timeout+=0.1
-
-func clearTcpServer():
-	if tcpServer:
-		tcpServer.stop()
-		tcpServer = null
-	set_process(false)
-	return
-
-func sendCallbackResponse(connection, isSuccess=true, message=""):
-	var body:String
-	if isSuccess:
-		body = """
-		<html>
-		<body>
-		Authentication successful
-		</body>
-		</html>
-		"""
-	else:
-		body = str("""
-		<html>
-		<body>
-		Authentication Failed <br>""",message,"""
-		</body>
-		</html>
-		""")
-	var response = str("HTTP/1.1 200 OK\r\n"
-	+ "Content-Type: text/html; charset=utf-8\r\n"
-	+ "Content-Length: %d\r\n" % body.to_utf8_buffer().size()
-	+ "Connection: close\r\n"
-	+ "\r\n"
-	+ body
-	)
-	connection.put_data(response.to_utf8_buffer())
-	connection.disconnect_from_host()
+#func clearTcpServer():
+	#if tcpServer:
+		#tcpServer.stop()
+		#tcpServer = null
+	#set_process(false)
+	#return
+#
+#func sendCallbackResponse(connection, isSuccess=true, message=""):
+	#var body:String
+	#if isSuccess:
+		#body = """
+		#<html>
+		#<body>
+		#Authentication successful
+		#</body>
+		#</html>
+		#"""
+	#else:
+		#body = str("""
+		#<html>
+		#<body>
+		#Authentication Failed <br>""",message,"""
+		#</body>
+		#</html>
+		#""")
+	#var response = str("HTTP/1.1 200 OK\r\n"
+	#+ "Content-Type: text/html; charset=utf-8\r\n"
+	#+ "Content-Length: %d\r\n" % body.to_utf8_buffer().size()
+	#+ "Connection: close\r\n"
+	#+ "\r\n"
+	#+ body
+	#)
+	#connection.put_data(response.to_utf8_buffer())
+	#connection.disconnect_from_host()
 
 func storeSession(session):
 	session["stored_at"] = Time.get_unix_time_from_system()
@@ -690,6 +711,7 @@ func ensureValidSession():
 			return false
 		refreshToken(sessionCache["refresh_token"])
 		await tokenRefreshed
+		return true
 	else:
 		return true
 func refreshToken(refreshString):
@@ -701,8 +723,9 @@ func refreshToken(refreshString):
 	var body = {
 		"refresh_token": refreshString
 	}
-	httpRequest.request(url,headers,HTTPClient.METHOD_POST,JSON.stringify(body))
-	await httpRequest.request_completed
+	#httpRequest.request(url,headers,HTTPClient.METHOD_POST,JSON.stringify(body))
+	#await httpRequest.request_completed
+	await genericHttpRequest(url,headers,HTTPClient.METHOD_POST,JSON.stringify(body))
 
 func signOut():
 	var session = loadSession()
@@ -726,7 +749,6 @@ func clearSession():
 	signalBus.signedOut.emit()
 
 func onHttpReply(_message):
-	#print("http just called, they said ",_message)
 	pass
 func onHttpReplyError(message):
 	printerr("error: ",message)
@@ -739,8 +761,6 @@ func onAuthSuccess(session):
 		isSignedIn = true
 		##BRING THIS BACK AFTER REWORK
 		await ensureAccountExists()
-	#signalBus.startTextPopup.emit(str("Welcome ",session["user"]["user_metadata"]["name"]))
-	#print("Welcome ",session["user"]["user_metadata"]["name"])
 
 func onAuthError(error):
 	#signalBus.startTextPopup.emit(error)

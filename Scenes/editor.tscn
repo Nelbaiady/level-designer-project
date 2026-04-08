@@ -68,7 +68,6 @@ func populateLevels():
 	visible = true
 	globalEditor.levelBrowsingPopupIsOpen = true
 	var levels = await authentication.rpcRequest({},\"getalllevels\")
-	#print(levels[3].get_string_from_utf8())
 	for i in JSON.parse_string(levels[3].get_string_from_utf8()):
 		var levelCard:LevelCard = LEVEL_CARD.instantiate()
 		levelCard.levelDict = i
@@ -200,7 +199,7 @@ func _on_confirm_button_pressed() -> void:
 	if isSigningIn:
 		var response = await authentication.signIn(emailLineEdit.text,passwordLineEdit.text)
 		if response==200:
-			signalBus.startTextPopup.emit(\"Welcome Player\")
+			signalBus.startTextPopup.emit(\"Signed in successfully\")
 			#endInputPopup(true)
 			#passwordLineEdit.clear()
 	elif isSigningUp:
@@ -214,6 +213,10 @@ func _on_confirm_button_pressed() -> void:
 func _on_cancel_button_pressed() -> void:
 	endInputPopup(false)
 "
+
+[sub_resource type="LabelSettings" id="LabelSettings_efg2m"]
+font_size = 14
+font_color = Color(1, 1, 1, 0.7529412)
 
 [sub_resource type="LabelSettings" id="LabelSettings_u6te5"]
 font_color = Color(1, 0.3019608, 0.37254903, 1)
@@ -754,7 +757,14 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="authFieldsContainer" type="VBoxContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer" unique_id=822196114]
+visible = false
 layout_mode = 2
+
+[node name="warningLabel" type="Label" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer" unique_id=622141568]
+layout_mode = 2
+text = "Note: You are entirely responsible for remembering your credentials."
+label_settings = SubResource("LabelSettings_efg2m")
+horizontal_alignment = 1
 
 [node name="emailMarginContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer" unique_id=81469742]
 layout_mode = 2
@@ -1058,6 +1068,7 @@ anchor_bottom = 1.0
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
+mouse_behavior_recursive = 1
 script = SubResource("GDScript_06d57")
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD/Left Area UI" unique_id=1798674435]

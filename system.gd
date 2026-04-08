@@ -3,6 +3,8 @@ class_name System extends Node
 var fullscreen := false
 var wasMaximized := false ##remembers if the window was maximized when it goes to fullscreen so it can go back if the user turns fullscreen back off
 
+var popupIsOpen := false
+
 var isPaused := false
 
 var isUsingController := false
@@ -26,7 +28,7 @@ func _input(event: InputEvent) -> void:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
 			else:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-	if event.is_action_pressed("pause"):
+	if event.is_action_pressed("pause") and (!popupIsOpen or isPaused==true):
 		togglePause()
 
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
@@ -43,3 +45,6 @@ func _input(event: InputEvent) -> void:
 		if isUsingController: settingChanged = true #the variable will change from what it was, which we need to know so we dont update all icons constantly
 		isUsingController = false
 		if settingChanged: signalBus.updateControlIcons.emit()#make sure to update controller icons
+		
+func _physics_process(_delta: float) -> void:
+	popupIsOpen = globalEditor.popupIsOpen

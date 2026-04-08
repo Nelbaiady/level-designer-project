@@ -14,12 +14,7 @@ class_name PauseMenu extends Panel
 
 func _ready():
 	downloadLevel.visible = OS.has_feature("web")
-	#login.visible = !OS.has_feature("web")
-	#uploadLevel.visible = !OS.has_feature("web")
-	#DISABLE UNTIL A LOGIN SOLUTION IS FOUND
-	login.visible = false
-	uploadLevel.visible = false
-	
+
 	signalBus.pauseToggled.connect(pauseCheck)
 	signalBus.signedIn.connect(setSignInButtonTrue)
 	signalBus.signedOut.connect(setSignInButtonFalse)
@@ -44,7 +39,6 @@ func updateUserInfo():
 	else:
 		userInfoText.text = ""
 
-	
 func pauseCheck():
 	if system.isPaused:
 		pause()
@@ -65,13 +59,17 @@ func setSignInButtonFalse():
 func _on_unpause_button_pressed() -> void:
 	signalBus.togglePause.emit()
 
-
-func _on_login_button_pressed() -> void:
+func _on_sign_in_button_pressed() -> void:
 	signalBus.togglePause.emit()
 	if authentication.isSignedIn:
 		authentication.signOut()
 	else:
-		authentication.signInWithGoogle()
+		signalBus.startSignInPopup.emit()
+		#authentication.signInWithGoogle()
+
+func _on_sign_up_button_pressed() -> void:
+	signalBus.togglePause.emit()
+	signalBus.startSignUpPopup.emit()
 
 func _on_upload_button_pressed() -> void:
 	signalBus.togglePause.emit()
@@ -84,16 +82,16 @@ func _on_browse_levels_button_pressed() -> void:
 func _on_load_level_by_id_button_pressed() -> void:
 	signalBus.togglePause.emit()
 	signalBus.startTextEditPopup.emit("insert level ID")
-	var reply = await signalBus.endTextEditPopup
+	var reply = await signalBus.endTextPopup
 	var correct:bool = reply[0].is_valid_int()
-	var cancelled:bool = reply[1]
-	while !cancelled and !correct:
+	var confirmed:bool = reply[1]
+	while confirmed and !correct:
 		signalBus.startTextEditPopup.emit("Not a valid number. \nInsert level ID")
-		reply = await signalBus.endTextEditPopup
+		reply = await signalBus.endTextPopup
 		correct = false
-		cancelled = reply[1]
+		confirmed = reply[1]
 		correct = reply[0].is_valid_int()
-	if !cancelled and correct:
+	if confirmed and correct:
 		authentication.downloadLevel(reply[0])
 
 func _on_pause_button_pressed() -> void:
@@ -110,7 +108,6 @@ func _on_save_level_button_pressed() -> void:
 func _on_load_level_button_pressed() -> void:
 	signalBus.togglePause.emit()
 	signalBus.startLoadingLevel.emit()
-
 
 func _on_exit_play_mode_button_pressed() -> void:
 	signalBus.togglePause.emit()

@@ -91,132 +91,67 @@ outline_color = Color(0.578717, 0.40745404, 0.52866435, 1)
 resource_name = "textEditPopup"
 script/source = "class_name textEditPopup extends Control
 
-@export var lineEdit: LineEdit
-@export var emailLineEdit: LineEdit 
-@export var passwordLineEdit: LineEdit 
+@export var lineEdit: LineEdit# = $PanelContainer/MarginContainer/VBoxContainer/LineEditContainer/LineEdit
 
-@export var label: Label
+@export var label: Label# = $PanelContainer/MarginContainer/VBoxContainer/Label
 
 #need these containers to change their visibility
-@export var cancelButtonContainer: MarginContainer
-@export var cancelButton: Button
-@export var confirmButton: Button
-@export var lineEditContainer: MarginContainer
-@export var authFieldsContainer: VBoxContainer
-@export var errorLabel: Label
+@export var cancelButtonContainer: MarginContainer# = $PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/cancelButtonContainer
+@export var lineEditContainer: MarginContainer# = $PanelContainer/MarginContainer/VBoxContainer/LineEditContainer
 
-###true if the prompt requires text input. might be pointless, we'll see.
-#var withInput:=false
-
-##indicates if the user is signing in so that the popup doesnt always close on confirm
-var isSigningIn:=false
-##indicates if the user is signing up so that the popup doesnt always close on confirm
-var isSigningUp:=false
-
+##true if the prompt requires text input
+var withInput=false
 ##usage example
 #func _input(event: InputEvent) -> void:
 	#if event.is_action_pressed(\"9\"):
 		#signalBus.startTextEditPopup.emit('what a doozy eh?')
-		#var inputText = await signalBus.endTextPopup
+		#var inputText = await signalBus.endTextEditPopup
 		#print(inputText[0])
 
 func _ready() -> void:
 	signalBus.startTextEditPopup.connect(startInputPopup)
 	signalBus.startTextPopup.connect(startInfoPopup)
-	signalBus.startBinaryChoicePopup.connect(startBinaryChoicePopup)
-	signalBus.startSignInPopup.connect(startSignInPopup)
-	signalBus.startSignUpPopup.connect(startSignUpPopup)
-	authentication.authError.connect(setErrorText)
-
-func setErrorText(error):
-	if emailLineEdit.text==\"\":
-		error = \"\"
-		error+=\"Missing email\\n\"
-	if passwordLineEdit.text==\"\":
-		if error != \"Missing email\\n\": error = \"\" 
-		error+=\"Missing password\"
-	errorLabel.text=error
-	
-##displays the popup and sets everything to its default
-func showFreshPopup():
-	isSigningIn=false
-	isSigningUp=false
-	cancelButtonContainer.visible = false
-	lineEditContainer.visible = false
-	authFieldsContainer.visible = false
-	cancelButton.text=\"Cancel\"
-	confirmButton.text=\"Confirm\"
-	label.text=\"\"
-	errorLabel.text=\"\"
-	lineEdit.clear()
-	emailLineEdit.clear()
-	passwordLineEdit.clear()
-	visible = true
-	globalEditor.textPopupIsOpen = true
 
 ##Just text and a confirm button as a notification.
 func startInfoPopup(prompt:String):
-	showFreshPopup()
-	#withInput = false
+	withInput = false
+	lineEditContainer.visible = false
+	cancelButtonContainer.visible = false
+	visible = true
 	label.text = prompt
+	globalEditor.textPopupIsOpen = true
 
-##popup with two options. Parameters: prompt, option1, option2
-func startBinaryChoicePopup(prompt:String=\"Do you want to go ahead\",option1:String=\"Cancel\",option2:String=\"Confirm\"):
-	showFreshPopup()
-	cancelButtonContainer.visible = true
-	cancelButton.text=option1
-	confirmButton.text=option2
+##
+func startBinaryChoicePopup(prompt:String=\"Do you want to go ahead\",Option1:String=\"Yes\",Option2:String=\"No\"):
+	withInput = false
+	lineEditContainer.visible = false
+	cancelButtonContainer.visible = false
+	visible = true
 	label.text = prompt
-	#withInput = false
+	globalEditor.textPopupIsOpen = true
 
 ##A popup with text input, and cancel button, and a confirm button. Parameters: Prompt.
 func startInputPopup(prompt:String):
-	showFreshPopup()
-	#withInput = true
+	withInput = true
+	lineEdit.clear()
 	lineEditContainer.visible = true
 	cancelButtonContainer.visible = true
+	visible = true
 	label.text = prompt
-
-func startSignInPopup():
-	showFreshPopup()
-	isSigningIn = true
-	authFieldsContainer.visible = true
-	cancelButtonContainer.visible = true
-	label.text=\"Sign In\"
-func startSignUpPopup():
-	showFreshPopup()
-	isSigningUp = true
-	authFieldsContainer.visible = true
-	cancelButtonContainer.visible = true
-	label.text=\"Sign Up\"
-
-func endInputPopup(isConfirmed:bool):
+	globalEditor.textPopupIsOpen = true
+	
+func endInputPopup(isCancelled:bool):
 	visible = false
 	globalEditor.textPopupIsOpen = false
-	signalBus.endTextPopup.emit(lineEdit.text,isConfirmed)
+	signalBus.endTextEditPopup.emit(lineEdit.text,isCancelled)
 	lineEdit.clear()
 
 func _on_confirm_button_pressed() -> void:
-	if isSigningIn:
-		var response = await authentication.signIn(emailLineEdit.text,passwordLineEdit.text)
-		if response==200:
-			signalBus.startTextPopup.emit(\"Welcome Player\")
-			#endInputPopup(true)
-			#passwordLineEdit.clear()
-	elif isSigningUp:
-		var _response = await authentication.signUp(emailLineEdit.text,passwordLineEdit.text)
-		#if response==200:
-			#endInputPopup(true)
-			#passwordLineEdit.clear()
-	else:
-		endInputPopup(true)
+	endInputPopup(false)
 
 func _on_cancel_button_pressed() -> void:
-	endInputPopup(false)
+	endInputPopup(true)
 "
-
-[sub_resource type="LabelSettings" id="LabelSettings_u6te5"]
-font_color = Color(1, 0.3019608, 0.37254903, 1)
 
 [sub_resource type="GDScript" id="GDScript_pee1p"]
 resource_name = "playModeTopArea"
@@ -381,21 +316,21 @@ mouse_filter = 2
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.407
-anchor_top = 0.038000003
-anchor_right = 0.407
-anchor_bottom = 0.038000003
-offset_left = -0.011505127
-offset_top = 0.08299875
-offset_right = 63.988487
-offset_bottom = 64.08299
+anchor_left = 0.3925
+anchor_top = 0.038
+anchor_right = 1.0304999
+anchor_bottom = 0.35300002
+offset_left = 1.510994
+offset_top = 0.082999706
+offset_right = -1.4790039
+offset_bottom = 0.13799286
 grow_horizontal = 2
-grow_vertical = 2
 size_flags_vertical = 0
 focus_mode = 0
 theme = ExtResource("3_cnbw5")
 icon = ExtResource("4_i5vsu")
 icon_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="Hotbar" parent="HUD/Top Area UI" unique_id=1476390264 instance=ExtResource("2_32ik4")]
 layout_mode = 2
@@ -530,34 +465,25 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 theme = ExtResource("3_cnbw5")
 script = ExtResource("7_i5vsu")
-userInfoText = NodePath("MarginContainer/PauseVBoxContainer/userInfoText")
-loginButton = NodePath("MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer/SignInButton")
-editModePauseVBoxContainer = NodePath("MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer")
-playModePauseVBoxContainer = NodePath("MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer")
-downloadLevel = NodePath("MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/DownloadLevel")
-login = NodePath("MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login")
-uploadLevel = NodePath("MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/uploadLevel")
+userInfoText = NodePath("PauseVBoxContainer/userInfoText")
+loginButton = NodePath("PauseVBoxContainer/editModePauseVBoxContainer/Login/LoginButton")
+editModePauseVBoxContainer = NodePath("PauseVBoxContainer/editModePauseVBoxContainer")
+playModePauseVBoxContainer = NodePath("PauseVBoxContainer/playModePauseVBoxContainer")
+downloadLevel = NodePath("PauseVBoxContainer/editModePauseVBoxContainer/DownloadLevel")
+login = NodePath("PauseVBoxContainer/editModePauseVBoxContainer/Login")
+uploadLevel = NodePath("PauseVBoxContainer/editModePauseVBoxContainer/uploadLevel")
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD/PausePanel" unique_id=970194299]
+[node name="PauseVBoxContainer" type="VBoxContainer" parent="HUD/PausePanel" unique_id=1463991541]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.11111111
-anchor_right = 0.8888889
+anchor_top = 0.12369137
+anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -0.15200806
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 32
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 32
-metadata/_edit_use_anchors_ = true
-
-[node name="PauseVBoxContainer" type="VBoxContainer" parent="HUD/PausePanel/MarginContainer" unique_id=1463991541]
-layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("3_cnbw5")
@@ -565,11 +491,10 @@ theme_override_constants/separation = 16
 alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="userInfoText" type="RichTextLabel" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer" unique_id=995079693]
+[node name="userInfoText" type="RichTextLabel" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=995079693]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
-size_flags_vertical = 0
-size_flags_stretch_ratio = 0.0
+size_flags_vertical = 8
 focus_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 6
@@ -577,132 +502,124 @@ horizontal_alignment = 1
 vertical_alignment = 1
 selection_enabled = true
 
-[node name="pausedLabel" type="Label" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer" unique_id=1654464693]
+[node name="pausedLabel" type="Label" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=1654464693]
 layout_mode = 2
-size_flags_vertical = 8
 text = "Paused"
 label_settings = SubResource("LabelSettings_0l4bc")
 horizontal_alignment = 1
 uppercase = true
 
-[node name="editModePauseVBoxContainer" type="VBoxContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer" unique_id=1086053970]
+[node name="editModePauseVBoxContainer" type="VBoxContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=1086053970]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 0
+size_flags_vertical = 2
 theme = ExtResource("3_cnbw5")
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="Unpause" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1626968206]
+[node name="Unpause" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1626968206]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="UnpauseButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Unpause" unique_id=1821917658]
+[node name="UnpauseButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/Unpause" unique_id=1821917658]
 layout_mode = 2
 text = "Unpause"
 
-[node name="Login" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=722089432]
+[node name="Login" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=722089432]
+visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login" unique_id=299496386]
+[node name="LoginButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/Login" unique_id=1207319776]
 layout_mode = 2
+text = "Sign In/Up"
 
-[node name="SignInButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer" unique_id=1207319776]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Sign In"
-
-[node name="SignUpButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer" unique_id=106990226]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Sign Up"
-
-[node name="uploadLevel" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1055362265]
+[node name="uploadLevel" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1055362265]
+visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="uploadButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/uploadLevel" unique_id=710410053]
+[node name="uploadButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/uploadLevel" unique_id=710410053]
 layout_mode = 2
 text = "Upload Level"
 
-[node name="BrowseLevels" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1774625358]
+[node name="BrowseLevels" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1774625358]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="BrowseLevelsButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/BrowseLevels" unique_id=957855919]
+[node name="BrowseLevelsButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/BrowseLevels" unique_id=957855919]
 layout_mode = 2
 text = "Browse Levels"
 
-[node name="LoadLevelByID" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1437630887]
+[node name="LoadLevelByID" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1437630887]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="LoadLevelByIDButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevelByID" unique_id=1611144296]
+[node name="LoadLevelByIDButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevelByID" unique_id=1611144296]
 layout_mode = 2
 text = "Find Level by ID"
 
-[node name="SaveLevel" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=42092402]
+[node name="SaveLevel" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=42092402]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="SaveLevelButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/SaveLevel" unique_id=1316137415]
+[node name="SaveLevelButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/SaveLevel" unique_id=1316137415]
 layout_mode = 2
 text = "Save Level"
 
-[node name="LoadLevel" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=2119631058]
+[node name="LoadLevel" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=2119631058]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="LoadLevelButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevel" unique_id=1263896398]
+[node name="LoadLevelButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevel" unique_id=1263896398]
 layout_mode = 2
 text = "Load Level"
 
-[node name="DownloadLevel" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1921119199]
+[node name="DownloadLevel" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1921119199]
 visible = false
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="DownloadLevelButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/DownloadLevel" unique_id=332347246]
+[node name="DownloadLevelButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/DownloadLevel" unique_id=332347246]
 layout_mode = 2
 text = "Download Level File"
 
-[node name="playModePauseVBoxContainer" type="VBoxContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer" unique_id=1503197328]
+[node name="playModePauseVBoxContainer" type="VBoxContainer" parent="HUD/PausePanel/PauseVBoxContainer" unique_id=1503197328]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_vertical = 2
 theme = ExtResource("3_cnbw5")
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="Unpause" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer" unique_id=1218897246]
+[node name="Unpause" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer/playModePauseVBoxContainer" unique_id=1218897246]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="UnpauseButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer/Unpause" unique_id=612162770]
+[node name="UnpauseButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/playModePauseVBoxContainer/Unpause" unique_id=612162770]
 layout_mode = 2
 text = "Unpause"
 
-[node name="ExitPlayMode" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer" unique_id=669946963]
+[node name="ExitPlayMode" type="MarginContainer" parent="HUD/PausePanel/PauseVBoxContainer/playModePauseVBoxContainer" unique_id=669946963]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 8
 
-[node name="ExitPlayModeButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer/ExitPlayMode" unique_id=129747225]
+[node name="ExitPlayModeButton" type="Button" parent="HUD/PausePanel/PauseVBoxContainer/playModePauseVBoxContainer/ExitPlayMode" unique_id=129747225]
 layout_mode = 2
 text = "Exit Play Mode"
 
-[node name="TextEditPopup" type="Control" parent="HUD" unique_id=38263661 node_paths=PackedStringArray("lineEdit", "emailLineEdit", "passwordLineEdit", "label", "cancelButtonContainer", "cancelButton", "confirmButton", "lineEditContainer", "authFieldsContainer", "errorLabel")]
+[node name="TextEditPopup" type="Control" parent="HUD" unique_id=38263661]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -713,16 +630,6 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 script = SubResource("GDScript_3lyd6")
-lineEdit = NodePath("PanelContainer/MarginContainer/VBoxContainer/LineEditContainer/LineEdit")
-emailLineEdit = NodePath("PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/emailMarginContainer/emailVBoxContainer/emailLineEditContainer/emailLineEdit")
-passwordLineEdit = NodePath("PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/passwordMarginContainer/passwordVBoxContainer/passwordLineEditContainer/passwordLineEdit")
-label = NodePath("PanelContainer/MarginContainer/VBoxContainer/Label")
-cancelButtonContainer = NodePath("PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/cancelButtonContainer")
-cancelButton = NodePath("PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/cancelButtonContainer/cancelButton")
-confirmButton = NodePath("PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/confirmButtonContainer/confirmButton")
-lineEditContainer = NodePath("PanelContainer/MarginContainer/VBoxContainer/LineEditContainer")
-authFieldsContainer = NodePath("PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer")
-errorLabel = NodePath("PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/errorLabel")
 
 [node name="PanelContainer" type="PanelContainer" parent="HUD/TextEditPopup" unique_id=2047174232]
 layout_mode = 1
@@ -751,64 +658,7 @@ size_flags_vertical = 3
 text = "Placeholder Text"
 horizontal_alignment = 1
 vertical_alignment = 1
-autowrap_mode = 2
-
-[node name="authFieldsContainer" type="VBoxContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer" unique_id=822196114]
-layout_mode = 2
-
-[node name="emailMarginContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer" unique_id=81469742]
-layout_mode = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 5
-
-[node name="emailVBoxContainer" type="HBoxContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/emailMarginContainer" unique_id=168460415]
-layout_mode = 2
-
-[node name="emailLabel" type="Label" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/emailMarginContainer/emailVBoxContainer" unique_id=706812714]
-custom_minimum_size = Vector2(96, 0)
-layout_mode = 2
-text = "Email"
-
-[node name="emailLineEditContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/emailMarginContainer/emailVBoxContainer" unique_id=1775303190]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.48
-
-[node name="emailLineEdit" type="LineEdit" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/emailMarginContainer/emailVBoxContainer/emailLineEditContainer" unique_id=1150022256]
-layout_mode = 2
-
-[node name="passwordMarginContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer" unique_id=1862476985]
-layout_mode = 2
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 32
-theme_override_constants/margin_bottom = 5
-
-[node name="passwordVBoxContainer" type="HBoxContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/passwordMarginContainer" unique_id=2127210419]
-layout_mode = 2
-
-[node name="passwordLabel" type="Label" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/passwordMarginContainer/passwordVBoxContainer" unique_id=83735595]
-custom_minimum_size = Vector2(96, 0)
-layout_mode = 2
-text = "Password"
-
-[node name="passwordLineEditContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/passwordMarginContainer/passwordVBoxContainer" unique_id=435325857]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-size_flags_stretch_ratio = 0.48
-
-[node name="passwordLineEdit" type="LineEdit" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/passwordMarginContainer/passwordVBoxContainer/passwordLineEditContainer" unique_id=808644637]
-layout_mode = 2
-
-[node name="errorLabel" type="Label" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer" unique_id=1381538537]
-layout_mode = 2
-size_flags_horizontal = 4
-text = "ERROR"
-label_settings = SubResource("LabelSettings_u6te5")
+autowrap_mode = 1
 
 [node name="LineEditContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer" unique_id=1784808162]
 layout_mode = 2
@@ -822,7 +672,7 @@ theme_override_constants/margin_bottom = 5
 [node name="LineEdit" type="LineEdit" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/LineEditContainer" unique_id=2066967567]
 layout_mode = 2
 
-[node name="ButtonsMarginContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer" unique_id=1674105826]
+[node name="MarginContainer2" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer" unique_id=1674105826]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 32
@@ -830,10 +680,10 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer" unique_id=1843718711]
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2" unique_id=1843718711]
 layout_mode = 2
 
-[node name="cancelButtonContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer" unique_id=1846751620]
+[node name="cancelButtonContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1846751620]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -842,12 +692,12 @@ theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 24
 
-[node name="cancelButton" type="Button" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/cancelButtonContainer" unique_id=995163819]
+[node name="cancelButton" type="Button" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/cancelButtonContainer" unique_id=995163819]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Cancel"
 
-[node name="confirmButtonContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer" unique_id=1211649265]
+[node name="confirmButtonContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer" unique_id=1211649265]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -856,7 +706,7 @@ theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 24
 
-[node name="confirmButton" type="Button" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/confirmButtonContainer" unique_id=166694240]
+[node name="confirmButton" type="Button" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/confirmButtonContainer" unique_id=166694240]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Confirm"
@@ -1137,19 +987,18 @@ floor_snap_length = 12.0
 [connection signal="pressed" from="HUD/Top Area UI/menuButtons/playButtonMarginContainer/playButton" to="Editor" method="toggleGameMode"]
 [connection signal="pressed" from="HUD/Top Area UI/menuButtons/pauseButtonMarginContainer/pauseButton" to="HUD/PausePanel" method="_on_pause_button_pressed"]
 [connection signal="pressed" from="HUD/levelSelectPopup/closeButton" to="HUD/levelSelectPopup" method="_on_close_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Unpause/UnpauseButton" to="HUD/PausePanel" method="_on_unpause_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer/SignInButton" to="HUD/PausePanel" method="_on_sign_in_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer/SignUpButton" to="HUD/PausePanel" method="_on_sign_up_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/uploadLevel/uploadButton" to="HUD/PausePanel" method="_on_upload_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/BrowseLevels/BrowseLevelsButton" to="HUD/PausePanel" method="_on_browse_levels_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevelByID/LoadLevelByIDButton" to="HUD/PausePanel" method="_on_load_level_by_id_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/SaveLevel/SaveLevelButton" to="HUD/PausePanel" method="_on_save_level_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevel/LoadLevelButton" to="HUD/PausePanel" method="_on_load_level_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/DownloadLevel/DownloadLevelButton" to="HUD/PausePanel" method="_on_download_level_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer/Unpause/UnpauseButton" to="HUD/PausePanel" method="_on_unpause_button_pressed"]
-[connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer/ExitPlayMode/ExitPlayModeButton" to="HUD/PausePanel" method="_on_exit_play_mode_button_pressed"]
-[connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/cancelButtonContainer/cancelButton" to="HUD/TextEditPopup" method="_on_cancel_button_pressed"]
-[connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/confirmButtonContainer/confirmButton" to="HUD/TextEditPopup" method="_on_confirm_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/Unpause/UnpauseButton" to="HUD/PausePanel" method="_on_unpause_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/Login/LoginButton" to="HUD/PausePanel" method="_on_login_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/uploadLevel/uploadButton" to="HUD/PausePanel" method="_on_upload_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/BrowseLevels/BrowseLevelsButton" to="HUD/PausePanel" method="_on_browse_levels_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevelByID/LoadLevelByIDButton" to="HUD/PausePanel" method="_on_load_level_by_id_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/SaveLevel/SaveLevelButton" to="HUD/PausePanel" method="_on_save_level_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevel/LoadLevelButton" to="HUD/PausePanel" method="_on_load_level_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/editModePauseVBoxContainer/DownloadLevel/DownloadLevelButton" to="HUD/PausePanel" method="_on_download_level_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/playModePauseVBoxContainer/Unpause/UnpauseButton" to="HUD/PausePanel" method="_on_unpause_button_pressed"]
+[connection signal="pressed" from="HUD/PausePanel/PauseVBoxContainer/playModePauseVBoxContainer/ExitPlayMode/ExitPlayModeButton" to="HUD/PausePanel" method="_on_exit_play_mode_button_pressed"]
+[connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/cancelButtonContainer/cancelButton" to="HUD/TextEditPopup" method="_on_cancel_button_pressed"]
+[connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer/confirmButtonContainer/confirmButton" to="HUD/TextEditPopup" method="_on_confirm_button_pressed"]
 [connection signal="pressed" from="HUD/PropertiesSidebar/PropertiesPanel/closeButton" to="HUD/PropertiesSidebar" method="_on_close_button_pressed"]
 [connection signal="canceled" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_canceled"]
 [connection signal="confirmed" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_confirmed"]

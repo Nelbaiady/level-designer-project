@@ -96,45 +96,211 @@ func getCurrentUser(getFullResponse = false):
 
 ##makes sure the account exists and has an entry in the database
 func ensureAccountExists():
-	#print("user: ", user)
-	#print("checking for user "+user.id)
-	#var response = await rpcRequest({},"getCurrentUser")
-	#var response = await rpcRequest({},"getCurrentUser")
-	#var body = response[3].get_string_from_utf8()
 	var response = await getCurrentUser(true)
 	var body = response[3].get_string_from_utf8()
 	
-	#if there is no instance of this user
+	#if the account does not have a database entry
 	if body == "[]" or body=="null" and response[1]==200:
-		await signUp()
+		return await signUpPartTwo()
 	else:
 		print("user found: ", body)
 		signalBus.signedIn.emit()
+		return response[1]
 
 func getOwnUser():
 	var response = await rpcRequest({},"getCurrentUser")
 	return response[3]
+#
+#func signUp(username:String=""):
+	#if username=="":
+		#signalBus.startTextEditPopup.emit("Welcome new player! \nWhat would you like your display name to be?")
+		#var returns = await signalBus.endTextPopup
+		#username = returns[0]
+		#var isCancelled = !returns[1]
+		#if isCancelled:
+			#await signOut()
+			##signalBus.startTextPopup.emit("User not created")
+			#return
+	#if !username:
+		#await signOut()
+		#signalBus.startTextPopup.emit("Invalid username.\n You cannot have an empty username.")
+		#return
+	#var response = await rpcRequest({"username": username},"createUser")
+	#if response[1] >199 and response[1] < 300:
+		#signalBus.startTextPopup.emit("User created \nsuccessfully!")
+		#signalBus.signedIn.emit()
+	#else:
+		#signalBus.startTextPopup.emit("Failed to create user :( ")
 
-func signUp(username:String=""):
+#func signInWithGoogle():
+	#var params = {}
+	#redirectUrl = ""
+	#if system.isWebVersion:
+		#redirectUrl = JavaScriptBridge.eval("window.location.origin + window.location.pathname")
+		#JavaScriptBridge.eval("alert('redirectUrl: ' + '" + redirectUrl + "')")
+		#params = {
+			#"provider": "google",
+			#"redirect_to": redirectUrl,
+		#}
+	#else:
+		##generate a random string
+		#codeVerifier = ""
+		#var randsChars = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm123456790"
+		#for i in 64:
+			#codeVerifier+= randsChars[randi() % randsChars.length()]
+		#
+		##generate pkce params
+		#var bytes = codeVerifier.to_utf8_buffer()
+		#var hashingContext = HashingContext.new()
+		#hashingContext.start(HashingContext.HASH_SHA256)
+		#hashingContext.update(bytes)
+		#var hashed = hashingContext.finish()
+		#codeChallenge = Marshalls.raw_to_base64(hashed).replace("+","-").replace("/","_").rstrip("=")
+	#
+		##start tcp server
+		#tcpServer = TCPServer.new()
+		#var error = tcpServer.listen(localPort)#,"127.0.0.1")
+		#if error!=OK:
+			#print("Could not start TCP server on port ",localPort,", ",error)
+			#var fallbackPorts = [3000, 54322, 54323, 9999, 8080]
+			#for port in fallbackPorts:
+				#error = tcpServer.listen(port,"127.0.0.1")
+				#if error==OK:
+					#localPort = port
+					##redirectUrl = str("http://localhost:",localPort)
+					#print("successfully started tcp server on fallback port ",localPort)
+					#break
+			#if error !=OK:
+				#printerr("Failed to start TCP server on all fallback ports")
+				#return false
+		#redirectUrl = str("http://localhost:",localPort)
+		#set_process(true)
+		##build the auth url
+		#params = {
+			#"provider": "google",
+			#"redirect_to": redirectUrl,
+			#"code_challenge": codeChallenge,
+			#"code_challenge_method": "S256",
+			#"flow_type": "pkce"
+		#}
+	#var queryString = ""
+	#for param in params:
+		#if queryString != "":
+			#queryString+='&'
+		#queryString += str(param,"=",params[param].uri_encode())
+	#var authUrl = SUPABASE_URL + "/auth/v1/authorize?" + queryString
+	#
+	#if system.isWebVersion:
+		#JavaScriptBridge.eval("window.open('" + authUrl + "', '_blank')")
+	#else:
+		#OS.shell_open(authUrl)
+
+func signUp(email:String, password:String):
+	var response = await genericHttpRequest(
+		SUPABASE_URL+"/auth/v1/signup",
+		["Content-Type: application/json","apikey: " + SUPABASE_ANON_KEY], 
+		HTTPClient.METHOD_POST, 
+		JSON.stringify({
+			"email":email,
+			"password":password
+			}))
+	var body = JSON.parse_string(response[3].get_string_from_utf8())
+	if response[1]==200:
+		if body.has("user_metadata"):
+			if body["user_metadata"]=={}:
+				authError.emit("This email already has an account. \nTry signing in or using a different email.")
+				#signalBus.startTextPopup.emit("This email already has an account. \nTry signing in or using a different email.")
+				#await signalBus.endTextPopup
+				return -2
+			elif body["user_metadata"]["email_verified"]==false:
+				if response[1] >199 and response[1] < 300:
+					signalBus.startTextPopup.emit(str("A verification email has been sent to ",email,". \nLook for an email sent by Cheese Chair\n and click the link to complete the sign up process. \n You will need to enter your credentials again to sign in \nafter verifying your account."))
+				else:
+					authError.emit("Failed to create user for some unknown wacky reason :(")
+	else:
+		authError.emit(body["msg"])
+	#print(response)
+	#print(body)
+	return response[1]
+	
+func signUpPartTwo(username:String=""):
 	if username=="":
 		signalBus.startTextEditPopup.emit("Welcome new player! \nWhat would you like your display name to be?")
-		var returns = await signalBus.endTextEditPopup
+		var returns = await signalBus.endTextPopup
 		username = returns[0]
-		var isCancelled = returns[1]
+		var isCancelled = !returns[1]
 		if isCancelled:
 			await signOut()
 			#signalBus.startTextPopup.emit("User not created")
-			return
+			return -1
 	if !username:
 		await signOut()
-		signalBus.startTextPopup.emit("Invalid username.\n You cannot have an empty username.")
-		return
+		#signalBus.startTextPopup.emit("Invalid username.\n You cannot have an empty username.")
+		authError.emit("Invalid username.\n You cannot have an empty username.")
+		return -1
 	var response = await rpcRequest({"username": username},"createUser")
 	if response[1] >199 and response[1] < 300:
-		signalBus.startTextPopup.emit("User created \nsuccessfully!")
+		signalBus.startTextPopup.emit("User creation complete. \n I hope you create wonderful things.\n Have Fun!")
 		signalBus.signedIn.emit()
+		return 200
 	else:
-		signalBus.startTextPopup.emit("Failed to create user :( ")
+		#signalBus.startTextPopup.emit("Failed to create user :( ")
+		authError.emit("Failed to create user :( ")
+		return response[1]
+
+func signIn(email:String,password:String):
+	var response = await genericHttpRequest(
+		SUPABASE_URL+"/auth/v1/token?grant_type=password",
+		["Content-Type: application/json","apikey: " + SUPABASE_ANON_KEY], 
+		HTTPClient.METHOD_POST, 
+		JSON.stringify({
+			"email":email,
+			"password":password
+			}))
+	var body = JSON.parse_string(response[3].get_string_from_utf8())
+	#print(response)
+	#print(body)
+	if response[1]==400:
+		if body["error_code"]=="email_not_confirmed":
+			response = [0,0]
+			var playerInput=false
+			#while there are no errors
+			while response[1]!=200 and playerInput==false:
+				signalBus.startBinaryChoicePopup.emit("Email not verified. \nWould you like to resend verification email?")
+				playerInput = (await signalBus.endTextPopup)[1]
+				if playerInput==false:
+					response = await genericHttpRequest(
+						SUPABASE_URL+"/auth/v1/resend",
+						["Content-Type: application/json","apikey: " + SUPABASE_ANON_KEY], 
+						HTTPClient.METHOD_POST, 
+						JSON.stringify({
+							"type":"signup",
+							"email":email
+							}))
+					body = JSON.parse_string(response[3].get_string_from_utf8())
+					#print(response)
+					#print(body)
+					if response[1]!=200:
+						authError.emit(body["msg"])
+						await signalBus.endTextPopup
+					else:
+						signalBus.startTextPopup.emit(str("Verification email sent. \nCheck your email at ",email," and click the link, then try to sign in again."))
+		elif body["error_code"]=="invalid_credentials":
+			authError.emit(str("Incorrect email or password"))
+		else:
+			authError.emit(body["msg"])
+	elif response[1]==200:
+		#print(body)
+		#var session = {
+			#"access_token": body.get("access_token", ""),
+			#"refresh_token": body.get("refresh_token", ""),
+			#"expires_in": body.get("expires_in", 0),
+			#"user": body.get("user", {})
+		#}
+		#authSuccess.emit(session)
+		#signalBus.startTextPopup.emit("successfully signed in")
+		#await signalBus.endTextPopup
+		return await ensureAccountExists()
 
 ##Sends a request for a supabase rpc function. response is an array where:[br]
 ##Response[0]: result[br]
@@ -154,13 +320,12 @@ func rpcRequest(params:Dictionary,functionName:String):
 		"apikey: " + SUPABASE_ANON_KEY,
 		"Content-Type: application/json"
 	]
-	#print(headers)
 	var body = JSON.stringify(params)
 	httpRequest.request(url, headers, HTTPClient.METHOD_POST, body)
 	var response = await httpRequest.request_completed
 	return response
 
-##Http request that behaves
+##Http request that behaves the same on web and desktop versions
 func genericHttpRequest(url:String,headers:PackedStringArray,method:HTTPClient.Method,requestData:String=""):
 	if system.isWebVersion:
 		return await webRequest(url,headers,method,requestData)
@@ -243,7 +408,6 @@ func rpcRequestWeb(params: Dictionary, functionName: String):
 	var result = JavaScriptBridge.eval("window._godot_rpc_result")
 	JavaScriptBridge.eval("delete window._godot_rpc_result; delete window._godot_rpc_error;")
 	var resultBytes = (result as String).to_utf8_buffer() if result else PackedByteArray()
-	#print("result is the of ", resultBytes.get_string_from_utf8())
 	return [OK, 200, [], resultBytes]
 
 func uploadLevel(levelName=""):
@@ -251,9 +415,9 @@ func uploadLevel(levelName=""):
 	if isSessionValid():
 		if !levelName:
 			signalBus.startTextEditPopup.emit("Enter name for your level")
-			var returns = await signalBus.endTextEditPopup
+			var returns = await signalBus.endTextPopup
 			levelName = returns[0]
-			var isCancelled = returns[1]
+			var isCancelled = !returns[1]
 			if isCancelled:
 				#signalBus.startTextPopup.emit("Level not created")
 				return
@@ -294,10 +458,7 @@ func downloadLevel(levelID:="0"):
 		"Content-Type: application/octet-stream",
 		"apikey: "+SUPABASE_ANON_KEY,
 	]
-	#genericHttpRequest(url,headers,HTTPClient.METHOD_GET,data)
 	var response = await genericHttpRequest(url,headers,HTTPClient.METHOD_GET)
-	#httpRequest.request(url,headers,HTTPClient.METHOD_GET,data)
-	#var response = await httpRequest.request_completed
 	var responseCode = response[1]
 	var body = response[3]
 	if responseCode == 200:
@@ -329,14 +490,7 @@ func handleWebRedirect():
 		"user": params.get("user", {})
 	}
 	var url = SUPABASE_URL+"/auth/v1/user"
-	#var headers = [
-		#"Content-Type: application/json",
-		#"apikey: "+SUPABASE_ANON_KEY,
-		#"Authorization: Bearer "+session.access_token
-	#]
-	#set_meta("temp_session", session)
-	#httpRequest.request(url,headers,HTTPClient.METHOD_GET,"")
-	#await httpRequest.request_completed
+
 	var headers = PackedStringArray([
 		"Content-Type: application/json",
 		"apikey: "+SUPABASE_ANON_KEY,
@@ -378,10 +532,7 @@ func onHttpRequestCompleted(_result, responseCode, _headers, body):
 		
 	json = JSON.new()
 	json.parse(response)
-	#var parsedResult = json.parse(response)
-	#if parsedResult != OK:
-		#httpReplyError.emit("Failed to parse http response")
-		#return
+
 	var data = json.data
 	#when signing in through downloaded version of the game
 	if data and typeof(data)==TYPE_DICTIONARY and data.has("access_token"):
@@ -397,72 +548,7 @@ func onHttpRequestCompleted(_result, responseCode, _headers, body):
 		#print(response)
 		httpReply.emit(response)
 
-
-func signInWithGoogle():
-	var params = {}
-	redirectUrl = ""
-	if system.isWebVersion:
-		redirectUrl = JavaScriptBridge.eval("window.location.origin + window.location.pathname")
-		JavaScriptBridge.eval("alert('redirectUrl: ' + '" + redirectUrl + "')")
-		params = {
-			"provider": "google",
-			"redirect_to": redirectUrl,
-		}
-	else:
-		#generate a random string
-		codeVerifier = ""
-		var randsChars = "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm123456790"
-		for i in 64:
-			codeVerifier+= randsChars[randi() % randsChars.length()]
-		
-		#generate pkce params
-		var bytes = codeVerifier.to_utf8_buffer()
-		var hashingContext = HashingContext.new()
-		hashingContext.start(HashingContext.HASH_SHA256)
-		hashingContext.update(bytes)
-		var hashed = hashingContext.finish()
-		codeChallenge = Marshalls.raw_to_base64(hashed).replace("+","-").replace("/","_").rstrip("=")
-	
-		#start tcp server
-		tcpServer = TCPServer.new()
-		var error = tcpServer.listen(localPort)#,"127.0.0.1")
-		if error!=OK:
-			print("Could not start TCP server on port ",localPort,", ",error)
-			var fallbackPorts = [3000, 54322, 54323, 9999, 8080]
-			for port in fallbackPorts:
-				error = tcpServer.listen(port,"127.0.0.1")
-				if error==OK:
-					localPort = port
-					#redirectUrl = str("http://localhost:",localPort)
-					print("successfully started tcp server on fallback port ",localPort)
-					break
-			if error !=OK:
-				printerr("Failed to start TCP server on all fallback ports")
-				return false
-		redirectUrl = str("http://localhost:",localPort)
-		set_process(true)
-		#build the auth url
-		params = {
-			"provider": "google",
-			"redirect_to": redirectUrl,
-			"code_challenge": codeChallenge,
-			"code_challenge_method": "S256",
-			"flow_type": "pkce"
-		}
-	var queryString = ""
-	for param in params:
-		if queryString != "":
-			queryString+='&'
-		queryString += str(param,"=",params[param].uri_encode())
-	var authUrl = SUPABASE_URL + "/auth/v1/authorize?" + queryString
-	
-	if system.isWebVersion:
-		JavaScriptBridge.eval("window.open('" + authUrl + "', '_blank')")
-	else:
-		OS.shell_open(authUrl)
-
 func _process(_delta: float) -> void:
-	
 	if not tcpServer or not tcpServer.is_listening():
 		return
 	if tcpServer.is_connection_available():
@@ -628,7 +714,6 @@ func signOut():
 			"Authorization: Bearer "+session.access_token
 		]
 		clearSession()
-		#httpRequest.request(url,headers,HTTPClient.METHOD_POST,"")
 		await genericHttpRequest(url,headers,HTTPClient.METHOD_POST)
 		#await httpRequest.request_completed
 
@@ -652,10 +737,12 @@ func onAuthSuccess(session):
 		sessionCache = session
 		tokenRefreshed.emit()
 		isSignedIn = true
+		##BRING THIS BACK AFTER REWORK
 		await ensureAccountExists()
 	#signalBus.startTextPopup.emit(str("Welcome ",session["user"]["user_metadata"]["name"]))
 	#print("Welcome ",session["user"]["user_metadata"]["name"])
 
 func onAuthError(error):
-	print("auth error: ",error)
+	#signalBus.startTextPopup.emit(error)
+	printerr(error)
 	

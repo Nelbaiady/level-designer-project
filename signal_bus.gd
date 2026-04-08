@@ -76,11 +76,17 @@ signal spinboxSpun()##when a spinbox with a specific script is spin, it emits th
 
 #popup prompts
 @warning_ignore("unused_signal")
-signal startTextEditPopup(prompt)##tells the text edit popup to appear and prepare to send something back
+signal startTextEditPopup(prompt)##tells the text edit popup to appear and prepare to send something back. parameters: prompt
 @warning_ignore("unused_signal")
-signal endTextEditPopup(text,isCancelled:bool)##tells the text edit popup to appear and prepare to send something back
+signal startBinaryChoicePopup(prompt,option1,option2)##tells the binary choice popup to appear and prepare to send something back. parameters: prompt, option1, option2
 @warning_ignore("unused_signal")
 signal startTextPopup(text)##regular text popup without input
+@warning_ignore("unused_signal")
+signal startSignInPopup()##popup for signing in
+@warning_ignore("unused_signal")
+signal startSignUpPopup()##popup for signing up
+@warning_ignore("unused_signal")
+signal endTextPopup(text,isCancelled:bool)##notifies that the popup was closed. parameters: text, isCancelled
 
 #pause menu
 @warning_ignore("unused_signal")

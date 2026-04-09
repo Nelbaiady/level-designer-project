@@ -1106,7 +1106,6 @@ metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525]
 top_level = true
 position = Vector2(544, 280)
-process_callback = 0
 limit_enabled = false
 position_smoothing_speed = 20.0
 script = ExtResource("1_8howc")

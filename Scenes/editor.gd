@@ -146,8 +146,7 @@ func eraseItem():
 		#var erasedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
 		#tileMap.erase_cell(erasedTilePosition) #if we wanted to erase a non-terrain tile
 		getCurrentLayerTilemap().set_cells_terrain_connect([cursorCellCoords],0,-1,false)
-	if selectedItem is objectItem:
-		signalBus.eraseObject.emit()
+	signalBus.eraseObject.emit()
 		
 
 ##sets the mode to edit mode

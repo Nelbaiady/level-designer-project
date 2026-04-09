@@ -104,7 +104,7 @@ func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 			summonPropertiesUI()
 			signalBus.editingObject.emit(globalEditor.itemRoster[rosterID].name,instanceID)
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickLeft") and globalEditor.isEditing:
-		if globalEditor.currentTool == globalEditor.Tools.erase:
+		if globalEditor.currentTool == globalEditor.Tools.erase and globalEditor.currentLayer==layer.index:
 			eraseSelf()
 
 func summonPropertiesUI():
@@ -124,7 +124,7 @@ func setNotEditing():
 	signalBus.updateProperty.disconnect(setProperty)
 
 func checkErase():
-	if isMouseOver:
+	if isMouseOver and globalEditor.currentLayer==layer.index:
 		eraseSelf()
 func eraseSelf():
 	rootNode.queue_free()

@@ -253,18 +253,14 @@ func webRequest(url:String,headers:PackedStringArray,method:HTTPClient.Method,re
 		timeout += 0.05
 		if timeout > 10.0:
 			printerr("webFetch timed out: ", url)
-			JavaScriptBridge.eval("delete window.godotBody; delete window.godotError; delete window.godotResult;")
 			return [FAILED, 0, [], PackedByteArray()]
-	
 	
 	if JavaScriptBridge.eval("window.godotError !== undefined"):
 		printerr("webFetch JS error: ", JavaScriptBridge.eval("window.godotError"))
-		JavaScriptBridge.eval("delete window.godotBody; delete window.godotError; delete window.godotResult;")
 		return [FAILED, 0, [], PackedByteArray()]
 	
 	var result = JSON.parse_string(str(JavaScriptBridge.eval("window.godotResult")))
-	
-	JavaScriptBridge.eval("delete window.godotBody; delete window.godotError; delete window.godotResult;")
+
 	return [OK, result["status"], [], result["body"].to_utf8_buffer()]
 
 

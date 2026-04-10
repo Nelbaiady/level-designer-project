@@ -14,9 +14,10 @@ const COLOR_PULSE = preload("uid://cbnkbef0ahxkp")
 	,preload("uid://utkx0vgp3gc5") #can Chourc
 	,preload("uid://bethifqoxndpo") #can Crawl
 	,preload("uid://do5ll6ym26tfy") #acceleration
-	,preload("uid://cer7cfvecm4ww") #top running speed
-	,preload("uid://d7aufjc2xj1h") #deceleration
-	,preload("uid://d3y2ia0lj7kk5") #maxHealth
+	,preload("uid://bt3t4oe46o4a8") #top running speed
+	,preload("uid://d3y2ia0lj7kk5")
+	
+	#,preload("uid://d3y2ia0lj7kk5") #maxHealth
 	]
 var isBeingEdited:bool = false
 

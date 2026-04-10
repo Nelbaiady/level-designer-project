@@ -1,4 +1,3 @@
 extends Node2D
 
-#func _ready() -> void:
-	#globalEditor.objects = self
+#no idea why this script exists or what it does but it seems to have some dependencies or something so im keeping it until i figure this out

@@ -2,14 +2,16 @@
 
 [ext_resource type="Texture2D" uid="uid://mur08phi7tt5" path="res://Scenes/Items/Objects/NPC/Canimus/canimusCrush.png" id="1_13ulp"]
 [ext_resource type="Texture2D" uid="uid://fqa88r2pdjb4" path="res://Scenes/Items/Objects/NPC/Canimus/canimusIdle.png" id="1_fgj4o"]
+[ext_resource type="Script" uid="uid://lyirlk5r3uow" path="res://Scenes/Items/Objects/genericEnemy.gd" id="1_oadvy"]
 [ext_resource type="Texture2D" uid="uid://ivcdy10irvqu" path="res://Scenes/Items/Objects/NPC/Canimus/canimusRunning.png" id="2_j2sd1"]
 [ext_resource type="PackedScene" uid="uid://c4aci6f2wscx5" path="res://Scenes/Items/Objects/objectMod.tscn" id="2_myemf"]
 [ext_resource type="Texture2D" uid="uid://dfwltlq5bulsp" path="res://Scenes/Items/Objects/NPC/Canimus/canimusRun.png" id="3_wm4yp"]
-
-[sub_resource type="GDScript" id="GDScript_fgj4o"]
-resource_name = "Canimus"
-script/source = "class_name Canimus extends genericEnemy
-"
+[ext_resource type="PackedScene" uid="uid://citpxoeau101h" path="res://Scenes/Items/Objects/Modular Additions/jump_point_area.tscn" id="6_wm4yp"]
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="7_dff58"]
+[ext_resource type="Resource" uid="uid://bh2hcytk84e13" path="res://Scenes/UI/ObjectProperties/properties/positionProperty.tres" id="8_q7lup"]
+[ext_resource type="Resource" uid="uid://dqbrp3ghialya" path="res://Scenes/UI/ObjectProperties/properties/sizeProperty.tres" id="9_2ppoo"]
+[ext_resource type="Resource" uid="uid://byn3kv4q02kpl" path="res://Scenes/UI/ObjectProperties/properties/colorProperty.tres" id="10_g72bb"]
+[ext_resource type="Resource" uid="uid://d3y2ia0lj7kk5" path="res://Scenes/UI/ObjectProperties/properties/playerProperties/maxHealthProperty.tres" id="11_defcg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_g72bb"]
 atlas = ExtResource("1_13ulp")
@@ -186,11 +188,13 @@ radius = 36.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_13ulp"]
 radius = 176.0
 
-[node name="Canimus" type="CharacterBody2D" unique_id=1317101315 node_paths=PackedStringArray("animatedSprite") groups=["movables", "solids"]]
+[node name="Canimus" type="CharacterBody2D" unique_id=1317101315 node_paths=PackedStringArray("animatedSprite", "visionArea", "flippableColliders") groups=["movables", "solids"]]
 collision_layer = 128
 collision_mask = 128
-script = SubResource("GDScript_fgj4o")
+script = ExtResource("1_oadvy")
 animatedSprite = NodePath("AnimatedSprite2D")
+visionArea = NodePath("VisionArea")
+flippableColliders = [NodePath("jumpPointArea"), NodePath("hitBoxArea"), NodePath("VisionArea"), NodePath("VisionExitArea")]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=917958512]
 process_mode = 3
@@ -200,9 +204,9 @@ animation = &"idle"
 autoplay = "idle"
 
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_myemf")]
-process_mode = 3
 position = Vector2(0, -8)
 clickCollision = NodePath("Area2D")
+properties = Array[ExtResource("7_dff58")]([ExtResource("8_q7lup"), ExtResource("9_2ppoo"), ExtResource("10_g72bb"), ExtResource("11_defcg")])
 category = 1
 
 [node name="Area2D" type="Area2D" parent="Object" unique_id=12686494]
@@ -212,10 +216,10 @@ position = Vector2(0, 8)
 position = Vector2(4, -8)
 shape = SubResource("RectangleShape2D_5lns4")
 
-[node name="hurtBoxArea" type="Area2D" parent="." unique_id=1251664224 groups=["hurtbox"]]
+[node name="jumpPointArea" parent="." unique_id=1963504617 instance=ExtResource("6_wm4yp")]
 position = Vector2(0, 8)
 
-[node name="hurtBox" type="CollisionShape2D" parent="hurtBoxArea" unique_id=450273891]
+[node name="jumpPoint" type="CollisionShape2D" parent="jumpPointArea" unique_id=450273891]
 position = Vector2(0, -36)
 shape = SubResource("RectangleShape2D_wm4yp")
 
@@ -245,7 +249,6 @@ polygon = PackedVector2Array(0, -32, -412, -96, -412, 80, 0, 16)
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]
-[connection signal="area_entered" from="hurtBoxArea" to="." method="_on_hurt_box_area_area_entered"]
 [connection signal="body_entered" from="hitBoxArea" to="." method="_on_hit_box_area_body_entered"]
 [connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]
 [connection signal="body_exited" from="VisionExitArea" to="." method="_on_vision_exit_area_body_exited"]

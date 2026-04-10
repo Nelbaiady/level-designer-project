@@ -35,8 +35,10 @@ alpha_curve = SubResource("CurveTexture_wnvis")
 hue_variation_min = -1.0
 hue_variation_max = 0.99999994
 
-[node name="selectionParticles" type="GPUParticles2D" unique_id=331650802]
+[node name="celebrationParticles" type="GPUParticles2D" unique_id=331650802]
 emitting = false
 amount = 128
+one_shot = true
+speed_scale = 2.0
 local_coords = true
 process_material = SubResource("ParticleProcessMaterial_23st2")

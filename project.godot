@@ -48,6 +48,8 @@ solids="anything that would stop a moving movable object from moving"
 movables=""
 hurtbox=""
 hitbox=""
+jumpPoint="area that the player can jump on and get bounced"
+jumpSource="the bottom part of a character, which detects bouncing on other objects"
 
 [gui]
 

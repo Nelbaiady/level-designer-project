@@ -8,10 +8,10 @@ var roamTimer:float = 0
 
 #properties
 var targetSpeed = 0
-var maxSpeed:=250
-var acceleration:=600
-var deceleration:=acceleration
-var maxHealth:=1
+var maxSpeed := 250
+var acceleration := 600
+var deceleration := acceleration
+var maxHealth := 1
 var gravity := 50.0
 var terminalVelocity := 1500.0
 
@@ -26,14 +26,15 @@ var state = states.IDLE
 var restlessness:float = 1
 
 
-signal takeAttack()
+#signal takeAttack()
 #signal dealAttack()
+signal jumpedOn()
 
 func _ready() -> void:
 	reset()
 	signalBus.startEditMode.connect(reset)
-	
-	takeAttack.connect(takeDamage)
+	signalBus.startPlayMode.connect(reset)
+	jumpedOn.connect(getJumpedOn)
 	#dealAttack.connect(dealDamage)
 
 ##whenever edit mode is entered, make sure everything reset
@@ -138,14 +139,11 @@ func _on_hit_box_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and state != states.DYING:
 		pass
 
-##taking damage
-func _on_hurt_box_area_area_entered(area: Area2D) -> void:
-	if area.is_in_group("player") and area.is_in_group("hitbox") and "rootNode" in area and area.rootNode is Player:
+func getJumpedOn(_player:Player, _area:Area2D):
 		#if area.rootNode.velocity.y > 0 and !area.rootNode.bouncedThisFrame:
-		if !area.rootNode.bouncedThisFrame:
-				#area.rootNode.bouncedThisFrame = true
-				area.rootNode.getBounced.emit(velocity.slide(Vector2.UP.rotated(area.rotation)) + Vector2.UP.rotated(area.rotation) * (700))
-				takeDamage()
+		#if !player.bouncedThisFrame:
+			#player.getBounced.emit(velocity.slide(Vector2.UP.rotated(area.rotation)) + Vector2.UP.rotated(area.rotation) * (700))
+		takeDamage()
 
 func takeDamage(damage=1):
 	currentHealth-=damage
@@ -157,7 +155,6 @@ func die():
 	velocity.x = 0
 	targetSpeed = 0
 	(func(): process_mode = Node.PROCESS_MODE_DISABLED).call_deferred()
-
 
 var chaseTarget = null
 func _on_vision_area_body_entered(body: Node2D) -> void:

@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://citpxoeau101h"]
+
+[ext_resource type="Script" uid="uid://bki6ay40ympfe" path="res://Scenes/Items/Objects/Modular Additions/jump_point_area.gd" id="1_t2n2l"]
+
+[node name="jumpPointArea" type="Area2D" unique_id=1963504617 groups=["jumpPoint"]]
+collision_layer = 129
+collision_mask = 129
+script = ExtResource("1_t2n2l")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

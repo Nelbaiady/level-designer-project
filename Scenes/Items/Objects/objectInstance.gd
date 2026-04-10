@@ -101,17 +101,18 @@ func setProperty(property:String, value, tween = false):
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
 		if globalEditor.isEditing or globalEditor.isObjectBeingEdited:
-			summonPropertiesUI()
+			signalBus.populatePropertiesUI.emit(self)
+			#summonPropertiesUI()
 			signalBus.editingObject.emit(globalEditor.itemRoster[rosterID].name,instanceID)
-	if event is InputEventMouseButton and event.is_action_pressed("mouseClickLeft") and globalEditor.isEditing:
-		if globalEditor.currentTool == globalEditor.Tools.erase and globalEditor.currentLayer==layer.index:
-			eraseSelf()
+	#if event is InputEventMouseButton and event.is_action_pressed("mouseClickLeft") and globalEditor.isEditing:
+		#if globalEditor.currentTool == globalEditor.Tools.erase and globalEditor.currentLayer==layer.index:
+			#eraseSelf()
 
-func summonPropertiesUI():
-	populatePropertiesUI()
-
-func populatePropertiesUI():
-	signalBus.populatePropertiesUI.emit(self)
+#func summonPropertiesUI():
+	#populatePropertiesUI()
+#
+#func populatePropertiesUI():
+	#signalBus.populatePropertiesUI.emit(self)
 
 func mouseEntered():
 	isMouseOver = true
@@ -120,7 +121,6 @@ func mouseExited():
 
 func setNotEditing():
 	isBeingEdited = false
-	#propertyUiElements.clear()
 	signalBus.updateProperty.disconnect(setProperty)
 
 func checkErase():

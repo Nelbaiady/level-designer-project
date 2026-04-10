@@ -20,7 +20,7 @@ class_name Player extends CharacterBody2D
 @export var gravity : int = 2400
 @export var terminalVelocity : int = 2000
 @export var topRunSpeed : int = 700
-@export var acceleration : int = 4000
+@export var acceleration : int = 6000
 @export var deceleration : int = 4000
 @export var airAcceleration : int = 4000
 @export var airDeceleration : int = 4000
@@ -72,6 +72,7 @@ func enterPlayState():
 func reset():
 	sprite.rotation = 0
 	currentHealth = maxHealth
+	signalBus.updatePlayerHealth.emit()
 	invulnerabilityTimer = invulnerabilityTime
 	gravityMult = 1
 	

@@ -3,4 +3,5 @@
 [ext_resource type="Script" uid="uid://cb1l6jkesh14s" path="res://Scenes/Items/Objects/objectInstance.gd" id="1_22uvg"]
 
 [node name="Object" type="Node2D" unique_id=766181706]
+process_mode = 3
 script = ExtResource("1_22uvg")

@@ -27,19 +27,18 @@ func _on_area_entered(area: Area2D) -> void:
 	if !detectFullBody and area.is_in_group("jumpSource"):
 		if area.is_in_group("player") and area.is_in_group("jumpSource") and "rootNode" in area and area.rootNode is Player:
 			var player:Player = area.rootNode
-			#if area.rootNode.velocity.y > 0 and !area.rootNode.bouncedThisFrame:
-			if !area.rootNode.bouncedThisFrame:
+			if !player.bouncedThisFrame and player.velocity.y >= 0:
 				if !player.bouncedThisFrame and canBouncePlayer:
-					player.getBounced.emit(player.velocity.slide(Vector2.UP.rotated(area.rotation)) + Vector2.UP.rotated(area.rotation) * (bounciness*bouncinessMult))
-					rootNode.jumpedOn.emit(area.rootNode, self)
+					player.getBounced.emit(player.velocity.slide(Vector2.UP.rotated(global_rotation)) + Vector2.UP.rotated(global_rotation) * (bounciness*bouncinessMult))
+					rootNode.jumpedOn.emit(player, self)
 		#I could add bouncing for non-player areas but ill do that when its needed
 
 func _on_body_entered(body: Node2D) -> void:
 	if detectFullBody:
 		if body is Player:
 			if !body.bouncedThisFrame:
-				body.getBounced.emit(body.velocity.slide(Vector2.UP.rotated(rotation)) + Vector2.UP.rotated(rotation) * (bounciness*bouncinessMult))
+				body.getBounced.emit(body.velocity.slide(Vector2.UP.rotated(global_rotation)) + Vector2.UP.rotated(global_rotation) * (bounciness*bouncinessMult))
 				rootNode.jumpedOn.emit(body, self)
 		elif body.is_in_group("movables") and !isPlayerOnly:
-			body.velocity = body.velocity.slide(Vector2.UP.rotated(rotation)) + Vector2.UP.rotated(rotation) * (bounciness*bouncinessMult)
+			body.velocity = body.velocity.slide(Vector2.UP.rotated(global_rotation)) + Vector2.UP.rotated(global_rotation) * (bounciness*bouncinessMult)
 			rootNode.jumpedOn.emit(body, self)

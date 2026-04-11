@@ -18,8 +18,7 @@ var objectInstancesCount:int = 0
 var itemRoster:Array[Item] = []#[preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
 @onready var level: Level
 var hotbarIndex: int = 0
-#var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
-var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),null,null,null,null,null,null,null]
+var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),null,null,null,null,null,null]
 var currentLayer: int = 0
 var currentRoom: int = 0
 
@@ -46,7 +45,10 @@ enum Tools {place, erase}#, move}
 
 
 func _ready() -> void:
-	itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),null,null,null,null,null,null,null]
+	itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),null,null,null,null,null,null]
+	for i in itemRoster.size():
+		if itemRoster[i]:
+			itemRoster[i].rosterID = i
 	signalBus.setCurrentTool.connect(setCurrentTool)
 	signalBus.loadedLevel.connect(reloadPlayer)
 	signalBus.showPropertiesSidebar.connect(propertiesEditorIsShown)

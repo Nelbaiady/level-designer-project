@@ -11,5 +11,4 @@ objectReference = ExtResource("2_tt1md")
 icon = ExtResource("1_2688d")
 previewTexture = ExtResource("3_tt1md")
 name = "Canimus"
-rosterID = 2
 metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

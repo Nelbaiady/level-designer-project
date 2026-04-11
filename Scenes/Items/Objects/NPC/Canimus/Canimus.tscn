@@ -13,6 +13,192 @@
 [ext_resource type="Resource" uid="uid://byn3kv4q02kpl" path="res://Scenes/UI/ObjectProperties/properties/colorProperty.tres" id="10_g72bb"]
 [ext_resource type="Resource" uid="uid://d3y2ia0lj7kk5" path="res://Scenes/UI/ObjectProperties/properties/playerProperties/maxHealthProperty.tres" id="11_defcg"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dff58"]
+
+[sub_resource type="Animation" id="Animation_dff58"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"idle"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_2ppoo"]
+resource_name = "crush"
+length = 1.3333334
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"crush"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 1.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="Animation" id="Animation_q7lup"]
+resource_name = "idle"
+length = 0.50000834
+loop_mode = 1
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"idle"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 0.33333334, 0.4166667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="Animation" id="Animation_g72bb"]
+resource_name = "run"
+length = 0.166675
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"run"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.083333336),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_defcg"]
+resource_name = "running"
+length = 0.41666666
+loop_mode = 1
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"running"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.083333336, 0.16666667, 0.25, 0.33333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
+}
+
+[sub_resource type="Animation" id="Animation_rq1fw"]
+resource_name = "unrun"
+length = 0.16666667
+step = 0.083333336
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"unrun"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.083333336),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2ppoo"]
+_data = {
+&"RESET": SubResource("Animation_dff58"),
+&"crush": SubResource("Animation_2ppoo"),
+&"idle": SubResource("Animation_q7lup"),
+&"run": SubResource("Animation_g72bb"),
+&"running": SubResource("Animation_defcg"),
+&"unrun": SubResource("Animation_rq1fw")
+}
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_g72bb"]
 atlas = ExtResource("1_13ulp")
 region = Rect2(0, 0, 192, 192)
@@ -177,7 +363,7 @@ animations = [{
 size = Vector2(104, 80)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wm4yp"]
-size = Vector2(64, 16)
+size = Vector2(56, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_13ulp"]
 size = Vector2(64, 44)
@@ -188,16 +374,22 @@ radius = 36.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_13ulp"]
 radius = 176.0
 
-[node name="Canimus" type="CharacterBody2D" unique_id=1317101315 node_paths=PackedStringArray("animatedSprite", "visionArea", "flippableColliders") groups=["movables", "solids"]]
+[node name="Canimus" type="CharacterBody2D" unique_id=1317101315 node_paths=PackedStringArray("animationPlayer", "visionArea", "flippableColliders", "flippableAnimatedSprites") groups=["movables", "solids"]]
+material = SubResource("ShaderMaterial_dff58")
 collision_layer = 128
 collision_mask = 128
 script = ExtResource("1_oadvy")
-animatedSprite = NodePath("AnimatedSprite2D")
+animationPlayer = NodePath("AnimationPlayer")
 visionArea = NodePath("VisionArea")
 flippableColliders = [NodePath("jumpPointArea"), NodePath("hitBoxArea"), NodePath("VisionArea"), NodePath("VisionExitArea")]
+flippableAnimatedSprites = [NodePath("AnimatedSprite2D")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2114326542]
+process_mode = 3
+libraries/ = SubResource("AnimationLibrary_2ppoo")
+autoplay = &"idle"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=917958512]
-process_mode = 3
 use_parent_material = true
 sprite_frames = SubResource("SpriteFrames_5icnn")
 animation = &"idle"
@@ -247,8 +439,7 @@ shape = SubResource("CircleShape2D_13ulp")
 [node name="visionCone" type="CollisionPolygon2D" parent="VisionExitArea" unique_id=1997293645]
 polygon = PackedVector2Array(0, -32, -412, -96, -412, 80, 0, 16)
 
-[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
-[connection signal="animation_looped" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_looped"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="body_entered" from="hitBoxArea" to="." method="_on_hit_box_area_body_entered"]
 [connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]
 [connection signal="body_exited" from="VisionExitArea" to="." method="_on_vision_exit_area_body_exited"]

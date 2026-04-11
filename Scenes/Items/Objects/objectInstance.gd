@@ -44,13 +44,14 @@ func _ready() -> void:
 		signalBus.startPlayMode.connect(playModeStarted)
 
 ##effect when selecting an object
-func objectEditingStarted(_name, _id):
-	if _id == instanceID:
+func objectEditingStarted(_name, id):
+	if id == instanceID:
 		rootNode.material = ShaderMaterial.new()
 		rootNode.material.shader = COLOR_PULSE
 		rootNode.material.set_shader_parameter("mode",1)
 		rootNode.material.set_shader_parameter("cycle_speed",8)
 		rootNode.material.set_shader_parameter("shine_color",Color(0.8, 0.9, 1.0, 0.7))
+		print("coloring ",_name)
 	else:
 		objectEditingStopped()
 
@@ -101,18 +102,9 @@ func setProperty(property:String, value, tween = false):
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
 		if globalEditor.isEditing or globalEditor.isObjectBeingEdited:
+			#signal to fill the propertiesUI with this object's properties
 			signalBus.populatePropertiesUI.emit(self)
-			#summonPropertiesUI()
 			signalBus.editingObject.emit(globalEditor.itemRoster[rosterID].name,instanceID)
-	#if event is InputEventMouseButton and event.is_action_pressed("mouseClickLeft") and globalEditor.isEditing:
-		#if globalEditor.currentTool == globalEditor.Tools.erase and globalEditor.currentLayer==layer.index:
-			#eraseSelf()
-
-#func summonPropertiesUI():
-	#populatePropertiesUI()
-#
-#func populatePropertiesUI():
-	#signalBus.populatePropertiesUI.emit(self)
 
 func mouseEntered():
 	isMouseOver = true

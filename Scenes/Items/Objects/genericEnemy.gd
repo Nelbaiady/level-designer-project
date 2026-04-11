@@ -1,7 +1,11 @@
 class_name genericEnemy extends CharacterBody2D
-@export var animatedSprite: AnimatedSprite2D
+
+@export var animationPlayer: AnimationPlayer
 @export var visionArea: Area2D
 @export var flippableColliders:Array[Area2D] = []
+@export var flippableAnimatedSprites:Array[AnimatedSprite2D] = []
+@export var flippableSprites:Array[Sprite2D] = []
+#@export var animatedSprite: AnimatedSprite2D
 
 var roamTime : float = 0
 var roamTimer:float = 0
@@ -12,7 +16,7 @@ var maxSpeed := 250
 var acceleration := 600
 var deceleration := acceleration
 var maxHealth := 1
-var gravity := 50.0
+@export var gravity := 50.0
 var terminalVelocity := 1500.0
 
 #states
@@ -22,27 +26,37 @@ var facingRight:=false
 enum states {IDLE, ROAMING, CHASING, DYING}
 var state = states.IDLE
 
+#enable or disable certain states
+@export var canRoam := true
+@export var canChase := true
+@export var canDie := true
+
 ##how quickly this creature switches between random states
 var restlessness:float = 1
 
 
-#signal takeAttack()
-#signal dealAttack()
+
 signal jumpedOn()
 
 func _ready() -> void:
-	reset()
 	signalBus.startEditMode.connect(reset)
 	signalBus.startPlayMode.connect(reset)
 	jumpedOn.connect(getJumpedOn)
-	#dealAttack.connect(dealDamage)
+	
+	#in case i forget to set an animation player
+	if !animationPlayer:
+		for i in get_children():
+			if i is AnimationPlayer:
+				animationPlayer = i
+	reset()
 
 ##whenever edit mode is entered, make sure everything reset
 func reset():
 	roamTime = randf_range(1,6/restlessness)
 	state = states.IDLE
-	animatedSprite.animation = "idle"
-	animatedSprite.speed_scale = 1
+	animationPlayer.play("RESET")
+	animationPlayer.play("idle")
+	animationPlayer.speed_scale = 1
 	currentHealth = maxHealth
 	visible = true
 	targetSpeed = 0
@@ -71,19 +85,18 @@ func _physics_process(delta: float) -> void:
 					var direMult = 1 if facingRight else -1
 					targetSpeed = maxSpeed * direMult
 		#if the creature is not moving (difference in position < 12) make sure the creature plays the idle animation
-		if animatedSprite.animation != "running" and state in [states.ROAMING,states.CHASING] and abs(get_real_velocity().x) >= 12:
-			animatedSprite.animation = "run"
-		if (animatedSprite.animation != "idle" and abs(get_real_velocity().x) < 6 and state in[states.IDLE, states.ROAMING, states.CHASING]):
-			
-			animatedSprite.animation = "unrun"
+		if animationPlayer.current_animation != "running" and state in [states.ROAMING,states.CHASING] and abs(get_real_velocity().x) >= 12:
+			animationPlayer.current_animation = "run"
+		if (animationPlayer.current_animation != "idle" and abs(get_real_velocity().x) < 6 and state in[states.IDLE, states.ROAMING, states.CHASING]):
+			animationPlayer.current_animation = "unrun"
 
-		if animatedSprite.animation in ["running","run","unrun"]:
+		if animationPlayer.current_animation in ["running","run","unrun"]:
 			var desiredAnimSpeed = abs(velocity.x/maxSpeed)
 			if desiredAnimSpeed < 0.8:
 				desiredAnimSpeed = 0.8
-			animatedSprite.speed_scale = desiredAnimSpeed
+			animationPlayer.speed_scale = desiredAnimSpeed
 		else:
-			animatedSprite.speed_scale = 1
+			animationPlayer.speed_scale = 1
 		
 		#random timed intervals between idling and moving around
 		if roamTimer >= roamTime:
@@ -99,40 +112,32 @@ func _physics_process(delta: float) -> void:
 		
 		move_and_slide()
 
+##transitions to another state
 func setState(newState:states):
+	#If the newState is disabled, dont do anything
+	if newState == states.ROAMING and !canRoam or newState == states.CHASING and !canChase or newState == states.DYING and !canDie:
+		return
 	state = newState
 	match newState:
 		states.IDLE:
 			targetSpeed = 0
-			#animatedSprite.animation = "unrun"
 		states.ROAMING:
 			facingRight = randi_range(0 , 1)
 			orientDirection()
 			var direMult = 1 if facingRight else -1
 			targetSpeed = maxSpeed * direMult
-			#animatedSprite.animation = "run"
 		states.DYING:
-			animatedSprite.animation = "crush"
+			animationPlayer.play("crush")
 
 ##makes the object face the direction its supposed to, including sprite and collision
 func orientDirection():
-	if animatedSprite.flip_h != facingRight:
+	#if animationPlayer.flip_h != facingRight:
 		for i in flippableColliders:
-			i.scale.x *= -1
-		animatedSprite.flip_h = facingRight
-
-func _on_animated_sprite_2d_animation_finished() -> void:
-	match animatedSprite.animation:
-		"run":
-			animatedSprite.animation = "running"
-		"unrun":
-			animatedSprite.animation = "idle"
-		"crush":
-			#dead
-			visible = false
-			pass
-			
-	animatedSprite.play()
+			i.scale.x *= 1 if ((i.scale.x<0) and facingRight) or ((i.scale.x>0) and !facingRight) else -1
+		for i in flippableSprites:
+			i.flip_h = facingRight
+		for i in flippableAnimatedSprites:
+			i.flip_h = facingRight
 
 
 func _on_hit_box_area_body_entered(body: Node2D) -> void:
@@ -140,15 +145,13 @@ func _on_hit_box_area_body_entered(body: Node2D) -> void:
 		pass
 
 func getJumpedOn(_player:Player, _area:Area2D):
-		#if area.rootNode.velocity.y > 0 and !area.rootNode.bouncedThisFrame:
-		#if !player.bouncedThisFrame:
-			#player.getBounced.emit(velocity.slide(Vector2.UP.rotated(area.rotation)) + Vector2.UP.rotated(area.rotation) * (700))
 		takeDamage()
 
 func takeDamage(damage=1):
-	currentHealth-=damage
-	if currentHealth<=0:
-		die()
+	if canDie:
+		currentHealth-=damage
+		if currentHealth<=0:
+			die()
 
 func die():
 	setState(states.DYING)
@@ -166,3 +169,14 @@ func _on_vision_exit_area_body_exited(body: Node2D) -> void:
 	if body == chaseTarget:
 		chaseTarget = null
 		setState(states.IDLE)
+
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	match anim_name:
+		"run":
+			animationPlayer.play("running")
+		"unrun":
+			animationPlayer.play("idle")
+		"crush":
+			#dead
+			visible = false

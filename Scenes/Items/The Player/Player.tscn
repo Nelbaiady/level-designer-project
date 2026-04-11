@@ -673,7 +673,7 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 "
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jkifv"]
-size = Vector2(32, 56)
+size = Vector2(32, 64)
 
 [sub_resource type="GDScript" id="GDScript_meww7"]
 resource_name = "playerHitboxArea"
@@ -774,7 +774,7 @@ script = SubResource("GDScript_8pi6c")
 collision_layer = 129
 
 [node name="hurtbox" type="CollisionShape2D" parent="hurtboxArea2D" unique_id=1980712613]
-position = Vector2(0, 8)
+position = Vector2(0, 4)
 shape = SubResource("RectangleShape2D_jkifv")
 
 [node name="jumpSourceArea2D" type="Area2D" parent="." unique_id=992519540 groups=["hitbox", "jumpSource", "player"]]

@@ -27,6 +27,8 @@ signal setCurrentTool(tool)
 @warning_ignore("unused_signal")
 signal eraseObject()
 @warning_ignore("unused_signal")
+signal eraseSpecificObject(id:int)
+@warning_ignore("unused_signal")
 signal placeObjectSignal(instanceID, object, properties)
 
 #game mode states
@@ -73,6 +75,8 @@ signal updateLayerUI()##signal for changing layer
 #specific stuff
 @warning_ignore("unused_signal")
 signal spinboxSpun()##when a spinbox with a specific script is spin, it emits this
+@warning_ignore("unused_signal")
+signal shimmyCamera()##when a layer's scroll_scale property changes, make sure the camera moves a slight bit to refresh the visual
 
 #popup prompts
 @warning_ignore("unused_signal")

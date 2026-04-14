@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://bnkjkrjujytj1"]
 
 [ext_resource type="Script" uid="uid://lyirlk5r3uow" path="res://Scenes/Items/Objects/genericEnemy.gd" id="1_ujknv"]
-[ext_resource type="Texture2D" uid="uid://dbq0021jaom0" path="res://Scenes/Items/Objects/NPC/Peachfly/PeachFly preview.png" id="2_751nh"]
 [ext_resource type="Texture2D" uid="uid://dkjxolw1g2w27" path="res://Scenes/Items/Objects/NPC/Peachfly/peachFlyCrushed.png" id="3_70ptt"]
 [ext_resource type="Texture2D" uid="uid://c5k1kyk1mkyat" path="res://Scenes/Items/Objects/NPC/Peachfly/peachFlyIdle.png" id="3_f3f51"]
 [ext_resource type="PackedScene" uid="uid://c4aci6f2wscx5" path="res://Scenes/Items/Objects/objectMod.tscn" id="6_a76qt"]
@@ -24,7 +23,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_751nh")]
+"values": [ExtResource("3_f3f51")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -208,7 +207,7 @@ size = Vector2(64, 70)
 size = Vector2(16, 48)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wm4yp"]
-size = Vector2(48, 20)
+size = Vector2(48, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_13ulp"]
 size = Vector2(48, 40)
@@ -233,7 +232,7 @@ autoplay = &"idle"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=420001091]
 use_parent_material = true
-texture = ExtResource("2_751nh")
+texture = ExtResource("3_f3f51")
 hframes = 3
 vframes = 3
 
@@ -262,14 +261,14 @@ shape = SubResource("RectangleShape2D_5lns4")
 position = Vector2(0, 8)
 
 [node name="jumpPoint" type="CollisionShape2D" parent="jumpPointArea" unique_id=450273891]
-position = Vector2(0, -30)
+position = Vector2(0, -28)
 shape = SubResource("RectangleShape2D_wm4yp")
 
 [node name="hitBoxArea" type="Area2D" parent="." unique_id=421457549 groups=["hitbox"]]
 position = Vector2(0, 16)
 
 [node name="hitBox" type="CollisionShape2D" parent="hitBoxArea" unique_id=1992963439]
-position = Vector2(0, -8)
+position = Vector2(0, -4)
 shape = SubResource("RectangleShape2D_13ulp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=834873578]

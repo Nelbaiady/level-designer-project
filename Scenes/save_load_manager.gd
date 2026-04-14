@@ -117,7 +117,6 @@ func loadLevel(data):
 	else:
 		printerr("no valid level data")
 	globalEditor.clearLevel()
-	#var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}} ,1:{"tiles":{},"objects":{}}}  }]
 #	Loop through each layer within each room
 	for roomIndex in range(len(globalEditor.level.rooms)):
 		#globalEditor.level.rooms[globalEditor.currentRoom]["layers"]={}
@@ -132,8 +131,6 @@ func loadLevel(data):
 		#second pass for setting properties and placing items
 		for stringLayerIndex in loadedData["rooms"][roomIndex]["layers"].keys():
 			var layerIndex = int(stringLayerIndex)
-			#layers[i.index] = i #We need to dynamically spawn the nodes and set their indices
-			#globalEditor.level.rooms[roomIndex]["layers"][layerIndex]={"objects":{},"layerProperties":{}}
 			globalEditor.currentLayer = layerIndex
 			var tileMap = globalEditor.level.layers[layerIndex].tileMap
 			#place tiles for current room and layer
@@ -143,14 +140,14 @@ func loadLevel(data):
 			#place objects for current room and layer
 			for i in len( loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["objects"] ):
 				var currentLoadingObject = loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["objects"][i]
-				#globalEditor.loadPlaceObject(currentLoadingObject)
-				globalEditor.placeObject(globalEditor.itemRoster[currentLoadingObject.rosterID],Vector2.ZERO,str_to_var(currentLoadingObject.properties),int(currentLoadingObject.instanceID))
+				#globalEditor.placeObject(globalEditor.itemRoster[currentLoadingObject.rosterID],Vector2.ZERO,str_to_var(currentLoadingObject.properties),int(currentLoadingObject.instanceID))
+				globalEditor.placeObject(globalEditor.itemRoster[currentLoadingObject.rosterID],Vector2.ZERO,str_to_var(currentLoadingObject.properties))
 			#set the layer's properties
 			var currentLoadingLayerProperties = str_to_var(loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["layerProperties"])
 			for prop in currentLoadingLayerProperties:
 				globalEditor.level.setProperty(prop,currentLoadingLayerProperties[prop],layerIndex)
-	if loadedData.has("objectInstancesCount"):
-		globalEditor.objectInstancesCount = loadedData["objectInstancesCount"]
+	#if loadedData.has("objectInstancesCount"):
+		#globalEditor.objectInstancesCount = loadedData["objectInstancesCount"]
 	globalEditor.currentLayer = 0
 	globalEditor.playerProperties = str_to_var( loadedData["playerProperties"] )
 	signalBus.loadedLevel.emit()

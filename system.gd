@@ -1,5 +1,7 @@
 class_name System extends Node
 
+var undoRedo:UndoRedo = UndoRedo.new()
+
 var fullscreen := false
 var wasMaximized := false ##remembers if the window was maximized when it goes to fullscreen so it can go back if the user turns fullscreen back off
 
@@ -30,6 +32,10 @@ func _input(event: InputEvent) -> void:
 				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	if event.is_action_pressed("pause") and (!popupIsOpen or isPaused==true):
 		togglePause()
+	if event.is_action_pressed("redo"):
+		undoRedo.redo()
+	elif event.is_action_pressed("undo"):
+		undoRedo.undo()
 
 	if event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		#account for slight drift

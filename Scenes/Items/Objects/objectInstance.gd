@@ -31,6 +31,9 @@ func _ready() -> void:
 		rootNode.process_mode=Node.PROCESS_MODE_INHERIT
 		clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
 	signalBus.placeObjectSignal.connect(setStartingStuff)
+	signalBus.startEditMode.connect(editModeStarted)
+	signalBus.startPlayMode.connect(playModeStarted)
+	signalBus.eraseSpecificObject.connect(checkErase)
 	if !clickCollision:
 		printerr("Object ",rootNode.name, " instance number ", instanceID, " has no click collision")
 	else:
@@ -40,8 +43,6 @@ func _ready() -> void:
 		signalBus.eraseObject.connect(checkErase)
 		signalBus.editingObject.connect(objectEditingStarted)
 		signalBus.hidePropertiesSidebar.connect(objectEditingStopped)
-		signalBus.startEditMode.connect(editModeStarted)
-		signalBus.startPlayMode.connect(playModeStarted)
 
 ##effect when selecting an object
 func objectEditingStarted(_name, id):
@@ -51,7 +52,6 @@ func objectEditingStarted(_name, id):
 		rootNode.material.set_shader_parameter("mode",1)
 		rootNode.material.set_shader_parameter("cycle_speed",8)
 		rootNode.material.set_shader_parameter("shine_color",Color(0.8, 0.9, 1.0, 0.7))
-		print("coloring ",_name)
 	else:
 		objectEditingStopped()
 
@@ -115,12 +115,25 @@ func setNotEditing():
 	isBeingEdited = false
 	signalBus.updateProperty.disconnect(setProperty)
 
-func checkErase():
-	if isMouseOver and globalEditor.currentLayer==layer.index:
+func checkErase(id=-1):
+	if id !=-1:
+		#print("erasing ",id," but my id is ",instanceID)
+		if id != -1 and id == instanceID:
+			eraseSelf()
+	elif isMouseOver and globalEditor.currentLayer==layer.index:
+		system.undoRedo.add_undo_method(globalEditor.placeObject.bind(globalEditor.itemRoster[rosterID], position, getSelfFromLevelStruct().properties, instanceID))
+		system.undoRedo.add_do_method(globalEditor.eraseSpecificObject.bind(instanceID))
+		#print("deleting ",instanceID)
 		eraseSelf()
+		
+func getSelfFromLevelStruct():
+	return globalEditor.level.rooms[globalEditor.currentRoom].layers[layer.index].objects[instanceID]
+	#if isMouseOver and globalEditor.currentLayer==layer.index:
+		#print( globalEditor.level.rooms[globalEditor.currentRoom].layers[layer.index].objects[instanceID].properties )
 func eraseSelf():
-	rootNode.queue_free()
+	globalEditor.freedObjectIndicesStack.push_back(instanceID)
 	globalEditor.getCurrentLevelLayerDict()["objects"].erase(instanceID)
+	rootNode.queue_free()
 	
 func getObjectFromLevelStruct() -> Dictionary: 
 	return globalEditor.getCurrentLevelRoomDict()["layers"][layer.index]["objects"][ instanceID ]

@@ -1,10 +1,5 @@
 extends Node2D
 
-#@onready var level: Node2D = $"../Level"
-#@onready var tileMap: TileMapLayer = $"../Level/Layer0/TileMapLayer"
-#@onready var tileMaps: Dictionary[int, TileMapLayer] = {0:$"../Level/Layer0/TileMapLayer"}
-#@onready var cursor: Node2D = $"../CursorCanvas/Cursor"
-#@onready var cursor: Node2D =$"../Cursor"
 @onready var cursorItemIcon: TextureRect = $"../cursorItemIcon"
 
 @onready var camera: GameplayCamera = $"../Camera2D"
@@ -30,8 +25,6 @@ func _ready() -> void:
 	globalEditor.setItem.connect(setSelectedItem)
 	signalBus.startEditMode.connect(resetStage)
 	globalEditor.propertiesUI = $"../HUD/PropertiesSidebar/PropertiesPanel/ScrollContainer/Properties"
-	#globalEditor.tileMaps = tileMaps
-	#globalEditor.level = $"../Level"
 	signalBus.onLevelReady.connect(levelReady)
 	
 	signalBus.pauseToggled.connect(handlePausing)
@@ -52,32 +45,25 @@ func _process(_delta: float) -> void:
 	if !globalEditor.popupIsOpen:
 		if globalEditor.isEditing and !globalEditor.popupIsOpen:
 			previousCursorCellCoords = cursorCellCoords
-#			Cursor's position shifted with the current parallax layer
+			#Cursor's position shifted with the current parallax layer
 			cursorParallaxPosition = cursorCanvas.cursor.global_position + getCurrentLayerNode().screen_offset * (getCurrentLayerNode().scroll_scale-Vector2.ONE)
 			cursorCellCoords = getCurrentLayerTilemap().local_to_map( cursorParallaxPosition )
-			#cursorCellCoords = getCurrentLayerTilemap().local_to_map(getCurrentLayerTilemap().to_local(cursor.global_position)) #evil stupid version
 			#if the cursor moved to a different tile or the camera's target position is not the same as the current one (it is easing in), adjust the tile preview
 			if (cursorCellCoords!=previousCursorCellCoords or (round(camera.phantomCamera.position*100) != round(camera.position*100)) ) and selectedItem is terrainItem:
 				tweenCursorItemIcon()
 			elif selectedItem is objectItem:
 				cursorItemIcon.position = (cursorCanvas.cursor.global_position - (Vector2.ONE * (cursorItemIcon.texture.get_size()/2) if selectedItem.centerPreview else Vector2.ZERO) + selectedItem.textureOffset)
-			
-			#place an object
-			if Input.is_action_just_released("mouseClickLeft"):
-				placeButtonIsHeld = false
-				previousPlacePos = Vector2.INF
-			if placeButtonIsHeld and cursorCanvas.cursor.cursorOnScreen: #TIGHT COUPLING HERE MIGHT NOT BE IDEAL
+				
+			#placing items
+			if placeButtonIsHeld and cursorCanvas.cursor.cursorOnScreen:
 				match globalEditor.currentTool:
 					globalEditor.Tools.place:
 						placeItem()
-					#globalEditor.Tools.move:
-						#pass #UNTIL MOVE TOOL IS IMPLEMENTED
 					globalEditor.Tools.erase:
 						eraseItem()
-
+						
 			if Input.is_action_just_released("clear"):
 				globalEditor.clearLevel()
-				#tileMap.clear()
 #		If Not editing
 		else:
 			pass
@@ -122,10 +108,16 @@ func _unhandled_input(event: InputEvent) -> void:
 	#toggle between edit mode and play mode
 	if Input.is_action_just_pressed("toggleEditing") and !globalEditor.popupIsOpen:
 		toggleGameMode()
-	if event.is_action("mouseClickLeft") and cursorCanvas.cursor.cursorOnScreen and globalEditor.isEditing:
-		placeButtonIsHeld = true
-		clickFrame = true
-
+	if event.is_action("mouseClickLeft") and globalEditor.isEditing:
+		if event.is_pressed() and cursorCanvas.cursor.cursorOnScreen:
+			system.undoRedo.create_action("placeItem")
+			placeButtonIsHeld = true
+			clickFrame = true
+		#stopped placing items
+		if event.is_released():
+			system.undoRedo.commit_action(false)
+			placeButtonIsHeld = false
+			previousPlacePos = Vector2.INF
 func toggleGameMode():
 	if globalEditor.isEditing:
 		#globalEditor.isEditing = false
@@ -133,21 +125,31 @@ func toggleGameMode():
 	else:
 		signalBus.startEditMode.emit()
 
+##tells the globalEditor to place an item depending on if it is a tile or an object
 func placeItem():
 	if selectedItem is terrainItem:
-		globalEditor.placeTile(selectedItem,cursorCellCoords)
+		#globalEditor.placeTile(selectedItem,cursorCellCoords)
+		if getCurrentLayerTilemap().get_cell_source_id(cursorCellCoords) == -1:
+			system.undoRedo.add_undo_method(getCurrentLayerTilemap().set_cells_terrain_connect.bind([cursorCellCoords],0,-1,false))
+			system.undoRedo.add_do_method(globalEditor.placeTile.bind(selectedItem.terrainSet,selectedItem.terrain,cursorCellCoords))
+			globalEditor.placeTile(selectedItem.terrainSet,selectedItem.terrain,cursorCellCoords)
 	if selectedItem is objectItem:
 		if clickFrame or (previousPlacePos.is_finite() and (cursorParallaxPosition.x > previousPlacePos.x+globalEditor.gridSize or cursorParallaxPosition.x < previousPlacePos.x-globalEditor.gridSize or cursorParallaxPosition.y > previousPlacePos.y+globalEditor.gridSize or cursorParallaxPosition.y < previousPlacePos.y-globalEditor.gridSize )):
 			previousPlacePos = cursorParallaxPosition
+			system.undoRedo.add_undo_method(globalEditor.eraseSpecificObject.bind(globalEditor.getNextObjectId()))
+			system.undoRedo.add_do_method(globalEditor.placeObject.bind(selectedItem,cursorParallaxPosition))
 			globalEditor.placeObject(selectedItem,cursorParallaxPosition)
 
 func eraseItem():
-	if selectedItem is terrainItem:
-		#var erasedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
+	#if selectedItem is terrainItem:
+	#var erasedTilePosition: Vector2i = tileMap.local_to_map(get_global_mouse_position())
+	if getCurrentLayerTilemap().get_cell_source_id(cursorCellCoords) != -1:
 		#tileMap.erase_cell(erasedTilePosition) #if we wanted to erase a non-terrain tile
-		getCurrentLayerTilemap().set_cells_terrain_connect([cursorCellCoords],0,-1,false)
+		system.undoRedo.add_undo_method(globalEditor.placeTile.bind( getCurrentLayerTilemap().get_cell_tile_data(cursorCellCoords).terrain_set,getCurrentLayerTilemap().get_cell_source_id(cursorCellCoords),cursorCellCoords))
+		system.undoRedo.add_do_method(getCurrentLayerTilemap().set_cells_terrain_connect.bind([cursorCellCoords],0,-1,false))
+		getCurrentLayerTilemap().set_cells_terrain_connect([cursorCellCoords],0,-1,true)
+		print()
 	signalBus.eraseObject.emit()
-		
 
 ##sets the mode to edit mode
 func resetStage():
@@ -157,5 +159,5 @@ func resetStage():
 
 func getCurrentLayerNode():
 	return globalEditor.level.layers[globalEditor.currentLayer]
-func getCurrentLayerTilemap():
+func getCurrentLayerTilemap() -> TileMapLayer:
 	return globalEditor.level.layers[globalEditor.currentLayer].tileMap

@@ -152,10 +152,11 @@ func setProperty(property:String, value, layerID):
 		return -1
 	#globalEditor.getCurrentLevelLayerDict()["objects"][ instanceID ]["properties"][property] = value
 	getCurrentRoomDict()["layers"][layerID]["layerProperties"][property]=value
+	if property == "scroll_scale":
+		signalBus.shimmyCamera.emit()
 	layers[layerID].set(property, value)
 
 func _on_layers_button_pressed() -> void:
-	#globalEditor.propertiesSidebar.populateLayersUI(propertiesHandler)
 	signalBus.populateLayersUI.emit(propertiesHandler)
 	
 func _input(event: InputEvent) -> void:

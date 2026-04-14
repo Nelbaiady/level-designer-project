@@ -21,9 +21,15 @@ func _ready() -> void:
 	signalBus.startEditMode.connect(editMode)
 	signalBus.startPlayMode.connect(playMode)
 	signalBus.loadedLevel.connect(refindPlayer)
-	
-	phantomCamera.dead_zone_reached.connect(_on_dead_zone_changed)
+	signalBus.shimmyCamera.connect(shimmyOver)
+	#phantomCamera.dead_zone_reached.connect(_on_dead_zone_changed)
 
+##moves the camera slightly to forcefully update scrollScale
+func shimmyOver():
+	phantomCamera.position+=Vector2.RIGHT*0.5
+	await get_tree().process_frame
+	phantomCamera.position-=Vector2.RIGHT*0.5
+	
 func setPlayer(_lvl):
 	refindPlayer()
 	#for some reason the below three lines in that exact order fix the cursor jitter on startup. no idea why.
@@ -31,13 +37,13 @@ func setPlayer(_lvl):
 	phantomCamera.set_follow_target(player)
 	phantomCamera.follow_mode = phantomCamera.FollowMode.NONE
 
-func _on_dead_zone_changed(zoneVector):
-	if !globalEditor.isEditing:
-		var newFollowOffset = Vector2(
-			(((player.velocity) * abs(zoneVector)).limit_length(350)).x,
-			((player.velocity) * abs(zoneVector)).limit_length(500).y
-		)
-		phantomCamera.set_follow_offset(newFollowOffset)
+#func _on_dead_zone_changed(zoneVector):
+	#if !globalEditor.isEditing:
+		#var newFollowOffset = Vector2(
+			#(((player.velocity) * abs(Vector2(zoneVector))).limit_length(350)).x,
+			#((player.velocity) * abs(Vector2(zoneVector))).limit_length(500).y
+		#)
+		#phantomCamera.set_follow_offset(newFollowOffset)
 func _physics_process(_delta: float) -> void:
 	if globalEditor.popupIsOpen:
 		inputVector = Vector2.ZERO

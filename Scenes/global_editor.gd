@@ -12,7 +12,8 @@ var gridSize:int = 64
 signal updateHotbar(hotbarIndex, item)
 signal updateHotbarSelection(hotbarIndex)
 signal setItem(item)
-var objectInstancesCount:int = 0
+var objectInstancesCount:int = 0 ##keeps track of the latest index
+var freedObjectIndicesStack:Array[int] = [] ##keeps track of freed object indices in the middle so they can be reclaimed by the next objects
 
 #list of every possible object type
 var itemRoster:Array[Item] = []#[preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
@@ -61,20 +62,43 @@ func levelNodeReady(levelNode):
 func _physics_process(_delta: float) -> void:
 	popupIsOpen = system.isPaused or saveLoadPopupIsOpen or colorPickerPopupIsOpen or textPopupIsOpen or levelBrowsingPopupIsOpen
 
-
-func placeTile(item, cell):
-	level.layers[currentLayer].tileMap.set_cells_terrain_connect([cell],item.terrainSet,item.terrain,false) #place the tile
+##Placing a tile in the tilemap
+func placeTile(terrainSet:int, terrain:int, cell:Vector2i):
+	level.layers[currentLayer].tileMap.set_cells_terrain_connect([cell],terrainSet,terrain,false) #place the tile
+##Placing an object and optionally setting properties and an instance ID
 func placeObject(object:objectItem, position:Vector2=Vector2.ZERO,startProperties={}, instanceID = null):
 	var objectToPlace = object.objectReference.instantiate()
 	objectToPlace.global_position = position
 	level.layers[currentLayer].objects.add_child(objectToPlace)
 	if instanceID == null:
-		instanceID = objectInstancesCount
-		objectInstancesCount+=1
+		#if freedObjectIndicesStack.size()>0:
+			#instanceID = freedObjectIndicesStack.pop_back()
+		#else:
+			#instanceID = objectInstancesCount
+			#objectInstancesCount+=1
+		instanceID = getNextObjectId(true)
 	globalEditor.getCurrentLevelLayerDict()["objects"][instanceID] = {"object":objectToPlace, "rosterID":object.rosterID,"properties":{"position":position}}
 	signalBus.placeObjectSignal.emit(instanceID, objectToPlace, startProperties)
+##erase an object based on its id
+func eraseSpecificObject(id:int):
+	signalBus.eraseSpecificObject.emit(id)
 
+##calculates the id of the next object that will be placed
+func getNextObjectId(destructive=false):
+	var nextID=null
+	if freedObjectIndicesStack.size()>0:
+		if destructive:
+			nextID = freedObjectIndicesStack.pop_back()
+		else:
+			nextID = freedObjectIndicesStack[-1]
+	else:
+		nextID = objectInstancesCount
+		if destructive: objectInstancesCount+=1
+	return nextID
+
+##Erases absolutely everything and starts a new empty level
 func clearLevel():
+	system.undoRedo.clear_history()
 	playerProperties = {"position":Vector2(544,280)}
 	currentLayer=0
 	for layerIndex in level["rooms"][currentRoom]["layers"]:
@@ -98,6 +122,7 @@ func clearLevel():
 	level.rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{}  }]
 	level.collectChildren()
 	objectInstancesCount=0
+	freedObjectIndicesStack.clear()
 	signalBus.hidePropertiesSidebar.emit()
 	signalBus.loadedLevel.emit()
 

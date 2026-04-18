@@ -29,7 +29,9 @@ func _on_area_entered(area: Area2D) -> void:
 			var player:Player = area.rootNode
 			if !player.bouncedThisFrame and player.velocity.y >= 0:
 				if !player.bouncedThisFrame and canBouncePlayer:
-					player.getBounced.emit(player.velocity.slide(Vector2.UP.rotated(global_rotation)) + Vector2.UP.rotated(global_rotation) * (bounciness*bouncinessMult))
+					#TEMPORARILY REMOVE ROTATION ASPECT UNTIL WE FIGURE OUT HOW THE FLIP WE'RE FLIPPING THE ENEMY
+					player.getBounced.emit(bounciness*bouncinessMult * Vector2.UP)
+					#player.getBounced.emit(player.velocity.slide(Vector2.UP.rotated(global_rotation)) + Vector2.UP.rotated(global_rotation) * (bounciness*bouncinessMult))
 					rootNode.jumpedOn.emit(player, self)
 		#I could add bouncing for non-player areas but ill do that when its needed
 

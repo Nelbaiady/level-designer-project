@@ -1,15 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://cd4enn34snm7g"]
+[gd_scene format=3 uid="uid://cd4enn34snm7g"]
 
 [ext_resource type="Script" uid="uid://d446gklusu3n" path="res://Scenes/UI/ObjectProperties/propertyUIelements/text_property_editor.gd" id="1_kx4xs"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ebjba"]
 font_size = 14
 
-[node name="TextPropertyEditor" type="Panel"]
+[node name="TextPropertyEditor" type="Panel" unique_id=1484554601]
 custom_minimum_size = Vector2(0, 32)
 script = ExtResource("1_kx4xs")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=42328413]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,18 +19,18 @@ grow_vertical = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=427334495]
 layout_mode = 2
 text = "Name:"
 label_settings = SubResource("LabelSettings_ebjba")
 
-[node name="TextEdit" type="TextEdit" parent="HBoxContainer"]
+[node name="TextEdit" type="TextEdit" parent="HBoxContainer" unique_id=204260795]
 visible = false
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer" unique_id=1012392052]
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0

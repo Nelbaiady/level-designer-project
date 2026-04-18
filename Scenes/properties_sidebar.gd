@@ -21,6 +21,8 @@ func hideSidebar():
 	hotbarTween.set_trans(Tween.TRANS_CUBIC)
 	hotbarTween.set_ease(Tween.EASE_IN)
 	hotbarTween.tween_property(self,"anchor_left",1,0.1)
+	globalEditor.colorPickerPopupIsOpen = false #just in case
+	emptyPropertiesUI()
 
 func _on_close_button_pressed() -> void:
 	signalBus.hidePropertiesSidebar.emit()

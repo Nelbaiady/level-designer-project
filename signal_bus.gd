@@ -106,6 +106,8 @@ signal stopBrowsingLevels()##closes and empties the level browsing menu
 @warning_ignore("unused_signal")
 signal updateControlIcons()##when swapping between keyboard and controller
 @warning_ignore("unused_signal")
+signal inputMethodChanged()##when swapping between keyboard and controller
+@warning_ignore("unused_signal")
 signal controlIconsUpdated()##sent after icons were changed
 
 

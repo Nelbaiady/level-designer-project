@@ -77,6 +77,9 @@ func placeObject(object:objectItem, position:Vector2=Vector2.ZERO,startPropertie
 			#instanceID = objectInstancesCount
 			#objectInstancesCount+=1
 		instanceID = getNextObjectId(true)
+	#make sure that if instanceID is already in the stack, we empty is from the stack to avoid colliding ID's in the future
+	elif instanceID in freedObjectIndicesStack:
+		freedObjectIndicesStack.erase(instanceID)
 	globalEditor.getCurrentLevelLayerDict()["objects"][instanceID] = {"object":objectToPlace, "rosterID":object.rosterID,"properties":{"position":position}}
 	signalBus.placeObjectSignal.emit(instanceID, objectToPlace, startProperties)
 ##erase an object based on its id

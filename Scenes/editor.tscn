@@ -280,7 +280,7 @@ func hideHud():
 		hotbarTween = create_tween()
 		hotbarTween.set_trans(Tween.TRANS_CUBIC)
 		hotbarTween.set_ease(Tween.EASE_IN)
-		hotbarTween.tween_property(self,\"offset_left\",-size.x-12,0.15)
+		hotbarTween.tween_property(self,\"offset_left\",-size.x-1200,0.15)
 "
 
 [sub_resource type="GDScript" id="GDScript_u6te5"]
@@ -882,6 +882,7 @@ grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("3_exjlx")
+metadata/_edit_use_anchors_ = true
 
 [node name="propertiesEditingLabelPanel" type="Panel" parent="HUD/PropertiesSidebar" unique_id=1522755482]
 self_modulate = Color(1, 1, 1, 0)
@@ -942,7 +943,7 @@ anchors_preset = -1
 anchor_right = 0.16
 anchor_bottom = 0.04954321
 offset_bottom = -0.10400009
-focus_mode = 1
+focus_mode = 3
 theme = ExtResource("3_cnbw5")
 text = "x"
 
@@ -1107,7 +1108,6 @@ dead_zone_height = 0.65
 metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525]
-top_level = true
 position = Vector2(544, 280)
 limit_enabled = false
 position_smoothing_speed = 20.0

@@ -1,129 +1,8 @@
-#class_name Cursor extends Node2D
-#
-#var cursorMoveVector:Vector2 
-#var mousePosition:Vector2 
-#@export var cursorMoveSpeed: int = 10
-#@export var cursorMoveSpeedMult: float = 1
-#var mouseOnScreen: bool = false
-#var cursorOnScreen: bool = false
-#var prioritizeController:bool = false
-#var isSpinBoxing: bool = false
-#var screenPosition:Vector2 = Vector2.ZERO ##variable to represent cursor position in screen space
-#@onready var cursorSprite: AnimatedSprite2D = $"../AnimatedSprite2D"
-#var camPosition : Vector2 ##position of the viewport in the global world space
-##the below two vars deal with an issue where the browser thinks the actual mouse moved to the position a click was triggered in
-#
-#func _ready() -> void:
-	#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	#signalBus.spinboxSpun.connect( spinBoxing )
-#func updateCursorPosition():
-	#camPosition = Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2
-	#if get_viewport().get_camera_2d(): camPosition = get_viewport().get_camera_2d().position 
-	#if globalEditor.isEditing or globalEditor.isObjectBeingEdited or globalEditor.popupIsOpen:
-		##To make UI block controller input, we make the controller trigger a real mouse click
-		#if Input.is_action_just_pressed("controllerClickLeft"):
-			#click()
-		#if Input.is_action_just_released("controllerClickLeft"):
-			#unClick()
-		#if Input.is_action_just_pressed("controllerClickRight"):
-			#rightClick()
-		#if Input.is_action_just_released("controllerClickRight"):
-			#unRightClick()
-		##Left stick input vector
-		#cursorMoveVector = Input.get_vector("rLeft","rRight","rUp","rDown")
-		##If the mouse isnt making any movement in the game window and the right stick is moved in any direction, 
-		##use controller to move the cursor
-		#if cursorMoveVector:
-			#if !prioritizeController:
-				#prioritizeController = true
-				#screenPosition = position - camPosition
-			#mousePosition = get_viewport().get_mouse_position()
-			#cursorOnScreen = true
-		##code for moving the cursor with controllers
-		#if prioritizeController:
-			#cursorMoveSpeedMult = 1-Input.get_action_strength("L2")
-			#if cursorMoveSpeedMult < 0.15:
-				#cursorMoveSpeedMult = 0.15
-			#screenPosition += cursorMoveVector * cursorMoveSpeed * cursorMoveSpeedMult
-			#position = screenPosition + camPosition
-			##Make sure the cursor does not go off screen
-			#screenPosition.x = clamp(screenPosition.x,-get_viewport_rect().size.x / 2, get_viewport_rect().size.x / 2 - 1)#-1 on the max of both clamps because the mouse otherwise goes off screen
-			#screenPosition.y = clamp(screenPosition.y,-get_viewport_rect().size.y / 2, get_viewport_rect().size.y / 2 - 1)
-			##Move the mouse itself too if it's inside the game window
-			##if mouseOnScreen:
-				##get_viewport().warp_mouse(get_viewport().canvas_transform * global_position)
-		#else:
-			#mousePosition = get_viewport().get_mouse_position()
-			##mouse position relative to viewport + viewport distance from origin
-			#position = mousePosition + camPosition-get_viewport().get_visible_rect().size/2
-		##If the mouse moved and is on screen and the controller's inputs arent being used, use mouse controls
-		#if (mousePosition != get_viewport().get_mouse_position()) and mouseOnScreen and !cursorMoveVector and !Input.is_action_just_released("controllerClickLeft") and !Input.is_action_just_released("controllerClickRight") and !Input.is_action_pressed("controllerClickLeft") and !Input.is_action_pressed("controllerClickRight"): 
-			#prioritizeController = false
-#func _process(_delta: float) -> void:
-	#updateCursorPosition()
-	##cursorSprite.position = get_local_mouse_position() + Vector2(4,8)
-	#cursorSprite.position = position-camPosition+Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2 + Vector2(4,8)
-	#visible = cursorOnScreen and (globalEditor.isEditing or globalEditor.isObjectBeingEdited or globalEditor.popupIsOpen) and !isSpinBoxing
-	#cursorSprite.visible = visible
-#
-#func _notification(event):
-	##mouse enters the window
-	#if event == NOTIFICATION_WM_MOUSE_ENTER:
-		#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-		#mouseOnScreen = true
-		#cursorOnScreen = true
-		#prioritizeController = false
-	##mouse exits the window
-	#elif event == NOTIFICATION_WM_MOUSE_EXIT:
-		#mouseOnScreen = false
-		#cursorOnScreen = false
-		#prioritizeController = true
-#
-## REFERENCE: https://forum.godotengine.org/t/how-can-i-simulate-a-mouse-click-with-controller-inputs/1644
-#func click():
-	#var clickEvent = InputEventMouseButton.new()
-	#clickEvent.position = get_viewport().canvas_transform * global_position
-	#clickEvent.global_position = get_viewport().canvas_transform * global_position
-	#clickEvent.button_index = MOUSE_BUTTON_LEFT
-	#clickEvent.pressed = true
-	#Input.parse_input_event(clickEvent)
-#func unClick():
-	#var clickEvent = InputEventMouseButton.new()
-	#clickEvent.position = get_viewport().canvas_transform * global_position
-	#clickEvent.global_position = get_viewport().canvas_transform * global_position
-	#clickEvent.button_index = MOUSE_BUTTON_LEFT
-	#clickEvent.pressed = false
-	#Input.parse_input_event(clickEvent)
-	#
-#func rightClick():
-	#var clickEvent = InputEventMouseButton.new()
-	#clickEvent.position = get_viewport().canvas_transform * global_position
-	#clickEvent.global_position = get_viewport().canvas_transform * global_position
-	#clickEvent.button_index = MOUSE_BUTTON_RIGHT
-	#clickEvent.pressed = true
-	#Input.parse_input_event(clickEvent)
-#func unRightClick():
-	#var clickEvent = InputEventMouseButton.new()
-	#clickEvent.position = get_viewport().canvas_transform * global_position
-	#clickEvent.global_position = get_viewport().canvas_transform * global_position
-	#clickEvent.button_index = MOUSE_BUTTON_RIGHT
-	#clickEvent.pressed = false
-	#Input.parse_input_event(clickEvent)
-#
-#func spinBoxing():
-	#if Input.is_action_pressed("mouseClickLeft"):
-		#isSpinBoxing = true
-	#
-#func _input(event: InputEvent) -> void:
-	#if event.is_action_released("mouseClickLeft"):
-		#if isSpinBoxing:
-			#isSpinBoxing = false
-
 class_name Cursor extends Node2D
 
 var cursorMoveVector:Vector2 
 var mousePosition:Vector2 
-@export var cursorMoveSpeed: int = 10
+@export var cursorMoveSpeed: int = 1500
 @export var cursorMoveSpeedMult: float = 1
 var mouseOnScreen: bool = false
 var cursorOnScreen: bool = false
@@ -131,13 +10,13 @@ var prioritizeController:bool = false
 var isSpinBoxing: bool = false
 var screenPosition:Vector2 = Vector2.ZERO ##variable to represent cursor position in screen space
 @onready var cursorSprite: AnimatedSprite2D = $"../AnimatedSprite2D"
-var camPosition : Vector2 ##position of the viewport in the global world space
+var camPosition : Vector2 ##position of the viewport inf the global world space
 #the below two vars deal with an issue where the browser thinks the actual mouse moved to the position a click was triggered in
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	signalBus.spinboxSpun.connect( spinBoxing )
-func updateCursorPosition():
+func updateCursorPosition(delta):
 	camPosition = Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2
 	if get_viewport().get_camera_2d(): camPosition = get_viewport().get_camera_2d().position 
 	if globalEditor.isEditing or globalEditor.isObjectBeingEdited or globalEditor.popupIsOpen:
@@ -165,7 +44,7 @@ func updateCursorPosition():
 			cursorMoveSpeedMult = 1-Input.get_action_strength("L2")
 			if cursorMoveSpeedMult < 0.15:
 				cursorMoveSpeedMult = 0.15
-			screenPosition += cursorMoveVector * cursorMoveSpeed * cursorMoveSpeedMult
+			screenPosition += cursorMoveVector * cursorMoveSpeed * cursorMoveSpeedMult * delta
 			position = screenPosition + camPosition
 			#Make sure the cursor does not go off screen
 			screenPosition.x = clamp(screenPosition.x,-get_viewport_rect().size.x / 2, get_viewport_rect().size.x / 2 - 1)#-1 on the max of both clamps because the mouse otherwise goes off screen
@@ -182,7 +61,7 @@ func updateCursorPosition():
 			#prioritizeController = false
 func _process(_delta: float) -> void:
 	prioritizeController = system.isUsingController
-	updateCursorPosition()
+	updateCursorPosition(_delta)
 	#cursorSprite.position = get_local_mouse_position() + Vector2(4,8)
 	cursorSprite.position = position-camPosition+Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2 + Vector2(4,8)
 	visible = cursorOnScreen and (globalEditor.isEditing or globalEditor.isObjectBeingEdited or globalEditor.popupIsOpen) and !isSpinBoxing

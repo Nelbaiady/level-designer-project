@@ -22,6 +22,7 @@ func _ready() -> void:
 	signalBus.startPlayMode.connect(playMode)
 	signalBus.loadedLevel.connect(refindPlayer)
 	signalBus.shimmyCamera.connect(shimmyOver)
+	
 	#phantomCamera.dead_zone_reached.connect(_on_dead_zone_changed)
 
 ##moves the camera slightly to forcefully update scrollScale
@@ -37,13 +38,6 @@ func setPlayer(_lvl):
 	phantomCamera.set_follow_target(player)
 	phantomCamera.follow_mode = phantomCamera.FollowMode.NONE
 
-#func _on_dead_zone_changed(zoneVector):
-	#if !globalEditor.isEditing:
-		#var newFollowOffset = Vector2(
-			#(((player.velocity) * abs(Vector2(zoneVector))).limit_length(350)).x,
-			#((player.velocity) * abs(Vector2(zoneVector))).limit_length(500).y
-		#)
-		#phantomCamera.set_follow_offset(newFollowOffset)
 func _physics_process(_delta: float) -> void:
 	if globalEditor.popupIsOpen:
 		inputVector = Vector2.ZERO

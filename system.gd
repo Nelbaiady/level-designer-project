@@ -46,11 +46,13 @@ func _input(event: InputEvent) -> void:
 			if !isUsingController: settingChanged = true #the variable will change from what it was, which we need to know so we dont update all icons constantly
 			isUsingController = true
 			if settingChanged: signalBus.updateControlIcons.emit()#make sure to update controller icons
+			if settingChanged: signalBus.inputMethodChanged.emit()#inform other things that the input method changed
 	elif event is InputEventKey or event is InputEventMouseMotion:
 		var settingChanged:=false
 		if isUsingController: settingChanged = true #the variable will change from what it was, which we need to know so we dont update all icons constantly
 		isUsingController = false
 		if settingChanged: signalBus.updateControlIcons.emit()#make sure to update controller icons
+		if settingChanged: signalBus.inputMethodChanged.emit()#inform other things that the input method changed
 		
 func _physics_process(_delta: float) -> void:
 	popupIsOpen = globalEditor.popupIsOpen

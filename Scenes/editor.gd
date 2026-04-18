@@ -115,6 +115,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			clickFrame = true
 		#stopped placing items
 		if event.is_released():
+			
 			system.undoRedo.commit_action(false)
 			placeButtonIsHeld = false
 			previousPlacePos = Vector2.INF
@@ -148,7 +149,6 @@ func eraseItem():
 		system.undoRedo.add_undo_method(globalEditor.placeTile.bind( getCurrentLayerTilemap().get_cell_tile_data(cursorCellCoords).terrain_set,getCurrentLayerTilemap().get_cell_source_id(cursorCellCoords),cursorCellCoords))
 		system.undoRedo.add_do_method(getCurrentLayerTilemap().set_cells_terrain_connect.bind([cursorCellCoords],0,-1,false))
 		getCurrentLayerTilemap().set_cells_terrain_connect([cursorCellCoords],0,-1,true)
-		print()
 	signalBus.eraseObject.emit()
 
 ##sets the mode to edit mode

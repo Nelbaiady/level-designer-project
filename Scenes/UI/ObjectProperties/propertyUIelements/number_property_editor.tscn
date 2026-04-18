@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bydj3gco3u5wr"]
+[gd_scene format=3 uid="uid://bydj3gco3u5wr"]
 
 [ext_resource type="Script" uid="uid://dir28lw0jlwuy" path="res://Scenes/UI/ObjectProperties/propertyUIelements/number_property_editor.gd" id="1_32n73"]
 [ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="2_d5kri"]
@@ -6,14 +6,25 @@
 [sub_resource type="LabelSettings" id="LabelSettings_ebjba"]
 font_size = 14
 
-[node name="NumberPropertyEditor" type="Panel"]
+[sub_resource type="GDScript" id="GDScript_32n73"]
+resource_name = "spinbox"
+script/source = "extends SpinBox
+
+func _input(event: InputEvent):
+	#when the player clicks away, the texbox is unfocuses
+	if event is InputEventMouseButton and event.is_action_pressed(\"mouseClickLeft\"):
+		if !Rect2(Vector2(0,0), size).has_point(make_input_local(event).position):
+			get_line_edit().release_focus()
+"
+
+[node name="NumberPropertyEditor" type="Panel" unique_id=898440047]
 custom_minimum_size = Vector2(0, 32)
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
 script = ExtResource("1_32n73")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1851625610]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,12 +33,12 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=57126026]
 layout_mode = 2
 text = "Size:"
 label_settings = SubResource("LabelSettings_ebjba")
 
-[node name="ValueSpinBox" type="SpinBox" parent="HBoxContainer"]
+[node name="ValueSpinBox" type="SpinBox" parent="HBoxContainer" unique_id=323107936]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("2_d5kri")
@@ -37,5 +48,6 @@ step = 0.2
 allow_greater = true
 allow_lesser = true
 prefix = "X:"
+script = SubResource("GDScript_32n73")
 
 [connection signal="value_changed" from="HBoxContainer/ValueSpinBox" to="." method="_on_value_spin_box_value_changed"]

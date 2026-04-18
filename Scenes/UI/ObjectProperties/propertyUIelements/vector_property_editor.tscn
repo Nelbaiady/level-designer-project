@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cg6udjb2cyhqs" path="res://Scenes/UI/ObjectProperties/propertyUIelements/vector_property_editor.gd" id="1_oie7u"]
 [ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="1_vgvs7"]
+[ext_resource type="Script" uid="uid://cyndiwhqv5wyw" path="res://Scenes/UI/Modular UI scripts/spinbox.gd" id="3_wihbn"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ebjba"]
 font_size = 14
@@ -39,6 +40,7 @@ step = 0.1
 allow_greater = true
 allow_lesser = true
 prefix = "X:"
+script = ExtResource("3_wihbn")
 
 [node name="yValueSpinBox" type="SpinBox" parent="HBoxContainer" unique_id=1770954536]
 layout_mode = 2
@@ -51,6 +53,7 @@ step = 0.1
 allow_greater = true
 allow_lesser = true
 prefix = "Y:"
+script = ExtResource("3_wihbn")
 
 [connection signal="value_changed" from="HBoxContainer/xValueSpinBox" to="." method="_on_spin_box_value_changed"]
 [connection signal="value_changed" from="HBoxContainer/xValueSpinBox" to="." method="_on_x_value_spin_box_value_changed"]

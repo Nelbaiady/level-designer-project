@@ -131,6 +131,7 @@ func getSelfFromLevelStruct():
 	#if isMouseOver and globalEditor.currentLayer==layer.index:
 		#print( globalEditor.level.rooms[globalEditor.currentRoom].layers[layer.index].objects[instanceID].properties )
 func eraseSelf():
+	if isBeingEdited: signalBus.hidePropertiesSidebar.emit()
 	globalEditor.freedObjectIndicesStack.push_back(instanceID)
 	globalEditor.getCurrentLevelLayerDict()["objects"].erase(instanceID)
 	rootNode.queue_free()

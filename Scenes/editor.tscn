@@ -308,7 +308,7 @@ func setText():
 script = ExtResource("8_op3c8")
 duration = 0.5
 
-[node name="Node2D" type="Node" unique_id=1408597539]
+[node name="FileDialog" type="Node" unique_id=1408597539]
 
 [node name="cursorItemIcon" type="TextureRect" parent="." unique_id=1233162024]
 self_modulate = Color(1, 1, 1, 0.5019608)
@@ -1108,6 +1108,7 @@ dead_zone_height = 0.65
 metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525]
+top_level = true
 position = Vector2(544, 280)
 limit_enabled = false
 position_smoothing_speed = 20.0
@@ -1131,8 +1132,12 @@ title = "Save a Level"
 initial_position = 1
 size = Vector2i(640, 442)
 theme = ExtResource("3_cnbw5")
-ok_button_text = "OK"
-root_subfolder = "savedLevels"
+ok_button_text = "Confirm"
+access = 1
+filters = PackedStringArray("*.json")
+hidden_files_toggle_enabled = false
+file_filter_toggle_enabled = false
+folder_creation_enabled = false
 
 [node name="Level" type="Node2D" parent="." unique_id=827656185]
 script = ExtResource("2_24ceq")
@@ -1167,4 +1172,5 @@ floor_snap_length = 12.0
 [connection signal="pressed" from="HUD/PropertiesSidebar/PropertiesPanel/closeButton" to="HUD/PropertiesSidebar" method="_on_close_button_pressed"]
 [connection signal="canceled" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_canceled"]
 [connection signal="confirmed" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_confirmed"]
+[connection signal="custom_action" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_custom_action"]
 [connection signal="file_selected" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_file_selected"]

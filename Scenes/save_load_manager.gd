@@ -4,23 +4,22 @@ class_name SaveLoadManager extends Node
 
 var isSaving = false
 func _ready() -> void:
-	authentication.saveLoadManager = self
 	signalBus.loadLevel.connect(loadLevel)
 	signalBus.startSavingLevel.connect(startSavingLevel)
 	signalBus.startLoadingLevel.connect(startLoadingLevel)
 	signalBus.downloadLevelFile.connect(downloadLevelFile)
+	authentication.saveLoadManager = self
+	setLevelPath()
 
-#remove this
-#func _input(event: InputEvent) -> void:
-	#if globalEditor.isEditing:
-		#if event.is_action_pressed("save"):
-			#if OS.has_feature("web"):
-				#downloadLevelFile()
-			#else:
-				#startSavingLevel()
-		#if event.is_action_pressed("load"):
-			#startLoadingLevel()
-
+##makes sure the current path is the levels folder and adds delete button for web
+func setLevelPath():
+	var dir = DirAccess.open("user://")
+	if !dir.dir_exists("user://levels"):
+		dir.make_dir("levels")
+	file_dialog.current_dir = "user://levels"
+	if system.isWebVersion:
+		file_dialog.add_button("Delete",false,"delete")
+	
 ##opens the file dialog and starts the process of saving a level
 func startSavingLevel():
 	globalEditor.saveLoadPopupIsOpen = true
@@ -52,6 +51,16 @@ func downloadLevelFile():
 	else:
 		signalBus.startTextPopup.emit("You cannot download level files unless you are on a browser.")
 
+func _on_file_dialog_custom_action(action: StringName) -> void:
+	#delete button, makes sure the file exists and then deletes it and refreshes the file system
+	if action=="delete":
+		var dir = DirAccess.open(file_dialog.current_dir)
+		if file_dialog.current_file!="" and dir.file_exists(file_dialog.current_file):
+			print(file_dialog.current_file)
+			dir.remove(file_dialog.current_file)
+			file_dialog.invalidate()
+			file_dialog.current_file=""
+	
 func _on_file_dialog_file_selected(path: String) -> void:
 	globalEditor.saveLoadPopupIsOpen = false
 	if isSaving:
@@ -66,7 +75,7 @@ func _on_file_dialog_canceled() -> void:
 
 func saveLevel(path):
 	#REFERENCE: https://godotforums.org/d/35977-how-do-i-save-a-tileset-in-a-building-game/2
-	var saveFile = FileAccess.open(path+".json", FileAccess.WRITE)
+	var saveFile = FileAccess.open(path, FileAccess.WRITE)
 	if(FileAccess.get_open_error() != OK):
 		return false
 	var levelSaveStruct : Dictionary = parseLevelToJson()

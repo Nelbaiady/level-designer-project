@@ -17,27 +17,23 @@ func physics_update(delta: float) -> void:
 	player.move_and_slide()
 
 	if !player.is_on_floor():
-		player.mainCollision.disabled=false
-		player.crouchCollision.disabled=true
-		finished.emit(FALLING)
-	elif Input.is_action_just_pressed("jump") and player.canJump:
-		player.mainCollision.disabled=false
-		player.crouchCollision.disabled=true
-		finished.emit(RISING)
+		finished.emit(FALLING,{"fell":true})
 	elif player.directionInput.y >= player.crouchInputThreshold:
 		#perform the check inside so as not to check every frame.
 		if unCrouchCheck():
-			player.mainCollision.disabled=false
-			player.crouchCollision.disabled=true
 			finished.emit(IDLE)
 			player.animationPlayer.play("unCrouching")
-
+	player.tryToJump()
 ##checks if the player can uncrouch by making sure there are no solid objects above the player
 func unCrouchCheck():
 	for i in player.uncrouchChecker.get_overlapping_bodies():
 		if i.is_in_group("solids") and i != player:
 			return false
 	return true
+
+func exit() -> void:
+	player.mainCollision.disabled=false
+	player.crouchCollision.disabled=true
 
 func crouchTransition(anim:String):
 	if anim=="unCrouching":

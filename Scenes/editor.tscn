@@ -308,6 +308,50 @@ func setText():
 script = ExtResource("8_op3c8")
 duration = 0.5
 
+[sub_resource type="Gradient" id="Gradient_efg2m"]
+offsets = PackedFloat32Array(0, 0.8663595, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_iis80"]
+gradient = SubResource("Gradient_efg2m")
+width = 1
+height = 256
+fill_from = Vector2(1, 1)
+
+[sub_resource type="GDScript" id="GDScript_af0oh"]
+resource_name = "bottomlessPit"
+script/source = "class_name BottomlessPit extends TextureRect
+
+func _ready():
+	get_tree().root.size_changed.connect(updateSize)
+	#signalBus.cameraTransformUpdate.connect(updatePosition)
+	updateSize()
+	updatePosition()
+	
+func updateSize():
+	size.x = get_viewport_rect().size.x+2
+	
+func _process(_delta: float) -> void:
+	updatePosition()
+	
+func updatePosition():
+	position.x = (-get_viewport().canvas_transform.origin).x-1
+	#position.x = (get_viewport().get_camera_2d().global_position-get_viewport_rect().get_center()).x
+
+#func _process(delta: float) -> void:
+	#position = get_viewport().get_camera_2d().global_position
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSFORM_CHANGED:
+		print(\"changed\")
+"
+
+[sub_resource type="Gradient" id="Gradient_u6te5"]
+colors = PackedColorArray(0.7688883, 0.7455368, 0.9951721, 1, 0.9697817, 0.8099847, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_efg2m"]
+gradient = SubResource("Gradient_u6te5")
+fill_from = Vector2(1, 1)
+
 [node name="FileDialog" type="Node" unique_id=1408597539]
 
 [node name="cursorItemIcon" type="TextureRect" parent="." unique_id=1233162024]
@@ -1108,7 +1152,6 @@ dead_zone_height = 0.65
 metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525]
-top_level = true
 position = Vector2(544, 280)
 limit_enabled = false
 position_smoothing_speed = 20.0
@@ -1141,6 +1184,24 @@ folder_creation_enabled = false
 
 [node name="Level" type="Node2D" parent="." unique_id=827656185]
 script = ExtResource("2_24ceq")
+
+[node name="bottomless pit" type="TextureRect" parent="Level" unique_id=923693957]
+offset_right = 481.435
+offset_bottom = 512.0
+texture = SubResource("GradientTexture2D_iis80")
+script = SubResource("GDScript_af0oh")
+
+[node name="Sky" type="CanvasLayer" parent="Level" unique_id=1910664044]
+layer = -256
+
+[node name="TextureRect" type="TextureRect" parent="Level/Sky" unique_id=1994886404]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0, 64)
+texture = SubResource("GradientTexture2D_efg2m")
 
 [node name="PropertiesHandler" type="Node" parent="Level" unique_id=1719493391]
 script = ExtResource("15_i5vsu")

@@ -22,8 +22,7 @@ func _ready() -> void:
 	signalBus.startPlayMode.connect(playMode)
 	signalBus.loadedLevel.connect(refindPlayer)
 	signalBus.shimmyCamera.connect(shimmyOver)
-	
-	#phantomCamera.dead_zone_reached.connect(_on_dead_zone_changed)
+
 
 ##moves the camera slightly to forcefully update scrollScale
 func shimmyOver():

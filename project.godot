@@ -15,13 +15,13 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Level Designer Project"
-config/version="0.2"
+config/version="0.3"
 run/main_scene="uid://bgavxi5l77ibl"
 config/features=PackedStringArray("4.6", "Forward Plus")
 run/max_fps=144
 boot_splash/bg_color=Color(1, 0.827451, 0.42745098, 1)
 boot_splash/image="uid://8vrw88iumrtu"
-config/icon="res://icon.svg"
+config/icon="uid://c5wgrx17cjoni"
 
 [autoload]
 
@@ -32,6 +32,13 @@ system="*uid://dqxkj4f7i6wwh"
 authentication="*uid://ts3goyxmuwxh"
 cursorCanvas="*uid://dw4ojydnn8mlq"
 controlMapping="*uid://cdixu2p0xl5op"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [dotnet]
 

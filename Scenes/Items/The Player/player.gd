@@ -12,6 +12,10 @@ class_name Player extends CharacterBody2D
 #@onready var audioStreamPlayer: AudioStreamPlayer2D = $AudioStreamPlayer2D
 @onready var audioStreamPlayer: AudioStreamPlayer2D = $Sprite2D/AudioStreamPlayer2D
 
+const jumpSFX = preload("uid://5nvaopds8ngk")
+const ouchSFX = preload("uid://bfdulbl1auotk")
+
+
 #Exported stats
 @export var maxHealth : int = 3
 @export var invulnerabilityTime : float = 2 ##amount of time the player cannot take damage again for after taking damage
@@ -64,8 +68,7 @@ func bounce(bounceVelocity):
 		bouncedThisFrame = true
 		refreshJumps()
 		stateMachine._transitionToNextState("Rising",{"bounced":true,"bounceVelocity":bounceVelocity})
-	
-	velocity = bounceVelocity
+		velocity = bounceVelocity
 
 func enterEditState():
 	reset()
@@ -86,20 +89,24 @@ func reset():
 	gravityMult = 1
 	
 func _physics_process(_delta: float) -> void:
-	bouncedThisFrame = false
-	##Either mode
-	directionInput = (Input.get_vector("LstickL","LstickR","LstickD","LstickU") + Input.get_vector("dpadL","dpadR","dpadD","dpadU")).limit_length(1) 
-	if !globalEditor.isEditing:
-		if directionInput.x < 0: sprite.flip_h = true 
-		if directionInput.x > 0: sprite.flip_h = false
-		
-	#invulnerability animation
-	if invulnerabilityTimer < invulnerabilityTime:
-		invulnerabilityTimer += _delta
-		visible = fmod(invulnerabilityTimer,invulnerabilityFlickerSpeed*2)<invulnerabilityFlickerSpeed
+	if stateMachine.state.name in ["Dying"]:
+		bouncedThisFrame = true #make sure the player cannot bounce
+	#code that is common between most states
 	else:
-		visible = true
-		invulnerabilityTimer = invulnerabilityTime
+		bouncedThisFrame = false
+		##Either mode
+		directionInput = (Input.get_vector("LstickL","LstickR","LstickD","LstickU") + Input.get_vector("dpadL","dpadR","dpadD","dpadU")).limit_length(1) 
+		if !globalEditor.isEditing:
+			if directionInput.x < 0: sprite.flip_h = true 
+			if directionInput.x > 0: sprite.flip_h = false
+			
+		#invulnerability animation
+		if invulnerabilityTimer < invulnerabilityTime:
+			invulnerabilityTimer += _delta
+			visible = fmod(invulnerabilityTimer,invulnerabilityFlickerSpeed*2)<invulnerabilityFlickerSpeed
+		else:
+			visible = true
+			invulnerabilityTimer = invulnerabilityTime
 	
 
 ##plays an animation and also plays the reset track (reset no longer happens for now due to bugs)
@@ -133,6 +140,7 @@ func takeDamage(damage:=1):
 		if currentHealth <= 0:
 			die()
 		else:
+			playSound(ouchSFX)
 			invulnerabilityTimer = 0
 func knockBack(sourceLocation:Vector2, power=1000):
 	##knock the player away from the source (plus a corrective y value to make sure the player isnt knocked into the air for no reason)
@@ -148,8 +156,8 @@ func tryToJump(fell=false):
 				coyoteTimer.stop()
 			else:
 				jumpsLeft-=1
+			playSound(jumpSFX)
 			stateMachine.state.finished.emit(stateMachine.state.RISING,{"jumped":true,"fell":fell})
-
 ##restores jumps left to maxJumps
 func refreshJumps():
 	jumpsLeft = maxJumps
@@ -158,3 +166,8 @@ func refreshCoyoteTime():
 	if coyoteTime > 0:
 		coyoteTimer.one_shot = true
 		coyoteTimer.start(coyoteTime)
+		
+func playSound(sound: AudioStream, randomPitch=0.2):
+	audioStreamPlayer.stream = sound
+	audioStreamPlayer.pitch_scale = randf_range(1-randomPitch,1+randomPitch)
+	audioStreamPlayer.play()

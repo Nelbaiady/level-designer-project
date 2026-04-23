@@ -12,12 +12,10 @@ func physics_update(delta: float) -> void:
 
 	if !player.is_on_floor():
 		finished.emit(FALLING,{"fell":true})
-	elif Input.is_action_just_pressed("jump") and player.jumpsLeft>0:
-		player.jumpsLeft-=1
-		finished.emit(RISING)
 	elif player.directionInput.x == 0:
 		finished.emit(IDLE)
 	elif player.directionInput.y < player.crouchInputThreshold and player.canCrouch:
 		finished.emit(CROUCHED)
 	elif player.directionInput.y > -player.crouchInputThreshold and player.canChourc and player.chourcCheck():
 		finished.emit(CHOURCED)
+	player.tryToJump()

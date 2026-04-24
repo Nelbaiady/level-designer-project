@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c6r085mo8sgb6" path="res://Scenes/levelLayer.gd" id="1_fifjg"]
 [ext_resource type="Texture2D" uid="uid://dcwmwktlug1kv" path="res://Scenes/Items/Terrain/grass/grassTiles.png" id="2_e50q0"]
-[ext_resource type="Script" uid="uid://gbx72oygq3hy" path="res://Scenes/objects.gd" id="3_xi4do"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b78su"]
 texture = ExtResource("2_e50q0")
@@ -392,8 +391,6 @@ terrain_set_0/terrain_0/name = "Dirt"
 terrain_set_0/terrain_0/color = Color(0.78171426, 0, 0.17095065, 1)
 sources/0 = SubResource("TileSetAtlasSource_b78su")
 
-[sub_resource type="GDScript" id="GDScript_1k58v"]
-
 [node name="Layer" type="Parallax2D" unique_id=1675109972]
 script = ExtResource("1_fifjg")
 index = 1
@@ -401,7 +398,5 @@ index = 1
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1177813373 groups=["solids"]]
 tile_set = SubResource("TileSet_7fkqn")
 collision_enabled = false
-script = SubResource("GDScript_1k58v")
 
 [node name="Objects" type="Node2D" parent="." unique_id=683321039]
-script = ExtResource("3_xi4do")

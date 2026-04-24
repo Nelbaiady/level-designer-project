@@ -35,7 +35,6 @@ func startLoadingLevel():
 func downloadLevelFile():
 	if OS.has_feature("web"):
 		var levelSaveStruct : Dictionary = parseLevelToJson()
-		print(JSON.stringify(levelSaveStruct))
 		JavaScriptBridge.eval("""
 			(function() {
 				const content = JSON.stringify(%s);
@@ -56,7 +55,6 @@ func _on_file_dialog_custom_action(action: StringName) -> void:
 	if action=="delete":
 		var dir = DirAccess.open(file_dialog.current_dir)
 		if file_dialog.current_file!="" and dir.file_exists(file_dialog.current_file):
-			print(file_dialog.current_file)
 			dir.remove(file_dialog.current_file)
 			file_dialog.invalidate()
 			file_dialog.current_file=""
@@ -82,12 +80,12 @@ func saveLevel(path):
 	saveFile.store_string(JSON.stringify(levelSaveStruct))
 
 func parseLevelToJson():
-	#Exemples for reference
+	#Examples for reference
 	#var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}} ,1:{"tiles":{},"objects":{}}}  }]
 	#var levelSaveStruct : Dictionary = {"rooms": [{"layers":{0:{"tiles": [], "objects": []}}}], "playerProperties":{}}
 	var levelSaveStruct = {"rooms": [ ],"playerProperties":{}}
 	for roomIndex in range(len(globalEditor.level.rooms)):
-		levelSaveStruct["rooms"].append( {"layers":{}} )#{"tiles": [], "objects": []} )
+		levelSaveStruct["rooms"].append( {"layers":{}} ) #{"tiles": [], "objects": []} )
 		for layerIndex in globalEditor.level.rooms[roomIndex]["layers"]:
 			levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]={"tiles": [], "objects": []}
 			var layer = globalEditor.level.rooms[roomIndex]["layers"][layerIndex]
@@ -105,7 +103,6 @@ func parseLevelToJson():
 				var currentSavingObject = layer["objects"][i]#globalEditor.objectsHash[i]
 				levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["objects"].append({"instanceID":i,"rosterID":currentSavingObject.rosterID,"properties":var_to_str(currentSavingObject.properties) })
 			levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["layerProperties"]=var_to_str(globalEditor.level.rooms[roomIndex]["layers"][layerIndex]["layerProperties"])
-			levelSaveStruct["objectInstancesCount"] = globalEditor.objectInstancesCount
 	levelSaveStruct.playerProperties = var_to_str(globalEditor.playerProperties)
 	return levelSaveStruct
 
@@ -154,9 +151,8 @@ func loadLevel(data):
 			#set the layer's properties
 			var currentLoadingLayerProperties = str_to_var(loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["layerProperties"])
 			for prop in currentLoadingLayerProperties:
-				globalEditor.level.setProperty(prop,currentLoadingLayerProperties[prop],layerIndex)
-	#if loadedData.has("objectInstancesCount"):
-		#globalEditor.objectInstancesCount = loadedData["objectInstancesCount"]
+				#globalEditor.level.setProperty(prop,currentLoadingLayerProperties[prop],layerIndex)
+				signalBus.updateLayerProperty.emit(prop,currentLoadingLayerProperties[prop],layerIndex)
 	globalEditor.currentLayer = 0
 	globalEditor.playerProperties = str_to_var( loadedData["playerProperties"] )
 	signalBus.loadedLevel.emit()

@@ -49,7 +49,7 @@ func _process(_delta: float) -> void:
 			cursorParallaxPosition = cursorCanvas.cursor.global_position + getCurrentLayerNode().screen_offset * (getCurrentLayerNode().scroll_scale-Vector2.ONE)
 			cursorCellCoords = getCurrentLayerTilemap().local_to_map( cursorParallaxPosition )
 			#if the cursor moved to a different tile or the camera's target position is not the same as the current one (it is easing in), adjust the tile preview
-			if (cursorCellCoords!=previousCursorCellCoords or (round(camera.phantomCamera.position*100) != round(camera.position*100)) ) and selectedItem is terrainItem:
+			if (cursorCellCoords!=previousCursorCellCoords or (round(camera.controllablePhantomCamera2D.position*100) != round(camera.position*100)) ) and selectedItem is terrainItem:
 				tweenCursorItemIcon()
 			elif selectedItem is objectItem:
 				#cursorItemIcon.position = (cursorCanvas.cursor.global_position - (Vector2.ONE * (cursorItemIcon.texture.get_size()/2) if selectedItem.centerPreview else Vector2.ZERO) + selectedItem.textureOffset)

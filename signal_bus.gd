@@ -46,9 +46,9 @@ signal showPropertiesSidebar()
 @warning_ignore("unused_signal")
 signal hidePropertiesSidebar()
 @warning_ignore("unused_signal")
-signal populatePropertiesUI(object)
+signal populatePropertiesUI(object) ##signal to fill the propertiesUI with an object's properties
 @warning_ignore("unused_signal")
-signal updateProperty(property,value)
+signal updateProperty(property,value) ##this signal is connected to the object that is being edited and tells the object to set the given property (code name) to the given value
 @warning_ignore("unused_signal")
 signal editingObject(objectName, instanceID)
 

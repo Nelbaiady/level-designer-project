@@ -12,7 +12,7 @@ func _ready() -> void:
 #	find all layers and store them in the layers dictionary
 	collectChildren()
 	signalBus.onLevelReady.emit(self)
-	signalBus.updateLayerProperty.connect(setProperty)
+	signalBus.updateLayerProperty.connect(setLayerProperty)
 	signalBus.moveLayerUp.connect(moveLayerUp)
 	signalBus.moveLayerDown.connect(moveLayerDown)
 	signalBus.addLayerAbove.connect(addLayerAbove)
@@ -146,7 +146,7 @@ func getCurrentRoomDict():
 func getCurrentLayerDict():
 	return rooms[globalEditor.currentRoom]["layers"][globalEditor.currentLayer]
 
-func setProperty(property:String, value, layerID):
+func setLayerProperty(property:String, value, layerID):
 	if !layers.has( layerID ):
 		printerr("Error: no layer of id ",layerID)
 		return -1
@@ -158,7 +158,3 @@ func setProperty(property:String, value, layerID):
 
 func _on_layers_button_pressed() -> void:
 	signalBus.populateLayersUI.emit(propertiesHandler)
-	
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("0"):
-		print(getCurrentLayerDict())

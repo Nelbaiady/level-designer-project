@@ -12,7 +12,9 @@
 [ext_resource type="Script" uid="uid://b2jtwkorhb01s" path="res://Scenes/Items/The Player/states/idle.gd" id="9_p02g4"]
 [ext_resource type="Script" uid="uid://dl6ck2tmwtmxy" path="res://Scenes/Items/The Player/states/editing.gd" id="10_qsa3t"]
 [ext_resource type="Script" uid="uid://de12sfrbh1lj5" path="res://Scenes/Items/The Player/crouched.gd" id="11_meww7"]
+[ext_resource type="Script" uid="uid://bylgiwn4q2lxv" path="res://Scenes/Items/The Player/states/chourced.gd" id="12_8pi6c"]
 [ext_resource type="Script" uid="uid://dxw0j6wgiic50" path="res://Scenes/Items/The Player/states/running.gd" id="12_6170r"]
+[ext_resource type="Script" uid="uid://cptwhnytq7o3u" path="res://Scenes/Items/The Player/states/dying.gd" id="15_k1ypc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jkifv"]
 
@@ -610,57 +612,6 @@ _data = {
 &"unCrouching": SubResource("Animation_8pi6c")
 }
 
-[sub_resource type="GDScript" id="GDScript_jkifv"]
-resource_name = "chourced"
-script/source = "#CHOURCED STATE
-extends PlayerState
-
-func enter(_previous_state_path: String, _data := {}) -> void:
-	player.playAnim(\"chourcing\")
-	if !player.animationPlayer.animation_finished.is_connected(crouchTransition):
-		player.animationPlayer.animation_finished.connect(crouchTransition)
-	player.mainCollision.disabled=true
-	player.chourcCollision.disabled=false
-
-func physics_update(delta: float) -> void:
-	player.velocity.y += player.gravity * player.gravityMult * delta
-	player.velocity = Vector2(move_toward(player.velocity.x,0,player.deceleration*delta),player.velocity.y)
-	
-	#player.velocity = Vector2(move_toward(player.velocity.x,player.directionInput.x * player.topRunSpeed,player.acceleration*delta),player.velocity.y)
-	player.move_and_slide()
-
-	if !player.is_on_floor():
-		finished.emit(FALLING,{\"fell\":true})
-	elif player.directionInput.y <= -player.crouchInputThreshold:
-			finished.emit(IDLE)
-			player.animationPlayer.play(\"unChourcing\")
-	player.tryToJump()
-	
-func exit() -> void:
-	player.mainCollision.disabled=false
-	player.chourcCollision.disabled=true
-
-func crouchTransition(anim:String):
-	if anim==\"unChourcing\":
-		player.animationPlayer.play(\"idle\")
-"
-
-[sub_resource type="GDScript" id="GDScript_8pi6c"]
-script/source = "extends PlayerState
-
-const deathSound= preload(\"uid://8xb1en7en8gg\")
-
-func enter(_previous_state_path: String, _data := {}) -> void:
-	player.resetPlay(\"die\")
-	player.audioStreamPlayer.stream = deathSound
-	player.audioStreamPlayer.play()
-
-
-func _on_animation_player_animation_finished(anim_name: StringName) -> void:
-	if anim_name==\"die\":
-		signalBus.startEditMode.emit()
-"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jkifv"]
 size = Vector2(32, 64)
 
@@ -725,6 +676,7 @@ polygon = PackedVector2Array(32, 9, 32, 41, 25, 45.833332, -25, 45.833332, -32, 
 disabled = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2057835058]
+process_mode = 3
 libraries/ = SubResource("AnimationLibrary_ay8ch")
 autoplay = &"idle"
 
@@ -746,7 +698,7 @@ script = ExtResource("9_p02g4")
 script = ExtResource("11_meww7")
 
 [node name="Chourced" type="Node" parent="StateMachine" unique_id=1757473699]
-script = SubResource("GDScript_jkifv")
+script = ExtResource("12_8pi6c")
 
 [node name="Editing" type="Node" parent="StateMachine" unique_id=878611351]
 script = ExtResource("10_qsa3t")
@@ -756,7 +708,7 @@ metadata/_custom_type_script = "uid://bvj7h8be6v0io"
 script = ExtResource("12_6170r")
 
 [node name="Dying" type="Node" parent="StateMachine" unique_id=1743330964]
-script = SubResource("GDScript_8pi6c")
+script = ExtResource("15_k1ypc")
 
 [node name="hurtboxArea2D" type="Area2D" parent="." unique_id=416494424 groups=["hurtbox", "player"]]
 collision_layer = 129

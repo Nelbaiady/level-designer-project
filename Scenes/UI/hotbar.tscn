@@ -43,11 +43,12 @@ alignment = 1
 
 [node name="Control" type="Control" parent="Panel/HBoxContainer" unique_id=251691788]
 clip_contents = true
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 
 [node name="Button" type="Button" parent="Panel/HBoxContainer/Control" unique_id=1933255561]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -72,11 +73,12 @@ script = ExtResource("2_sk345")
 
 [node name="Control2" type="Control" parent="Panel/HBoxContainer" unique_id=2038876441]
 clip_contents = true
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 
 [node name="Button2" type="Button" parent="Panel/HBoxContainer/Control2" unique_id=1290377888]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -103,11 +105,12 @@ index = 1
 
 [node name="Control3" type="Control" parent="Panel/HBoxContainer" unique_id=432964828]
 clip_contents = true
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 
 [node name="Button3" type="Button" parent="Panel/HBoxContainer/Control3" unique_id=756482705]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -134,11 +137,12 @@ index = 2
 
 [node name="Control4" type="Control" parent="Panel/HBoxContainer" unique_id=1654663106]
 clip_contents = true
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 
 [node name="Button4" type="Button" parent="Panel/HBoxContainer/Control4" unique_id=947547602]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -165,11 +169,12 @@ index = 3
 
 [node name="Control5" type="Control" parent="Panel/HBoxContainer" unique_id=2074397724]
 clip_contents = true
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 
 [node name="Button5" type="Button" parent="Panel/HBoxContainer/Control5" unique_id=1287255908]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -196,11 +201,12 @@ index = 4
 
 [node name="Control6" type="Control" parent="Panel/HBoxContainer" unique_id=540796749]
 clip_contents = true
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 
 [node name="Button6" type="Button" parent="Panel/HBoxContainer/Control6" unique_id=278813296]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -227,11 +233,12 @@ index = 5
 
 [node name="Control7" type="Control" parent="Panel/HBoxContainer" unique_id=34374607]
 clip_contents = true
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 
 [node name="Button7" type="Button" parent="Panel/HBoxContainer/Control7" unique_id=1290415307]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -258,11 +265,12 @@ index = 6
 
 [node name="Control8" type="Control" parent="Panel/HBoxContainer" unique_id=361986077]
 clip_contents = true
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 
 [node name="Button8" type="Button" parent="Panel/HBoxContainer/Control8" unique_id=744028415]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -289,11 +297,12 @@ index = 7
 
 [node name="Control9" type="Control" parent="Panel/HBoxContainer" unique_id=1074655436]
 clip_contents = true
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 
 [node name="Button9" type="Button" parent="Panel/HBoxContainer/Control9" unique_id=550807962]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -320,11 +329,12 @@ index = 8
 
 [node name="Control10" type="Control" parent="Panel/HBoxContainer" unique_id=921567280]
 clip_contents = true
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 
 [node name="Button10" type="Button" parent="Panel/HBoxContainer/Control10" unique_id=1990287805]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

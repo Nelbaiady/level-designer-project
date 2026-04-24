@@ -11,8 +11,10 @@ var holdTimer: float = 0
 const holdThreshold = 0.3
 const holdStepThreshold = 0.08
 var nextHoldStepTarget = holdThreshold
+#@onready var phantomCamera: PhantomCamera2D = $"../PhantomCamera2D"
+@export var framedPhantomCamera2D: PhantomCamera2D
+@export var controllablePhantomCamera2D: PhantomCamera2D
 @onready var phantom_camera_host: PhantomCameraHost = $PhantomCameraHost
-@onready var phantomCamera: PhantomCamera2D = $"../PhantomCamera2D"
 
 var inputVector = Vector2.ZERO
 
@@ -26,16 +28,16 @@ func _ready() -> void:
 
 ##moves the camera slightly to forcefully update scrollScale
 func shimmyOver():
-	phantomCamera.position+=Vector2.RIGHT*0.5
+	controllablePhantomCamera2D.position+=Vector2.RIGHT*0.5
 	await get_tree().process_frame
-	phantomCamera.position-=Vector2.RIGHT*0.5
+	controllablePhantomCamera2D.position-=Vector2.RIGHT*0.5
 	
 func setPlayer(_lvl):
 	refindPlayer()
-	#for some reason the below three lines in that exact order fix the cursor jitter on startup. no idea why.
-	phantomCamera.follow_mode = phantomCamera.FollowMode.FRAMED
-	phantomCamera.set_follow_target(player)
-	phantomCamera.follow_mode = phantomCamera.FollowMode.NONE
+	##for some reason the below three lines in that exact order fix the cursor jitter on startup. no idea why.
+	#controllablePhantomCamera2D.follow_mode = controllablePhantomCamera2D.FollowMode.FRAMED
+	#controllablePhantomCamera2D.set_follow_target(player)
+	#controllablePhantomCamera2D.follow_mode = controllablePhantomCamera2D.FollowMode.NONE
 
 func _physics_process(_delta: float) -> void:
 	if globalEditor.popupIsOpen:
@@ -45,7 +47,6 @@ func _physics_process(_delta: float) -> void:
 		inputPosY = 0
 		inputNegY = 0
 	if !globalEditor.isEditing:
-		#phantomCamera.set_follow_offset((player.velocity/5))#.limit_length(400))
 		pass
 	else:
 		if !globalEditor.popupIsOpen:
@@ -81,26 +82,34 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ##for movement in edit mode
 func transLateCamera(direction: Vector2):
-	phantomCamera.position += direction
+	controllablePhantomCamera2D.position += direction
 	
 func editMode():
+	framedPhantomCamera2D.set_priority(0)
+	controllablePhantomCamera2D.set_priority(1)
 	inputPosX = 0
 	inputNegX = 0
 	inputPosY = 0
 	inputNegY = 0
-	phantomCamera.follow_mode = phantomCamera.FollowMode.NONE
-	phantomCamera.set_follow_offset(Vector2.ZERO)
+	#phantomCamera.follow_mode = phantomCamera.FollowMode.NONE
+	#phantomCamera.set_follow_offset(Vector2.ZERO)
 	player = globalEditor.player
-	var camTween = create_tween()
-	camTween.set_trans(Tween.TRANS_CUBIC)
-	camTween.set_ease(Tween.EASE_OUT)
-	camTween.tween_property(phantomCamera,"position",globalEditor.playerProperties.position,0.1)
+	#var camTween = create_tween()
+	#camTween.set_trans(Tween.TRANS_CUBIC)
+	#camTween.set_ease(Tween.EASE_OUT)
+	controllablePhantomCamera2D.position = globalEditor.playerProperties.position
+	#camTween.tween_property(controllablePhantomCamera2D,"position",globalEditor.playerProperties.position,0.1)
 
 func playMode():
-	phantomCamera.follow_mode = phantomCamera.FollowMode.FRAMED
-	phantomCamera.set_follow_target(player)
-	phantomCamera.set_follow_offset(Vector2.ZERO)
+	framedPhantomCamera2D.lookahead = false
+	framedPhantomCamera2D.lookahead = true
+	
+	controllablePhantomCamera2D.set_priority(0)
+	framedPhantomCamera2D.set_priority(1)
+	#phantomCamera.follow_mode = phantomCamera.FollowMode.FRAMED
+	framedPhantomCamera2D.set_follow_target(player)
+	framedPhantomCamera2D.set_follow_offset(Vector2.ZERO)
 
 func refindPlayer():
 	player = globalEditor.player
-	phantomCamera.set_follow_target(player)
+	framedPhantomCamera2D.set_follow_target(player)

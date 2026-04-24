@@ -1,3 +1,4 @@
+##This script handles the interface of an entry on the properties sidebar that edits a single property.
 class_name PropertyEditor extends Panel
 
 var value
@@ -6,19 +7,17 @@ var maxValue: float
 var hasMin:bool
 var hasMax:bool
 var step: float
-#the property's in-code name
-var propertyName: String
+var propertyName: String ##the property's in-code name
+
 #display name label
 @onready var label: Label = $HBoxContainer/Label
 #ui nodes the player will be editing
-#the interface nodes the value is changed from. This differs for each property editor
+#the interface nodes the value is  from. This differs for each property editor
 @onready var valueNodes = []
 
 #signal for the subclass to start setting up
 signal propertyReadySignal()
-#signal setStartValuesSignal(value, minValue, maxValue, propertyName, labelText)
-#setStartValuesSignal.connect(setStartValues)
-#func _ready() -> void:
+
 
 ##function triggered when the node is created. Sets up everything.
 func setStartValues(val, minVal, maxVal, stp, propName, labelText, hasMinVal=false,hasMaxVal=false, data=[]):

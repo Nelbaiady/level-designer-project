@@ -34,7 +34,6 @@ func updateUserInfo():
 	if authentication.isSignedIn:
 		var username = authentication.user.username
 		var id = authentication.user.id
-		#print(authentication.sessionCache.user)
 		userInfoText.text = str("Signed in as ",username,'\n','User ID: ',id)
 	else:
 		userInfoText.text = ""

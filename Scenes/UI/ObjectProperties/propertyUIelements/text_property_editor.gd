@@ -1,16 +1,6 @@
 class_name TextPropertyEditor extends PropertyEditor
 
 
-#var value:String = ""
-#var propertyName: String
-#@onready var label: Label = $HBoxContainer/Label
-#@onready var valueNode = $HBoxContainer/LineEdit
-
-#func _input(event: InputEvent) -> void:
-	#if event is InputEventMouseButton and event.is_action_pressed("mouseClickLeft") and !Rect2(Vector2.ZERO,TextEdit.size).has_point(make_input_local(event).position):
-		#print("feseekh")
-		 
-
 func _ready() -> void:
 	valueNodes = [$HBoxContainer/LineEdit]
 	valueNodes[0].text = value

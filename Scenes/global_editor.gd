@@ -120,8 +120,8 @@ func clearLevel():
 			level.remove_child(layer) #apparently queue_free sometimes keeps the node as a null child
 			level.layers.erase(layerID)
 	#reset layer 0 properties
-	level.setProperty("modulate",Color.WHITE,0)
-	level.setProperty("scroll_scale",Vector2.ONE,0)
+	signalBus.updateLayerProperty.emit("modulate",Color.WHITE,0)
+	signalBus.updateLayerProperty.emit("scroll_scale",Vector2.ONE,0)
 	level.rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{}  }]
 	level.collectChildren()
 	objectInstancesCount=0

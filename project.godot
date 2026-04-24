@@ -35,10 +35,11 @@ controlMapping="*uid://cdixu2p0xl5op"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+window/size/viewport_width=1280
+window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/stretch/scale=0.8
 
 [dotnet]
 

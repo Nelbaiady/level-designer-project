@@ -19,9 +19,7 @@ func _ready() -> void:
 func updateCursorPosition(delta):
 	camPosition = Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2
 	if get_viewport().get_camera_2d(): camPosition = get_viewport().get_camera_2d().position 
-	#camPosition = (-get_viewport_transform().origin)
-	#camPosition  = get_viewport().get_camera_2d().get_screen_center_position()
-	#print(get_viewport().get_camera_2d().)
+
 	if globalEditor.isEditing or globalEditor.isObjectBeingEdited or globalEditor.popupIsOpen:
 		#To make UI block controller input, we make the controller trigger a real mouse click
 		if Input.is_action_just_pressed("controllerClickLeft"):

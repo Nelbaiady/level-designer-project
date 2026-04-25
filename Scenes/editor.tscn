@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://ce1i72nmpos1n" path="res://Scenes/Items/The Player/Player.tscn" id="4_7wlcy"]
 [ext_resource type="Texture2D" uid="uid://cufwjh7b2h1io" path="res://Scenes/UI/basic Icons/layersIcon.png" id="4_i5vsu"]
 [ext_resource type="Script" uid="uid://ffyc5hsflkqu" path="res://Scenes/propertiesEditingLabel.gd" id="4_l4kvy"]
+[ext_resource type="Texture2D" uid="uid://04a86nptn4b6" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/video.png" id="5_efg2m"]
 [ext_resource type="Texture2D" uid="uid://bet7g48q1u37j" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/forward.png" id="6_3lyd6"]
 [ext_resource type="Script" uid="uid://nqbaqgjq17xc" path="res://Scenes/UI/misc UI scenes/pauseMenu.gd" id="7_i5vsu"]
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="7_nfgmo"]
@@ -21,8 +22,10 @@
 [ext_resource type="Texture2D" uid="uid://cojf1gkcws630" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/barsHorizontal.png" id="8_u6te5"]
 [ext_resource type="Texture2D" uid="uid://56hly1wm5s04" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/stop.png" id="12_o8yew"]
 [ext_resource type="Texture2D" uid="uid://cjapidryl0sof" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/pause.png" id="13_u6te5"]
-[ext_resource type="Script" uid="uid://ul8eb8jem2l" path="res://Scenes/properties_handler.gd" id="15_i5vsu"]
+[ext_resource type="Script" uid="uid://ul8eb8jem2l" path="res://Scenes/layer_properties_handler.gd" id="15_i5vsu"]
 [ext_resource type="PackedScene" uid="uid://j4eyk5hksqrt" path="res://Scenes/layer.tscn" id="17_0l4bc"]
+[ext_resource type="Script" uid="uid://cisvv1ndgob2a" path="res://Scenes/roomBottom.gd" id="22_iis80"]
+[ext_resource type="Script" uid="uid://ct75igh58cl1v" path="res://generic modular scripts/followCamXaxis.gd" id="23_06d57"]
 
 [sub_resource type="GDScript" id="GDScript_efg2m"]
 resource_name = "playButtonInputPrompt"
@@ -310,6 +313,15 @@ duration = 0.2
 transition = 7
 ease = 1
 
+[sub_resource type="Gradient" id="Gradient_u6te5"]
+colors = PackedColorArray(0.7688883, 0.7455368, 0.9951721, 1, 0.9697817, 0.8099847, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_efg2m"]
+gradient = SubResource("Gradient_u6te5")
+width = 1
+height = 256
+fill_from = Vector2(1, 1)
+
 [sub_resource type="Gradient" id="Gradient_efg2m"]
 offsets = PackedFloat32Array(0, 0.3824885, 0.8663595, 1)
 colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0)
@@ -319,33 +331,6 @@ gradient = SubResource("Gradient_efg2m")
 width = 1
 height = 256
 fill_from = Vector2(1, 1)
-
-[sub_resource type="GDScript" id="GDScript_af0oh"]
-resource_name = "bottomlessPit"
-script/source = "class_name BottomlessPit extends TextureRect
-
-func _ready():
-	get_tree().root.size_changed.connect(updateSize)
-	#signalBus.cameraTransformUpdate.connect(updatePosition)
-	updateSize()
-	updatePosition()
-	
-func updateSize():
-	size.x = get_viewport_rect().size.x+2
-	
-func _process(_delta: float) -> void:
-	updatePosition()
-	
-func updatePosition():
-	position.x = (-get_viewport().canvas_transform.origin).x-1
-	#position.x = (get_viewport().get_camera_2d().global_position-get_viewport_rect().get_center()).x
-
-#func _process(delta: float) -> void:
-	#position = get_viewport().get_camera_2d().global_position
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_TRANSFORM_CHANGED:
-		print(\"changed\")
-"
 
 [sub_resource type="Gradient" id="Gradient_iis80"]
 offsets = PackedFloat32Array(0, 0.47004607, 0.7235023)
@@ -357,12 +342,8 @@ width = 1
 height = 16
 fill_from = Vector2(1, 1)
 
-[sub_resource type="Gradient" id="Gradient_u6te5"]
-colors = PackedColorArray(0.7688883, 0.7455368, 0.9951721, 1, 0.9697817, 0.8099847, 1, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_efg2m"]
-gradient = SubResource("Gradient_u6te5")
-fill_from = Vector2(1, 1)
+[sub_resource type="LabelSettings" id="LabelSettings_06d57"]
+font_color = Color(1, 0.82544345, 0.95291287, 1)
 
 [node name="FileDialog" type="Node" unique_id=1408597539]
 
@@ -431,29 +412,45 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_1k58v")
 
-[node name="Control" type="Control" parent="HUD/Top Area UI/HBoxContainer" unique_id=958778049]
+[node name="layersButtonControl" type="Control" parent="HUD/Top Area UI/HBoxContainer" unique_id=958778049]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="layersButton" type="Button" parent="HUD/Top Area UI/HBoxContainer/Control" unique_id=690513294]
+[node name="layersButton" type="Button" parent="HUD/Top Area UI/HBoxContainer/layersButtonControl" unique_id=690513294]
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.407
-anchor_top = 0.038000003
 anchor_right = 0.407
-anchor_bottom = 0.038000003
-offset_left = -0.011505127
-offset_top = 0.08299875
-offset_right = 63.988487
-offset_bottom = 64.08299
+offset_left = 11.2409935
+offset_top = 8.0
+offset_right = 75.241
+offset_bottom = 72.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 0
 focus_mode = 0
 theme = ExtResource("3_cnbw5")
 icon = ExtResource("4_i5vsu")
+icon_alignment = 1
+
+[node name="roomButton" type="Button" parent="HUD/Top Area UI/HBoxContainer/layersButtonControl" unique_id=1434045996]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.372
+anchor_right = 0.372
+offset_left = -63.963997
+offset_top = 8.0
+offset_right = 0.035999298
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+focus_mode = 0
+theme = ExtResource("3_cnbw5")
+icon = ExtResource("5_efg2m")
 icon_alignment = 1
 
 [node name="Hotbar" parent="HUD/Top Area UI" unique_id=1476390264 instance=ExtResource("2_32ik4")]
@@ -937,6 +934,7 @@ offset_top = -0.15200806
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 3
+theme = ExtResource("3_cnbw5")
 script = ExtResource("3_exjlx")
 metadata/_edit_use_anchors_ = true
 
@@ -950,8 +948,9 @@ anchor_bottom = 0.13
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel" unique_id=207308021]
+[node name="ThingNamePanelContainer" type="PanelContainer" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel" unique_id=207308021]
 clip_contents = true
+custom_minimum_size = Vector2(256, 0)
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -966,17 +965,16 @@ pivot_offset = Vector2(2, 27.42667)
 theme = ExtResource("3_cnbw5")
 theme_type_variation = &"tab"
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer" unique_id=1533983739]
+[node name="ThingNameMarginContainer" type="MarginContainer" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel/ThingNamePanelContainer" unique_id=1533983739]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 12
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 12
 
-[node name="propertiesEditingLabel" type="Label" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel/PanelContainer/MarginContainer" unique_id=1242636918]
+[node name="ThingNameLabel" type="Label" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel/ThingNamePanelContainer/ThingNameMarginContainer" unique_id=1242636918]
 layout_mode = 2
 text = "Player"
-horizontal_alignment = 1
 vertical_alignment = 2
 script = ExtResource("4_l4kvy")
 
@@ -989,8 +987,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_cnbw5")
-theme_type_variation = &"propertiesPanel"
 
 [node name="closeButton" type="Button" parent="HUD/PropertiesSidebar/PropertiesPanel" unique_id=600812247]
 custom_minimum_size = Vector2(32, 32)
@@ -1059,7 +1055,6 @@ size_flags_horizontal = 6
 size_flags_vertical = 0
 focus_mode = 3
 theme = ExtResource("3_cnbw5")
-theme_override_font_sizes/font_size = 24
 icon = ExtResource("12_o8yew")
 icon_alignment = 1
 
@@ -1095,8 +1090,8 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 focus_mode = 3
+mouse_filter = 1
 theme = ExtResource("3_cnbw5")
-theme_override_font_sizes/font_size = 24
 icon = ExtResource("13_u6te5")
 icon_alignment = 1
 
@@ -1185,6 +1180,8 @@ framedPhantomCamera2D = NodePath("../framedPhantomCamera2D")
 controllablePhantomCamera2D = NodePath("../controllablePhantomCamera2D")
 
 [node name="PhantomCameraHost" type="Node" parent="Camera2D" unique_id=1366881780]
+process_priority = 300
+process_physics_priority = 300
 script = ExtResource("8_cnbw5")
 metadata/_custom_type_script = "uid://bd046eokvcnu2"
 
@@ -1210,14 +1207,35 @@ folder_creation_enabled = false
 [node name="Level" type="Node2D" parent="." unique_id=827656185]
 script = ExtResource("2_24ceq")
 
-[node name="bottomless pit" type="TextureRect" parent="Level" unique_id=923693957]
-offset_top = 464.0
-offset_right = 16.0
-offset_bottom = 720.0
-texture = SubResource("GradientTexture2D_iis80")
-script = SubResource("GDScript_af0oh")
+[node name="roomManager" type="Node2D" parent="Level" unique_id=565230703 node_paths=PackedStringArray("bottomTexture", "skyTexture", "roomBottomIndicator")]
+position = Vector2(0, 720)
+script = ExtResource("22_iis80")
+bottomTexture = NodePath("roomBottomTexture")
+skyTexture = NodePath("Sky/TextureRect")
+roomBottomIndicator = NodePath("roomBottomTexture/roomBottomIndicator")
+category = 3
+displayName = "Scene"
 
-[node name="TextureRect" type="TextureRect" parent="Level/bottomless pit" unique_id=1642324496]
+[node name="Sky" type="CanvasLayer" parent="Level/roomManager" unique_id=1910664044]
+layer = -256
+
+[node name="TextureRect" type="TextureRect" parent="Level/roomManager/Sky" unique_id=1994886404]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0, 64)
+texture = SubResource("GradientTexture2D_efg2m")
+
+[node name="roomBottomTexture" type="TextureRect" parent="Level/roomManager" unique_id=923693957]
+offset_top = -48.0
+offset_right = 16.0
+offset_bottom = 208.0
+texture = SubResource("GradientTexture2D_iis80")
+script = ExtResource("23_06d57")
+
+[node name="roomBottomIndicator" type="TextureRect" parent="Level/roomManager/roomBottomTexture" unique_id=1642324496]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1228,7 +1246,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("GradientTexture2D_06d57")
 
-[node name="Label" type="Label" parent="Level/bottomless pit/TextureRect" unique_id=27496319]
+[node name="Label" type="Label" parent="Level/roomManager/roomBottomTexture/roomBottomIndicator" unique_id=27496319]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1236,24 +1254,13 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -89.0
-offset_top = 24.0
+offset_top = 8.0
 offset_right = 89.0
-offset_bottom = 47.0
+offset_bottom = 31.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Bottomless death pit"
-
-[node name="Sky" type="CanvasLayer" parent="Level" unique_id=1910664044]
-layer = -256
-
-[node name="TextureRect" type="TextureRect" parent="Level/Sky" unique_id=1994886404]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(0, 64)
-texture = SubResource("GradientTexture2D_efg2m")
+text = "This line indicates the bottom of the level"
+label_settings = SubResource("LabelSettings_06d57")
 
 [node name="PropertiesHandler" type="Node" parent="Level" unique_id=1719493391]
 script = ExtResource("15_i5vsu")
@@ -1265,7 +1272,8 @@ index = 0
 position = Vector2(544, 280)
 floor_snap_length = 12.0
 
-[connection signal="pressed" from="HUD/Top Area UI/HBoxContainer/Control/layersButton" to="Level" method="_on_layers_button_pressed"]
+[connection signal="pressed" from="HUD/Top Area UI/HBoxContainer/layersButtonControl/layersButton" to="Level" method="_on_layers_button_pressed"]
+[connection signal="pressed" from="HUD/Top Area UI/HBoxContainer/layersButtonControl/roomButton" to="Level/roomManager" method="startEditingSelf"]
 [connection signal="pressed" from="HUD/Top Area UI/menuButtons/playButtonMarginContainer/playButton" to="Editor" method="toggleGameMode"]
 [connection signal="pressed" from="HUD/Top Area UI/menuButtons/pauseButtonMarginContainer/pauseButton" to="HUD/PausePanel" method="_on_pause_button_pressed"]
 [connection signal="pressed" from="HUD/levelSelectPopup/closeButton" to="HUD/levelSelectPopup" method="_on_close_button_pressed"]

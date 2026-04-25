@@ -1,9 +1,15 @@
 class_name Level extends Node2D
 
 ##for handling the editing of properties
-var propertiesHandler: PropertiesHandler
+var layerPropertiesHandler: LayerPropertiesHandler
 ##Layer scene
 const LAYER = preload("uid://j4eyk5hksqrt")
+
+##how much below the texture is the actual bottomless pit rather than the texture indicator
+#const bottomTextureOffset = 0
+var roomBottom:int
+var bgColor1:Color
+var bgColor2:Color
 
 #var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"objects":{}} ,1:{"objects":{}}}  }]
 var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{}  }]
@@ -93,7 +99,7 @@ func refreshEverything():
 	collectChildren()
 	restoreTempProperties()
 	if globalEditor.isObjectBeingEdited:
-		signalBus.populateLayersUI.emit(propertiesHandler) #refresh the UI to show new layer positions
+		signalBus.populateLayersUI.emit(layerPropertiesHandler) #refresh the UI to show new layer positions
 
 ##swaps the keys between any 2 dictionaries
 func swapDictKeys(dict, key1, key2):
@@ -113,6 +119,8 @@ func collectChildren():
 		if i is LevelLayer:
 			layers[i.index] = i 
 			rooms[globalEditor.currentRoom]["layers"][i.index]={"objects":{},"layerProperties":{}}
+		if i is RoomManager:
+			roomBottom = i.global_position.y
 
 ##when changes are made, tries to update the children's indeces
 func updateChildren():
@@ -157,4 +165,4 @@ func setLayerProperty(property:String, value, layerID):
 	layers[layerID].set(property, value)
 
 func _on_layers_button_pressed() -> void:
-	signalBus.populateLayersUI.emit(propertiesHandler)
+	signalBus.populateLayersUI.emit(layerPropertiesHandler)

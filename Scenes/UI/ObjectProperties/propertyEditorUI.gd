@@ -8,7 +8,6 @@ var hasMin:bool
 var hasMax:bool
 var step: float
 var propertyName: String ##the property's in-code name
-
 #display name label
 @onready var label: Label = $HBoxContainer/Label
 #ui nodes the player will be editing

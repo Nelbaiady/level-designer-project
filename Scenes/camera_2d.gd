@@ -19,18 +19,29 @@ var nextHoldStepTarget = holdThreshold
 var inputVector = Vector2.ZERO
 
 func _ready() -> void:
+	#stupid spaghetti solution to a weird issue where camera limits are off unless the window is resized at least once
+	get_window().size.y = get_window().size.y + 1
+	get_window().size.y = get_window().size.y - 1
+	
 	signalBus.onLevelReady.connect(setPlayer)
 	signalBus.startEditMode.connect(editMode)
 	signalBus.startPlayMode.connect(playMode)
 	signalBus.loadedLevel.connect(refindPlayer)
 	signalBus.shimmyCamera.connect(shimmyOver)
+	signalBus.updateProperty.connect(updateLimit)
 
+##takes a setProperty signal and updates the bottom limit if the property is 
+func updateLimit(propName, value):
+	if propName == "roomBottom":
+		#framedPhantomCamera2D.limit_bottom = value
+		framedPhantomCamera2D.set_limit_bottom(value)
+		#framedPhantomCamera2D.limit_bottom = globalEditor.level.roomBottom
 
 ##moves the camera slightly to forcefully update scrollScale
 func shimmyOver():
-	controllablePhantomCamera2D.position+=Vector2.RIGHT*0.5
+	position+=Vector2.RIGHT*0.5
 	await get_tree().process_frame
-	controllablePhantomCamera2D.position-=Vector2.RIGHT*0.5
+	position-=Vector2.RIGHT*0.5
 	
 func setPlayer(_lvl):
 	refindPlayer()
@@ -101,6 +112,8 @@ func editMode():
 	#camTween.tween_property(controllablePhantomCamera2D,"position",globalEditor.playerProperties.position,0.1)
 
 func playMode():
+	updateLimit("roomBottom",globalEditor.level.roomBottom)
+	#reset lookahead to prevent the camera from remembering its lookahead velocity
 	framedPhantomCamera2D.lookahead = false
 	framedPhantomCamera2D.lookahead = true
 	

@@ -3,9 +3,6 @@
 [ext_resource type="Script" uid="uid://dir28lw0jlwuy" path="res://Scenes/UI/ObjectProperties/propertyUIelements/number_property_editor.gd" id="1_32n73"]
 [ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="2_d5kri"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_ebjba"]
-font_size = 14
-
 [sub_resource type="GDScript" id="GDScript_32n73"]
 resource_name = "spinbox"
 script/source = "extends SpinBox
@@ -22,21 +19,28 @@ custom_minimum_size = Vector2(0, 32)
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
+theme_type_variation = &"subPanel"
 script = ExtResource("1_32n73")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1851625610]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 14
+anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 0.5
+offset_top = -14.0
+offset_bottom = 14.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
+[node name="paddingMarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=509427531]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
 [node name="Label" type="Label" parent="HBoxContainer" unique_id=57126026]
 layout_mode = 2
 text = "Size:"
-label_settings = SubResource("LabelSettings_ebjba")
 
 [node name="ValueSpinBox" type="SpinBox" parent="HBoxContainer" unique_id=323107936]
 layout_mode = 2
@@ -48,5 +52,10 @@ step = 0.01
 allow_greater = true
 allow_lesser = true
 script = SubResource("GDScript_32n73")
+
+[node name="paddingMarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=657705818]
+visible = false
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
 
 [connection signal="value_changed" from="HBoxContainer/ValueSpinBox" to="." method="_on_value_spin_box_value_changed"]

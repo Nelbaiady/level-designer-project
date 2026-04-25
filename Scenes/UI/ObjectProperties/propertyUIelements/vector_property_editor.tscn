@@ -4,15 +4,13 @@
 [ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="1_vgvs7"]
 [ext_resource type="Script" uid="uid://cyndiwhqv5wyw" path="res://Scenes/UI/Modular UI scripts/spinbox.gd" id="3_wihbn"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_ebjba"]
-font_size = 14
-
 [node name="VectorPropertyEditor" type="Panel" unique_id=292386586]
 custom_minimum_size = Vector2(0, 32)
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
 size_flags_horizontal = 3
+theme_type_variation = &"subPanel"
 script = ExtResource("1_oie7u")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=333781000]
@@ -24,10 +22,13 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
+[node name="paddingMarginContainer" type="MarginContainer" parent="HBoxContainer" unique_id=290406147]
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
+
 [node name="Label" type="Label" parent="HBoxContainer" unique_id=1169973749]
 layout_mode = 2
 text = "Size:"
-label_settings = SubResource("LabelSettings_ebjba")
 
 [node name="xValueSpinBox" type="SpinBox" parent="HBoxContainer" unique_id=362780963]
 layout_mode = 2
@@ -54,6 +55,11 @@ allow_greater = true
 allow_lesser = true
 prefix = "Y:"
 script = ExtResource("3_wihbn")
+
+[node name="paddingMarginContainer2" type="MarginContainer" parent="HBoxContainer" unique_id=1813145707]
+visible = false
+custom_minimum_size = Vector2(8, 0)
+layout_mode = 2
 
 [connection signal="value_changed" from="HBoxContainer/xValueSpinBox" to="." method="_on_spin_box_value_changed"]
 [connection signal="value_changed" from="HBoxContainer/xValueSpinBox" to="." method="_on_x_value_spin_box_value_changed"]

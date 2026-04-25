@@ -11,48 +11,39 @@ const COLOR_PULSE = preload("uid://cbnkbef0ahxkp")
 	,preload("uid://dqbrp3ghialya") #size/scale
 	,preload("uid://byn3kv4q02kpl") #color/modulate
 	]
-enum Categories {gizmo, npc, decoration}
+enum Categories {gizmo, npc, decoration, nonObject}
 @export var category: Categories
-var rootNode:Node
+@export var rootNode:Node
 var isBeingEdited = false
 var isMouseOver:bool = false
 var rosterID:int
-var instanceID:int = -1
+@export var instanceID:int = -2
+@export var displayName:String
 var layer:LevelLayer
-
 ##used to tween object properties
 var propertyTween:Tween
 
 func _ready() -> void:
 	rootNode = get_parent()
-	#keep searching up the hierarchy until you find the layer
+	#keep searching up the hierarchy until you find the layer this thing belongs to
 	var ancestor = rootNode
 	while ancestor:
 		if ancestor is LevelLayer:
 			layer = ancestor
 			break
 		ancestor = ancestor.get_parent()
-	if !clickCollision:
-		pass
-	
-	if globalEditor.isEditing:
-		rootNode.process_mode=Node.PROCESS_MODE_DISABLED
-		clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
-	else:
-		rootNode.process_mode=Node.PROCESS_MODE_INHERIT
-		clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
+	updateProcesses()
 	signalBus.startEditMode.connect(editModeStarted)
 	signalBus.startPlayMode.connect(playModeStarted)
+	signalBus.editingObject.connect(objectEditingStarted)
+	signalBus.hidePropertiesSidebar.connect(objectEditingStopped)
 
-
-	if !clickCollision:
+	if !clickCollision and category!=Categories.nonObject:
 		printerr("Object ",rootNode.name, " instance number ", instanceID, " has no click collision")
-	else:
+	elif category!=Categories.nonObject:
 		clickCollision.input_event.connect(clickedOn)
 		clickCollision.mouse_entered.connect(mouseEntered)
 		clickCollision.mouse_exited.connect(mouseExited)
-		signalBus.editingObject.connect(objectEditingStarted)
-		signalBus.hidePropertiesSidebar.connect(objectEditingStopped)
 
 ##effect when selecting an object
 func objectEditingStarted(_name, id):
@@ -72,26 +63,41 @@ func objectEditingStopped():
 func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 	signalBus.placeObjectSignal.disconnect(setStartingStuff)
 	#layer = rootNode.get_parent().get_parent()
-	if layer.index !=0:
-		rootNode.process_mode=Node.PROCESS_MODE_DISABLED
+	#if layer.index !=0:
+		#rootNode.process_mode=Node.PROCESS_MODE_DISABLED
 	if obj == rootNode:
 		instanceID = instID
 		if loadedProperties:
 			for i in loadedProperties:
 				setProperty(i,loadedProperties[i])
 	rosterID = globalEditor.getCurrentLevelLayerDict()["objects"][instanceID]["rosterID"]
+	displayName = globalEditor.itemRoster[rosterID].name if !displayName else displayName
 
+##make sure everything is in the correct process mode
+func updateProcesses():
+	if globalEditor.isEditing and category!=Categories.nonObject:
+		rootNode.process_mode=Node.PROCESS_MODE_DISABLED
+		if clickCollision:
+			clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
+	else:
+		#rootNode.process_mode=Node.PROCESS_MODE_INHERIT
+		#clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
+		if layer and layer.index == 0 and category!=Categories.nonObject:
+			rootNode.process_mode = Node.PROCESS_MODE_INHERIT
+			if clickCollision:
+				clickCollision.process_mode = Node.PROCESS_MODE_DISABLED
 
 func editModeStarted():
 	for property in properties:
 		setProperty(property.codeName, getProperty(property.codeName), true)
-	#await propertyTween.finished
-	rootNode.process_mode = Node.PROCESS_MODE_DISABLED
-	clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
+	#rootNode.process_mode = Node.PROCESS_MODE_DISABLED
+	#clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
+	updateProcesses()
 func playModeStarted():
-	if layer.index == 0:
-		rootNode.process_mode = Node.PROCESS_MODE_INHERIT
-		clickCollision.process_mode = Node.PROCESS_MODE_DISABLED
+	updateProcesses()
+	#if layer.index == 0:
+		#rootNode.process_mode = Node.PROCESS_MODE_INHERIT
+		#clickCollision.process_mode = Node.PROCESS_MODE_DISABLED
 
 func getProperty(property:String):
 	return rootNode.get(property)
@@ -110,9 +116,9 @@ func setProperty(property:String, value, tween = false):
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
 		if globalEditor.isEditing or globalEditor.isObjectBeingEdited:
-			
-			signalBus.populatePropertiesUI.emit(self)
-			signalBus.editingObject.emit(globalEditor.itemRoster[rosterID].name,instanceID)
+			#signalBus.populatePropertiesUI.emit(self)
+			#signalBus.editingObject.emit(globalEditor.itemRoster[rosterID].name,instanceID)
+			startEditingSelf()
 
 func mouseEntered():
 	isMouseOver = true
@@ -122,3 +128,8 @@ func mouseExited():
 func setNotEditing():
 	isBeingEdited = false
 	signalBus.updateProperty.disconnect(setProperty)
+
+##Opens the propertiesUI and 
+func startEditingSelf() -> void:
+	signalBus.populatePropertiesUI.emit(self)
+	signalBus.editingObject.emit(displayName,instanceID)

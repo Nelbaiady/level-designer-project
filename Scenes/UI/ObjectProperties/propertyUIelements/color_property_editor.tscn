@@ -1,12 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://bl8v3im8arb10"]
+[gd_scene format=3 uid="uid://bl8v3im8arb10"]
 
 [ext_resource type="Script" uid="uid://bycqkexsqu0s0" path="res://Scenes/UI/ObjectProperties/propertyUIelements/color_property_editor.gd" id="1_of8k5"]
 
-[node name="ColorPropertyEditor" type="Panel"]
+[node name="ColorPropertyEditor" type="Panel" unique_id=2009791878]
 custom_minimum_size = Vector2(0, 32)
+theme_type_variation = &"subPanel"
 script = ExtResource("1_of8k5")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=699924007]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,11 +16,11 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=1409512163]
 layout_mode = 2
 text = "Color:"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="HBoxContainer"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="HBoxContainer" unique_id=81249469]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 focus_mode = 0

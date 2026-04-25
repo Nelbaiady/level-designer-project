@@ -8,7 +8,7 @@ func enter(_previous_state_path: String, _data := {}) -> void:
 	bounced = false
 	jumped = false
 	fell = false
-	player.resetPlay("jumpUp")
+	player.resetPlay("rising")
 	player.gravityMult = 1
 	
 	if _data.has("bounced") and _data["bounced"]==true:
@@ -32,3 +32,8 @@ func physics_update(delta: float) -> void:
 		finished.emit(IDLE)
 	if player.velocity.y > 0:
 		finished.emit(FALLING,{"jumped":jumped,"bounced":bounced,"fell":fell})
+
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "rising":
+		player.resetPlay("rise")

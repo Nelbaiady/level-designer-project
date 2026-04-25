@@ -56,13 +56,14 @@ func populateLayersUI(object): #This is probably redundant
 	signalBus.showPropertiesSidebar.emit()
 	emptyPropertiesUI()
 	#	tell the editor to forget any other objects and focus on this object
-	setLayersBeingEdited(object)
+	#setLayersBeingEdited(object)
+	setObjectBeingEdited(object)
 #	populate the properties editor
 	for i in globalEditor.level.layers:
 		var newNode:LayerEditor = LAYER_EDITOR.instantiate()
 		newNode.layerID = i
 		globalEditor.propertiesUI.add_child(newNode)
-	signalBus.editingObject.emit("Layers",-1)
+	signalBus.editingObject.emit("Layers",-2)
 func setLayersBeingEdited(object):
 	if globalEditor.objectBeingEdited:
 		globalEditor.objectBeingEdited.setNotEditing()

@@ -89,29 +89,33 @@ func reset():
 	gravityMult = 1
 	
 func _physics_process(_delta: float) -> void:
-	if stateMachine.state.name in ["Dying"]:
-		bouncedThisFrame = true #make sure the player cannot bounce
-	#code that is common between most states
-	else:
-		bouncedThisFrame = false
-		##Either mode
-		directionInput = (Input.get_vector("LstickL","LstickR","LstickD","LstickU") + Input.get_vector("dpadL","dpadR","dpadD","dpadU")).limit_length(1) 
-		if !globalEditor.isEditing:
-			if directionInput.x < 0: sprite.flip_h = true 
-			if directionInput.x > 0: sprite.flip_h = false
-			
-		#invulnerability animation
-		if invulnerabilityTimer < invulnerabilityTime:
-			invulnerabilityTimer += _delta
-			visible = fmod(invulnerabilityTimer,invulnerabilityFlickerSpeed*2)<invulnerabilityFlickerSpeed
+	if !globalEditor.isEditing:
+		if stateMachine.state.name in ["Dying"]:
+			bouncedThisFrame = true #make sure the player cannot bounce
+		#code that is common between most states
 		else:
-			visible = true
-			invulnerabilityTimer = invulnerabilityTime
+			bouncedThisFrame = false
+			##Either mode
+			directionInput = (Input.get_vector("LstickL","LstickR","LstickD","LstickU") + Input.get_vector("dpadL","dpadR","dpadD","dpadU")).limit_length(1) 
+			if !globalEditor.isEditing:
+				if directionInput.x < 0: sprite.flip_h = true 
+				if directionInput.x > 0: sprite.flip_h = false
+				
+			#invulnerability animation
+			if invulnerabilityTimer < invulnerabilityTime:
+				invulnerabilityTimer += _delta
+				visible = fmod(invulnerabilityTimer,invulnerabilityFlickerSpeed*2)<invulnerabilityFlickerSpeed
+			else:
+				visible = true
+				invulnerabilityTimer = invulnerabilityTime
+		if globalEditor.level and position.y > globalEditor.level.roomBottom:
+			die()
 	
 
 ##plays an animation and also plays the reset track (reset no longer happens for now due to bugs)
 func resetPlay(animation:String):
 	restoreSpriteScale()
+	#restoreSpritePosition()
 	animationPlayer.play(animation)
 func playAnim(animation:String):
 	animationPlayer.play(animation)
@@ -146,7 +150,8 @@ func knockBack(sourceLocation:Vector2, power=1000):
 	##knock the player away from the source (plus a corrective y value to make sure the player isnt knocked into the air for no reason)
 	velocity = ((position-sourceLocation).normalized() + Vector2(0,0.5)) * power 
 func die():
-	stateMachine._transitionToNextState("Dying")
+	if stateMachine.state.name!="Dying":
+		stateMachine._transitionToNextState("Dying")
 	
 ##repeatable function that checks if the player can jump
 func tryToJump(fell=false):

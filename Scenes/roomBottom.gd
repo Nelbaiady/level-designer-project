@@ -16,8 +16,8 @@ func _ready() -> void:
 	]
 	super()
 	
-	#signalBus.startPlayMode.connect(func(): roomBottomIndicator.visible = false)
-	#signalBus.startEditMode.connect(func(): roomBottomIndicator.visible = true)
+	signalBus.startPlayMode.connect(func(): roomBottomIndicator.visible = false)
+	signalBus.startEditMode.connect(func(): roomBottomIndicator.visible = true)
 
 func getProperty(property:String):
 	#if property == "roomBottom":
@@ -30,11 +30,31 @@ func getProperty(property:String):
 #
 func setProperty(property:String, value, tween = false):
 	if property == "roomBottom":
-		set("position",Vector2(get("position").x,value))
+		if tween:
+			propertyTween = create_tween()
+			propertyTween.set_trans(Tween.TRANS_CUBIC)
+			propertyTween.set_ease(Tween.EASE_OUT)
+			propertyTween.parallel().tween_property(self,"position",Vector2(get("position").x,value), system.uiTweenTime)
+		else:
+			set("position",Vector2(get("position").x,value))
 	if property == "bgColor1":
-		skyGradient.colors[1] = value
+		rootNode.bgColor1 = value
+		if tween:
+			propertyTween = create_tween()
+			propertyTween.set_trans(Tween.TRANS_CUBIC)
+			propertyTween.set_ease(Tween.EASE_OUT)
+			propertyTween.parallel().tween_property(skyGradient,"colors",PackedColorArray([rootNode.bgColor2,value]), system.uiTweenTime)
+		else:
+			skyGradient.colors[1] = value
 	if property == "bgColor2":
-		skyGradient.colors[0] = value
+		rootNode.bgColor2 = value
+		if tween:
+			propertyTween = create_tween()
+			propertyTween.set_trans(Tween.TRANS_CUBIC)
+			propertyTween.set_ease(Tween.EASE_OUT)
+			propertyTween.parallel().tween_property(skyGradient,"colors",PackedColorArray([value, rootNode.bgColor1]), system.uiTweenTime)
+		else:
+			skyGradient.colors[0] = value
 		
 	super(property,value,tween)
 	#if property == "scale":

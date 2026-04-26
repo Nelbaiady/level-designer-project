@@ -1204,14 +1204,15 @@ hidden_files_toggle_enabled = false
 file_filter_toggle_enabled = false
 folder_creation_enabled = false
 
-[node name="Level" type="Node2D" parent="." unique_id=827656185]
+[node name="Level" type="Node2D" parent="." unique_id=827656185 node_paths=PackedStringArray("roomManager")]
 script = ExtResource("2_24ceq")
+roomManager = NodePath("roomManager")
 
 [node name="roomManager" type="Node2D" parent="Level" unique_id=565230703 node_paths=PackedStringArray("bottomTexture", "skyTexture", "roomBottomIndicator")]
 position = Vector2(0, 720)
 script = ExtResource("22_iis80")
 bottomTexture = NodePath("roomBottomTexture")
-skyTexture = NodePath("Sky/TextureRect")
+skyTexture = NodePath("Sky/skyTexture")
 roomBottomIndicator = NodePath("roomBottomTexture/roomBottomIndicator")
 category = 3
 displayName = "Scene"
@@ -1219,7 +1220,7 @@ displayName = "Scene"
 [node name="Sky" type="CanvasLayer" parent="Level/roomManager" unique_id=1910664044]
 layer = -256
 
-[node name="TextureRect" type="TextureRect" parent="Level/roomManager/Sky" unique_id=1994886404]
+[node name="skyTexture" type="TextureRect" parent="Level/roomManager/Sky" unique_id=1994886404]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -7,13 +7,27 @@ const LAYER = preload("uid://j4eyk5hksqrt")
 
 ##how much below the texture is the actual bottomless pit rather than the texture indicator
 #const bottomTextureOffset = 0
-var roomBottom:int
-var bgColor1:Color
-var bgColor2:Color
+var roomBottom:int = 720
+var bgColor1:Color = Color(0.97, 0.81, 1.0)
+var bgColor2:Color = Color(0.769, 0.746, 0.995)
 
-#var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"objects":{}} ,1:{"objects":{}}}  }]
-var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{}  }]
+@export var roomManager:RoomManager ##manages room
+
+#var rooms = [{"layers":{0:{"objects":{}} ,1:{"objects":{}}}  }]
+var rooms = [{ "layers":{} }]
 var layers:Dictionary[int,LevelLayer] = {} ##Dictionary that holds the layer ID and the corresponding layer's node
+
+#resets this and all other rooms to the default values
+func resetRooms():
+	rooms = [{ "layers":{} }]
+	roomBottom = 720
+	bgColor1 = Color(0.97, 0.81, 1.0)
+	bgColor2 = Color(0.769, 0.746, 0.995)
+	roomManager.setProperty("roomBottom",roomBottom,true)
+	roomManager.setProperty("bgColor1",bgColor1,true)
+	roomManager.setProperty("bgColor2",bgColor2,true)
+
+
 func _ready() -> void:
 #	find all layers and store them in the layers dictionary
 	collectChildren()

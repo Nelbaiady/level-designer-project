@@ -13,6 +13,9 @@ var isUsingController := false
 
 var isWebVersion:=OS.has_feature("web")
 
+##Duration of most tweens
+const uiTweenTime = 0.3
+
 func _ready() -> void:
 	signalBus.togglePause.connect(togglePause)
 

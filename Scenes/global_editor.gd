@@ -122,7 +122,9 @@ func clearLevel():
 	#reset layer 0 properties
 	signalBus.updateLayerProperty.emit("modulate",Color.WHITE,0)
 	signalBus.updateLayerProperty.emit("scroll_scale",Vector2.ONE,0)
-	level.rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{}  }]
+	#level.rooms = [{"layers":{}}]
+	level.resetRooms()
+	
 	level.collectChildren()
 	objectInstancesCount=0
 	freedObjectIndicesStack.clear()

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://drejmwhep1of3"]
+
+[ext_resource type="Texture2D" uid="uid://h1a4fj7yrbk2" path="res://Scenes/Items/Objects/Decoration/Tree/treeBubbly.png" id="1_6dimd"]
+[ext_resource type="PackedScene" uid="uid://c4aci6f2wscx5" path="res://Scenes/Items/Objects/objectMod.tscn" id="4_halbu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_m231j"]
+size = Vector2(144, 192)
+
+[node name="Tree" type="Sprite2D" unique_id=1531560986 groups=["movables", "solids"]]
+light_mask = 128
+visibility_layer = 128
+texture = ExtResource("1_6dimd")
+
+[node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("4_halbu")]
+position = Vector2(0, -8)
+clickCollision = NodePath("clickArea2D")
+category = 2
+displayName = "Tree"
+
+[node name="clickArea2D" type="Area2D" parent="Object" unique_id=12686494]
+position = Vector2(0, 8)
+
+[node name="clickbox" type="CollisionShape2D" parent="Object/clickArea2D" unique_id=1321507038]
+shape = SubResource("RectangleShape2D_m231j")

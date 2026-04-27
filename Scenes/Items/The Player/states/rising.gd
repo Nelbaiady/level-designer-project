@@ -5,14 +5,15 @@ var bounced := false
 var jumped := false
 var fell := false
 func enter(_previous_state_path: String, _data := {}) -> void:
-	bounced = false
-	jumped = false
-	fell = false
+	#bounced = false
+	#jumped = false
+	#fell = false
 	player.resetPlay("rising")
 	player.gravityMult = 1
 	
-	if _data.has("bounced") and _data["bounced"]==true:
-		bounced = true
+	if _data.has("bounced"):
+		bounced = _data["bounced"]
+	if bounced and _data.has("bounceVelocity"): 
 		player.velocity = _data.bounceVelocity
 	else:
 		player.velocity= Vector2(player.velocity.x, -player.jumpPower)

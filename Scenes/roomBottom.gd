@@ -63,7 +63,7 @@ func setProperty(property:String, value, tween = false):
 		#propertyTween = create_tween()
 		#propertyTween.set_trans(Tween.TRANS_CUBIC)
 		#propertyTween.set_ease(Tween.EASE_OUT)
-		#propertyTween.parallel().tween_property(rootNode,property,value ,0.3)
+		#propertyTween.parallel().tween_property(rootNode,property,value ,system.uiTweenTime)
 	#else:
 		#rootNode.set(property, value )
 		

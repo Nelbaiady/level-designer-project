@@ -54,10 +54,10 @@
 	#var resetPlayerTween = create_tween()
 	#resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
 	#resetPlayerTween.set_ease(Tween.EASE_OUT)
-	#resetPlayerTween.parallel().tween_property(rootNode.sprite,"position",Vector2(0,44),0.3)
+	#resetPlayerTween.parallel().tween_property(rootNode.sprite,"position",Vector2(0,44),system.uiTweenTime)
 	#for i in globalEditor.playerProperties:
 		#var value = globalEditor.playerProperties[i] 
-		#resetPlayerTween.parallel().tween_property(rootNode,i,value ,0.3)
+		#resetPlayerTween.parallel().tween_property(rootNode, i, value, system.uiTweenTime)
 #
 #func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	#if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
@@ -129,7 +129,8 @@ func resetPlayer():
 	var resetPlayerTween = create_tween()
 	resetPlayerTween.set_trans(Tween.TRANS_CUBIC)
 	resetPlayerTween.set_ease(Tween.EASE_OUT)
-	resetPlayerTween.parallel().tween_property(rootNode.sprite,"position",Vector2(0,44),0.3)
+	resetPlayerTween.parallel().tween_property(rootNode.sprite,"position",Vector2(0,44),system.uiTweenTime)
+
 	for i in globalEditor.playerProperties:
 		var value = globalEditor.playerProperties[i] 
-		resetPlayerTween.parallel().tween_property(rootNode,i,value ,0.3)
+		resetPlayerTween.parallel().tween_property(rootNode,i,value, system.uiTweenTime)

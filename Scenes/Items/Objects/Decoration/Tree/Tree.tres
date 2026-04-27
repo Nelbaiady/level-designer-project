@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="objectItem" format=3 uid="uid://cyvppeo275ryt"]
+
+[ext_resource type="Texture2D" uid="uid://h1a4fj7yrbk2" path="res://Scenes/Items/Objects/Decoration/Tree/treeBubbly.png" id="1_aam1b"]
+[ext_resource type="PackedScene" uid="uid://drejmwhep1of3" path="res://Scenes/Items/Objects/Decoration/Tree/tree.tscn" id="2_fxgnh"]
+[ext_resource type="Script" uid="uid://c6m2hjthmh1nv" path="res://Scenes/Items/Objects/object.gd" id="4_x3t64"]
+
+[resource]
+script = ExtResource("4_x3t64")
+objectReference = ExtResource("2_fxgnh")
+icon = ExtResource("1_aam1b")
+previewTexture = ExtResource("1_aam1b")
+name = "Tree"
+metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

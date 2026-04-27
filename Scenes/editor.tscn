@@ -305,6 +305,13 @@ func setText():
 	+\"Edit Object [font_size=48][char=\",controlMapping.editObjectIcon,\"][/font_size]\\n\"
 	#+\"[img width=32 height=32]uid://dycbcfmvewimq[/img]\\n\" #EXAMPLE IF I WANT TO INSERT AN IMAGE
 	)
+	if !system.isUsingController:
+		text += str(
+			\"Undo Place/Erase [font_size=48][char=\",controlMapping.ctrlIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.zIcon,\"][/font_size]\\n\"
+			+\"Redo Place/Erase [font_size=48][char=\",controlMapping.ctrlIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.shiftIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.zIcon,\"][/font_size]\\n\"
+			+\"Clear level [font_size=48][char=\",controlMapping.ctrlIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.delIcon,\"][/font_size]\\n\"
+		)
+	
 "
 
 [sub_resource type="Resource" id="Resource_nfgmo"]

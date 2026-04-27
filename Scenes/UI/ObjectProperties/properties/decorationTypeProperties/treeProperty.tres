@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ObjectProperty" format=3 uid="uid://bygncybqic6li"]
+
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="1_0vb5p"]
+[ext_resource type="PackedScene" uid="uid://cp0fcah8prao8" path="res://Scenes/UI/ObjectProperties/propertyUIelements/dropDown_property_editor.tscn" id="2_nsfyd"]
+
+[resource]
+script = ExtResource("1_0vb5p")
+codeName = "treeSprite"
+displayName = "Tree type"
+uiNode = ExtResource("2_nsfyd")
+choices = {
+"Bubbly": "uid://h1a4fj7yrbk2",
+"Cubed": "uid://v00g36qmxxiv",
+"Weeping": "uid://d018vh5pr3i2e",
+"Witch": "uid://cf1ifkq2q1vvv"
+}
+metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

@@ -11,6 +11,15 @@ var pauseIcon : String
 const controllerFont = preload("uid://dldjup34y8kp1")
 const keyboardFont = preload("uid://bp4pn6tp2pbqa")
 
+#keyboard specific inputs
+var ctrlIcon := "E054"
+var zIcon := "E0DF"
+var yIcon := "E0DD"
+var shiftIcon := "E0BE"
+var delIcon := "E058"
+#var undoIcon := "E054] + [char=E0DF"
+#var redoIcon := "E054] + [char=E0BE] + [char=E0DF] / [char=E0BD] + [char=E0DD"
+#var clearIcon := "E054] + [char=E058"
 
 
 var currentFont = keyboardFont

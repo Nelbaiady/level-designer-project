@@ -81,9 +81,9 @@ func saveLevel(path):
 
 func parseLevelToJson():
 	#Examples for reference
-	#var rooms = [{"backgroundColor":Color.FLORAL_WHITE,"layers":{0:{"tiles":{},"objects":{}} ,1:{"tiles":{},"objects":{}}}  }]
+	#var rooms = [{"layers":{0:{"tiles":{},"objects":{}} ,1:{"tiles":{},"objects":{}}}  }]
 	#var levelSaveStruct : Dictionary = {"rooms": [{"layers":{0:{"tiles": [], "objects": []}}}], "playerProperties":{}}
-	var levelSaveStruct = {"rooms": [ ],"playerProperties":{}}
+	var levelSaveStruct = {"rooms": [ ],"playerProperties":{}} #this dictionary will be stored as a json
 	for roomIndex in range(len(globalEditor.level.rooms)):
 		levelSaveStruct["rooms"].append( {"layers":{}} ) #{"tiles": [], "objects": []} )
 		for layerIndex in globalEditor.level.rooms[roomIndex]["layers"]:
@@ -102,7 +102,13 @@ func parseLevelToJson():
 			for i in layer["objects"]:
 				var currentSavingObject = layer["objects"][i]#globalEditor.objectsHash[i]
 				levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["objects"].append({"instanceID":i,"rosterID":currentSavingObject.rosterID,"properties":var_to_str(currentSavingObject.properties) })
-			levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["layerProperties"]=var_to_str(globalEditor.level.rooms[roomIndex]["layers"][layerIndex]["layerProperties"])
+			levelSaveStruct["rooms"][roomIndex]["layers"][layerIndex]["layerProperties"] = var_to_str(globalEditor.level.rooms[roomIndex]["layers"][layerIndex]["layerProperties"])
+			
+			#room stuff
+			levelSaveStruct["rooms"][roomIndex]["roomBottom"] = var_to_str(globalEditor.level.roomBottom)
+			levelSaveStruct["rooms"][roomIndex]["bgColor1"] = var_to_str(globalEditor.level.bgColor1)
+			levelSaveStruct["rooms"][roomIndex]["bgColor2"] = var_to_str(globalEditor.level.bgColor2)
+			
 	levelSaveStruct.playerProperties = var_to_str(globalEditor.playerProperties)
 	return levelSaveStruct
 
@@ -149,10 +155,20 @@ func loadLevel(data):
 				#globalEditor.placeObject(globalEditor.itemRoster[currentLoadingObject.rosterID],Vector2.ZERO,str_to_var(currentLoadingObject.properties),int(currentLoadingObject.instanceID))
 				globalEditor.placeObject(globalEditor.itemRoster[currentLoadingObject.rosterID],Vector2.ZERO,str_to_var(currentLoadingObject.properties))
 			#set the layer's properties
-			var currentLoadingLayerProperties = str_to_var(loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["layerProperties"])
+			var currentLoadingLayerProperties = loadedData["rooms"][roomIndex]["layers"][str(layerIndex)]["layerProperties"]
+			if typeof(currentLoadingLayerProperties) == TYPE_STRING: currentLoadingLayerProperties = str_to_var(currentLoadingLayerProperties)
 			for prop in currentLoadingLayerProperties:
 				#globalEditor.level.setProperty(prop,currentLoadingLayerProperties[prop],layerIndex)
+				if typeof(currentLoadingLayerProperties[prop]) == TYPE_STRING: currentLoadingLayerProperties[prop] = str_to_var(currentLoadingLayerProperties[prop])
 				signalBus.updateLayerProperty.emit(prop,currentLoadingLayerProperties[prop],layerIndex)
+				#print("setting ",prop," to ",currentLoadingLayerProperties[prop]," on layer ",layerIndex)
+				
+		#room stuff
+		#print(loadedData["rooms"][roomIndex]["bgColor2"])
+		if loadedData["rooms"][roomIndex].has("roomBottom"): globalEditor.level.roomBottom = str_to_var(loadedData["rooms"][roomIndex]["roomBottom"])
+		if loadedData["rooms"][roomIndex].has("bgColor1"): globalEditor.level.bgColor1 = str_to_var(loadedData["rooms"][roomIndex]["bgColor1"])
+		if loadedData["rooms"][roomIndex].has("bgColor2"): globalEditor.level.bgColor2 = str_to_var(loadedData["rooms"][roomIndex]["bgColor2"])
+		globalEditor.level.updateRoomProperties()
 	globalEditor.currentLayer = 0
 	globalEditor.playerProperties = str_to_var( loadedData["playerProperties"] )
 	signalBus.loadedLevel.emit()

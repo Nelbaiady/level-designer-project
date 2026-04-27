@@ -23,10 +23,13 @@ func resetRooms():
 	roomBottom = 720
 	bgColor1 = Color(0.97, 0.81, 1.0)
 	bgColor2 = Color(0.769, 0.746, 0.995)
+	updateRoomProperties()
+
+##sets property values to the values in their variables
+func updateRoomProperties():
 	roomManager.setProperty("roomBottom",roomBottom,true)
 	roomManager.setProperty("bgColor1",bgColor1,true)
 	roomManager.setProperty("bgColor2",bgColor2,true)
-
 
 func _ready() -> void:
 #	find all layers and store them in the layers dictionary
@@ -176,6 +179,7 @@ func setLayerProperty(property:String, value, layerID):
 	getCurrentRoomDict()["layers"][layerID]["layerProperties"][property]=value
 	if property == "scroll_scale":
 		signalBus.shimmyCamera.emit()
+	#print("setting ",property," to ",value, " on layer ",layerID, " of type ",type_string(typeof(value)))
 	layers[layerID].set(property, value)
 
 func _on_layers_button_pressed() -> void:

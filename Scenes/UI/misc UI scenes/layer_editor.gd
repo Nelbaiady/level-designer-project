@@ -13,12 +13,24 @@ var layer:LevelLayer
 @onready var upButton: Button = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/upButton
 @onready var downButton: Button = $PanelContainer/MarginContainer/HBoxContainer/VBoxContainer/downButton
 
+var scrollScaleProperty = ObjectProperty.new()
+var colorProperty = ObjectProperty.new()
+
 func _ready() -> void:
 	signalBus.selectLayer.connect(layerChanged)
 	level = globalEditor.level
 	layer = level.layers[layerID]
-	scrollScalePropertyEditorNode.setStartValues(layer.scroll_scale,0,0,0.1,"scroll_scale","Scroll",false,false,[layerID])
-	colorPropertyEditorNode.setStartValues(layer.modulate,0,0,0,"modulate","Color",false,false,[layerID])
+	
+	scrollScaleProperty.codeName = "scroll_scale"
+	scrollScaleProperty.displayName = "Scroll"
+	#scrollScalePropertyEditorNode.setStartValues(layer.scroll_scale,0,0,0.1,"scroll_scale","Scroll",false,false,[layerID])
+	scrollScalePropertyEditorNode.setStartValues(layer.scroll_scale, scrollScaleProperty,[layerID])
+	
+	colorProperty.codeName = "modulate"
+	colorProperty.displayName = "Color"
+	#colorPropertyEditorNode.setStartValues(layer.modulate,0,0,0,"modulate","Color",false,false,[layerID])
+	colorPropertyEditorNode.setStartValues(layer.modulate, colorProperty, [layerID])
+	
 	#selectionPropertyEditorNode.setStartValues((level.layerID==layerID),0,0,0,"","",false,false,[layerID])
 	refreshData()
 	signalBus.updateLayerUI.connect(refreshData)

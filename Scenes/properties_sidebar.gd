@@ -14,13 +14,13 @@ func showSidebar():
 	hotbarTween = create_tween()
 	hotbarTween.set_trans(Tween.TRANS_CUBIC)
 	hotbarTween.set_ease(Tween.EASE_OUT)
-	hotbarTween.tween_property(self,"anchor_left",0.7,0.1)
+	hotbarTween.tween_property(self,"anchor_left",0.7,system.uiTweenTime/2)
 
 func hideSidebar():
 	hotbarTween = create_tween()
 	hotbarTween.set_trans(Tween.TRANS_CUBIC)
 	hotbarTween.set_ease(Tween.EASE_IN)
-	hotbarTween.tween_property(self,"anchor_left",1,0.1)
+	hotbarTween.tween_property(self,"anchor_left",1,system.uiTweenTime/2)
 	globalEditor.colorPickerPopupIsOpen = false #just in case
 	emptyPropertiesUI()
 
@@ -41,7 +41,7 @@ func populatePropertiesUI(object):
 			var newNode = i.uiNode.instantiate()
 			globalEditor.propertiesUI.add_child(newNode)
 			if newNode is PropertyEditor:
-				newNode.setStartValues(object.getProperty(i.codeName),i.minValue, i.maxValue,i.step , i.codeName, i.displayName,i.hasMin, i.hasMax ,[])
+				newNode.setStartValues(object.getProperty(i.codeName),i)
 	if !signalBus.updateProperty.is_connected(object.setProperty):
 		signalBus.updateProperty.connect(object.setProperty)
 ##	tell the editor to forget any other objects and focus on this object

@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://cp0fcah8prao8"]
+
+[ext_resource type="Script" uid="uid://cdiwntniw13gj" path="res://Scenes/UI/ObjectProperties/propertyUIelements/dropDown_property_editor.gd" id="1_o1ryp"]
+
+[node name="DropDownPropertyEditor" type="Panel" unique_id=1717266645]
+custom_minimum_size = Vector2(0, 32)
+theme_type_variation = &"subPanel"
+script = ExtResource("1_o1ryp")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=895489834]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=963395050]
+layout_mode = 2
+text = "DropDown:"
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer" unique_id=261396837]
+layout_mode = 2

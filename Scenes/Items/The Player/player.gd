@@ -46,7 +46,7 @@ var gravityMult : float = 1
 var currentHealth: int = maxHealth
 
 var jumping:bool = false
-var bounced:bool = false
+#var bounced:bool = false
 ##make sure the player cannot bounce on multiple things in the same frame
 var bouncedThisFrame:bool = false
 
@@ -80,6 +80,7 @@ func enterPlayState():
 
 ##resets stats when transitioning between edit/play modes
 func reset():
+	visible = true
 	coyoteTimer.stop()
 	jumpsLeft=maxJumps
 	sprite.rotation = 0
@@ -151,18 +152,19 @@ func knockBack(sourceLocation:Vector2, power=1000):
 	velocity = ((position-sourceLocation).normalized() + Vector2(0,0.5)) * power 
 func die():
 	if stateMachine.state.name!="Dying":
+		visible = true
 		stateMachine._transitionToNextState("Dying")
 	
 ##repeatable function that checks if the player can jump
-func tryToJump(fell=false):
+func tryToJump(fell=false, bounced=false):
 	if Input.is_action_just_pressed("jump"):
-		if (((is_on_floor() or !fell) and jumpsLeft>0) or ((fell and !coyoteTimer.is_stopped()) or jumpsLeft>1)):
+		if (((is_on_floor() or (!fell and !bounced)) and jumpsLeft>0) or ((fell and !coyoteTimer.is_stopped()) or jumpsLeft>1)):
 			if !coyoteTimer.is_stopped():
 				coyoteTimer.stop()
 			else:
 				jumpsLeft-=1
 			playSound(jumpSFX)
-			stateMachine.state.finished.emit(stateMachine.state.RISING,{"jumped":true,"fell":fell})
+			stateMachine.state.finished.emit(stateMachine.state.RISING,{"jumped":true,"fell":fell, "bounced":bounced})
 ##restores jumps left to maxJumps
 func refreshJumps():
 	jumpsLeft = maxJumps

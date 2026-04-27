@@ -19,7 +19,7 @@ var freedObjectIndicesStack:Array[int] = [] ##keeps track of freed object indice
 var itemRoster:Array[Item] = []#[preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),null,null,null,null,null,null,null,null]
 @onready var level: Level
 var hotbarIndex: int = 0
-var hotbar: Array[Item] = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),null,null,null,null,null,null]
+var hotbar: Array[Item]
 var currentLayer: int = 0
 var currentRoom: int = 0
 
@@ -46,7 +46,8 @@ enum Tools {place, erase}#, move}
 
 
 func _ready() -> void:
-	itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),null,null,null,null,null,null]
+	itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),preload("uid://cyvppeo275ryt"),null,null,null,null,null]
+	hotbar = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),preload("uid://cyvppeo275ryt"),null,null,null,null,null]
 	for i in itemRoster.size():
 		if itemRoster[i]:
 			itemRoster[i].rosterID = i

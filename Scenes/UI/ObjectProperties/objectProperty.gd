@@ -5,7 +5,7 @@ class_name ObjectProperty extends Resource
 @export var uiNode:PackedScene
 
 #attributes of the uiNode
-@export var defaultValue: float = 0
+@export var defaultValue: Variant = 0
 @export var minValue: float# = -999999999999.0
 @export var maxValue: float# = 999999999999.0
 @export var step: float

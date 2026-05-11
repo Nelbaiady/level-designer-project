@@ -68,6 +68,7 @@ func updateValue():
 	valueNodes[0] = value
 	#valueNodes[0].focus_mode = Control.FOCUS_CLICK
 
+##sends a signalBus.updateProperty signal, with the property codename and the current value
 func emitUpdate():
 	signalBus.updateProperty.emit(property.codeName, value)
 

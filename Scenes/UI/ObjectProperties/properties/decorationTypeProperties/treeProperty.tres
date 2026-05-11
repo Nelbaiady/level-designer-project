@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_0vb5p")
-codeName = "treeSprite"
+codeName = "texture"
 displayName = "Tree type"
 uiNode = ExtResource("2_nsfyd")
 choices = {

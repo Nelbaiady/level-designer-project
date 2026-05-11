@@ -1,7 +1,13 @@
 [gd_scene format=3 uid="uid://drejmwhep1of3"]
 
 [ext_resource type="Texture2D" uid="uid://h1a4fj7yrbk2" path="res://Scenes/Items/Objects/Decoration/Tree/treeBubbly.png" id="1_6dimd"]
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="3_nycse"]
 [ext_resource type="PackedScene" uid="uid://c4aci6f2wscx5" path="res://Scenes/Items/Objects/objectMod.tscn" id="4_halbu"]
+[ext_resource type="Resource" uid="uid://bh2hcytk84e13" path="res://Scenes/UI/ObjectProperties/properties/positionProperty.tres" id="4_pbjdl"]
+[ext_resource type="Resource" uid="uid://dqbrp3ghialya" path="res://Scenes/UI/ObjectProperties/properties/sizeProperty.tres" id="5_544mn"]
+[ext_resource type="Resource" uid="uid://byn3kv4q02kpl" path="res://Scenes/UI/ObjectProperties/properties/colorProperty.tres" id="6_h5ggv"]
+[ext_resource type="Resource" uid="uid://dt3gvme5p3joj" path="res://Scenes/UI/ObjectProperties/properties/rotationProperty.tres" id="7_xe5i6"]
+[ext_resource type="Resource" uid="uid://bygncybqic6li" path="res://Scenes/UI/ObjectProperties/properties/decorationTypeProperties/treeProperty.tres" id="8_pbjdl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_m231j"]
 size = Vector2(144, 192)
@@ -9,11 +15,13 @@ size = Vector2(144, 192)
 [node name="Tree" type="Sprite2D" unique_id=1531560986 groups=["movables", "solids"]]
 light_mask = 128
 visibility_layer = 128
+z_index = -1
 texture = ExtResource("1_6dimd")
 
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("4_halbu")]
 position = Vector2(0, -8)
 clickCollision = NodePath("clickArea2D")
+properties = Array[ExtResource("3_nycse")]([ExtResource("4_pbjdl"), ExtResource("5_544mn"), ExtResource("6_h5ggv"), ExtResource("7_xe5i6"), ExtResource("8_pbjdl")])
 category = 2
 displayName = "Tree"
 

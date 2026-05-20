@@ -509,8 +509,8 @@ scroll_offset = Vector2(-1, 0)
 script = ExtResource("1_fifjg")
 index = 1
 
+[node name="Objects" type="Node2D" parent="." unique_id=683321039]
+
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1177813373 groups=["solids"]]
 tile_set = SubResource("TileSet_7fkqn")
 collision_enabled = false
-
-[node name="Objects" type="Node2D" parent="." unique_id=683321039]

@@ -34,6 +34,11 @@ func updateRoomProperties():
 func _ready() -> void:
 #	find all layers and store them in the layers dictionary
 	collectChildren()
+	
+	#print(layers[0].tileMap.get_index())
+	#targetNodeIndex = layers[layerID-1].get_index()
+	#move_child(layers[layerID],targetNodeIndex)
+	
 	signalBus.onLevelReady.emit(self)
 	signalBus.updateLayerProperty.connect(setLayerProperty)
 	signalBus.moveLayerUp.connect(moveLayerUp)

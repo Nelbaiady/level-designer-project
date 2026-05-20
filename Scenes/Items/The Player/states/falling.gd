@@ -12,8 +12,11 @@ func enter(_previous_state_path: String, _data := {}) -> void:
 		bounced=_data["bounced"]
 	if _data.has("fell"):
 		fell=_data["fell"]
-	if !((_data.has("bounced") and _data["bounced"]==true) or (_data.has("jumped") and _data["jumped"]==true)):
-		player.refreshCoyoteTime()
+	
+	if !(_data.has("justStarted") and _data["justStarted"]):
+		if !(  (_data.has("bounced") and _data["bounced"]==true)  or  (_data.has("jumped") and _data["jumped"]==true)  ) and !_data.has('justStarted'):
+			if !player.is_on_floor():
+				player.refreshCoyoteTime()
 func physics_update(delta: float) -> void:
 	
 	if player.velocity.y < player.terminalVelocity:

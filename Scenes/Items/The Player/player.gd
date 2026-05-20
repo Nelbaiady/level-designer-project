@@ -34,6 +34,8 @@ const ouchSFX = preload("uid://bfdulbl1auotk")
 @export var jumpsLeft : int = maxJumps ##how many jumps the player has left
 @export var coyoteTime : float = 0.05
 var coyoteTimer : Timer = Timer.new()
+@export var jumpBuffer : float = 0.1
+var jumpBufferTimer : Timer = Timer.new()
 
 @export var canCrouch := true
 @export var canChourc := false
@@ -56,8 +58,10 @@ var directionInput = Vector2.ZERO
 ##signal for when the player is bounced
 signal getBounced(velocity)
 
+
 func _ready() -> void:
 	add_child( coyoteTimer )
+	add_child( jumpBufferTimer )
 	globalEditor.player = self
 	getBounced.connect(bounce)
 	signalBus.startEditMode.connect(enterEditState)
@@ -76,13 +80,18 @@ func enterEditState():
 	sprite.flip_h = false
 func enterPlayState():
 	reset()
-	stateMachine._transitionToNextState("Idle")
+	stateMachine._transitionToNextState("Idle",{'justStarted':true})
+	#if is_on_floor():
+		#stateMachine._transitionToNextState("Idle",{'justStarted':true})
+	#else:
+		#stateMachine._transitionToNextState("Falling",{'justStarted':true})
 
 ##resets stats when transitioning between edit/play modes
 func reset():
 	visible = true
 	coyoteTimer.stop()
-	jumpsLeft=maxJumps
+	jumpBufferTimer.stop()
+	jumpsLeft=0
 	sprite.rotation = 0
 	currentHealth = maxHealth
 	signalBus.updatePlayerHealth.emit()
@@ -154,17 +163,23 @@ func die():
 	if stateMachine.state.name!="Dying":
 		visible = true
 		stateMachine._transitionToNextState("Dying")
-	
+
+#func _process(delta: float) -> void:
+	#print("coyote and jbuffer and jumpsLeft: ",!coyoteTimer.is_stopped(),"   ",!jumpBufferTimer.is_stopped(),"   ",jumpsLeft)
+
 ##repeatable function that checks if the player can jump
 func tryToJump(fell=false, bounced=false):
-	if Input.is_action_just_pressed("jump"):
+	if Input.is_action_just_pressed("jump") or (!jumpBufferTimer.is_stopped() and Input.is_action_pressed("jump")):
 		if (((is_on_floor() or (!fell and !bounced)) and jumpsLeft>0) or ((fell and !coyoteTimer.is_stopped()) or jumpsLeft>1)):
-			if !coyoteTimer.is_stopped():
-				coyoteTimer.stop()
-			else:
-				jumpsLeft-=1
+			jumpsLeft-=1
+			coyoteTimer.stop()
+			jumpBufferTimer.stop()
 			playSound(jumpSFX)
 			stateMachine.state.finished.emit(stateMachine.state.RISING,{"jumped":true,"fell":fell, "bounced":bounced})
+		elif Input.is_action_just_pressed("jump") and !is_on_floor():
+			if jumpBuffer > 0:
+				jumpBufferTimer.one_shot = true
+				jumpBufferTimer.start(jumpBuffer)
 ##restores jumps left to maxJumps
 func refreshJumps():
 	jumpsLeft = maxJumps

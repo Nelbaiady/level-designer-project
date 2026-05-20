@@ -15,7 +15,6 @@ size = Vector2(144, 192)
 [node name="Tree" type="Sprite2D" unique_id=1531560986 groups=["movables", "solids"]]
 light_mask = 128
 visibility_layer = 128
-z_index = -1
 texture = ExtResource("1_6dimd")
 
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("4_halbu")]

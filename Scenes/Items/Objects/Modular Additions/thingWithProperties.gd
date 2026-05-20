@@ -62,9 +62,6 @@ func objectEditingStopped():
 ##sets an object's properties to the given values
 func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 	signalBus.placeObjectSignal.disconnect(setStartingStuff)
-	#layer = rootNode.get_parent().get_parent()
-	#if layer.index !=0:
-		#rootNode.process_mode=Node.PROCESS_MODE_DISABLED
 	if obj == rootNode:
 		instanceID = instID
 		if loadedProperties:
@@ -80,8 +77,6 @@ func updateProcesses():
 		if clickCollision:
 			clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
 	else:
-		#rootNode.process_mode=Node.PROCESS_MODE_INHERIT
-		#clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
 		if layer and layer.index == 0 and category!=Categories.nonObject:
 			rootNode.process_mode = Node.PROCESS_MODE_INHERIT
 			if clickCollision:
@@ -90,14 +85,9 @@ func updateProcesses():
 func editModeStarted():
 	for property in properties:
 		setProperty(property.codeName, getProperty(property.codeName), true)
-	#rootNode.process_mode = Node.PROCESS_MODE_DISABLED
-	#clickCollision.process_mode = Node.PROCESS_MODE_ALWAYS
 	updateProcesses()
 func playModeStarted():
 	updateProcesses()
-	#if layer.index == 0:
-		#rootNode.process_mode = Node.PROCESS_MODE_INHERIT
-		#clickCollision.process_mode = Node.PROCESS_MODE_DISABLED
 
 func getProperty(property:String):
 	return rootNode.get(property)

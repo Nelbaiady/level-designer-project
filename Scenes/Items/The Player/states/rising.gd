@@ -33,7 +33,7 @@ func physics_update(delta: float) -> void:
 		finished.emit(IDLE)
 	if player.velocity.y > 0:
 		finished.emit(FALLING,{"jumped":jumped,"bounced":bounced,"fell":fell})
-
+	player.tryToJump(fell, bounced)
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "rising":

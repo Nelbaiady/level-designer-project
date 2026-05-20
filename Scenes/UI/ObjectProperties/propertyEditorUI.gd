@@ -21,9 +21,12 @@ signal propertyReadySignal()
 
 ##function triggered when the node is created. Sets up everything.
 func setStartValues(startVal, prop:ObjectProperty=null, data=[]):
+	#if prop.codeName=='texture':
+		#print(startVal)
+	
 	property = prop
-	dealWithData(data)
 	value=startVal
+	dealWithData(data)
 	#minValue=minVal
 	#maxValue=maxVal
 	#hasMin = hasMinVal

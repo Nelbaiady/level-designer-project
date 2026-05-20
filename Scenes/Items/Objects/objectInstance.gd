@@ -4,6 +4,7 @@ func _ready():
 	signalBus.placeObjectSignal.connect(setStartingStuff)
 	signalBus.eraseSpecificObject.connect(checkErase)
 	signalBus.eraseObject.connect(checkErase)	
+	
 
 func getProperty(property:String):
 	if getObjectFromLevelStruct()["properties"].has(property):

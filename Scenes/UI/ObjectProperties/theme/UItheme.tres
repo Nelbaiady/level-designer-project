@@ -7,61 +7,6 @@
 [ext_resource type="StyleBox" uid="uid://cgb4o0r5f0gmp" path="res://Scenes/UI/misc UI scenes/tabPanel.tres" id="4_hi8js"]
 [ext_resource type="StyleBox" uid="uid://f1x0g6q0ga8b" path="res://Scenes/UI/misc UI scenes/subPanel.tres" id="5_5nlin"]
 
-[sub_resource type="FontVariation" id="FontVariation_1unef"]
-spacing_bottom = -12
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oober"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.1, 0.1, 0.1, 0.3)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u3g8d"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(1, 1, 1, 0.75)
-draw_center = false
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-expand_margin_left = 2.0
-expand_margin_top = 2.0
-expand_margin_right = 2.0
-expand_margin_bottom = 2.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2725r"]
-bg_color = Color(0.6, 0.6, 0.6, 0.54901963)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gfp2n"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0, 0, 0, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hi8js"]
 bg_color = Color(0.015686275, 0.16470589, 0.22352941, 1)
 corner_radius_top_left = 4
@@ -97,30 +42,6 @@ corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
 [resource]
-Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
-Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
-Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
-Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
-Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
-Button/colors/font_outline_color = Color(0, 0, 0, 1)
-Button/colors/font_pressed_color = Color(1, 1, 1, 1)
-Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
-Button/colors/icon_focus_color = Color(1, 1, 1, 1)
-Button/colors/icon_hover_color = Color(1, 1, 1, 1)
-Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
-Button/colors/icon_normal_color = Color(1, 1, 1, 1)
-Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
-Button/constants/align_to_largest_stylebox = 0
-Button/constants/h_separation = 4
-Button/constants/icon_max_width = 0
-Button/constants/outline_size = 0
-Button/font_sizes/font_size = 18
-Button/fonts/font = SubResource("FontVariation_1unef")
-Button/styles/disabled = SubResource("StyleBoxFlat_oober")
-Button/styles/focus = SubResource("StyleBoxFlat_u3g8d")
-Button/styles/hover = SubResource("StyleBoxFlat_2725r")
-Button/styles/normal = ExtResource("1_ten13")
-Button/styles/pressed = SubResource("StyleBoxFlat_gfp2n")
 CheckButton/styles/normal = ExtResource("1_ten13")
 FileDialog/styles/embedded_border = SubResource("StyleBoxFlat_hi8js")
 FileDialog/styles/embedded_unfocused_border = SubResource("StyleBoxFlat_11aod")
@@ -134,7 +55,6 @@ PanelContainer/styles/panel = ExtResource("1_ten13")
 SpinBoxInnerLineEdit/base_type = &"LineEdit"
 SpinBoxInnerLineEdit/constants/minimum_character_width = 3
 SpinBoxInnerLineEdit/font_sizes/font_size = 14
-hotbarButton/base_type = &"Button"
 hotbarButton/styles/disabled = ExtResource("1_ten13")
 hotbarButton/styles/focus = ExtResource("1_ten13")
 hotbarButton/styles/hover = ExtResource("1_ten13")

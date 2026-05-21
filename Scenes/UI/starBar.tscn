@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://bqsbb6alvs745"]
+
+[ext_resource type="Script" uid="uid://ccq4anh611jje" path="res://Scenes/UI/starBar.gd" id="1_sog25"]
+[ext_resource type="Texture2D" uid="uid://d4iwnsxrj5ebe" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/star.png" id="2_abx4r"]
+
+[node name="StarBar" type="Control" unique_id=1106814379 node_paths=PackedStringArray("slider", "starLine", "ztarLine")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sog25")
+slider = NodePath("slider")
+starLine = NodePath("starLine")
+ztarLine = NodePath("ztarLine")
+
+[node name="slider" type="HSlider" parent="." unique_id=990019749]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 32.0
+offset_top = 24.0
+offset_right = 352.0
+offset_bottom = 64.0
+max_value = 10.0
+
+[node name="ztarLine" type="Line2D" parent="." unique_id=222177366]
+texture_repeat = 2
+position = Vector2(0, 88)
+scale = Vector2(1, -1)
+points = PackedVector2Array(352, 44, 32, 44)
+width = 64.0
+default_color = Color(0.039215688, 0.1764706, 0.26666668, 0.36862746)
+texture = ExtResource("2_abx4r")
+texture_mode = 1
+
+[node name="starLine" type="Line2D" parent="." unique_id=1600610779]
+texture_repeat = 2
+points = PackedVector2Array(32, 44, 352, 44)
+width = 64.0
+default_color = Color(0.93664104, 0.9029764, 0.5418949, 1)
+texture = ExtResource("2_abx4r")
+texture_mode = 1
+
+[connection signal="mouse_entered" from="slider" to="." method="_on_slider_mouse_entered"]
+[connection signal="mouse_exited" from="slider" to="." method="_on_slider_mouse_exited"]
+[connection signal="value_changed" from="slider" to="." method="_on_slider_value_changed"]

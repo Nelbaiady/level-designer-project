@@ -19,6 +19,7 @@ func dealWithData(_data):
 		elif i is String:
 			valueNodes[0].add_item(i)
 		valueNodes[0].set_item_metadata(index,property.choices[i])
+		
 		index+=1
 		
 

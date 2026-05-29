@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://cjicoi1w8hc3s"]
+
+[ext_resource type="Script" uid="uid://c17b1lu3j3m5j" path="res://Scenes/UI/level Listing UI/levelCard.gd" id="1_1bid3"]
+[ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="1_wsdqw"]
+
+[node name="LevelCard" type="Control" unique_id=1149659435 node_paths=PackedStringArray("nameLabel", "idLabel", "authorLabel", "playButton", "moreDetailsButton")]
+custom_minimum_size = Vector2(0, 192)
+layout_mode = 3
+anchor_top = 0.00011110968
+anchor_right = 1.0
+anchor_bottom = 0.26644447
+offset_top = -0.07999897
+offset_bottom = 0.1599884
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+script = ExtResource("1_1bid3")
+nameLabel = NodePath("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/nameLabel")
+idLabel = NodePath("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/idLabel")
+authorLabel = NodePath("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/authorLabel")
+playButton = NodePath("PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/playButton")
+moreDetailsButton = NodePath("PanelContainer/MarginContainer/VBoxContainer/moreDetailsButton")
+metadata/_edit_use_anchors_ = true
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1437271389]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_wsdqw")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=538748635]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer" unique_id=803556585]
+layout_mode = 2
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1134064582]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1563736022]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="nameLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1278062636]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 1.4
+focus_mode = 2
+theme_override_font_sizes/normal_font_size = 24
+text = "Level Name"
+selection_enabled = true
+
+[node name="idLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=172492303]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+text = "Level ID:"
+selection_enabled = true
+
+[node name="authorLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=99548128]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+text = "Author: "
+selection_enabled = true
+
+[node name="playButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1324759037]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "Open Level"
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=1598922581]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="moreDetailsButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=377596181]
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("1_wsdqw")
+text = "More details"

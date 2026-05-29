@@ -11,13 +11,21 @@ var isPaused := false
 
 var isUsingController := false
 
-var isWebVersion:=OS.has_feature("web")
+var isWebVersion := OS.has_feature("web")
+var isDesktopVersion := OS.has_feature("windows") or OS.has_feature("macos") or OS.has_feature("linuxbsd")
+
+var popupStack:int = 0
 
 ##Duration of most tweens
 const uiTweenTime = 0.3
 
 func _ready() -> void:
+	if isDesktopVersion:
+		get_window().size = Vector2i(1280,720)
+		get_window().move_to_center()
 	signalBus.togglePause.connect(togglePause)
+	signalBus.genericPopupClosed.connect(func(): popupStack-=1)
+	signalBus.genericPopupOpened.connect(func(): popupStack+=1)
 
 func togglePause():
 	isPaused = !isPaused
@@ -58,4 +66,4 @@ func _input(event: InputEvent) -> void:
 		if settingChanged: signalBus.inputMethodChanged.emit()#inform other things that the input method changed
 		
 func _physics_process(_delta: float) -> void:
-	popupIsOpen = globalEditor.popupIsOpen
+	popupIsOpen = globalEditor.popupIsOpen or popupStack > 0

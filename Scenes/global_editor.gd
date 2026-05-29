@@ -5,7 +5,7 @@ var popupIsOpen:bool = false
 var colorPickerPopupIsOpen = false
 var saveLoadPopupIsOpen = false
 var textPopupIsOpen = false
-var levelBrowsingPopupIsOpen = false
+#var levelBrowsingPopupIsOpen = false
 
 var gridSize:int = 64
 
@@ -63,7 +63,7 @@ func levelNodeReady(levelNode):
 	level = levelNode
 
 func _physics_process(_delta: float) -> void:
-	popupIsOpen = system.isPaused or saveLoadPopupIsOpen or colorPickerPopupIsOpen or textPopupIsOpen or levelBrowsingPopupIsOpen
+	popupIsOpen = system.isPaused or saveLoadPopupIsOpen or colorPickerPopupIsOpen or textPopupIsOpen# or levelBrowsingPopupIsOpen
 
 ##Placing a tile in the tilemap
 func placeTile(terrainSet:int, terrain:int, cell:Vector2i):

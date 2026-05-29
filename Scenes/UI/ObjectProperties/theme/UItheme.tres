@@ -41,6 +41,9 @@ bg_color = Color(0.40392157, 0.7176471, 0.8862745, 0.2509804)
 corner_radius_bottom_right = 16
 corner_radius_bottom_left = 16
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oober"]
+bg_color = Color(0.118841074, 0.42035362, 0.619885, 1)
+
 [resource]
 CheckButton/styles/normal = ExtResource("1_ten13")
 FileDialog/styles/embedded_border = SubResource("StyleBoxFlat_hi8js")
@@ -50,6 +53,7 @@ Label/colors/font_color = Color(0.99215686, 0.90588236, 0.8235294, 1)
 Label/colors/font_outline_color = Color(0.15541816, 0.13584381, 0.12869316, 1)
 Label/colors/font_shadow_color = Color(0, 0, 0, 0)
 Label/constants/outline_size = 6
+Label/font_sizes/font_size = 32
 Panel/styles/panel = ExtResource("2_hi8js")
 PanelContainer/styles/panel = ExtResource("1_ten13")
 SpinBoxInnerLineEdit/base_type = &"LineEdit"
@@ -74,6 +78,8 @@ inGameLabel/constants/shadow_outline_size = 16
 inGameLabel/font_sizes/normal_font_size = 26
 propertiesPanel/base_type = &"Panel"
 propertiesPanel/styles/panel = ExtResource("3_2725r")
+solidPanel/base_type = &"Panel"
+solidPanel/styles/panel = SubResource("StyleBoxFlat_oober")
 subPanel/base_type = &"Panel"
 subPanel/styles/panel = ExtResource("5_5nlin")
 tab/base_type = &"PanelContainer"

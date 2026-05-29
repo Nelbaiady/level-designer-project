@@ -42,6 +42,7 @@ animations = [{
 }]
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=389373312]
+process_mode = 3
 layer = 2048
 script = SubResource("GDScript_yrxwg")
 

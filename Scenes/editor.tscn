@@ -20,6 +20,10 @@
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="8_cnbw5"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="8_op3c8"]
 [ext_resource type="Texture2D" uid="uid://cojf1gkcws630" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/barsHorizontal.png" id="8_u6te5"]
+[ext_resource type="PackedScene" uid="uid://crvr0iqhvui4i" path="res://Scenes/UI/level Listing UI/levelBrowser.tscn" id="10_ruwpr"]
+[ext_resource type="Script" uid="uid://c7ri4fxl34icl" path="res://popup.gd" id="11_af0oh"]
+[ext_resource type="Script" uid="uid://dsskwti47r88f" path="res://loadingScreen.gd" id="11_l5j4h"]
+[ext_resource type="PackedScene" uid="uid://cpgu28yscj365" path="res://Scenes/UI/level Listing UI/levelDetailsPopup.tscn" id="11_ruwpr"]
 [ext_resource type="Texture2D" uid="uid://56hly1wm5s04" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/stop.png" id="12_o8yew"]
 [ext_resource type="Texture2D" uid="uid://cjapidryl0sof" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/pause.png" id="13_u6te5"]
 [ext_resource type="Script" uid="uid://ul8eb8jem2l" path="res://Scenes/layer_properties_handler.gd" id="15_i5vsu"]
@@ -55,167 +59,11 @@ func setText():
 	)
 "
 
-[sub_resource type="GDScript" id="GDScript_i5vsu"]
-resource_name = "levelBrowser"
-script/source = "class_name LevelBrowser extends Panel
-
-const LEVEL_CARD = preload(\"uid://cjicoi1w8hc3s\")
-
-@onready var levelCards: VBoxContainer = $ScrollContainer/levelCards
-
-func _ready():
-	signalBus.startBrowsingLevels.connect(populateLevels)
-	signalBus.stopBrowsingLevels.connect(_on_close_button_pressed)
-	
-func populateLevels():
-	visible = true
-	globalEditor.levelBrowsingPopupIsOpen = true
-	var levels = await authentication.rpcRequest({},\"getalllevels\")
-	for i in JSON.parse_string(levels[3].get_string_from_utf8()):
-		var levelCard:LevelCard = LEVEL_CARD.instantiate()
-		levelCard.levelDict = i
-		levelCards.add_child(levelCard)
-
-func _on_close_button_pressed() -> void:
-	visible = false
-	globalEditor.levelBrowsingPopupIsOpen = false
-	for i in levelCards.get_children():
-		i.queue_free()
-"
-
 [sub_resource type="LabelSettings" id="LabelSettings_0l4bc"]
 font_size = 48
 font_color = Color(1, 0.94914633, 0.8754653, 1)
 outline_size = 22
 outline_color = Color(0.578717, 0.40745404, 0.52866435, 1)
-
-[sub_resource type="GDScript" id="GDScript_3lyd6"]
-resource_name = "textEditPopup"
-script/source = "class_name textEditPopup extends Control
-
-@export var lineEdit: LineEdit
-@export var emailLineEdit: LineEdit 
-@export var passwordLineEdit: LineEdit 
-
-@export var label: Label
-
-#need these containers to change their visibility
-@export var cancelButtonContainer: MarginContainer
-@export var cancelButton: Button
-@export var confirmButton: Button
-@export var lineEditContainer: MarginContainer
-@export var authFieldsContainer: VBoxContainer
-@export var errorLabel: Label
-
-###true if the prompt requires text input. might be pointless, we'll see.
-#var withInput:=false
-
-##indicates if the user is signing in so that the popup doesnt always close on confirm
-var isSigningIn:=false
-##indicates if the user is signing up so that the popup doesnt always close on confirm
-var isSigningUp:=false
-
-##usage example
-#func _input(event: InputEvent) -> void:
-	#if event.is_action_pressed(\"9\"):
-		#signalBus.startTextEditPopup.emit('what a doozy eh?')
-		#var inputText = await signalBus.endTextPopup
-		#print(inputText[0])
-
-func _ready() -> void:
-	signalBus.startTextEditPopup.connect(startInputPopup)
-	signalBus.startTextPopup.connect(startInfoPopup)
-	signalBus.startBinaryChoicePopup.connect(startBinaryChoicePopup)
-	signalBus.startSignInPopup.connect(startSignInPopup)
-	signalBus.startSignUpPopup.connect(startSignUpPopup)
-	authentication.authError.connect(setErrorText)
-
-func setErrorText(error):
-	if emailLineEdit.text==\"\":
-		error = \"\"
-		error+=\"Missing email\\n\"
-	if passwordLineEdit.text==\"\":
-		if error != \"Missing email\\n\": error = \"\" 
-		error+=\"Missing password\"
-	errorLabel.text=error
-	
-##displays the popup and sets everything to its default
-func showFreshPopup():
-	isSigningIn=false
-	isSigningUp=false
-	cancelButtonContainer.visible = false
-	lineEditContainer.visible = false
-	authFieldsContainer.visible = false
-	cancelButton.text=\"Cancel\"
-	confirmButton.text=\"Confirm\"
-	label.text=\"\"
-	errorLabel.text=\"\"
-	lineEdit.clear()
-	emailLineEdit.clear()
-	passwordLineEdit.clear()
-	visible = true
-	globalEditor.textPopupIsOpen = true
-
-##Just text and a confirm button as a notification.
-func startInfoPopup(prompt:String):
-	showFreshPopup()
-	#withInput = false
-	label.text = prompt
-
-##popup with two options. Parameters: prompt, option1, option2
-func startBinaryChoicePopup(prompt:String=\"Do you want to go ahead\",option1:String=\"Cancel\",option2:String=\"Confirm\"):
-	showFreshPopup()
-	cancelButtonContainer.visible = true
-	cancelButton.text=option1
-	confirmButton.text=option2
-	label.text = prompt
-	#withInput = false
-
-##A popup with text input, and cancel button, and a confirm button. Parameters: Prompt.
-func startInputPopup(prompt:String):
-	showFreshPopup()
-	#withInput = true
-	lineEditContainer.visible = true
-	cancelButtonContainer.visible = true
-	label.text = prompt
-
-func startSignInPopup():
-	showFreshPopup()
-	isSigningIn = true
-	authFieldsContainer.visible = true
-	cancelButtonContainer.visible = true
-	label.text=\"Sign In\"
-func startSignUpPopup():
-	showFreshPopup()
-	isSigningUp = true
-	authFieldsContainer.visible = true
-	cancelButtonContainer.visible = true
-	label.text=\"Sign Up\"
-
-func endInputPopup(isConfirmed:bool):
-	visible = false
-	globalEditor.textPopupIsOpen = false
-	signalBus.endTextPopup.emit(lineEdit.text,isConfirmed)
-	lineEdit.clear()
-
-func _on_confirm_button_pressed() -> void:
-	if isSigningIn:
-		var response = await authentication.signIn(emailLineEdit.text,passwordLineEdit.text)
-		if response==200:
-			signalBus.startTextPopup.emit(\"Signed in successfully\")
-			#endInputPopup(true)
-			#passwordLineEdit.clear()
-	elif isSigningUp:
-		var _response = await authentication.signUp(emailLineEdit.text,passwordLineEdit.text)
-		#if response==200:
-			#endInputPopup(true)
-			#passwordLineEdit.clear()
-	else:
-		endInputPopup(true)
-
-func _on_cancel_button_pressed() -> void:
-	endInputPopup(false)
-"
 
 [sub_resource type="LabelSettings" id="LabelSettings_efg2m"]
 font_size = 14
@@ -352,7 +200,7 @@ fill_from = Vector2(1, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_06d57"]
 font_color = Color(1, 0.82544345, 0.95291287, 1)
 
-[node name="FileDialog" type="Node" unique_id=1408597539]
+[node name="Editor" type="Node" unique_id=1408597539]
 
 [node name="cursorItemIcon" type="TextureRect" parent="." unique_id=1233162024]
 self_modulate = Color(1, 1, 1, 0.5019608)
@@ -543,46 +391,10 @@ horizontal_alignment = 1
 script = SubResource("GDScript_iis80")
 metadata/_edit_use_anchors_ = true
 
-[node name="levelSelectPopup" type="Panel" parent="HUD" unique_id=58127126]
+[node name="levelBrowser" parent="HUD" unique_id=1082516022 instance=ExtResource("10_ruwpr")]
+
+[node name="levelDetailsPopup" parent="HUD" unique_id=1149659435 instance=ExtResource("11_ruwpr")]
 visible = false
-top_level = true
-z_index = 1
-clip_contents = true
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("3_cnbw5")
-theme_type_variation = &"propertiesPanel"
-script = SubResource("GDScript_i5vsu")
-
-[node name="closeButton" type="Button" parent="HUD/levelSelectPopup" unique_id=548959484]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.16
-anchor_bottom = 0.04954321
-offset_right = -56.319992
-offset_bottom = 7.896
-focus_mode = 1
-theme = ExtResource("3_cnbw5")
-text = "x"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="HUD/levelSelectPopup" unique_id=474734764]
-clip_contents = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.05
-anchor_top = 0.1
-anchor_right = 0.95
-anchor_bottom = 0.9
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="levelCards" type="VBoxContainer" parent="HUD/levelSelectPopup/ScrollContainer" unique_id=1180702708]
-layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="PausePanel" type="Panel" parent="HUD" unique_id=691078316 node_paths=PackedStringArray("userInfoText", "loginButton", "editModePauseVBoxContainer", "playModePauseVBoxContainer", "downloadLevel", "login", "uploadLevel")]
@@ -765,6 +577,50 @@ size_flags_vertical = 8
 layout_mode = 2
 text = "Exit Play Mode"
 
+[node name="LoadingPanel" type="Panel" parent="HUD" unique_id=1046265247]
+visible = false
+z_index = 4096
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_cnbw5")
+script = ExtResource("11_l5j4h")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/LoadingPanel" unique_id=1599197336]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.11111111
+anchor_right = 0.8888889
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+metadata/_edit_use_anchors_ = true
+
+[node name="PauseVBoxContainer" type="VBoxContainer" parent="HUD/LoadingPanel/MarginContainer" unique_id=1087188563]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("3_cnbw5")
+theme_override_constants/separation = 16
+alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="pausedLabel" type="Label" parent="HUD/LoadingPanel/MarginContainer/PauseVBoxContainer" unique_id=1786032023]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Loading..."
+label_settings = SubResource("LabelSettings_0l4bc")
+horizontal_alignment = 1
+uppercase = true
+
 [node name="TextEditPopup" type="Control" parent="HUD" unique_id=38263661 node_paths=PackedStringArray("lineEdit", "emailLineEdit", "passwordLineEdit", "label", "cancelButtonContainer", "cancelButton", "confirmButton", "lineEditContainer", "authFieldsContainer", "errorLabel")]
 visible = false
 layout_mode = 3
@@ -775,7 +631,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
-script = SubResource("GDScript_3lyd6")
+script = ExtResource("11_af0oh")
 lineEdit = NodePath("PanelContainer/MarginContainer/VBoxContainer/LineEditContainer/LineEdit")
 emailLineEdit = NodePath("PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/emailMarginContainer/emailVBoxContainer/emailLineEditContainer/emailLineEdit")
 passwordLineEdit = NodePath("PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/passwordMarginContainer/passwordVBoxContainer/passwordLineEditContainer/passwordLineEdit")
@@ -1237,6 +1093,7 @@ pivot_offset = Vector2(0, 64)
 texture = SubResource("GradientTexture2D_efg2m")
 
 [node name="roomBottomTexture" type="TextureRect" parent="Level/roomManager" unique_id=923693957]
+process_mode = 3
 offset_top = -48.0
 offset_right = 16.0
 offset_bottom = 208.0
@@ -1284,7 +1141,6 @@ floor_snap_length = 12.0
 [connection signal="pressed" from="HUD/Top Area UI/HBoxContainer/layersButtonControl/roomButton" to="Level/roomManager" method="startEditingSelf"]
 [connection signal="pressed" from="HUD/Top Area UI/menuButtons/playButtonMarginContainer/playButton" to="Editor" method="toggleGameMode"]
 [connection signal="pressed" from="HUD/Top Area UI/menuButtons/pauseButtonMarginContainer/pauseButton" to="HUD/PausePanel" method="_on_pause_button_pressed"]
-[connection signal="pressed" from="HUD/levelSelectPopup/closeButton" to="HUD/levelSelectPopup" method="_on_close_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Unpause/UnpauseButton" to="HUD/PausePanel" method="_on_unpause_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer/SignInButton" to="HUD/PausePanel" method="_on_sign_in_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer/SignUpButton" to="HUD/PausePanel" method="_on_sign_up_button_pressed"]

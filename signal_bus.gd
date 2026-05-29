@@ -91,6 +91,16 @@ signal startSignInPopup()##popup for signing in
 signal startSignUpPopup()##popup for signing up
 @warning_ignore("unused_signal")
 signal endTextPopup(text,isCancelled:bool)##notifies that the popup was closed. parameters: text, isCancelled
+@warning_ignore("unused_signal")
+signal genericPopupOpened()#tells the game that a popup has opened, which increments the popup stack
+@warning_ignore("unused_signal")
+signal genericPopupClosed()#tells the game that a popup has closed, which decrements the popup stack
+
+#loading screen
+@warning_ignore("unused_signal")
+signal loadingStarted()##start showing the loading screen
+@warning_ignore("unused_signal")
+signal loadingStopped()##stop showing the loading screen
 
 #pause menu
 @warning_ignore("unused_signal")
@@ -98,11 +108,15 @@ signal pauseToggled()##emits to indicate that the game paused or unpaused
 @warning_ignore("unused_signal")
 signal togglePause()##emits to order a pause or unpause
 
-#other menus
+#Level browsing
 @warning_ignore("unused_signal")
 signal startBrowsingLevels()##opens and populates the level browsing menu
 @warning_ignore("unused_signal")
 signal stopBrowsingLevels()##closes and empties the level browsing menu
+@warning_ignore("unused_signal")
+signal showMoreLevelDetails(levelDict)
+
+#Controller input prompts
 @warning_ignore("unused_signal")
 signal updateControlIcons()##when swapping between keyboard and controller
 @warning_ignore("unused_signal")

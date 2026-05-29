@@ -2,20 +2,15 @@
 class_name PropertyEditor extends Panel
 
 var value
-#var minValue: float
-#var maxValue: float
-#var hasMin:bool
-#var hasMax:bool
-#var step: float
-#var propertyName: String ##the property's in-code name
 var property: ObjectProperty
-#display name label
+
+##display name label node
 @onready var label: Label = $HBoxContainer/Label
 #ui nodes the player will be editing
-#the interface nodes the value is  from. This differs for each property editor
+##the interface nodes the value is edited from.
 @onready var valueNodes = []
 
-#signal for the subclass to start setting up
+##signal for the subclass to start setting up
 signal propertyReadySignal()
 
 

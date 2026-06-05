@@ -31,6 +31,44 @@
 [ext_resource type="Script" uid="uid://cisvv1ndgob2a" path="res://Scenes/roomBottom.gd" id="22_iis80"]
 [ext_resource type="Script" uid="uid://ct75igh58cl1v" path="res://generic modular scripts/followCamXaxis.gd" id="23_06d57"]
 
+[sub_resource type="Resource" id="Resource_nfgmo"]
+script = ExtResource("8_op3c8")
+duration = 0.2
+transition = 7
+ease = 1
+
+[sub_resource type="Gradient" id="Gradient_u6te5"]
+colors = PackedColorArray(0.7688883, 0.7455368, 0.9951721, 1, 0.9697817, 0.8099847, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_efg2m"]
+gradient = SubResource("Gradient_u6te5")
+width = 1
+height = 256
+fill_from = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_efg2m"]
+offsets = PackedFloat32Array(0, 0.3824885, 0.8663595, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_iis80"]
+gradient = SubResource("Gradient_efg2m")
+width = 1
+height = 256
+fill_from = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_iis80"]
+offsets = PackedFloat32Array(0, 0.47004607, 0.7235023)
+colors = PackedColorArray(0.34202552, 0.00025629625, 0.4054354, 0, 0.47917366, 6.738305e-07, 0.28162822, 1, 1, 0.3039358, 0.3128019, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_06d57"]
+gradient = SubResource("Gradient_iis80")
+width = 1
+height = 16
+fill_from = Vector2(1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_06d57"]
+font_color = Color(1, 0.82544345, 0.95291287, 1)
+
 [sub_resource type="GDScript" id="GDScript_efg2m"]
 resource_name = "playButtonInputPrompt"
 script/source = "extends RichTextLabel
@@ -57,59 +95,6 @@ func setText():
 	text = str(
 	\"[font_size=64][char=\",controlMapping.pauseIcon,\"][/font_size]\\n\"
 	)
-"
-
-[sub_resource type="LabelSettings" id="LabelSettings_0l4bc"]
-font_size = 48
-font_color = Color(1, 0.94914633, 0.8754653, 1)
-outline_size = 22
-outline_color = Color(0.578717, 0.40745404, 0.52866435, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_efg2m"]
-font_size = 14
-font_color = Color(1, 1, 1, 0.7529412)
-
-[sub_resource type="LabelSettings" id="LabelSettings_u6te5"]
-font_color = Color(1, 0.3019608, 0.37254903, 1)
-
-[sub_resource type="GDScript" id="GDScript_pee1p"]
-resource_name = "playModeTopArea"
-script/source = "class_name PlayModeTopArea extends HBoxContainer
-
-var hotbarTween:Tween
-
-func _ready() -> void:
-	signalBus.startEditMode.connect(hideHud)
-	signalBus.startPlayMode.connect(showHud)
-
-func hideHud():
-		hotbarTween = create_tween()
-		hotbarTween.set_trans(Tween.TRANS_CUBIC)
-		hotbarTween.set_ease(Tween.EASE_IN)
-		hotbarTween.tween_property(self,\"offset_top\",-size.y,0.15)
-func showHud():
-	hotbarTween = create_tween()
-	hotbarTween.set_trans(Tween.TRANS_CUBIC)
-	hotbarTween.set_ease(Tween.EASE_OUT)
-	hotbarTween.tween_property(self,\"offset_top\",0,0.15)
-"
-
-[sub_resource type="LabelSettings" id="LabelSettings_i5vsu"]
-font_size = 32
-font_color = Color(0, 0.4434056, 0.41036707, 1)
-outline_size = 10
-outline_color = Color(0.7303834, 0.923467, 0.86802703, 1)
-
-[sub_resource type="GDScript" id="GDScript_o8yew"]
-resource_name = "healthBar"
-script/source = "class_name HealthBar extends Label
-
-func _ready() -> void:
-	signalBus.updatePlayerHealth.connect(updateHealthDisplay)
-	signalBus.startPlayMode.connect(updateHealthDisplay)
-	
-func updateHealthDisplay():
-	text = str(\"Health: \",globalEditor.player.currentHealth, \" / \" ,globalEditor.player.maxHealth)
 "
 
 [sub_resource type="GDScript" id="GDScript_06d57"]
@@ -162,43 +147,58 @@ func setText():
 	
 "
 
-[sub_resource type="Resource" id="Resource_nfgmo"]
-script = ExtResource("8_op3c8")
-duration = 0.2
-transition = 7
-ease = 1
+[sub_resource type="GDScript" id="GDScript_pee1p"]
+resource_name = "playModeTopArea"
+script/source = "class_name PlayModeTopArea extends HBoxContainer
 
-[sub_resource type="Gradient" id="Gradient_u6te5"]
-colors = PackedColorArray(0.7688883, 0.7455368, 0.9951721, 1, 0.9697817, 0.8099847, 1, 1)
+var hotbarTween:Tween
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_efg2m"]
-gradient = SubResource("Gradient_u6te5")
-width = 1
-height = 256
-fill_from = Vector2(1, 1)
+func _ready() -> void:
+	signalBus.startEditMode.connect(hideHud)
+	signalBus.startPlayMode.connect(showHud)
 
-[sub_resource type="Gradient" id="Gradient_efg2m"]
-offsets = PackedFloat32Array(0, 0.3824885, 0.8663595, 1)
-colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0)
+func hideHud():
+		hotbarTween = create_tween()
+		hotbarTween.set_trans(Tween.TRANS_CUBIC)
+		hotbarTween.set_ease(Tween.EASE_IN)
+		hotbarTween.tween_property(self,\"offset_top\",-size.y,0.15)
+func showHud():
+	hotbarTween = create_tween()
+	hotbarTween.set_trans(Tween.TRANS_CUBIC)
+	hotbarTween.set_ease(Tween.EASE_OUT)
+	hotbarTween.tween_property(self,\"offset_top\",0,0.15)
+"
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_iis80"]
-gradient = SubResource("Gradient_efg2m")
-width = 1
-height = 256
-fill_from = Vector2(1, 1)
+[sub_resource type="LabelSettings" id="LabelSettings_i5vsu"]
+font_size = 32
+font_color = Color(0, 0.4434056, 0.41036707, 1)
+outline_size = 10
+outline_color = Color(0.7303834, 0.923467, 0.86802703, 1)
 
-[sub_resource type="Gradient" id="Gradient_iis80"]
-offsets = PackedFloat32Array(0, 0.47004607, 0.7235023)
-colors = PackedColorArray(0.34202552, 0.00025629625, 0.4054354, 0, 0.47917366, 6.738305e-07, 0.28162822, 1, 1, 0.3039358, 0.3128019, 1)
+[sub_resource type="GDScript" id="GDScript_o8yew"]
+resource_name = "healthBar"
+script/source = "class_name HealthBar extends Label
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_06d57"]
-gradient = SubResource("Gradient_iis80")
-width = 1
-height = 16
-fill_from = Vector2(1, 1)
+func _ready() -> void:
+	signalBus.updatePlayerHealth.connect(updateHealthDisplay)
+	signalBus.startPlayMode.connect(updateHealthDisplay)
+	
+func updateHealthDisplay():
+	text = str(\"Health: \",globalEditor.player.currentHealth, \" / \" ,globalEditor.player.maxHealth)
+"
 
-[sub_resource type="LabelSettings" id="LabelSettings_06d57"]
-font_color = Color(1, 0.82544345, 0.95291287, 1)
+[sub_resource type="LabelSettings" id="LabelSettings_0l4bc"]
+font_size = 48
+font_color = Color(1, 0.94914633, 0.8754653, 1)
+outline_size = 22
+outline_color = Color(0.578717, 0.40745404, 0.52866435, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_efg2m"]
+font_size = 14
+font_color = Color(1, 1, 1, 0.7529412)
+
+[sub_resource type="LabelSettings" id="LabelSettings_u6te5"]
+font_color = Color(1, 0.3019608, 0.37254903, 1)
 
 [node name="Editor" type="Node" unique_id=1408597539]
 
@@ -219,6 +219,138 @@ grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 metadata/_edit_use_anchors_ = true
+
+[node name="framedPhantomCamera2D" type="Node2D" parent="." unique_id=21135804]
+top_level = true
+position = Vector2(544, 280)
+script = ExtResource("7_nfgmo")
+follow_mode = 5
+tween_resource = SubResource("Resource_nfgmo")
+follow_damping = true
+lookahead = true
+lookahead_max = true
+lookahead_max_value = Vector2(1500, 1500)
+dead_zone_width = 0.2
+dead_zone_height = 0.9
+metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
+
+[node name="controllablePhantomCamera2D" type="Node2D" parent="." unique_id=921378878]
+position = Vector2(544, 280)
+script = ExtResource("7_nfgmo")
+priority = 1
+tween_resource = SubResource("Resource_nfgmo")
+follow_damping = true
+lookahead = true
+lookahead_max = true
+lookahead_max_value = Vector2(1500, 1500)
+dead_zone_width = 0.2
+dead_zone_height = 0.65
+metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525 node_paths=PackedStringArray("framedPhantomCamera2D", "controllablePhantomCamera2D")]
+top_level = true
+position = Vector2(544, 280)
+limit_enabled = false
+position_smoothing_speed = 20.0
+script = ExtResource("1_8howc")
+framedPhantomCamera2D = NodePath("../framedPhantomCamera2D")
+controllablePhantomCamera2D = NodePath("../controllablePhantomCamera2D")
+
+[node name="PhantomCameraHost" type="Node" parent="Camera2D" unique_id=1366881780]
+process_priority = 300
+process_physics_priority = 300
+script = ExtResource("8_cnbw5")
+metadata/_custom_type_script = "uid://bd046eokvcnu2"
+
+[node name="Editor" type="Node2D" parent="." unique_id=947430787]
+script = ExtResource("1_eyy8u")
+
+[node name="SaveLoadManager" type="Node" parent="." unique_id=1604020172]
+script = ExtResource("3_7fkqn")
+
+[node name="FileDialog" type="FileDialog" parent="." unique_id=890024928]
+oversampling_override = 1.0
+title = "Save a Level"
+initial_position = 1
+size = Vector2i(640, 442)
+theme = ExtResource("3_cnbw5")
+ok_button_text = "Confirm"
+access = 1
+filters = PackedStringArray("*.json")
+hidden_files_toggle_enabled = false
+file_filter_toggle_enabled = false
+folder_creation_enabled = false
+
+[node name="Level" type="Node2D" parent="." unique_id=827656185 node_paths=PackedStringArray("roomManager")]
+script = ExtResource("2_24ceq")
+roomManager = NodePath("roomManager")
+
+[node name="roomManager" type="Node2D" parent="Level" unique_id=565230703 node_paths=PackedStringArray("bottomTexture", "skyTexture", "roomBottomIndicator")]
+position = Vector2(0, 720)
+script = ExtResource("22_iis80")
+bottomTexture = NodePath("roomBottomTexture")
+skyTexture = NodePath("Sky/skyTexture")
+roomBottomIndicator = NodePath("roomBottomTexture/roomBottomIndicator")
+category = 3
+displayName = "Scene"
+
+[node name="Sky" type="CanvasLayer" parent="Level/roomManager" unique_id=1910664044]
+layer = -256
+
+[node name="skyTexture" type="TextureRect" parent="Level/roomManager/Sky" unique_id=1994886404]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0, 64)
+texture = SubResource("GradientTexture2D_efg2m")
+
+[node name="roomBottomTexture" type="TextureRect" parent="Level/roomManager" unique_id=923693957]
+process_mode = 3
+offset_top = -48.0
+offset_right = 16.0
+offset_bottom = 208.0
+texture = SubResource("GradientTexture2D_iis80")
+script = ExtResource("23_06d57")
+
+[node name="roomBottomIndicator" type="TextureRect" parent="Level/roomManager/roomBottomTexture" unique_id=1642324496]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 48.0
+offset_bottom = -192.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_06d57")
+
+[node name="Label" type="Label" parent="Level/roomManager/roomBottomTexture/roomBottomIndicator" unique_id=27496319]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -89.0
+offset_top = 8.0
+offset_right = 89.0
+offset_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "This line indicates the bottom of the level"
+label_settings = SubResource("LabelSettings_06d57")
+
+[node name="PropertiesHandler" type="Node" parent="Level" unique_id=1719493391]
+script = ExtResource("15_i5vsu")
+
+[node name="Layer0" parent="Level" unique_id=1675109972 instance=ExtResource("17_0l4bc")]
+scroll_offset = Vector2(0, 0)
+index = 0
+
+[node name="Player" parent="Level/Layer0" unique_id=1400268196 instance=ExtResource("4_7wlcy")]
+position = Vector2(544, 280)
+floor_snap_length = 12.0
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=268677100]
 
@@ -390,6 +522,227 @@ scroll_active = false
 horizontal_alignment = 1
 script = SubResource("GDScript_iis80")
 metadata/_edit_use_anchors_ = true
+
+[node name="Left Area UI" type="VBoxContainer" parent="HUD" unique_id=1676596591]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 8.0
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+mouse_behavior_recursive = 1
+script = SubResource("GDScript_06d57")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Left Area UI" unique_id=1798674435]
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_constants/margin_left = 8
+
+[node name="editModeControlsLabel" type="RichTextLabel" parent="HUD/Left Area UI/MarginContainer" unique_id=1133048131]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+mouse_filter = 2
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+script = SubResource("GDScript_u6te5")
+metadata/_edit_use_anchors_ = true
+
+[node name="PlayModeHud" type="HBoxContainer" parent="HUD" unique_id=653226853]
+clip_contents = true
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.314
+offset_top = -203.0
+offset_bottom = -3.0517578e-05
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+mouse_behavior_recursive = 1
+theme_override_constants/separation = 12
+script = SubResource("GDScript_pee1p")
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/PlayModeHud" unique_id=1864529040]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+
+[node name="Label" type="Label" parent="HUD/PlayModeHud/MarginContainer" unique_id=849705467]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Health: 3/3"
+label_settings = SubResource("LabelSettings_i5vsu")
+script = SubResource("GDScript_o8yew")
+
+[node name="playButtonMarginContainer" type="MarginContainer" parent="HUD/PlayModeHud" unique_id=2081846835]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 8
+
+[node name="playButton" type="Button" parent="HUD/PlayModeHud/playButtonMarginContainer" unique_id=370429537]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 0
+focus_mode = 3
+theme = ExtResource("3_cnbw5")
+icon = ExtResource("12_o8yew")
+icon_alignment = 1
+
+[node name="playButtonPrompt" type="RichTextLabel" parent="HUD/PlayModeHud/playButtonMarginContainer/playButton" unique_id=1565802588]
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_top = 0.35937497
+anchor_right = 1.7200001
+anchor_bottom = 1.479375
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("7_o8yew")
+bbcode_enabled = true
+text = "[font_size=64][char=E0C5][/font_size]"
+scroll_active = false
+horizontal_alignment = 1
+script = SubResource("GDScript_efg2m")
+metadata/_edit_use_anchors_ = true
+
+[node name="pauseButtonMarginContainer" type="MarginContainer" parent="HUD/PlayModeHud" unique_id=731597193]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+
+[node name="pauseButton" type="Button" parent="HUD/PlayModeHud/pauseButtonMarginContainer" unique_id=913850963]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+focus_mode = 3
+mouse_filter = 1
+theme = ExtResource("3_cnbw5")
+icon = ExtResource("13_u6te5")
+icon_alignment = 1
+
+[node name="pauseButtonPrompt" type="RichTextLabel" parent="HUD/PlayModeHud/pauseButtonMarginContainer/pauseButton" unique_id=170143859]
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_top = 0.35937497
+anchor_right = 1.7200001
+anchor_bottom = 1.479375
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("7_o8yew")
+bbcode_enabled = true
+text = "[font_size=64][char=E0C5][/font_size]"
+scroll_active = false
+horizontal_alignment = 1
+script = SubResource("GDScript_iis80")
+metadata/_edit_use_anchors_ = true
+
+[node name="PropertiesSidebar" type="Control" parent="HUD" unique_id=1003501295]
+layout_mode = 3
+anchor_left = 1.0
+anchor_top = 0.09900001
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -0.15200806
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_cnbw5")
+script = ExtResource("3_exjlx")
+metadata/_edit_use_anchors_ = true
+
+[node name="propertiesEditingLabelPanel" type="Panel" parent="HUD/PropertiesSidebar" unique_id=1522755482]
+self_modulate = Color(1, 1, 1, 0)
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.13
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ThingNamePanelContainer" type="PanelContainer" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel" unique_id=207308021]
+clip_contents = true
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -74.0
+offset_top = -47.666668
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(2, 27.42667)
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"tab"
+
+[node name="ThingNameMarginContainer" type="MarginContainer" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel/ThingNamePanelContainer" unique_id=1533983739]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ThingNameLabel" type="Label" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel/ThingNamePanelContainer/ThingNameMarginContainer" unique_id=1242636918]
+layout_mode = 2
+text = "Player"
+vertical_alignment = 2
+script = ExtResource("4_l4kvy")
+
+[node name="PropertiesPanel" type="Panel" parent="HUD/PropertiesSidebar" unique_id=1949280062]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.13
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="closeButton" type="Button" parent="HUD/PropertiesSidebar/PropertiesPanel" unique_id=600812247]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.16
+anchor_bottom = 0.04954321
+offset_bottom = -0.10400009
+focus_mode = 3
+theme = ExtResource("3_cnbw5")
+text = "x"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HUD/PropertiesSidebar/PropertiesPanel" unique_id=228905550]
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 0.1
+anchor_right = 0.95
+anchor_bottom = 0.9
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Properties" type="VBoxContainer" parent="HUD/PropertiesSidebar/PropertiesPanel/ScrollContainer" unique_id=1328526897]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="levelBrowser" parent="HUD" unique_id=1082516022 instance=ExtResource("10_ruwpr")]
 
@@ -577,7 +930,7 @@ size_flags_vertical = 8
 layout_mode = 2
 text = "Exit Play Mode"
 
-[node name="LoadingPanel" type="Panel" parent="HUD" unique_id=1046265247]
+[node name="LoadingPanel" type="Panel" parent="HUD" unique_id=1046265247 node_paths=PackedStringArray("loadingLabel")]
 visible = false
 z_index = 4096
 anchors_preset = 15
@@ -589,6 +942,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("3_cnbw5")
 script = ExtResource("11_l5j4h")
+loadingLabel = NodePath("MarginContainer/PauseVBoxContainer/loadingLabel")
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD/LoadingPanel" unique_id=1599197336]
 layout_mode = 1
@@ -613,7 +967,7 @@ theme_override_constants/separation = 16
 alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="pausedLabel" type="Label" parent="HUD/LoadingPanel/MarginContainer/PauseVBoxContainer" unique_id=1786032023]
+[node name="loadingLabel" type="Label" parent="HUD/LoadingPanel/MarginContainer/PauseVBoxContainer" unique_id=1786032023]
 layout_mode = 2
 size_flags_vertical = 8
 text = "Loading..."
@@ -787,360 +1141,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Confirm"
 
-[node name="PropertiesSidebar" type="Control" parent="HUD" unique_id=1003501295]
-layout_mode = 3
-anchor_left = 1.0
-anchor_top = 0.09900001
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -0.15200806
-grow_horizontal = 0
-grow_vertical = 2
-size_flags_horizontal = 3
-theme = ExtResource("3_cnbw5")
-script = ExtResource("3_exjlx")
-metadata/_edit_use_anchors_ = true
-
-[node name="propertiesEditingLabelPanel" type="Panel" parent="HUD/PropertiesSidebar" unique_id=1522755482]
-self_modulate = Color(1, 1, 1, 0)
-clip_contents = true
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.13
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="ThingNamePanelContainer" type="PanelContainer" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel" unique_id=207308021]
-clip_contents = true
-custom_minimum_size = Vector2(256, 0)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -74.0
-offset_top = -47.666668
-grow_horizontal = 0
-grow_vertical = 0
-pivot_offset = Vector2(2, 27.42667)
-theme = ExtResource("3_cnbw5")
-theme_type_variation = &"tab"
-
-[node name="ThingNameMarginContainer" type="MarginContainer" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel/ThingNamePanelContainer" unique_id=1533983739]
-layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
-
-[node name="ThingNameLabel" type="Label" parent="HUD/PropertiesSidebar/propertiesEditingLabelPanel/ThingNamePanelContainer/ThingNameMarginContainer" unique_id=1242636918]
-layout_mode = 2
-text = "Player"
-vertical_alignment = 2
-script = ExtResource("4_l4kvy")
-
-[node name="PropertiesPanel" type="Panel" parent="HUD/PropertiesSidebar" unique_id=1949280062]
-clip_contents = true
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.13
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="closeButton" type="Button" parent="HUD/PropertiesSidebar/PropertiesPanel" unique_id=600812247]
-custom_minimum_size = Vector2(32, 32)
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.16
-anchor_bottom = 0.04954321
-offset_bottom = -0.10400009
-focus_mode = 3
-theme = ExtResource("3_cnbw5")
-text = "x"
-
-[node name="ScrollContainer" type="ScrollContainer" parent="HUD/PropertiesSidebar/PropertiesPanel" unique_id=228905550]
-clip_contents = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.05
-anchor_top = 0.1
-anchor_right = 0.95
-anchor_bottom = 0.9
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Properties" type="VBoxContainer" parent="HUD/PropertiesSidebar/PropertiesPanel/ScrollContainer" unique_id=1328526897]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="PlayModeHud" type="HBoxContainer" parent="HUD" unique_id=653226853]
-clip_contents = true
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.314
-offset_top = -203.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_vertical = 3
-mouse_behavior_recursive = 1
-theme_override_constants/separation = 12
-script = SubResource("GDScript_pee1p")
-
-[node name="MarginContainer" type="MarginContainer" parent="HUD/PlayModeHud" unique_id=1864529040]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 16
-
-[node name="Label" type="Label" parent="HUD/PlayModeHud/MarginContainer" unique_id=849705467]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "Health: 3/3"
-label_settings = SubResource("LabelSettings_i5vsu")
-script = SubResource("GDScript_o8yew")
-
-[node name="playButtonMarginContainer" type="MarginContainer" parent="HUD/PlayModeHud" unique_id=2081846835]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/margin_left = 32
-theme_override_constants/margin_top = 8
-
-[node name="playButton" type="Button" parent="HUD/PlayModeHud/playButtonMarginContainer" unique_id=370429537]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-size_flags_horizontal = 6
-size_flags_vertical = 0
-focus_mode = 3
-theme = ExtResource("3_cnbw5")
-icon = ExtResource("12_o8yew")
-icon_alignment = 1
-
-[node name="playButtonPrompt" type="RichTextLabel" parent="HUD/PlayModeHud/playButtonMarginContainer/playButton" unique_id=1565802588]
-clip_contents = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.6
-anchor_top = 0.35937497
-anchor_right = 1.7200001
-anchor_bottom = 1.479375
-mouse_behavior_recursive = 1
-theme = ExtResource("3_cnbw5")
-theme_type_variation = &"inGameLabel"
-theme_override_fonts/normal_font = ExtResource("7_o8yew")
-bbcode_enabled = true
-text = "[font_size=64][char=E0C5][/font_size]"
-scroll_active = false
-horizontal_alignment = 1
-script = SubResource("GDScript_efg2m")
-metadata/_edit_use_anchors_ = true
-
-[node name="pauseButtonMarginContainer" type="MarginContainer" parent="HUD/PlayModeHud" unique_id=731597193]
-layout_mode = 2
-size_flags_horizontal = 2
-size_flags_vertical = 0
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 16
-
-[node name="pauseButton" type="Button" parent="HUD/PlayModeHud/pauseButtonMarginContainer" unique_id=913850963]
-custom_minimum_size = Vector2(64, 64)
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-focus_mode = 3
-mouse_filter = 1
-theme = ExtResource("3_cnbw5")
-icon = ExtResource("13_u6te5")
-icon_alignment = 1
-
-[node name="pauseButtonPrompt" type="RichTextLabel" parent="HUD/PlayModeHud/pauseButtonMarginContainer/pauseButton" unique_id=170143859]
-clip_contents = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.6
-anchor_top = 0.35937497
-anchor_right = 1.7200001
-anchor_bottom = 1.479375
-mouse_behavior_recursive = 1
-theme = ExtResource("3_cnbw5")
-theme_type_variation = &"inGameLabel"
-theme_override_fonts/normal_font = ExtResource("7_o8yew")
-bbcode_enabled = true
-text = "[font_size=64][char=E0C5][/font_size]"
-scroll_active = false
-horizontal_alignment = 1
-script = SubResource("GDScript_iis80")
-metadata/_edit_use_anchors_ = true
-
-[node name="Left Area UI" type="VBoxContainer" parent="HUD" unique_id=1676596591]
-anchors_preset = 9
-anchor_bottom = 1.0
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 2
-mouse_behavior_recursive = 1
-script = SubResource("GDScript_06d57")
-
-[node name="MarginContainer" type="MarginContainer" parent="HUD/Left Area UI" unique_id=1798674435]
-layout_mode = 2
-size_flags_vertical = 6
-theme_override_constants/margin_left = 8
-
-[node name="editModeControlsLabel" type="RichTextLabel" parent="HUD/Left Area UI/MarginContainer" unique_id=1133048131]
-clip_contents = false
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 6
-mouse_filter = 2
-theme = ExtResource("3_cnbw5")
-theme_type_variation = &"inGameLabel"
-bbcode_enabled = true
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-script = SubResource("GDScript_u6te5")
-metadata/_edit_use_anchors_ = true
-
-[node name="framedPhantomCamera2D" type="Node2D" parent="." unique_id=21135804]
-top_level = true
-position = Vector2(544, 280)
-script = ExtResource("7_nfgmo")
-follow_mode = 5
-tween_resource = SubResource("Resource_nfgmo")
-follow_damping = true
-lookahead = true
-lookahead_max = true
-lookahead_max_value = Vector2(1500, 1500)
-dead_zone_width = 0.2
-dead_zone_height = 0.9
-metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
-
-[node name="controllablePhantomCamera2D" type="Node2D" parent="." unique_id=921378878]
-position = Vector2(544, 280)
-script = ExtResource("7_nfgmo")
-priority = 1
-tween_resource = SubResource("Resource_nfgmo")
-follow_damping = true
-lookahead = true
-lookahead_max = true
-lookahead_max_value = Vector2(1500, 1500)
-dead_zone_width = 0.2
-dead_zone_height = 0.65
-metadata/_custom_type_script = "uid://bhexx6mj1xv3q"
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1191540525 node_paths=PackedStringArray("framedPhantomCamera2D", "controllablePhantomCamera2D")]
-top_level = true
-position = Vector2(544, 280)
-limit_enabled = false
-position_smoothing_speed = 20.0
-script = ExtResource("1_8howc")
-framedPhantomCamera2D = NodePath("../framedPhantomCamera2D")
-controllablePhantomCamera2D = NodePath("../controllablePhantomCamera2D")
-
-[node name="PhantomCameraHost" type="Node" parent="Camera2D" unique_id=1366881780]
-process_priority = 300
-process_physics_priority = 300
-script = ExtResource("8_cnbw5")
-metadata/_custom_type_script = "uid://bd046eokvcnu2"
-
-[node name="Editor" type="Node2D" parent="." unique_id=947430787]
-script = ExtResource("1_eyy8u")
-
-[node name="SaveLoadManager" type="Node" parent="." unique_id=1604020172]
-script = ExtResource("3_7fkqn")
-
-[node name="FileDialog" type="FileDialog" parent="." unique_id=890024928]
-oversampling_override = 1.0
-title = "Save a Level"
-initial_position = 1
-size = Vector2i(640, 442)
-theme = ExtResource("3_cnbw5")
-ok_button_text = "Confirm"
-access = 1
-filters = PackedStringArray("*.json")
-hidden_files_toggle_enabled = false
-file_filter_toggle_enabled = false
-folder_creation_enabled = false
-
-[node name="Level" type="Node2D" parent="." unique_id=827656185 node_paths=PackedStringArray("roomManager")]
-script = ExtResource("2_24ceq")
-roomManager = NodePath("roomManager")
-
-[node name="roomManager" type="Node2D" parent="Level" unique_id=565230703 node_paths=PackedStringArray("bottomTexture", "skyTexture", "roomBottomIndicator")]
-position = Vector2(0, 720)
-script = ExtResource("22_iis80")
-bottomTexture = NodePath("roomBottomTexture")
-skyTexture = NodePath("Sky/skyTexture")
-roomBottomIndicator = NodePath("roomBottomTexture/roomBottomIndicator")
-category = 3
-displayName = "Scene"
-
-[node name="Sky" type="CanvasLayer" parent="Level/roomManager" unique_id=1910664044]
-layer = -256
-
-[node name="skyTexture" type="TextureRect" parent="Level/roomManager/Sky" unique_id=1994886404]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(0, 64)
-texture = SubResource("GradientTexture2D_efg2m")
-
-[node name="roomBottomTexture" type="TextureRect" parent="Level/roomManager" unique_id=923693957]
-process_mode = 3
-offset_top = -48.0
-offset_right = 16.0
-offset_bottom = 208.0
-texture = SubResource("GradientTexture2D_iis80")
-script = ExtResource("23_06d57")
-
-[node name="roomBottomIndicator" type="TextureRect" parent="Level/roomManager/roomBottomTexture" unique_id=1642324496]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 48.0
-offset_bottom = -192.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("GradientTexture2D_06d57")
-
-[node name="Label" type="Label" parent="Level/roomManager/roomBottomTexture/roomBottomIndicator" unique_id=27496319]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -89.0
-offset_top = 8.0
-offset_right = 89.0
-offset_bottom = 31.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "This line indicates the bottom of the level"
-label_settings = SubResource("LabelSettings_06d57")
-
-[node name="PropertiesHandler" type="Node" parent="Level" unique_id=1719493391]
-script = ExtResource("15_i5vsu")
-
-[node name="Layer0" parent="Level" unique_id=1675109972 instance=ExtResource("17_0l4bc")]
-index = 0
-
-[node name="Player" parent="Level/Layer0" unique_id=1400268196 instance=ExtResource("4_7wlcy")]
-position = Vector2(544, 280)
-floor_snap_length = 12.0
-
+[connection signal="canceled" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_canceled"]
+[connection signal="confirmed" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_confirmed"]
+[connection signal="custom_action" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_custom_action"]
+[connection signal="file_selected" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_file_selected"]
 [connection signal="pressed" from="HUD/Top Area UI/HBoxContainer/layersButtonControl/layersButton" to="Level" method="_on_layers_button_pressed"]
 [connection signal="pressed" from="HUD/Top Area UI/HBoxContainer/layersButtonControl/roomButton" to="Level/roomManager" method="startEditingSelf"]
 [connection signal="pressed" from="HUD/Top Area UI/menuButtons/playButtonMarginContainer/playButton" to="Editor" method="toggleGameMode"]
 [connection signal="pressed" from="HUD/Top Area UI/menuButtons/pauseButtonMarginContainer/pauseButton" to="HUD/PausePanel" method="_on_pause_button_pressed"]
+[connection signal="pressed" from="HUD/PropertiesSidebar/PropertiesPanel/closeButton" to="HUD/PropertiesSidebar" method="_on_close_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Unpause/UnpauseButton" to="HUD/PausePanel" method="_on_unpause_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer/SignInButton" to="HUD/PausePanel" method="_on_sign_in_button_pressed"]
 [connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer/SignUpButton" to="HUD/PausePanel" method="_on_sign_up_button_pressed"]
@@ -1154,8 +1163,3 @@ floor_snap_length = 12.0
 [connection signal="pressed" from="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer/ExitPlayMode/ExitPlayModeButton" to="HUD/PausePanel" method="_on_exit_play_mode_button_pressed"]
 [connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/cancelButtonContainer/cancelButton" to="HUD/TextEditPopup" method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/confirmButtonContainer/confirmButton" to="HUD/TextEditPopup" method="_on_confirm_button_pressed"]
-[connection signal="pressed" from="HUD/PropertiesSidebar/PropertiesPanel/closeButton" to="HUD/PropertiesSidebar" method="_on_close_button_pressed"]
-[connection signal="canceled" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_canceled"]
-[connection signal="confirmed" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_confirmed"]
-[connection signal="custom_action" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_custom_action"]
-[connection signal="file_selected" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_file_selected"]

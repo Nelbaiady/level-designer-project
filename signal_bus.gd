@@ -101,6 +101,9 @@ signal genericPopupClosed()#tells the game that a popup has closed, which decrem
 signal loadingStarted()##start showing the loading screen
 @warning_ignore("unused_signal")
 signal loadingStopped()##stop showing the loading screen
+@warning_ignore("unused_signal")
+signal altLoadingStarted(loadingText:String)##start showing the loading screen with custom text
+@warning_ignore("unused_signal")
 
 #pause menu
 @warning_ignore("unused_signal")

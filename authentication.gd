@@ -33,8 +33,9 @@ var isSignedIn: bool = false
 
 func setSignedIn():
 	isSignedIn = true
-	var userResponse = await getOwnUser()
-	user = JSON.parse_string(userResponse.get_string_from_utf8())
+	#var userResponse = await getOwnUser()
+	var userResponse = await getCurrentUser()
+	user = JSON.parse_string(userResponse)
 	signalBus.signInStatusUpdated.emit()
 func setSignedOut():
 	isSignedIn = false
@@ -70,7 +71,7 @@ func sendSignInSignal():
 
 ##looks for the user in the session cache
 func getCurrentUser(getFullResponse = false):
-	var response = await rpcRequest({},"getCurrentUser")
+	var response = await rpcRequest({},"getCurrentUser",false)
 	if getFullResponse:
 		return response
 	else:
@@ -89,9 +90,9 @@ func ensureAccountExists():
 		signalBus.signedIn.emit()
 		return response[1]
 
-func getOwnUser():
-	var response = await rpcRequest({},"getCurrentUser")
-	return response[3]
+#func getOwnUser():
+	#var response = await rpcRequest({},"getCurrentUser")
+	#return response[3]
 
 func signUp(email:String, password:String):
 	var response = await genericHttpRequest(
@@ -116,10 +117,11 @@ func signUp(email:String, password:String):
 	else:
 		authError.emit(body["msg"])
 	return response[1]
-	
+
+##when the account is already created but the ematil was only just verified and a username needs to be specified
 func signUpPartTwo(username:String=""):
 	if username=="":
-		signalBus.startTextEditPopup.emit("Welcome new player! \nWhat would you like your display name to be?")
+		signalBus.startTextEditPopup.emit("Welcome new player! \nWhat would you like your display name to be?\n(you do not have to remember this username to sign in but it will be displayed publicly)")
 		var returns = await signalBus.endTextPopup
 		username = returns[0]
 		var isCancelled = !returns[1]
@@ -191,7 +193,9 @@ func signIn(email:String,password:String):
 ##Response[1]: responseCode[br] 
 ##Response[2]: headers[br]
 ##Response[3]: body[br]
-func rpcRequest(params:Dictionary,functionName:String):
+##For response body use Response[3].get_string_from_utf8()
+func rpcRequest(params:Dictionary,functionName:String, loadingScreen:=true):
+	if loadingScreen: signalBus.altLoadingStarted.emit("waiting for request")
 	var url = SUPABASE_URL + "/rest/v1/rpc/"+functionName
 	var headers = [
 		"apikey: " + SUPABASE_ANON_KEY,
@@ -203,6 +207,7 @@ func rpcRequest(params:Dictionary,functionName:String):
 	]
 	var body = JSON.stringify(params)
 	var response = await genericHttpRequest(url, headers, HTTPClient.METHOD_POST, body)
+	if loadingScreen: signalBus.loadingStopped.emit()
 	return response
 
 func newHttpRequest(url:String,headers:PackedStringArray,method:HTTPClient.Method,requestData:String=""):
@@ -301,6 +306,7 @@ func uploadLevel(levelName=""):
 				signalBus.startTextPopup.emit("Failed to upload level")
 	else:
 		signalBus.startTextPopup.emit("Bummer, I don't think you're signed in")
+		
 func downloadLevel(levelID:="0"):
 	var url = SUPABASE_URL + "/storage/v1/object/Levels/"+levelID+".json"
 	var headers = [

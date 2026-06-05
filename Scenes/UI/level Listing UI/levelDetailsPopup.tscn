@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://bqsbb6alvs745" path="res://Scenes/UI/starBar.tscn" id="5_41br5"]
 
 [node name="levelDetailsPopup" type="Panel" unique_id=103981226 node_paths=PackedStringArray("closeButton")]
-z_index = 2
 custom_minimum_size = Vector2(0, 192)
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,16 +20,17 @@ script = ExtResource("2_m5igj")
 closeButton = NodePath("closeButton")
 metadata/_custom_type_script = "uid://cf6llt8j7rnmk"
 
-[node name="detailedLevelCard" type="Control" parent="." unique_id=1123796863 node_paths=PackedStringArray("parentPopup", "submitReviewButton", "reviewTextEdit", "ratingDisplays", "ratingInputs", "nameLabel", "idLabel", "authorLabel", "playButton")]
+[node name="detailedLevelCard" type="Control" parent="." unique_id=1123796863 node_paths=PackedStringArray("parentPopup", "submitReviewButton", "foldableContainer", "reviewTextEdit", "ratingDisplays", "ratingInputs", "nameLabel", "idLabel", "authorLabel", "playButton")]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("2_vy71b")
 parentPopup = NodePath("..")
 submitReviewButton = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/submitReviewButton")
+foldableContainer = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer")
 reviewTextEdit = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/reviewTextEdit")
 ratingDisplays = [NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/OverallStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/ControlsStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/VisualsStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/DifficultyCurveStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/LearningCurveStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/CreativityStarBar")]
-ratingInputs = [NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/VBoxContainer2/ControlsStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/VBoxContainer2/VisualsStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/VBoxContainer2/DifficultyCurveStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/VBoxContainer2/LearningCurveStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/VBoxContainer2/CreativityStarBar")]
+ratingInputs = [NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/ControlsStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/VisualsStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/DifficultyCurveStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/LearningCurveStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/CreativityStarBar")]
 nameLabel = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/nameLabel")
 idLabel = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/idLabel")
 authorLabel = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/authorLabel")
@@ -270,26 +270,26 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Creativity: "
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars" unique_id=2042728290]
+[node name="RatingStarBarVBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars" unique_id=2042728290]
 layout_mode = 2
 
-[node name="ControlsStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/VBoxContainer2" unique_id=1519090127 instance=ExtResource("5_41br5")]
+[node name="ControlsStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer" unique_id=1519090127 instance=ExtResource("5_41br5")]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 
-[node name="VisualsStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/VBoxContainer2" unique_id=606338393 instance=ExtResource("5_41br5")]
+[node name="VisualsStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer" unique_id=606338393 instance=ExtResource("5_41br5")]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 
-[node name="DifficultyCurveStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/VBoxContainer2" unique_id=132702123 instance=ExtResource("5_41br5")]
+[node name="DifficultyCurveStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer" unique_id=132702123 instance=ExtResource("5_41br5")]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 
-[node name="LearningCurveStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/VBoxContainer2" unique_id=1259232272 instance=ExtResource("5_41br5")]
+[node name="LearningCurveStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer" unique_id=1259232272 instance=ExtResource("5_41br5")]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 
-[node name="CreativityStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/VBoxContainer2" unique_id=368206124 instance=ExtResource("5_41br5")]
+[node name="CreativityStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer" unique_id=368206124 instance=ExtResource("5_41br5")]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 

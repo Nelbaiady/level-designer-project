@@ -773,8 +773,8 @@ uploadLevel = NodePath("MarginContainer/PauseVBoxContainer/editModePauseVBoxCont
 [node name="MarginContainer" type="MarginContainer" parent="HUD/PausePanel" unique_id=970194299]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.11111111
-anchor_right = 0.8888889
+anchor_left = 0.28333333
+anchor_right = 0.7166665
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -828,6 +828,7 @@ size_flags_vertical = 8
 
 [node name="UnpauseButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Unpause" unique_id=1821917658]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Unpause"
 
 [node name="Login" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=722089432]
@@ -841,11 +842,13 @@ layout_mode = 2
 [node name="SignInButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer" unique_id=1207319776]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
 text = "Sign In"
 
 [node name="SignUpButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer" unique_id=106990226]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
 text = "Sign Up"
 
 [node name="uploadLevel" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1055362265]
@@ -855,6 +858,7 @@ size_flags_vertical = 8
 
 [node name="uploadButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/uploadLevel" unique_id=710410053]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Upload Level"
 
 [node name="BrowseLevels" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1774625358]
@@ -864,6 +868,7 @@ size_flags_vertical = 8
 
 [node name="BrowseLevelsButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/BrowseLevels" unique_id=957855919]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Browse Levels"
 
 [node name="LoadLevelByID" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1437630887]
@@ -873,6 +878,7 @@ size_flags_vertical = 8
 
 [node name="LoadLevelByIDButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevelByID" unique_id=1611144296]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Find Level by ID"
 
 [node name="SaveLevel" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=42092402]
@@ -882,6 +888,7 @@ size_flags_vertical = 8
 
 [node name="SaveLevelButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/SaveLevel" unique_id=1316137415]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Save Level"
 
 [node name="LoadLevel" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=2119631058]
@@ -891,6 +898,7 @@ size_flags_vertical = 8
 
 [node name="LoadLevelButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevel" unique_id=1263896398]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Load Level"
 
 [node name="DownloadLevel" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer" unique_id=1921119199]
@@ -901,13 +909,13 @@ size_flags_vertical = 8
 
 [node name="DownloadLevelButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/DownloadLevel" unique_id=332347246]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Download Level File"
 
 [node name="playModePauseVBoxContainer" type="VBoxContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer" unique_id=1503197328]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 3
 theme = ExtResource("3_cnbw5")
 theme_override_constants/separation = 16
 alignment = 1
@@ -919,6 +927,7 @@ size_flags_vertical = 8
 
 [node name="UnpauseButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer/Unpause" unique_id=612162770]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Unpause"
 
 [node name="ExitPlayMode" type="MarginContainer" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer" unique_id=669946963]
@@ -928,6 +937,7 @@ size_flags_vertical = 8
 
 [node name="ExitPlayModeButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer/ExitPlayMode" unique_id=129747225]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 text = "Exit Play Mode"
 
 [node name="LoadingPanel" type="Panel" parent="HUD" unique_id=1046265247 node_paths=PackedStringArray("loadingLabel")]

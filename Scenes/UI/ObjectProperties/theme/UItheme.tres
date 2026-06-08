@@ -82,5 +82,7 @@ solidPanel/base_type = &"Panel"
 solidPanel/styles/panel = SubResource("StyleBoxFlat_oober")
 subPanel/base_type = &"Panel"
 subPanel/styles/panel = ExtResource("5_5nlin")
+subPanelContainer/base_type = &"PanelContainer"
+subPanelContainer/styles/panel = ExtResource("5_5nlin")
 tab/base_type = &"PanelContainer"
 tab/styles/panel = ExtResource("4_hi8js")

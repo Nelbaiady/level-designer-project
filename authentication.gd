@@ -193,7 +193,7 @@ func signIn(email:String,password:String):
 ##Response[1]: responseCode[br] 
 ##Response[2]: headers[br]
 ##Response[3]: body[br]
-##For response body use Response[3].get_string_from_utf8()
+##For response body use JSON.parse_string(Response[3].get_string_from_utf8())
 func rpcRequest(params:Dictionary,functionName:String, loadingScreen:=true):
 	if loadingScreen: signalBus.altLoadingStarted.emit("waiting for request")
 	var url = SUPABASE_URL + "/rest/v1/rpc/"+functionName

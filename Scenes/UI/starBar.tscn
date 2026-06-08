@@ -37,6 +37,7 @@ offset_right = 327.0
 offset_bottom = 40.0
 max_value = 10.0
 value = 10.0
+scrollable = false
 
 [node name="ztarLine" type="Line2D" parent="HBoxContainer/Control" unique_id=222177366]
 texture_repeat = 2

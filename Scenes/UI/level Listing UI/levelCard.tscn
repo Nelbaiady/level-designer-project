@@ -71,7 +71,7 @@ selection_enabled = true
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 2
-text = "Author: "
+text = "Artist ID: "
 selection_enabled = true
 
 [node name="playButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1324759037]

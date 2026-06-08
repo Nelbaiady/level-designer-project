@@ -66,7 +66,7 @@ func _process(_delta: float) -> void:
 	#cursorSprite.position = get_local_mouse_position() + Vector2(4,8)
 	cursorSprite.position = position-camPosition+Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2 + Vector2(4,8)
 	visible = cursorOnScreen and (globalEditor.isEditing or globalEditor.isObjectBeingEdited or globalEditor.popupIsOpen) and !isSpinBoxing
-	cursorSprite.visible = visible
+	cursorSprite.visible = visible	
 
 func _notification(event):
 	#mouse enters the window
@@ -84,33 +84,45 @@ func _notification(event):
 # REFERENCE: https://forum.godotengine.org/t/how-can-i-simulate-a-mouse-click-with-controller-inputs/1644
 func click():
 	var clickEvent = InputEventMouseButton.new()
-	clickEvent.position = get_viewport().canvas_transform * global_position
-	clickEvent.global_position = get_viewport().canvas_transform * global_position
+	#clickEvent.position = get_viewport().canvas_transform * global_position
+	#clickEvent.global_position = get_viewport().canvas_transform * global_position
+	clickEvent.position = getClickPosition()
+	clickEvent.global_position = getClickPosition()
 	clickEvent.button_index = MOUSE_BUTTON_LEFT
 	clickEvent.pressed = true
 	Input.parse_input_event(clickEvent)
 func unClick():
 	var clickEvent = InputEventMouseButton.new()
-	clickEvent.position = get_viewport().canvas_transform * global_position
-	clickEvent.global_position = get_viewport().canvas_transform * global_position
+	#clickEvent.position = get_viewport().canvas_transform * global_position
+	#clickEvent.global_position = get_viewport().canvas_transform * global_position
+	clickEvent.position = getClickPosition()
+	clickEvent.global_position = getClickPosition()
 	clickEvent.button_index = MOUSE_BUTTON_LEFT
 	clickEvent.pressed = false
 	Input.parse_input_event(clickEvent)
 	
 func rightClick():
 	var clickEvent = InputEventMouseButton.new()
-	clickEvent.position = get_viewport().canvas_transform * global_position
-	clickEvent.global_position = get_viewport().canvas_transform * global_position
+	#clickEvent.position = get_viewport().canvas_transform * global_position
+	#clickEvent.global_position = get_viewport().canvas_transform * global_position
+	clickEvent.position = getClickPosition()
+	clickEvent.global_position = getClickPosition()
 	clickEvent.button_index = MOUSE_BUTTON_RIGHT
 	clickEvent.pressed = true
 	Input.parse_input_event(clickEvent)
 func unRightClick():
 	var clickEvent = InputEventMouseButton.new()
-	clickEvent.position = get_viewport().canvas_transform * global_position
-	clickEvent.global_position = get_viewport().canvas_transform * global_position
+	#clickEvent.position = get_viewport().canvas_transform * global_position
+	#clickEvent.global_position = get_viewport().canvas_transform * global_position
+	clickEvent.position = getClickPosition()
+	clickEvent.global_position = getClickPosition()
 	clickEvent.button_index = MOUSE_BUTTON_RIGHT
 	clickEvent.pressed = false
 	Input.parse_input_event(clickEvent)
+
+func getClickPosition():
+	var viewportSize = get_viewport().get_visible_rect().size
+	return (get_viewport().canvas_transform * global_position) * (Vector2(get_window().size) / viewportSize)
 
 func spinBoxing():
 	if Input.is_action_pressed("mouseClickLeft"):

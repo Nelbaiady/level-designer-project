@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://cc0g5proch5e2"]
+
+[ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="1_1ohf6"]
+[ext_resource type="Script" uid="uid://yn67pa7ltp6g" path="res://Scenes/UI/misc UI scenes/reviewPanel.gd" id="1_38og7"]
+[ext_resource type="PackedScene" uid="uid://bqsbb6alvs745" path="res://Scenes/UI/starBar.tscn" id="3_mu6tv"]
+
+[node name="reviewPanel" type="PanelContainer" unique_id=1756418839 node_paths=PackedStringArray("authorLabel", "reviewTextLabel", "ratingDisplays")]
+custom_minimum_size = Vector2(0, 16)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 2
+theme = ExtResource("1_1ohf6")
+script = ExtResource("1_38og7")
+authorLabel = NodePath("VBoxContainer/marginContainer/VBoxContainer/authorLabel")
+reviewTextLabel = NodePath("VBoxContainer/marginContainer/VBoxContainer/PanelContainer/MarginContainer/reviewLabel")
+ratingDisplays = {
+"Controls": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/ControlsStarBar"),
+"Creativity": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/CreativityStarBar"),
+"Difficulty Curve": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/DifficultyCurveStarBar"),
+"Learning Curve": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/LearningCurveStarBar"),
+"Overall": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/OverallStarBar"),
+"Visuals": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/VisualsStarBar")
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=357846447]
+layout_mode = 2
+
+[node name="marginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1437798695]
+layout_mode = 2
+theme = ExtResource("1_1ohf6")
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/marginContainer" unique_id=1423167001]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="authorLabel" type="RichTextLabel" parent="VBoxContainer/marginContainer/VBoxContainer" unique_id=2134998092]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+theme_override_font_sizes/normal_font_size = 24
+text = "Author"
+fit_content = true
+selection_enabled = true
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/marginContainer/VBoxContainer" unique_id=1786972842]
+self_modulate = Color(0, 0.12939239, 0.30131844, 1)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/marginContainer/VBoxContainer/PanelContainer" unique_id=10457574]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="reviewLabel" type="RichTextLabel" parent="VBoxContainer/marginContainer/VBoxContainer/PanelContainer/MarginContainer" unique_id=319715990]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+theme_override_font_sizes/normal_font_size = 24
+text = "ReviewText"
+fit_content = true
+selection_enabled = true
+
+[node name="FoldableContainer2" type="FoldableContainer" parent="VBoxContainer/marginContainer/VBoxContainer" unique_id=1794085670]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+folded = true
+title = "Ratings"
+
+[node name="ratingsDisplayMarginContainer" type="MarginContainer" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2" unique_id=1749589499]
+visible = false
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 96
+theme_override_constants/margin_top = 32
+
+[node name="displayStarBars" type="HBoxContainer" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer" unique_id=345722039]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars" unique_id=467244431]
+layout_mode = 2
+theme_override_constants/separation = 56
+
+[node name="OverallLabel" type="Label" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=512590369]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Average Score: "
+
+[node name="ControlsLabel" type="Label" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=2058434285]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Controls: "
+
+[node name="VisualsLabel" type="Label" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=391702949]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Visuals: "
+
+[node name="DifficultyCurveLabel" type="Label" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=249345522]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Difficulty Curve:    "
+
+[node name="LearningCurveLabel" type="Label" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=1864897672]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Learning Curve: "
+
+[node name="CreativityLabel" type="Label" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=1179660506]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Creativity: "
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars" unique_id=1771792086]
+layout_mode = 2
+
+[node name="OverallStarBar" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=1106814379 instance=ExtResource("3_mu6tv")]
+modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+isEditable = false
+
+[node name="ControlsStarBar" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=90537731 instance=ExtResource("3_mu6tv")]
+modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+isEditable = false
+
+[node name="VisualsStarBar" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=1846350334 instance=ExtResource("3_mu6tv")]
+modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+isEditable = false
+
+[node name="DifficultyCurveStarBar" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=1918148506 instance=ExtResource("3_mu6tv")]
+modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+isEditable = false
+
+[node name="LearningCurveStarBar" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=582708715 instance=ExtResource("3_mu6tv")]
+modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+isEditable = false
+
+[node name="CreativityStarBar" parent="VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=140991119 instance=ExtResource("3_mu6tv")]
+modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+isEditable = false

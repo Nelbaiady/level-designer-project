@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://tynhsmj4yhpc" path="res://Scenes/UI/level Listing UI/levelDetailsPopup.gd" id="2_vy71b"]
 [ext_resource type="Texture2D" uid="uid://bbdxc5s178rie" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/arrowLeft.png" id="2_w56ke"]
 [ext_resource type="PackedScene" uid="uid://bqsbb6alvs745" path="res://Scenes/UI/starBar.tscn" id="5_41br5"]
+[ext_resource type="PackedScene" uid="uid://cc0g5proch5e2" path="res://Scenes/UI/misc UI scenes/reviewPanel.tscn" id="6_8a432"]
 
 [node name="levelDetailsPopup" type="Panel" unique_id=103981226 node_paths=PackedStringArray("closeButton")]
 custom_minimum_size = Vector2(0, 192)
@@ -20,7 +21,7 @@ script = ExtResource("2_m5igj")
 closeButton = NodePath("closeButton")
 metadata/_custom_type_script = "uid://cf6llt8j7rnmk"
 
-[node name="detailedLevelCard" type="Control" parent="." unique_id=1123796863 node_paths=PackedStringArray("parentPopup", "submitReviewButton", "foldableContainer", "reviewTextEdit", "ratingDisplays", "ratingInputs", "nameLabel", "idLabel", "authorLabel", "playButton")]
+[node name="detailedLevelCard" type="Control" parent="." unique_id=1123796863 node_paths=PackedStringArray("parentPopup", "submitReviewButton", "foldableContainer", "reviewTextEdit", "reviewsVBox", "artistNameLabel", "ratingDisplays", "ratingInputs", "nameLabel", "idLabel", "authorLabel", "playButton")]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -29,12 +30,27 @@ parentPopup = NodePath("..")
 submitReviewButton = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/submitReviewButton")
 foldableContainer = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer")
 reviewTextEdit = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/reviewTextEdit")
-ratingDisplays = [NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/OverallStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/ControlsStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/VisualsStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/DifficultyCurveStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/LearningCurveStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2/CreativityStarBar")]
-ratingInputs = [NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/ControlsStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/VisualsStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/DifficultyCurveStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/LearningCurveStarBar"), NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/CreativityStarBar")]
-nameLabel = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/nameLabel")
-idLabel = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/idLabel")
-authorLabel = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer/authorLabel")
-playButton = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/playButton")
+reviewsVBox = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/reviewsPanel/MarginContainer/VBoxContainer/reviews")
+artistNameLabel = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/levelDetailsHBoxContainer/VBoxContainer/authorNameLabel")
+ratingDisplays = {
+"Controls": NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/ControlsStarBar"),
+"Creativity": NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/CreativityStarBar"),
+"Difficulty Curve": NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/DifficultyCurveStarBar"),
+"Learning Curve": NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/LearningCurveStarBar"),
+"Overall": NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/OverallStarBar"),
+"Visuals": NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/VisualsStarBar")
+}
+ratingInputs = {
+"controls": NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/ControlsStarBar"),
+"creativity": NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/CreativityStarBar"),
+"difficulty_curve": NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/DifficultyCurveStarBar"),
+"learning_curve": NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/LearningCurveStarBar"),
+"visuals": NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/RatingStarBarVBoxContainer/VisualsStarBar")
+}
+nameLabel = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/levelDetailsHBoxContainer/VBoxContainer/nameLabel")
+idLabel = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/levelDetailsHBoxContainer/VBoxContainer/idLabel")
+authorLabel = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/levelDetailsHBoxContainer/VBoxContainer/authorIDLabel")
+playButton = NodePath("../ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/levelDetailsHBoxContainer/playButton")
 
 [node name="closeButton" type="Button" parent="." unique_id=1912593265]
 z_index = 1
@@ -95,18 +111,18 @@ metadata/_edit_use_anchors_ = true
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1134064582]
-custom_minimum_size = Vector2(0, 176)
+[node name="levelDetailsHBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1134064582]
+custom_minimum_size = Vector2(0, 192)
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1563736022]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/levelDetailsHBoxContainer" unique_id=1563736022]
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="nameLabel" type="RichTextLabel" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1278062636]
+[node name="nameLabel" type="RichTextLabel" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/levelDetailsHBoxContainer/VBoxContainer" unique_id=1278062636]
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 1.4
@@ -115,7 +131,7 @@ theme_override_font_sizes/normal_font_size = 40
 text = "Level Name"
 selection_enabled = true
 
-[node name="idLabel" type="RichTextLabel" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=172492303]
+[node name="idLabel" type="RichTextLabel" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/levelDetailsHBoxContainer/VBoxContainer" unique_id=172492303]
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 2
@@ -123,99 +139,111 @@ theme_override_font_sizes/normal_font_size = 24
 text = "Level ID:"
 selection_enabled = true
 
-[node name="authorLabel" type="RichTextLabel" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=99548128]
+[node name="authorIDLabel" type="RichTextLabel" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/levelDetailsHBoxContainer/VBoxContainer" unique_id=99548128]
 layout_mode = 2
 size_flags_vertical = 3
 focus_mode = 2
 theme_override_font_sizes/normal_font_size = 24
-text = "Author: "
+text = "Artist ID: "
 selection_enabled = true
 
-[node name="playButton" type="Button" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1324759037]
+[node name="authorNameLabel" type="RichTextLabel" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/levelDetailsHBoxContainer/VBoxContainer" unique_id=358397604]
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+theme_override_font_sizes/normal_font_size = 24
+text = "Artist Name:"
+selection_enabled = true
+
+[node name="playButton" type="Button" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/levelDetailsHBoxContainer" unique_id=1324759037]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 40
 text = "Open Level"
 
-[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=1598922581]
+[node name="FoldableContainer2" type="FoldableContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=123803705]
+layout_mode = 2
+title = "Level Ratings"
+
+[node name="ratingsDisplayMarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2" unique_id=1598922581]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/margin_left = 96
 theme_override_constants/margin_top = 32
 
-[node name="displayStarBars" type="HBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer" unique_id=1391152695]
+[node name="displayStarBars" type="HBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer" unique_id=1391152695]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars" unique_id=1115259420]
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars" unique_id=1115259420]
 layout_mode = 2
 theme_override_constants/separation = 56
 
-[node name="OverallLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer" unique_id=1419693621]
+[node name="OverallLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=1419693621]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
-text = "Overall: "
+text = "Average Score: "
 
-[node name="ControlsLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer" unique_id=1873887981]
+[node name="ControlsLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=1873887981]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Controls: "
 
-[node name="VisualsLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer" unique_id=367729551]
+[node name="VisualsLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=367729551]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Visuals: "
 
-[node name="DifficultyCurveLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer" unique_id=149891292]
+[node name="DifficultyCurveLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=149891292]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Difficulty Curve:    "
 
-[node name="LearningCurveLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer" unique_id=960800357]
+[node name="LearningCurveLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=960800357]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Learning Curve: "
 
-[node name="CreativityLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer" unique_id=1937136244]
+[node name="CreativityLabel" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer" unique_id=1937136244]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Creativity: "
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars" unique_id=1903459322]
+[node name="VBoxContainer2" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars" unique_id=1903459322]
 layout_mode = 2
 
-[node name="OverallStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2" unique_id=1106814379 instance=ExtResource("5_41br5")]
+[node name="OverallStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=1106814379 instance=ExtResource("5_41br5")]
 modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 isEditable = false
 
-[node name="ControlsStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2" unique_id=749521126 instance=ExtResource("5_41br5")]
+[node name="ControlsStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=749521126 instance=ExtResource("5_41br5")]
 modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 isEditable = false
 
-[node name="VisualsStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2" unique_id=1231358261 instance=ExtResource("5_41br5")]
+[node name="VisualsStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=1231358261 instance=ExtResource("5_41br5")]
 modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 isEditable = false
 
-[node name="DifficultyCurveStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2" unique_id=605113662 instance=ExtResource("5_41br5")]
+[node name="DifficultyCurveStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=605113662 instance=ExtResource("5_41br5")]
 modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 isEditable = false
 
-[node name="LearningCurveStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2" unique_id=1261432906 instance=ExtResource("5_41br5")]
+[node name="LearningCurveStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=1261432906 instance=ExtResource("5_41br5")]
 modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 isEditable = false
 
-[node name="CreativityStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/displayStarBars/VBoxContainer2" unique_id=986720238 instance=ExtResource("5_41br5")]
+[node name="CreativityStarBar" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2" unique_id=986720238 instance=ExtResource("5_41br5")]
 modulate = Color(0.80782706, 2.0503392, 2.2043693, 1)
 custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
@@ -308,3 +336,54 @@ text = "Submit Review"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer" unique_id=1675251292]
 layout_mode = 2
+
+[node name="reviewsPanel" type="PanelContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=344018458]
+custom_minimum_size = Vector2(0, 42.755)
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("2_5aav8")
+theme_type_variation = &"subPanel"
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/reviewsPanel" unique_id=1342981927]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/reviewsPanel/MarginContainer" unique_id=552299925]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/reviewsPanel/MarginContainer/VBoxContainer" unique_id=861574635]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 32
+text = "REVIEWS:"
+
+[node name="reviews" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/reviewsPanel/MarginContainer/VBoxContainer" unique_id=2096443975]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="placeholderreviewPanel" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/reviewsPanel/MarginContainer/VBoxContainer/reviews" unique_id=682854905 node_paths=PackedStringArray("ratingDisplays") instance=ExtResource("6_8a432")]
+visible = false
+layout_mode = 2
+ratingDisplays = {
+"Controls": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/ControlsStarBar"),
+"Creativity": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/CreativityStarBar"),
+"Difficulty Curve": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/DifficultyCurveStarBar"),
+"Learning Curve": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/LearningCurveStarBar"),
+"Overall": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/OverallStarBar"),
+"Visuals": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/VisualsStarBar")
+}
+
+[node name="placeholderreviewPanel2" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/reviewsPanel/MarginContainer/VBoxContainer/reviews" unique_id=226751278 node_paths=PackedStringArray("ratingDisplays") instance=ExtResource("6_8a432")]
+visible = false
+layout_mode = 2
+ratingDisplays = {
+"Controls": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/ControlsStarBar"),
+"Creativity": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/CreativityStarBar"),
+"Difficulty Curve": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/DifficultyCurveStarBar"),
+"Learning Curve": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/LearningCurveStarBar"),
+"Overall": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/OverallStarBar"),
+"Visuals": NodePath("VBoxContainer/marginContainer/VBoxContainer/FoldableContainer2/ratingsDisplayMarginContainer/displayStarBars/VBoxContainer2/VisualsStarBar")
+}

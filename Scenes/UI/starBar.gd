@@ -24,6 +24,8 @@ func _ready() -> void:
 	defaultStarColor = starLine.default_color
 func _on_slider_value_changed(value: float) -> void:
 	setStarBarValue(value)
+	
+#tweens the visual starBar to reflect the new value and updates the value too
 func setStarBarValue(value):
 	var valuePosition = lineStart + Vector2.RIGHT*lineLength/10*value
 	var starTween = create_tween()
@@ -31,6 +33,7 @@ func setStarBarValue(value):
 	starTween.set_ease(Tween.EASE_IN_OUT)
 	starTween.tween_property(starLine,"points", PackedVector2Array([lineStart, valuePosition]), system.uiTweenTime/3)
 	starTween.parallel().tween_property(ztarLine,"points", PackedVector2Array([lineEnd, valuePosition]) ,system.uiTweenTime/2)
+	slider.value = value
 
 func _on_slider_mouse_entered() -> void:
 	if isEditable: starLine.default_color = Color(0xf1e2b0ff)

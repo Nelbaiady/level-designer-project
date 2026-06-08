@@ -47,10 +47,12 @@ layer = 2048
 script = SubResource("GDScript_yrxwg")
 
 [node name="Cursor" type="Marker2D" parent="." unique_id=1232085793]
+process_mode = 3
 top_level = true
 script = ExtResource("1_nehsy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1882932888]
+process_mode = 3
 z_index = 215
 z_as_relative = false
 position = Vector2(6, 12)

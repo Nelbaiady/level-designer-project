@@ -1,4 +1,4 @@
-class_name genericEnemy extends CharacterBody2D
+class_name GenericEnemy extends CharacterBody2D
 
 @export var animationPlayer: AnimationPlayer
 @export var visionArea: Area2D
@@ -35,7 +35,6 @@ var state = states.IDLE
 var restlessness:float = 1
 
 
-
 signal jumpedOn()
 
 func _ready() -> void:
@@ -55,7 +54,7 @@ func reset():
 	roamTime = randf_range(1,6/restlessness)
 	state = states.IDLE
 	animationPlayer.play("RESET")
-	animationPlayer.play("idle")
+	animationPlayer.queue("idle")
 	animationPlayer.speed_scale = 1
 	currentHealth = maxHealth
 	visible = true
@@ -87,7 +86,7 @@ func _physics_process(delta: float) -> void:
 		#if the creature is not moving (difference in position < 12) make sure the creature plays the idle animation
 		if animationPlayer.current_animation != "running" and state in [states.ROAMING,states.CHASING] and abs(get_real_velocity().x) >= 12:
 			animationPlayer.current_animation = "run"
-		if (animationPlayer.current_animation != "idle" and abs(get_real_velocity().x) < 6 and state in[states.IDLE, states.ROAMING, states.CHASING]):
+		if (animationPlayer.current_animation == "running" and abs(get_real_velocity().x) < 6 and state in[states.IDLE, states.ROAMING, states.CHASING]):
 			animationPlayer.current_animation = "unrun"
 
 		if animationPlayer.current_animation in ["running","run","unrun"]:

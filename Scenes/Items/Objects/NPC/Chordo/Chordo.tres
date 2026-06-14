@@ -1,21 +1,14 @@
 [gd_resource type="Resource" script_class="objectItem" format=3 uid="uid://hqm7h6yt4hnt"]
 
-[ext_resource type="Texture2D" uid="uid://copjphoootouu" path="res://Scenes/Items/Objects/NPC/Chordo/Chordo.png" id="1_sgt3r"]
+[ext_resource type="Texture2D" uid="uid://cjnmuidtvgwad" path="res://Scenes/Items/Objects/NPC/Chordo/chordoIcon.png" id="1_pugif"]
 [ext_resource type="PackedScene" uid="uid://crp0lpbcuqqgf" path="res://Scenes/Items/Objects/NPC/Chordo/Chordo.tscn" id="2_pugif"]
+[ext_resource type="Texture2D" uid="uid://c7q7ncgsqwwjx" path="res://Scenes/Items/Objects/NPC/Chordo/chordoPreview.png" id="3_0x588"]
 [ext_resource type="Script" uid="uid://c6m2hjthmh1nv" path="res://Scenes/Items/Objects/object.gd" id="3_sosoo"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0x588"]
-atlas = ExtResource("1_sgt3r")
-region = Rect2(256, 1024, 256, 256)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_n87pf"]
-atlas = ExtResource("1_sgt3r")
-region = Rect2(256, 1024, 256, 256)
 
 [resource]
 script = ExtResource("3_sosoo")
 objectReference = ExtResource("2_pugif")
-icon = SubResource("AtlasTexture_0x588")
-previewTexture = SubResource("AtlasTexture_n87pf")
+icon = ExtResource("1_pugif")
+previewTexture = ExtResource("3_0x588")
 name = "Chordo"
 metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

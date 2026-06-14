@@ -72,11 +72,6 @@ func placeObject(object:objectItem, position:Vector2=Vector2.ZERO,startPropertie
 	objectToPlace.global_position = position
 	level.layers[currentLayer].objects.add_child(objectToPlace)
 	if instanceID == null:
-		#if freedObjectIndicesStack.size()>0:
-			#instanceID = freedObjectIndicesStack.pop_back()
-		#else:
-			#instanceID = objectInstancesCount
-			#objectInstancesCount+=1
 		instanceID = getNextObjectId(true)
 	#make sure that if instanceID is already in the stack, we empty is from the stack to avoid colliding ID's in the future
 	elif instanceID in freedObjectIndicesStack:

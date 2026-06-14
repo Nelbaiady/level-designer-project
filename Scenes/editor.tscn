@@ -191,7 +191,7 @@ func updateHealthDisplay():
 font_size = 48
 font_color = Color(1, 0.94914633, 0.8754653, 1)
 outline_size = 22
-outline_color = Color(0.578717, 0.40745404, 0.52866435, 1)
+outline_color = Color(0.08620561, 0.2337417, 0.4919721, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_efg2m"]
 font_size = 14
@@ -761,6 +761,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("3_cnbw5")
+theme_type_variation = &"subPanel"
 script = ExtResource("7_i5vsu")
 userInfoText = NodePath("MarginContainer/PauseVBoxContainer/userInfoText")
 loginButton = NodePath("MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer/SignInButton")

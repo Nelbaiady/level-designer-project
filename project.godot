@@ -22,6 +22,10 @@ boot_splash/bg_color=Color(1, 0.827451, 0.42745098, 1)
 boot_splash/image="uid://8vrw88iumrtu"
 config/icon="uid://c5wgrx17cjoni"
 
+[audio]
+
+buses/default_bus_layout="uid://bojr0sjoxf2x6"
+
 [autoload]
 
 globalEditor="*res://Scenes/global_editor.gd"

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ObjectProperty" format=3 uid="uid://occw34kb4nrh"]
+
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="1_8yauc"]
+[ext_resource type="PackedScene" uid="uid://bydj3gco3u5wr" path="res://Scenes/UI/ObjectProperties/propertyUIelements/number_property_editor.tscn" id="2_gkk23"]
+
+[resource]
+script = ExtResource("1_8yauc")
+codeName = "idleTime"
+displayName = "Decompressed Time"
+uiNode = ExtResource("2_gkk23")
+defaultValue = 1.0
+maxValue = 9999999999999.0
+hasMin = true
+metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

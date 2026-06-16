@@ -116,7 +116,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			clickFrame = true
 		#stopped placing items
 		if event.is_released():
-			
 			system.undoRedo.commit_action(false)
 			placeButtonIsHeld = false
 			previousPlacePos = Vector2.INF

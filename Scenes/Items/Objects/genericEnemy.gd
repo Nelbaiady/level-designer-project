@@ -2,7 +2,8 @@ class_name GenericEnemy extends CharacterBody2D
 
 @export var animationPlayer: AnimationPlayer
 @export var visionArea: Area2D
-@export var flippableColliders:Array[Area2D] = []
+@export var flippableAreas:Array[Area2D] = []
+@export var flippablePolygonColliders:Array[CollisionPolygon2D] = []
 @export var flippableAnimatedSprites:Array[AnimatedSprite2D] = []
 @export var flippableSprites:Array[Sprite2D] = []
 #@export var animatedSprite: AnimatedSprite2D
@@ -21,6 +22,7 @@ var terminalVelocity := 1500.0
 
 #states
 var currentHealth := maxHealth
+var startFacingRight:=false
 var facingRight:=false
 
 enum states {IDLE, ROAMING, CHASING, DYING}
@@ -59,7 +61,7 @@ func reset():
 	currentHealth = maxHealth
 	visible = true
 	targetSpeed = 0
-	facingRight = false
+	facingRight = startFacingRight
 	orientDirection()
 	roamTimer = 0
 	velocity = Vector2.ZERO
@@ -129,12 +131,19 @@ func setState(newState:states):
 ##makes the object face the direction its supposed to, including sprite and collision
 func orientDirection():
 	#if animationPlayer.flip_h != facingRight:
-		for i in flippableColliders:
+		for i in flippableAreas:
+			i.scale.x *= 1 if ((i.scale.x<0) and facingRight) or ((i.scale.x>0) and !facingRight) else -1
+		for i in flippablePolygonColliders:
 			i.scale.x *= 1 if ((i.scale.x<0) and facingRight) or ((i.scale.x>0) and !facingRight) else -1
 		for i in flippableSprites:
 			i.flip_h = facingRight
 		for i in flippableAnimatedSprites:
 			i.flip_h = facingRight
+
+##mirrors the object on the x-axis
+func mirror():
+	facingRight = !facingRight
+	orientDirection()
 
 
 func _on_hit_box_area_body_entered(body: Node2D) -> void:
@@ -154,6 +163,7 @@ func die():
 	setState(states.DYING)
 	velocity.x = 0
 	targetSpeed = 0
+	animationPlayer.speed_scale = 1
 	(func(): process_mode = Node.PROCESS_MODE_DISABLED).call_deferred()
 
 var chaseTarget = null

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ObjectProperty" format=3 uid="uid://ctn8bw7ogsoo3"]
+
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="1_16x6f"]
+[ext_resource type="PackedScene" uid="uid://vpjuq6jpn308" path="res://Scenes/UI/ObjectProperties/propertyUIelements/checkBox_property_editor.tscn" id="2_sp1at"]
+
+[resource]
+script = ExtResource("1_16x6f")
+codeName = "startFacingRight"
+displayName = "Start Facing Right"
+uiNode = ExtResource("2_sp1at")
+metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

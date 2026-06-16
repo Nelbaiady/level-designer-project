@@ -65,9 +65,7 @@ func reset():
 	velocity = Vector2.ZERO
 
 func _physics_process(delta: float) -> void:
-	if globalEditor.isEditing:
-		velocity = Vector2.ZERO
-	else:
+	if !globalEditor.isEditing:
 		#gravity
 		velocity.y += gravity if velocity.y<terminalVelocity else 0.0
 

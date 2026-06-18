@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://cpgu28yscj365" path="res://Scenes/UI/level Listing UI/levelDetailsPopup.tscn" id="11_ruwpr"]
 [ext_resource type="Texture2D" uid="uid://56hly1wm5s04" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/stop.png" id="12_o8yew"]
 [ext_resource type="Texture2D" uid="uid://cjapidryl0sof" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/pause.png" id="13_u6te5"]
+[ext_resource type="PackedScene" uid="uid://bdjv0hwp335af" path="res://Scenes/UI/misc UI scenes/hoverHint.tscn" id="15_1giqv"]
 [ext_resource type="Script" uid="uid://ul8eb8jem2l" path="res://Scenes/layer_properties_handler.gd" id="15_i5vsu"]
 [ext_resource type="PackedScene" uid="uid://j4eyk5hksqrt" path="res://Scenes/layer.tscn" id="17_0l4bc"]
 [ext_resource type="Script" uid="uid://cisvv1ndgob2a" path="res://Scenes/roomBottom.gd" id="22_iis80"]
@@ -369,6 +370,28 @@ script = ExtResource("2_3lyd6")
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
+
+[node name="hoverHint" parent="HUD/Top Area UI/HBoxContainer" unique_id=1860104331 instance=ExtResource("15_1giqv")]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+direction = 8
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="HUD/Top Area UI/HBoxContainer/hoverHint" unique_id=1441765110]
+layout_mode = 0
+offset_left = 94.0
+offset_right = 409.0
+offset_bottom = 339.0
+text = "flowing into the mines. wee
+diiisapeeeeaaar. Diieaaased wda waf wa 
+fwa
+w fo ff oaw0f awf oaw0-fo 9aw0f o90fw a
+fw a
+f wa
+f."
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
 
 [node name="Tool Display" type="Control" parent="HUD/Top Area UI/HBoxContainer" unique_id=1510456922]
 layout_mode = 2

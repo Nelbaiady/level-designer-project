@@ -929,8 +929,8 @@ tracks/23/interp = 1
 tracks/23/loop_wrap = true
 tracks/23/keys = {
 "clips": [{
-"end_offset": 0.0,
-"start_offset": 0.32988718,
+"end_offset": 0.26869845,
+"start_offset": 0.0,
 "stream": ExtResource("3_ry1ti")
 }],
 "times": PackedFloat32Array(0)
@@ -1531,7 +1531,7 @@ tracks/24/loop_wrap = true
 tracks/24/keys = {
 "clips": [{
 "end_offset": 0.0,
-"start_offset": 0.26337767,
+"start_offset": 0.0,
 "stream": ExtResource("4_bc6lp")
 }],
 "times": PackedFloat32Array(0.25)
@@ -1570,7 +1570,7 @@ texture = ExtResource("2_yjys5")
 offset = Vector2(0, -128)
 hframes = 6
 vframes = 6
-frame = 34
+frame = 22
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2114326542]
 process_mode = 3

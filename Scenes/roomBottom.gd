@@ -45,7 +45,8 @@ func setProperty(property:String, value, tween = false):
 			propertyTween.set_ease(Tween.EASE_OUT)
 			propertyTween.parallel().tween_property(skyGradient,"colors",PackedColorArray([rootNode.bgColor2,value]), system.uiTweenTime)
 		else:
-			skyGradient.colors[1] = value
+			#skyGradient.colors[1] = value
+			skyGradient.set_color(1,value)
 	if property == "bgColor2":
 		rootNode.bgColor2 = value
 		if tween:
@@ -54,7 +55,8 @@ func setProperty(property:String, value, tween = false):
 			propertyTween.set_ease(Tween.EASE_OUT)
 			propertyTween.parallel().tween_property(skyGradient,"colors",PackedColorArray([value, rootNode.bgColor1]), system.uiTweenTime)
 		else:
-			skyGradient.colors[0] = value
+			#skyGradient.colors[0] = value
+			skyGradient.set_color(0,value)
 		
 	super(property,value,tween)
 	#if property == "scale":

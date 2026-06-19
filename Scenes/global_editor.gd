@@ -31,7 +31,7 @@ var playerProperties : Dictionary = {"position":Vector2(544,280)}
 #@onready var objects
 #@onready var tileMap: TileMapLayer
 #@onready var tileMaps: Dictionary[int, TileMapLayer]
-@onready var propertiesUI: VBoxContainer
+#@onready var propertiesUI: VBoxContainer
 #@onready var propertiesSidebar: PropertiesSidebar
 var objectBeingEdited
 ##if the sidebar is open (sorry for the horrible name)

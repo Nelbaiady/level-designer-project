@@ -16,7 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="Level Designer Project"
 run/main_scene="uid://bgavxi5l77ibl"
-config/features=PackedStringArray("4.6", "Forward Plus")
+config/features=PackedStringArray("4.7", "Forward Plus")
 run/max_fps=144
 boot_splash/bg_color=Color(1, 0.827451, 0.42745098, 1)
 boot_splash/image="uid://8vrw88iumrtu"
@@ -33,8 +33,8 @@ signalBus="*res://signal_bus.gd"
 PhantomCameraManager="*uid://duq6jhf6unyis"
 system="*uid://dqxkj4f7i6wwh"
 authentication="*uid://ts3goyxmuwxh"
-cursorCanvas="*uid://dw4ojydnn8mlq"
 controlMapping="*uid://cdixu2p0xl5op"
+cursorCanvas="*uid://dw4ojydnn8mlq"
 
 [display]
 
@@ -60,6 +60,7 @@ hurtbox=""
 hitbox=""
 jumpPoint="area that the player can jump on and get bounced"
 jumpSource="the bottom part of a character, which detects bouncing on other objects"
+cursor=""
 
 [gui]
 

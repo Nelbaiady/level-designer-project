@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://bylgiwn4q2lxv" path="res://Scenes/Items/The Player/states/chourced.gd" id="12_8pi6c"]
 [ext_resource type="Script" uid="uid://dxw0j6wgiic50" path="res://Scenes/Items/The Player/states/running.gd" id="12_6170r"]
 [ext_resource type="Script" uid="uid://cptwhnytq7o3u" path="res://Scenes/Items/The Player/states/dying.gd" id="15_k1ypc"]
+[ext_resource type="Script" uid="uid://buaworiou3jpd" path="res://Scenes/Items/The Player/playerBounceHitbox.gd" id="16_k1ypc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jkifv"]
 
@@ -682,12 +683,6 @@ _data = {
 radius = 28.0
 height = 80.0
 
-[sub_resource type="GDScript" id="GDScript_meww7"]
-resource_name = "playerHitboxArea"
-script/source = "class_name PlayerBounceHitbox extends Area2D
-@onready var rootNode: Player = $\"..\"
-"
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_meww7"]
 size = Vector2(64, 28)
 
@@ -791,7 +786,7 @@ shape = SubResource("CapsuleShape2D_8pi6c")
 [node name="jumpSourceArea2D" type="Area2D" parent="." unique_id=992519540 groups=["hitbox", "jumpSource", "player"]]
 collision_layer = 129
 collision_mask = 129
-script = SubResource("GDScript_meww7")
+script = ExtResource("16_k1ypc")
 
 [node name="jumpSource" type="CollisionShape2D" parent="jumpSourceArea2D" unique_id=511544400]
 position = Vector2(0, 38)

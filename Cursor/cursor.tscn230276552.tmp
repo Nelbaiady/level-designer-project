@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://dw4ojydnn8mlq"]
 
-[ext_resource type="Script" uid="uid://cvpvq8piasl6l" path="res://Cursor/cursorCanvas.gd" id="1_8eho3"]
-[ext_resource type="Script" uid="uid://nex04i5f5a5f" path="res://Cursor/cursor.gd" id="1_nehsy"]
+[ext_resource type="Script" uid="uid://cvpvq8piasl6l" path="res://Scenes/UI/cursor/cursorCanvas.gd" id="1_8eho3"]
+[ext_resource type="Script" uid="uid://nex04i5f5a5f" path="res://Scenes/cursor.gd" id="1_nehsy"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yrxwg"]
+radius = 0.0
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yrxwg"]
 load_path = "res://.godot/imported/cursor.png-81b85aec819db670ac0e28f271710396.ctex"
@@ -35,9 +38,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_yrxwg"]
-radius = 0.0
-
 [node name="CanvasLayer" type="CanvasLayer" unique_id=389373312]
 process_mode = 3
 layer = 2048
@@ -48,6 +48,12 @@ process_mode = 3
 top_level = true
 script = ExtResource("1_nehsy")
 
+[node name="StaticBody2D" type="Area2D" parent="Cursor" unique_id=843229012 groups=["cursor"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cursor/StaticBody2D" unique_id=1194424530]
+visible = false
+shape = SubResource("CircleShape2D_yrxwg")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1882932888]
 process_mode = 3
 z_index = 215
@@ -57,11 +63,3 @@ scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_nfgmo")
 autoplay = "default"
 frame_progress = 0.9529415
-
-[node name="StaticBody2D" type="Area2D" parent="AnimatedSprite2D" unique_id=843229012 groups=["cursor"]]
-position = Vector2(-12, -24)
-scale = Vector2(2, 2)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/StaticBody2D" unique_id=1194424530]
-visible = false
-shape = SubResource("CircleShape2D_yrxwg")

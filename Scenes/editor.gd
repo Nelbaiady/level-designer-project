@@ -24,7 +24,6 @@ func _ready() -> void:
 	signalBus.startPlayMode.connect(func():globalEditor.isEditing = false)
 	globalEditor.setItem.connect(setSelectedItem)
 	signalBus.startEditMode.connect(resetStage)
-	globalEditor.propertiesUI = $"../HUD/PropertiesSidebar/PropertiesPanel/ScrollContainer/Properties"
 	signalBus.onLevelReady.connect(levelReady)
 	
 	signalBus.pauseToggled.connect(handlePausing)

@@ -42,8 +42,19 @@ func _ready() -> void:
 		printerr("Object ",rootNode.name, " instance number ", instanceID, " has no click collision")
 	elif category!=Categories.nonObject:
 		clickCollision.input_event.connect(clickedOn)
-		clickCollision.mouse_entered.connect(mouseEntered)
-		clickCollision.mouse_exited.connect(mouseExited)
+		#clickCollision.mouse_entered.connect(mouseEntered)
+		#clickCollision.mouse_exited.connect(mouseExited)
+		clickCollision.area_entered.connect(checkForCursor.bind(true))
+		clickCollision.area_exited.connect(checkForCursor.bind(false))
+
+func checkForCursor(area:Area2D, entered:bool = true):
+	if area.is_in_group("cursor"):
+		isMouseOver = entered
+		
+#func mouseEntered():
+	#isMouseOver = true
+#func mouseExited():
+	#isMouseOver = false
 
 ##effect when selecting an object
 func objectEditingStarted(_name, id):
@@ -110,10 +121,6 @@ func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 			#signalBus.editingObject.emit(globalEditor.itemRoster[rosterID].name,instanceID)
 			startEditingSelf()
 
-func mouseEntered():
-	isMouseOver = true
-func mouseExited():
-	isMouseOver = false
 
 func setNotEditing():
 	isBeingEdited = false

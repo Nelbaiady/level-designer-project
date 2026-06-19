@@ -2,7 +2,7 @@ class_name textEditPopup extends Control
 
 @export var lineEdit: LineEdit
 @export var emailLineEdit: LineEdit 
-@export var passwordLineEdit: LineEdit 
+@export var passwordLineEdit: PasswordLineEdit 
 
 @export var label: Label
 
@@ -33,6 +33,9 @@ func _ready() -> void:
 	signalBus.startSignInPopup.connect(startSignInPopup)
 	signalBus.startSignUpPopup.connect(startSignUpPopup)
 	authentication.authError.connect(setErrorText)
+	cancelButton.pressed.connect(cancelPopup)
+	confirmButton.pressed.connect(confirmPopup)
+	passwordLineEdit.submit.connect(confirmPopup)
 
 func setErrorText(error):
 	if emailLineEdit.text=="":
@@ -102,7 +105,7 @@ func endInputPopup(isConfirmed:bool):
 	signalBus.endTextPopup.emit(lineEdit.text,isConfirmed)
 	lineEdit.clear()
 
-func _on_confirm_button_pressed() -> void:
+func confirmPopup() -> void:
 	if isSigningIn:
 		var response = await authentication.signIn(emailLineEdit.text,passwordLineEdit.text)
 		if response==200:
@@ -117,5 +120,5 @@ func _on_confirm_button_pressed() -> void:
 	else:
 		endInputPopup(true)
 
-func _on_cancel_button_pressed() -> void:
+func cancelPopup() -> void:
 	endInputPopup(false)

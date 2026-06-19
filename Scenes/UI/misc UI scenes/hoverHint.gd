@@ -3,6 +3,7 @@ class_name HoverHint extends Control
 
 @export var hintContainer: PanelContainer
 @export var hintTexture: TextureRect
+@export var hint_area_2d: Area2D
 
 enum Directions {TL, T, TR, L, M, R, BL, B, BR}
 @export var direction: Directions
@@ -14,19 +15,34 @@ enum Directions {TL, T, TR, L, M, R, BL, B, BR}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	hintTexture.mouse_entered.connect(showHint)
-	hintTexture.mouse_exited.connect(hideHint)
+	#hintTexture.mouse_entered.connect(showHint)
+	#hintTexture.mouse_exited.connect(hideHint)
+	hint_area_2d.area_entered.connect(checkHover.bind(true))
+	hint_area_2d.area_exited.connect(checkHover.bind(false))
+	
 	custom_minimum_size = hintTexture.size
 	
-	if hintText: 
+	updateText()
+
+func updateText(newText=""):
+	if newText:
+		hintLabel.show()
+		hintLabel.text = newText
+	elif hintText: 
 		hintLabel.show()
 		hintLabel.text = hintText
 	elif hintNode:
 		hintLabel.hide()
 		hintNode.reparent(hint_margin_container)
-	elif get_child(2):
-		get_child(2,false).reparent(hint_margin_container)
+	elif get_child_count() > 2:
+		get_child(2).reparent(hint_margin_container)
 	setDirection()
+
+func checkHover(area:Area2D, entered:=true):
+	if area.is_in_group("cursor"):
+		if entered: showHint()
+		else: hideHint()
+	
 ##sets the position and pivot point to a particular edge or corner
 func setDirection(dir: Directions = direction):
 	var preset: Control.LayoutPreset
@@ -81,7 +97,3 @@ func hideHint():
 	sizeTween.set_ease(Tween.EASE_IN_OUT)
 	sizeTween.tween_property(hintContainer,"scale",Vector2.ZERO,system.uiTweenTime/3)
 	#hintContainer.hide()
-
-
-func _on_texture_rect_mouse_entered() -> void:
-	pass # Replace with function body.

@@ -7,5 +7,5 @@ class_name Item
 @export var centerPreview: bool = true
 
 @export var name: String
-@export var description: String
+@export_multiline() var description: String
 var rosterID: int

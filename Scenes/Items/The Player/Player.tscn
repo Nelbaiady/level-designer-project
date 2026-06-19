@@ -699,6 +699,9 @@ script = ExtResource("1_e8vge")
 script = ExtResource("6_mpkmv")
 instanceID = -1
 displayName = "Bao (Player)"
+description = "This is your playable character!
+You can adjust movement parameters,
+or even customize the player's moveset."
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1771113116]
 use_parent_material = true

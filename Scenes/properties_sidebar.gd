@@ -2,7 +2,10 @@ class_name PropertiesSidebar extends Control
 
 var hotbarTween:Tween
 const LAYER_EDITOR = preload("uid://0c854hhnl8dy")
+const HOVER_HINT = preload("uid://bdjv0hwp335af")
 @export var propertiesList: VBoxContainer
+@export var titleHint: HoverHint
+
 
 func _ready() -> void:
 	#globalEditor.propertiesSidebar = self
@@ -13,7 +16,8 @@ func _ready() -> void:
 	signalBus.hidePropertiesSidebar.connect(hideSidebar)
 
 func showSidebar():
-	signalBus.setThingDescription.emit("") #hide the hint hoverHint
+	#signalBus.setThingDescription.emit("") #hide the hint hoverHint
+	titleHint.setHintText("")
 	hotbarTween = create_tween()
 	hotbarTween.set_trans(Tween.TRANS_CUBIC)
 	hotbarTween.set_ease(Tween.EASE_OUT)
@@ -38,20 +42,51 @@ func emptyPropertiesUI():
 	for i in propertiesList.get_children():
 		i.queue_free()
 
-func populatePropertiesUI(object):
+func populatePropertiesUI(object:ThingWithProperties):
 	signalBus.showPropertiesSidebar.emit()
 	emptyPropertiesUI()
 	setObjectBeingEdited(object)
 #	populate the properties editor
-	for i in object.properties:
-		if i is ObjectProperty:
-			var newNode = i.uiNode.instantiate()
-			#globalEditor.propertiesUI.add_child(newNode)
-			propertiesList.add_child(newNode)
+	for property in object.properties:
+		if property is ObjectProperty:
+			var newNode = property.uiNode.instantiate()
+			#var newHoverHint:HoverHint = HOVER_HINT.instantiate()
+			#newHoverHint.direction = CursorHint.Directions.L
+			#newHoverHint.updateText(property.description)
+			#var hBox = HBoxContainer.new()
+			##globalEditor.propertiesUI.add_child(newNode)
+			#
+			##propertiesList.add_child(newNode)
+			#hBox.add_child(newHoverHint)
+			#hBox.add_child(newNode)
+			#if newNode is Control: newNode.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			#propertiesList.add_child(hBox)
+			addRowWithHint(newNode,property.description)
+			
 			if newNode is PropertyEditor:
-				newNode.setStartValues(object.getProperty(i.codeName),i)
+				newNode.setStartValues(object.getProperty(property.codeName),property)
 	if !signalBus.updateProperty.is_connected(object.setProperty):
 		signalBus.updateProperty.connect(object.setProperty)
+	#signalBus.setThingDescription.emit(object.description)
+	titleHint.setHintText(object.description)
+
+func addRowWithHint(newNode,hint):
+	var hBox = HBoxContainer.new()
+	hBox.add_theme_constant_override("separation",0)
+	if hint:
+		var newHoverHint:HoverHint = HOVER_HINT.instantiate()
+		newHoverHint.direction = CursorHint.Directions.L
+		newHoverHint.setHintText(hint)
+		hBox.add_child(newHoverHint)
+	else:
+		var margin = MarginContainer.new()
+		margin.add_theme_constant_override("margin_right",64)
+		margin.add_theme_constant_override("margin_top",64)
+		hBox.add_child(margin)
+	hBox.add_child(newNode)
+	if newNode is Control: newNode.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	propertiesList.add_child(hBox)
+	
 ##	tell the editor to forget any other objects and focus on this object
 func setObjectBeingEdited(object):
 	if globalEditor.objectBeingEdited:
@@ -67,16 +102,15 @@ func populateLayersUI(object): #This is probably redundant
 	#setLayersBeingEdited(object)
 	setObjectBeingEdited(object)
 #	populate the properties editor
-	for i in globalEditor.level.layers:
+	for layer in globalEditor.level.layers:
 		var newNode:LayerEditor = LAYER_EDITOR.instantiate()
-		newNode.layerID = i
+		newNode.layerID = layer
 		#globalEditor.propertiesUI.add_child(newNode)
 		propertiesList.add_child(newNode)
 	signalBus.editingObject.emit("Layers",-2)
 	signalBus.setThingDescription.emit("""Your scene can have multiple parallax layers! 
 	Setting the scroll value makes layers move at different speeds as the camera moves, creating depth.
-	Layer 0 is the playable layer where the player resides and interacts. All other layers are purely visual.
-	""")
+	Layer 0 is the playable layer where the player resides and interacts. All other layers are purely visual.""")
 func setLayersBeingEdited(object):
 	if globalEditor.objectBeingEdited:
 		globalEditor.objectBeingEdited.setNotEditing()

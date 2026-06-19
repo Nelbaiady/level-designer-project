@@ -11,4 +11,6 @@ objectReference = ExtResource("2_dfd4o")
 icon = ExtResource("1_h0hab")
 previewTexture = ExtResource("3_4gxsr")
 name = "Peach Fly"
+description = "An enemy that floats in place. 
+Defeated when jumped on."
 metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

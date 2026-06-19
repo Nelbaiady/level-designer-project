@@ -18,7 +18,8 @@ var isBeingEdited = false
 var isMouseOver:bool = false
 var rosterID:int
 @export var instanceID:int = -2
-@export var displayName:String
+@export var displayName:String = ""
+@export_multiline var description:String = ""
 var layer:LevelLayer
 ##used to tween object properties
 var propertyTween:Tween
@@ -80,6 +81,7 @@ func setStartingStuff(instID, obj, loadedProperties:Dictionary):
 				setProperty(i,loadedProperties[i])
 	rosterID = globalEditor.getCurrentLevelLayerDict()["objects"][instanceID]["rosterID"]
 	displayName = globalEditor.itemRoster[rosterID].name if !displayName else displayName
+	description = globalEditor.itemRoster[rosterID].description if !description else description
 
 ##make sure everything is in the correct process mode
 func updateProcesses():

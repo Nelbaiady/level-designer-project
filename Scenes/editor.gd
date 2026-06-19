@@ -115,9 +115,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			clickFrame = true
 		#stopped placing items
 		if event.is_released():
-			system.undoRedo.commit_action(false)
-			placeButtonIsHeld = false
-			previousPlacePos = Vector2.INF
+			if placeButtonIsHeld:
+				system.undoRedo.commit_action(false)
+				placeButtonIsHeld = false
+				previousPlacePos = Vector2.INF
 func toggleGameMode():
 	if globalEditor.isEditing:
 		#globalEditor.isEditing = false

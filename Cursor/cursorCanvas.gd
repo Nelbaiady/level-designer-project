@@ -1,3 +1,9 @@
 class_name CursorCanvas extends CanvasLayer
 
-@onready var cursor: Cursor = $Cursor
+@export var cursor: Cursor
+
+@export var hintContainer: CursorHint
+
+#func _ready() -> void:
+	#if isTitle: signalBus.setThingDescription.connect(setHintText)
+	

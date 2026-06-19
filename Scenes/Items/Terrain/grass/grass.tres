@@ -7,4 +7,5 @@
 script = ExtResource("1_6nagl")
 icon = ExtResource("2_oiy1a")
 name = "grass"
+description = "A standard terrain block."
 metadata/_custom_type_script = "uid://b6cxu8cgi33t4"

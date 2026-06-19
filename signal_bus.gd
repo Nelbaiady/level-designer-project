@@ -51,8 +51,8 @@ signal populatePropertiesUI(object) ##signal to fill the propertiesUI with an ob
 signal updateProperty(property,value) ##this signal is connected to the object that is being edited and tells the object to set the given property (code name) to the given value
 @warning_ignore("unused_signal")
 signal editingObject(objectName, instanceID)
-@warning_ignore("unused_signal")
-signal setThingDescription(desc) ##signal to set the property editor's hoverHint 
+#@warning_ignore("unused_signal")
+#signal setThingDescription(desc) ##signal to set the property editor's hoverHint 
 
 #signals for layer property editing
 @warning_ignore("unused_signal")

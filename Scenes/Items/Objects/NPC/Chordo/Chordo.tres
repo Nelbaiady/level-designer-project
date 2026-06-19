@@ -11,4 +11,6 @@ objectReference = ExtResource("2_pugif")
 icon = ExtResource("1_pugif")
 previewTexture = ExtResource("3_0x588")
 name = "Chordo"
+description = "This enemy stretches and compresses as it moves in arcs, not unlike
+a slinky."
 metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

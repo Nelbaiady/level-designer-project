@@ -11,4 +11,7 @@ objectReference = ExtResource("2_tt1md")
 icon = ExtResource("1_2688d")
 previewTexture = ExtResource("3_tt1md")
 name = "Canimus"
+description = "An enemy that roams randomly, but if the 
+player enters its line of sight, it will give 
+chase. Can be defeated by jumping on it."
 metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

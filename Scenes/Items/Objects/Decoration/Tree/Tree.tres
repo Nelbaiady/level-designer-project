@@ -11,4 +11,5 @@ objectReference = ExtResource("2_fxgnh")
 icon = ExtResource("1_fxgnh")
 previewTexture = ExtResource("1_aam1b")
 name = "Tree"
+description = "A decorative object. There are multiple tree types that can be selected."
 metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

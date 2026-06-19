@@ -245,6 +245,7 @@ skyTexture = NodePath("Sky/skyTexture")
 roomBottomIndicator = NodePath("roomBottomTexture/roomBottomIndicator")
 category = 3
 displayName = "Scene"
+description = "You can configure some properties of the environment itself!"
 
 [node name="Sky" type="CanvasLayer" parent="Level/roomManager" unique_id=1910664044]
 layer = -256
@@ -605,7 +606,7 @@ horizontal_alignment = 1
 script = SubResource("GDScript_iis80")
 metadata/_edit_use_anchors_ = true
 
-[node name="PropertiesSidebar" type="Control" parent="HUD" unique_id=1003501295 node_paths=PackedStringArray("propertiesList")]
+[node name="PropertiesSidebar" type="Control" parent="HUD" unique_id=1003501295 node_paths=PackedStringArray("propertiesList", "titleHint")]
 layout_mode = 3
 anchor_left = 1.0
 anchor_top = 0.1
@@ -618,6 +619,7 @@ size_flags_horizontal = 8
 theme = ExtResource("3_cnbw5")
 script = ExtResource("3_exjlx")
 propertiesList = NodePath("VBoxContainer/PropertiesPanel/ScrollContainer/Properties")
+titleHint = NodePath("VBoxContainer/propertiesEditingLabelPanel/ThingNamePanelContainer/ThingNameMarginContainer/ThingNameRow/hoverHint")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/PropertiesSidebar" unique_id=1673332840]
 layout_mode = 1
@@ -664,14 +666,14 @@ layout_mode = 2
 [node name="hoverHint" parent="HUD/PropertiesSidebar/VBoxContainer/propertiesEditingLabelPanel/ThingNamePanelContainer/ThingNameMarginContainer/ThingNameRow" unique_id=1434476637 instance=ExtResource("28_5yagh")]
 visible = false
 layout_mode = 2
+isTitle = true
 direction = 6
 
-[node name="ThingNameLabel" type="Label" parent="HUD/PropertiesSidebar/VBoxContainer/propertiesEditingLabelPanel/ThingNamePanelContainer/ThingNameMarginContainer/ThingNameRow" unique_id=1242636918 node_paths=PackedStringArray("hover_hint")]
+[node name="ThingNameLabel" type="Label" parent="HUD/PropertiesSidebar/VBoxContainer/propertiesEditingLabelPanel/ThingNamePanelContainer/ThingNameMarginContainer/ThingNameRow" unique_id=1242636918]
 layout_mode = 2
 text = "Player"
 vertical_alignment = 2
 script = ExtResource("4_l4kvy")
-hover_hint = NodePath("../hoverHint")
 
 [node name="PropertiesPanel" type="Panel" parent="HUD/PropertiesSidebar/VBoxContainer" unique_id=1949280062]
 layout_mode = 2
@@ -689,7 +691,6 @@ theme = ExtResource("3_cnbw5")
 text = "x"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="HUD/PropertiesSidebar/VBoxContainer/PropertiesPanel" unique_id=228905550]
-clip_contents = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.05

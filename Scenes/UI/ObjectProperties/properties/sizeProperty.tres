@@ -7,8 +7,9 @@
 script = ExtResource("1_iylaw")
 codeName = "scale"
 displayName = "Size"
+description = "You can adjust the scale of this item.
+You adjust the X-axis and Y-axis independently."
 uiNode = ExtResource("2_iylaw")
-defaultValue = 1.0
 minValue = 0.1
 maxValue = 9999999999999.0
 hasMin = true

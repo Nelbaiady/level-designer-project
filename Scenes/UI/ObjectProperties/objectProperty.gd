@@ -2,6 +2,7 @@ class_name ObjectProperty extends Resource
 
 @export var codeName:String
 @export var displayName:String
+@export_multiline var description:String
 @export var uiNode:PackedScene
 
 #attributes of the uiNode

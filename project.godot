@@ -60,7 +60,8 @@ hurtbox=""
 hitbox=""
 jumpPoint="area that the player can jump on and get bounced"
 jumpSource="the bottom part of a character, which detects bouncing on other objects"
-cursor=""
+canvasCursor=""
+worldCursor=""
 
 [gui]
 

@@ -5,6 +5,9 @@
 [ext_resource type="Script" uid="uid://dwuucav4qid1a" path="res://Cursor/cursorHint.gd" id="3_8eho3"]
 [ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="3_h5f4s"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_yrxwg"]
+radius = 0.0
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yrxwg"]
 load_path = "res://.godot/imported/cursor.png-81b85aec819db670ac0e28f271710396.ctex"
 
@@ -37,9 +40,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_yrxwg"]
-radius = 0.0
-
 [node name="CanvasLayer" type="CanvasLayer" unique_id=389373312 node_paths=PackedStringArray("cursor", "hintContainer")]
 process_mode = 3
 layer = 2048
@@ -52,6 +52,13 @@ process_mode = 3
 top_level = true
 script = ExtResource("1_nehsy")
 
+[node name="worldSpaceArea" type="Area2D" parent="Cursor" unique_id=7648394 groups=["worldCursor"]]
+scale = Vector2(2, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Cursor/worldSpaceArea" unique_id=646852745]
+visible = false
+shape = SubResource("CircleShape2D_yrxwg")
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1882932888]
 process_mode = 3
 z_index = 215
@@ -62,11 +69,11 @@ sprite_frames = SubResource("SpriteFrames_nfgmo")
 autoplay = "default"
 frame_progress = 0.9529415
 
-[node name="StaticBody2D" type="Area2D" parent="AnimatedSprite2D" unique_id=843229012 groups=["cursor"]]
+[node name="canvasSpaceArea" type="Area2D" parent="AnimatedSprite2D" unique_id=843229012 groups=["canvasCursor"]]
 position = Vector2(-12, -24)
 scale = Vector2(2, 2)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/StaticBody2D" unique_id=1194424530]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/canvasSpaceArea" unique_id=1194424530]
 visible = false
 shape = SubResource("CircleShape2D_yrxwg")
 
@@ -88,6 +95,7 @@ offset_transform_enabled = true
 offset_transform_scale = Vector2(2, 2)
 offset_transform_visual_only = false
 mouse_filter = 2
+mouse_behavior_recursive = 2
 theme = ExtResource("3_h5f4s")
 script = ExtResource("3_8eho3")
 label = NodePath("hintContainer/hintMarginContainer/Label")
@@ -110,9 +118,11 @@ offset_bottom = 0.83333206
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(46.5, 49.166656)
+mouse_filter = 2
 
 [node name="hintMarginContainer" type="MarginContainer" parent="AnimatedSprite2D/hintContainerControl/hintContainer" unique_id=724424812]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8

@@ -102,6 +102,7 @@ signal genericPopupClosed()##tells the game that a popup has closed, which decre
 
 @warning_ignore("unused_signal")
 signal popupsOpened()##When there was no popup before and a new popup just opened
+@warning_ignore("unused_signal")
 signal popupsClosed()##When all popups have closed
 
 

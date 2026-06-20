@@ -49,7 +49,7 @@ func _ready() -> void:
 		clickCollision.area_exited.connect(checkForCursor.bind(false))
 
 func checkForCursor(area:Area2D, entered:bool = true):
-	if area.is_in_group("cursor"):
+	if area.is_in_group("worldCursor"):
 		isMouseOver = entered
 		
 #func mouseEntered():

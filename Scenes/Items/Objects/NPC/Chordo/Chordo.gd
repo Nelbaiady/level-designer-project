@@ -39,6 +39,7 @@ func _physics_process(_delta: float) -> void:
 			animationPlayer.play("unfolding")
 			chordoState = chordoStates.UNFOLDING
 	move_and_slide()
+	pass
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	super(anim_name)
@@ -64,15 +65,22 @@ func setChordoState(newState:chordoStates):
 			animationPlayer.play("folded")
 			chordoState = chordoStates.FOLDED
 			stateTimer = foldedTime
-			await get_tree().process_frame
+			await get_tree().physics_frame #wait a frame becuase of visual jank
 			#if we are reversing, return the animation speed to normal and continue
 			#otherwise, teleport to adjust position
 			if animationPlayer.speed_scale < 0:
 				animationPlayer.speed_scale *= -1
 				#facingRight = !facingRight
 				#orientDirection()
+				var previousLayer1Value = get_collision_layer_value(1)
+				set_collision_layer_value(1,false)
 				mirror()
 				teleportChordo()
+				#wait another 2 frames because of jank
+				await get_tree().physics_frame
+				await get_tree().physics_frame
+				set_collision_layer_value(1,previousLayer1Value)
+
 			else:
 				teleportChordo()
 		chordoStates.IDLE:

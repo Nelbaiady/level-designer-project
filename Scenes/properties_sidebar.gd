@@ -38,6 +38,7 @@ func _on_close_button_pressed() -> void:
 	signalBus.hidePropertiesSidebar.emit()
 
 func emptyPropertiesUI():
+	propertiesList.add_theme_constant_override("separation",4)
 	#for i in globalEditor.propertiesUI.get_children():
 	for i in propertiesList.get_children():
 		i.queue_free()
@@ -98,6 +99,10 @@ func setObjectBeingEdited(object):
 func populateLayersUI(object): #This is probably redundant
 	signalBus.showPropertiesSidebar.emit()
 	emptyPropertiesUI()
+	propertiesList.add_theme_constant_override("separation",32)
+	var margin = MarginContainer.new()
+	margin.add_theme_constant_override("margin_top",32)
+	propertiesList.add_child(margin)
 	#	tell the editor to forget any other objects and focus on this object
 	#setLayersBeingEdited(object)
 	setObjectBeingEdited(object)
@@ -108,9 +113,12 @@ func populateLayersUI(object): #This is probably redundant
 		#globalEditor.propertiesUI.add_child(newNode)
 		propertiesList.add_child(newNode)
 	signalBus.editingObject.emit("Layers",-2)
-	signalBus.setThingDescription.emit("""Your scene can have multiple parallax layers! 
+	titleHint.setHintText("""Your scene can have multiple parallax layers! 
 	Setting the scroll value makes layers move at different speeds as the camera moves, creating depth.
 	Layer 0 is the playable layer where the player resides and interacts. All other layers are purely visual.""")
+	#signalBus.setThingDescription.emit("""Your scene can have multiple parallax layers! 
+	#Setting the scroll value makes layers move at different speeds as the camera moves, creating depth.
+	#Layer 0 is the playable layer where the player resides and interacts. All other layers are purely visual.""")
 func setLayersBeingEdited(object):
 	if globalEditor.objectBeingEdited:
 		globalEditor.objectBeingEdited.setNotEditing()

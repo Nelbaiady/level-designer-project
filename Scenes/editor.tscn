@@ -483,12 +483,15 @@ offset_right = 8.0
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
+mouse_filter = 2
 mouse_behavior_recursive = 1
 script = ExtResource("22_1giqv")
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD/Left Area UI" unique_id=1798674435]
 layout_mode = 2
 size_flags_vertical = 6
+mouse_filter = 2
+mouse_behavior_recursive = 1
 theme_override_constants/margin_left = 8
 
 [node name="editModeControlsLabel" type="RichTextLabel" parent="HUD/Left Area UI/MarginContainer" unique_id=1133048131]
@@ -497,6 +500,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 mouse_filter = 2
+mouse_behavior_recursive = 1
 theme = ExtResource("3_cnbw5")
 theme_type_variation = &"inGameLabel"
 bbcode_enabled = true
@@ -694,11 +698,15 @@ text = "x"
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.05
-anchor_top = 0.1
+anchor_top = 0.082269505
 anchor_right = 0.95
-anchor_bottom = 0.9
+anchor_bottom = 0.9333333
+offset_top = 0.3999939
+offset_bottom = 0.4000244
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/scrollbar_h_separation = 8
+metadata/_edit_use_anchors_ = true
 
 [node name="Properties" type="VBoxContainer" parent="HUD/PropertiesSidebar/VBoxContainer/PropertiesPanel/ScrollContainer" unique_id=1328526897]
 layout_mode = 2
@@ -713,6 +721,7 @@ size_flags_vertical = 3
 
 [node name="PausePanel" type="Panel" parent="HUD" unique_id=691078316 node_paths=PackedStringArray("userInfoText", "loginButton", "editModePauseVBoxContainer", "playModePauseVBoxContainer", "downloadLevel", "login", "uploadLevel")]
 visible = false
+top_level = true
 z_index = 128
 anchors_preset = 15
 anchor_right = 1.0

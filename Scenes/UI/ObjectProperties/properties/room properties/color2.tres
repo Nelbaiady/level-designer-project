@@ -7,5 +7,6 @@
 script = ExtResource("1_x1du8")
 codeName = "bgColor2"
 displayName = "Lower Background Color"
+description = "The lower color of the background gradient."
 uiNode = ExtResource("2_c42un")
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

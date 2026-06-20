@@ -7,6 +7,8 @@
 script = ExtResource("1_k0mdc")
 codeName = "canCrouch"
 displayName = "Crouch"
+description = "Toggles the ability to crouch.
+When crouched, you take up less space."
 uiNode = ExtResource("2_oxf7v")
 defaultValue = 1.0
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

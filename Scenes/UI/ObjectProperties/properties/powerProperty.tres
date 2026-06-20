@@ -7,6 +7,7 @@
 script = ExtResource("1_tmsq6")
 codeName = "bouncinessMult"
 displayName = "Bounciness"
+description = "How strong you want the bounce to be."
 uiNode = ExtResource("2_1a1mj")
 step = 0.2
 hasMin = true

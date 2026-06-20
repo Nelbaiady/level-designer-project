@@ -7,5 +7,6 @@
 script = ExtResource("1_py2r0")
 codeName = "bgColor1"
 displayName = "Upper Background Color"
+description = "The upper color of the background gradient."
 uiNode = ExtResource("2_l6mh4")
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

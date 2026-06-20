@@ -4,8 +4,9 @@ enum Directions {TL, T, TR, L, M, R, BL, B, BR}
 @export var hint_margin_container: MarginContainer
 @export var hintContainer: PanelContainer
 
-#var hintText
-
+func _ready():
+	signalBus.popupsOpened.connect(hideHint)
+	
 #func setHintText(newHintText=""):
 	#if !newHintText: hide()
 	#else:
@@ -15,16 +16,17 @@ enum Directions {TL, T, TR, L, M, R, BL, B, BR}
 var sizeTween:Tween
 
 func showHint():
-	hintContainer.scale = Vector2.ZERO
-	hintContainer.show()
-	sizeTween = create_tween()
-	sizeTween.set_trans(Tween.TRANS_CUBIC)
-	sizeTween.set_ease(Tween.EASE_IN_OUT)
-	sizeTween.tween_property(hintContainer,"scale",Vector2.ONE,system.uiTweenTime/3)
+	if !system.popupIsOpen:
+		hintContainer.scale = Vector2.ZERO
+		hintContainer.show()
+		sizeTween = create_tween()
+		sizeTween.set_trans(Tween.TRANS_CUBIC)
+		sizeTween.set_ease(Tween.EASE_IN_OUT)
+		sizeTween.tween_property(hintContainer,"scale",Vector2.ONE,system.uiTweenTime/3)
 
 func hideHint():
 	#hintContainer.size = Vector2.ZERO
-	if sizeTween.is_running(): sizeTween.stop()
+	if sizeTween and sizeTween.is_running(): sizeTween.stop()
 	sizeTween = create_tween()
 	sizeTween.set_trans(Tween.TRANS_CUBIC)
 	sizeTween.set_ease(Tween.EASE_IN_OUT)

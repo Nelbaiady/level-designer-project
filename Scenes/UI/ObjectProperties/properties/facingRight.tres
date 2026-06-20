@@ -7,5 +7,6 @@
 script = ExtResource("1_16x6f")
 codeName = "startFacingRight"
 displayName = "Start Facing Right"
+description = "Toggle if this item starts the level facing the right. It will otherwise default to facing the left."
 uiNode = ExtResource("2_sp1at")
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

@@ -7,6 +7,9 @@
 script = ExtResource("1_bigx5")
 codeName = "coyoteTime"
 displayName = "Coyote Time"
+description = "Give the player a grace period when 
+they fall off a cliff where they can jump
+in midair, just like a certain character."
 uiNode = ExtResource("2_5px5a")
 step = 0.05
 hasMin = true

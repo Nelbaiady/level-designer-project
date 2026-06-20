@@ -7,6 +7,7 @@
 script = ExtResource("1_0vb5p")
 codeName = "texture"
 displayName = "Tree type"
+description = "Choose from multiple types of tree."
 uiNode = ExtResource("2_nsfyd")
 choices = {
 "Bubbly": "uid://h1a4fj7yrbk2",

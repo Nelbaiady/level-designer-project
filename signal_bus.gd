@@ -94,9 +94,16 @@ signal startSignUpPopup()##popup for signing up
 @warning_ignore("unused_signal")
 signal endTextPopup(text,isCancelled:bool)##notifies that the popup was closed. parameters: text, isCancelled
 @warning_ignore("unused_signal")
-signal genericPopupOpened()#tells the game that a popup has opened, which increments the popup stack
+signal genericPopupOpened()##tells the game that a popup has opened, which increments the popup stack
 @warning_ignore("unused_signal")
-signal genericPopupClosed()#tells the game that a popup has closed, which decrements the popup stack
+signal genericPopupClosed()##tells the game that a popup has closed, which decrements the popup stack
+
+
+
+@warning_ignore("unused_signal")
+signal popupsOpened()##When there was no popup before and a new popup just opened
+signal popupsClosed()##When all popups have closed
+
 
 #loading screen
 @warning_ignore("unused_signal")

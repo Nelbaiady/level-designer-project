@@ -7,6 +7,7 @@
 script = ExtResource("1_52gpd")
 codeName = "canCrawl"
 displayName = "Can Crawl"
+description = "Toggles the ability to move while crouched."
 uiNode = ExtResource("2_agy84")
 defaultValue = 1.0
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

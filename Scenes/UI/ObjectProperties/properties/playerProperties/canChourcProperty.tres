@@ -7,5 +7,6 @@
 script = ExtResource("1_y6bgd")
 codeName = "canChourc"
 displayName = "Chourc"
+description = "Enable the power to Chourc and reach new heights."
 uiNode = ExtResource("2_xgnfb")
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

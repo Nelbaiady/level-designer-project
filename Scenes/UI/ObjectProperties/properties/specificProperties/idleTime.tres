@@ -7,6 +7,8 @@
 script = ExtResource("1_8yauc")
 codeName = "idleTime"
 displayName = "Decompressed Time"
+description = "The amount of time the chordo stays 
+stretched out for."
 uiNode = ExtResource("2_gkk23")
 defaultValue = 1.0
 maxValue = 9999999999999.0

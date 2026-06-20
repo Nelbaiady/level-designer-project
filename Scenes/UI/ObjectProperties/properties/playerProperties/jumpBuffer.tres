@@ -7,6 +7,10 @@
 script = ExtResource("1_cchho")
 codeName = "jumpBuffer"
 displayName = "Jump Buffering"
+description = "With jump buffering, if you press the 
+jump button just before landing, the 
+player will jump again, even if the jump
+button was pressed too early."
 uiNode = ExtResource("2_feil3")
 step = 0.05
 hasMin = true

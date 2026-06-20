@@ -63,8 +63,11 @@ func addLayerAbove(layerID):
 ##adds a layer below the givel layerID's layer
 func addLayerBelow(layerID):
 	storeTempProperties()
-	if layerID > globalEditor.currentLayer:
-		globalEditor.currentLayer-=1
+	#print(layerID)
+	if 0 < layerID and layerID <= globalEditor.currentLayer:
+		globalEditor.currentLayer+=1
+	#if layerID > globalEditor.currentLayer :#and globalEditor.currentLayer > 0:
+		#globalEditor.currentLayer-=1
 	var newLayer = LAYER.instantiate()
 	layers[layerID].add_sibling(newLayer)
 	refreshEverything()
@@ -72,6 +75,8 @@ func deleteLayer(layerID):
 	storeTempProperties()
 	if layerID == globalEditor.currentLayer: #making sure we don't have a nonexistant layer selected after this
 		globalEditor.currentLayer = 0
+	elif 0 < layerID and layerID < globalEditor.currentLayer:
+		globalEditor.currentLayer -= 1
 	clampLayer()
 	
 	var layerToDelete = layers[layerID]

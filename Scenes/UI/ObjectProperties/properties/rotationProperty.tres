@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ObjectProperty" load_steps=3 format=3 uid="uid://dt3gvme5p3joj"]
+[gd_resource type="Resource" script_class="ObjectProperty" format=3 uid="uid://dt3gvme5p3joj"]
 
 [ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="1_rpym6"]
 [ext_resource type="PackedScene" uid="uid://bydj3gco3u5wr" path="res://Scenes/UI/ObjectProperties/propertyUIelements/number_property_editor.tscn" id="2_rpym6"]
@@ -7,6 +7,7 @@
 script = ExtResource("1_rpym6")
 codeName = "rotation_degrees"
 displayName = "Rotation"
+description = "The rotation angle in degrees."
 uiNode = ExtResource("2_rpym6")
 minValue = -360.0
 maxValue = 360.0

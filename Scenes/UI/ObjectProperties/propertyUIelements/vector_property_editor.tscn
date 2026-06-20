@@ -28,11 +28,16 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="HBoxContainer" unique_id=1169973749]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.3
 text = "Size:"
 
 [node name="xValueSpinBox" type="SpinBox" parent="HBoxContainer" unique_id=362780963]
+custom_minimum_size = Vector2(64, 32)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.3
 focus_mode = 1
 theme = ExtResource("1_vgvs7")
 min_value = -999999999999.0
@@ -44,8 +49,11 @@ prefix = "X:"
 script = ExtResource("3_wihbn")
 
 [node name="yValueSpinBox" type="SpinBox" parent="HBoxContainer" unique_id=1770954536]
+custom_minimum_size = Vector2(64, 32)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.3
 focus_mode = 1
 theme = ExtResource("1_vgvs7")
 min_value = -999999999999.0

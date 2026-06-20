@@ -64,6 +64,14 @@ func _input(event: InputEvent) -> void:
 		isUsingController = false
 		if settingChanged: signalBus.updateControlIcons.emit()#make sure to update controller icons
 		if settingChanged: signalBus.inputMethodChanged.emit()#inform other things that the input method changed
-		
+
+
 func _physics_process(_delta: float) -> void:
-	popupIsOpen = globalEditor.popupIsOpen or popupStack > 0
+	if !popupIsOpen and globalEditor.popupIsOpen or popupStack > 0:
+		popupIsOpen = true
+		signalBus.popupsOpened.emit()
+	elif popupIsOpen and !(globalEditor.popupIsOpen or popupStack > 0):
+		popupIsOpen = false
+		signalBus.popupsClosed.emit()
+		
+	#popupIsOpen = globalEditor.popupIsOpen or popupStack > 0

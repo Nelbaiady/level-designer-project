@@ -7,5 +7,6 @@
 script = ExtResource("1_w4uqo")
 codeName = "modulate"
 displayName = "Color"
+description = "You can adjust a color filter, as well as the opacity."
 uiNode = ExtResource("2_yvf4o")
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

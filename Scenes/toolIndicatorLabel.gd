@@ -6,4 +6,5 @@ func _ready() -> void:
 	signalBus.setCurrentTool.connect(updateToolDisplay)
 
 func updateToolDisplay(newTool):
+	print("swithed tool to ",newTool)
 	text = globalEditor.Tools.find_key(newTool)

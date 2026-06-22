@@ -16,10 +16,7 @@ func _ready():
 	
 	
 func populateLevels():
-	#popupParent.open.emit()
 	openPopup()
-	
-	#globalEditor.levelBrowsingPopupIsOpen = true
 	signalBus.loadingStarted.emit()
 	var levels = await authentication.rpcRequest({},"getalllevels")
 	signalBus.loadingStopped.emit()

@@ -8,7 +8,7 @@ func _ready():
 	updatePosition()
 	
 func updateSize():
-	size.x = get_viewport_rect().size.x+2
+	size.x = get_viewport_rect().size.x+4
 	
 func _process(_delta: float) -> void:
 	updatePosition()

@@ -71,7 +71,7 @@ func _process(_delta: float) -> void:
 func _notification(event):
 	#mouse enters the window
 	if event == NOTIFICATION_WM_MOUSE_ENTER:
-		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+		#Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 		mouseOnScreen = true
 		cursorOnScreen = true
 		#prioritizeController = false

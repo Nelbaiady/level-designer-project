@@ -11,8 +11,9 @@ func _ready():
 	closeButton.pressed.connect(closePopup)
 	open.connect(openPopup)
 	close.connect(closePopup)
-	if visible: 
-		signalBus.genericPopupOpened.emit()
+	if visible: #If for whatever reason the scene starts in a visible state, behave as if this popup just opened
+		openPopup()
+		print("This message indicates that a popup started in an open state. This probably shouldnt be happening so I'm just letting you know.")
 	
 	#allow this closeButton to be replaced
 	if closeButton != $closeButton: $closeButton.hide()

@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://dgdnl8mwnjivp"]
 
 [ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="1_26udg"]
-[ext_resource type="Script" uid="uid://cm5umat2khba3" path="res://Scenes/UI/HotbarPanel.gd" id="1_ss4vx"]
-[ext_resource type="Script" uid="uid://bre0ft12l6is3" path="res://Scenes/UI/hotbarButton.gd" id="2_sk345"]
+[ext_resource type="Script" uid="uid://cm5umat2khba3" path="res://Scenes/UI/HUD/HotbarPanel.gd" id="1_ss4vx"]
+[ext_resource type="Script" uid="uid://bre0ft12l6is3" path="res://Scenes/UI/HUD/hotbarButton.gd" id="2_sk345"]
+[ext_resource type="PackedScene" uid="uid://df6u0phetqdca" path="res://Scenes/UI/selector.tscn" id="3_wy6j5"]
 [ext_resource type="Texture2D" uid="uid://de1p8l0t4qll7" path="res://Scenes/UI/basic Icons/emptyIcon.png" id="4_26udg"]
+[ext_resource type="Script" uid="uid://b56id2bqfsd0m" path="res://Scenes/UI/misc UI scenes/hotbar_selectee.gd" id="4_j2sda"]
 
 [node name="Hotbar" type="Control" unique_id=1840035064]
 custom_minimum_size = Vector2(700, 0)
@@ -41,11 +43,13 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="Control" type="Control" parent="Panel/HBoxContainer" unique_id=251691788]
-clip_contents = true
+[node name="Control" type="Control" parent="Panel/HBoxContainer" unique_id=251691788 node_paths=PackedStringArray("selector")]
 custom_minimum_size = Vector2(64, 64)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 4
+script = ExtResource("4_j2sda")
+selector = NodePath("../../Selector")
 
 [node name="Button" type="Button" parent="Panel/HBoxContainer/Control" unique_id=1933255561]
 custom_minimum_size = Vector2(64, 64)
@@ -71,11 +75,13 @@ icon = ExtResource("4_26udg")
 icon_alignment = 1
 script = ExtResource("2_sk345")
 
-[node name="Control2" type="Control" parent="Panel/HBoxContainer" unique_id=2038876441]
-clip_contents = true
+[node name="Control2" type="Control" parent="Panel/HBoxContainer" unique_id=2038876441 node_paths=PackedStringArray("selector")]
 custom_minimum_size = Vector2(64, 64)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 4
+script = ExtResource("4_j2sda")
+selector = NodePath("../../Selector")
 
 [node name="Button2" type="Button" parent="Panel/HBoxContainer/Control2" unique_id=1290377888]
 custom_minimum_size = Vector2(64, 64)
@@ -103,11 +109,13 @@ icon_alignment = 1
 script = ExtResource("2_sk345")
 index = 1
 
-[node name="Control3" type="Control" parent="Panel/HBoxContainer" unique_id=432964828]
-clip_contents = true
+[node name="Control3" type="Control" parent="Panel/HBoxContainer" unique_id=432964828 node_paths=PackedStringArray("selector")]
 custom_minimum_size = Vector2(64, 64)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 4
+script = ExtResource("4_j2sda")
+selector = NodePath("../../Selector")
 
 [node name="Button3" type="Button" parent="Panel/HBoxContainer/Control3" unique_id=756482705]
 custom_minimum_size = Vector2(64, 64)
@@ -135,11 +143,13 @@ icon_alignment = 1
 script = ExtResource("2_sk345")
 index = 2
 
-[node name="Control4" type="Control" parent="Panel/HBoxContainer" unique_id=1654663106]
-clip_contents = true
+[node name="Control4" type="Control" parent="Panel/HBoxContainer" unique_id=1654663106 node_paths=PackedStringArray("selector")]
 custom_minimum_size = Vector2(64, 64)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 4
+script = ExtResource("4_j2sda")
+selector = NodePath("../../Selector")
 
 [node name="Button4" type="Button" parent="Panel/HBoxContainer/Control4" unique_id=947547602]
 custom_minimum_size = Vector2(64, 64)
@@ -167,11 +177,13 @@ icon_alignment = 1
 script = ExtResource("2_sk345")
 index = 3
 
-[node name="Control5" type="Control" parent="Panel/HBoxContainer" unique_id=2074397724]
-clip_contents = true
+[node name="Control5" type="Control" parent="Panel/HBoxContainer" unique_id=2074397724 node_paths=PackedStringArray("selector")]
 custom_minimum_size = Vector2(64, 64)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 4
+script = ExtResource("4_j2sda")
+selector = NodePath("../../Selector")
 
 [node name="Button5" type="Button" parent="Panel/HBoxContainer/Control5" unique_id=1287255908]
 custom_minimum_size = Vector2(64, 64)
@@ -199,11 +211,13 @@ icon_alignment = 1
 script = ExtResource("2_sk345")
 index = 4
 
-[node name="Control6" type="Control" parent="Panel/HBoxContainer" unique_id=540796749]
-clip_contents = true
+[node name="Control6" type="Control" parent="Panel/HBoxContainer" unique_id=540796749 node_paths=PackedStringArray("selector")]
 custom_minimum_size = Vector2(64, 64)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 4
+script = ExtResource("4_j2sda")
+selector = NodePath("../../Selector")
 
 [node name="Button6" type="Button" parent="Panel/HBoxContainer/Control6" unique_id=278813296]
 custom_minimum_size = Vector2(64, 64)
@@ -231,11 +245,13 @@ icon_alignment = 1
 script = ExtResource("2_sk345")
 index = 5
 
-[node name="Control7" type="Control" parent="Panel/HBoxContainer" unique_id=34374607]
-clip_contents = true
+[node name="Control7" type="Control" parent="Panel/HBoxContainer" unique_id=34374607 node_paths=PackedStringArray("selector")]
 custom_minimum_size = Vector2(64, 64)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 4
+script = ExtResource("4_j2sda")
+selector = NodePath("../../Selector")
 
 [node name="Button7" type="Button" parent="Panel/HBoxContainer/Control7" unique_id=1290415307]
 custom_minimum_size = Vector2(64, 64)
@@ -263,11 +279,13 @@ icon_alignment = 1
 script = ExtResource("2_sk345")
 index = 6
 
-[node name="Control8" type="Control" parent="Panel/HBoxContainer" unique_id=361986077]
-clip_contents = true
+[node name="Control8" type="Control" parent="Panel/HBoxContainer" unique_id=361986077 node_paths=PackedStringArray("selector")]
 custom_minimum_size = Vector2(64, 64)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 4
+script = ExtResource("4_j2sda")
+selector = NodePath("../../Selector")
 
 [node name="Button8" type="Button" parent="Panel/HBoxContainer/Control8" unique_id=744028415]
 custom_minimum_size = Vector2(64, 64)
@@ -295,11 +313,13 @@ icon_alignment = 1
 script = ExtResource("2_sk345")
 index = 7
 
-[node name="Control9" type="Control" parent="Panel/HBoxContainer" unique_id=1074655436]
-clip_contents = true
+[node name="Control9" type="Control" parent="Panel/HBoxContainer" unique_id=1074655436 node_paths=PackedStringArray("selector")]
 custom_minimum_size = Vector2(64, 64)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 4
+script = ExtResource("4_j2sda")
+selector = NodePath("../../Selector")
 
 [node name="Button9" type="Button" parent="Panel/HBoxContainer/Control9" unique_id=550807962]
 custom_minimum_size = Vector2(64, 64)
@@ -327,11 +347,13 @@ icon_alignment = 1
 script = ExtResource("2_sk345")
 index = 8
 
-[node name="Control10" type="Control" parent="Panel/HBoxContainer" unique_id=921567280]
-clip_contents = true
+[node name="Control10" type="Control" parent="Panel/HBoxContainer" unique_id=921567280 node_paths=PackedStringArray("selector")]
 custom_minimum_size = Vector2(64, 64)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 4
+script = ExtResource("4_j2sda")
+selector = NodePath("../../Selector")
 
 [node name="Button10" type="Button" parent="Panel/HBoxContainer/Control10" unique_id=1990287805]
 custom_minimum_size = Vector2(64, 64)
@@ -358,3 +380,18 @@ autowrap_mode = 2
 icon_alignment = 1
 script = ExtResource("2_sk345")
 index = 9
+
+[node name="Selector" parent="Panel" unique_id=64663865 instance=ExtResource("3_wy6j5")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -352.0
+offset_top = 0.0
+offset_right = -280.0
+offset_bottom = 72.0
+grow_vertical = 1
+pivot_offset = Vector2(36, 36)
+offset = Vector2(2, 4)

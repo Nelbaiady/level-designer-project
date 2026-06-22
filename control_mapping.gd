@@ -21,6 +21,9 @@ var delIcon := "E058"
 #var redoIcon := "E054] + [char=E0BE] + [char=E0DF] / [char=E0BD] + [char=E0DD"
 #var clearIcon := "E054] + [char=E058"
 
+#controller specific inputs
+var slowIcon := "E01C"
+var switchToolIcon := "E035"
 
 var currentFont = keyboardFont
 

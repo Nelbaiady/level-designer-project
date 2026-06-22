@@ -1,4 +1,4 @@
-extends Button
+class_name HotbarButton extends Button
 
 @export var index:int
 const emptyIcon = preload("uid://de1p8l0t4qll7")
@@ -8,7 +8,8 @@ func _ready() -> void:
 	globalEditor.updateHotbarSelection.connect(updateSelected)
 	globalEditor.updateHotbarUI()
 	updateSelected(globalEditor.hotbarIndex)
-	
+
+##updates the button icon and disables it if an invalid item is presented
 func updateButton(hotbarIndex:int, item:Item):
 	if hotbarIndex == index:
 		if item:
@@ -22,11 +23,13 @@ func updateButton(hotbarIndex:int, item:Item):
 			#focus_mode = Control.FOCUS_NONE
 			button_pressed = false
 
+##detects and reacts if this button is selected
 func updateSelected(hotbarIndex:int):
 	if hotbarIndex == index:
 		#grab_focus()
 		button_pressed = true
 	else:
 		button_pressed = false
+
 func _pressed() -> void:
 	globalEditor.setHotbarIndex(index)

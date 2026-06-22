@@ -28,11 +28,10 @@
 [ext_resource type="Texture2D" uid="uid://cjapidryl0sof" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/pause.png" id="13_u6te5"]
 [ext_resource type="Script" uid="uid://ctpt22d6jxopd" path="res://Scenes/UI/misc UI scenes/toolSelectee.gd" id="15_1pi8w"]
 [ext_resource type="FontFile" uid="uid://dldjup34y8kp1" path="res://Scenes/UI/basic Icons/Kenney Nintendo Switch/Fonts/kenney_input_nintendo_switch.otf" id="15_5yagh"]
-[ext_resource type="Texture2D" uid="uid://cb21meg2g52jh" path="res://Cursor/brushIcon.png" id="15_dmbb2"]
 [ext_resource type="Script" uid="uid://ul8eb8jem2l" path="res://Scenes/layer_properties_handler.gd" id="15_i5vsu"]
+[ext_resource type="Script" uid="uid://4t5pfekoih5f" path="res://Scenes/UI/Modular UI scripts/selector.gd" id="16_hhub4"]
 [ext_resource type="PackedScene" uid="uid://j4eyk5hksqrt" path="res://Scenes/layer.tscn" id="17_0l4bc"]
-[ext_resource type="Texture2D" uid="uid://utm5fysg3rtg" path="res://Cursor/eraserIcon.png" id="18_1l34x"]
-[ext_resource type="PackedScene" uid="uid://df6u0phetqdca" path="res://Scenes/UI/selector.tscn" id="18_r6kqb"]
+[ext_resource type="Texture2D" uid="uid://nx41enw3tsu8" path="res://Scenes/UI/Modular UI scripts/selector.png" id="18_hhub4"]
 [ext_resource type="Script" uid="uid://qa3onab2pjp2" path="res://Scenes/UI/HUD/editModeLeftArea.gd" id="22_1giqv"]
 [ext_resource type="Script" uid="uid://cisvv1ndgob2a" path="res://Scenes/roomBottom.gd" id="22_iis80"]
 [ext_resource type="Script" uid="uid://ct75igh58cl1v" path="res://generic modular scripts/followCamXaxis.gd" id="23_06d57"]
@@ -80,19 +79,6 @@ fill_from = Vector2(1, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_06d57"]
 font_color = Color(1, 0.82544345, 0.95291287, 1)
-
-[sub_resource type="GDScript" id="GDScript_hhub4"]
-script/source = "extends RichTextLabel
-
-func _ready() -> void:
-	signalBus.controlIconsUpdated.connect(setText)
-	
-func setText():
-	add_theme_font_override(\"normal_font\",controlMapping.currentFont)
-	text = str(
-	\"[font_size=64][char=\",controlMapping.switchToolIcon,\"][/font_size]\\n\"
-	) if system.isUsingController else \"\"
-"
 
 [sub_resource type="GDScript" id="GDScript_efg2m"]
 resource_name = "playButtonInputPrompt"
@@ -146,10 +132,6 @@ func setText():
 			\"Undo Place/Erase [font_size=48][char=\",controlMapping.ctrlIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.zIcon,\"][/font_size]\\n\"
 			+\"Redo Place/Erase [font_size=48][char=\",controlMapping.ctrlIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.shiftIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.zIcon,\"][/font_size]\\n\"
 			+\"Clear level [font_size=48][char=\",controlMapping.ctrlIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.delIcon,\"][/font_size]\\n\"
-		)
-	else:
-		text += str(
-			\"Slow Cursor [font_size=48][char=\",controlMapping.slowIcon,\"][/font_size]\"
 		)
 	
 "
@@ -378,12 +360,11 @@ size_flags_horizontal = 0
 custom_minimum_size = Vector2(64, 64)
 custom_maximum_size = Vector2(64, 64)
 layout_mode = 2
-icon = ExtResource("15_dmbb2")
-icon_alignment = 1
 script = ExtResource("15_1pi8w")
+tool = null
 selector = NodePath("../../../../Toolbar Selector")
 
-[node name="old label (to be removed)" type="Label" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/toolButton" unique_id=246481595]
+[node name="Label" type="Label" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/toolButton" unique_id=246481595]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -403,45 +384,49 @@ script = ExtResource("4_1k58v")
 custom_minimum_size = Vector2(64, 64)
 custom_maximum_size = Vector2(64, 64)
 layout_mode = 2
-icon = ExtResource("18_1l34x")
-icon_alignment = 1
 script = ExtResource("15_1pi8w")
 tool = 1
 selector = NodePath("../../../../Toolbar Selector")
 
-[node name="tool switch prompt" type="RichTextLabel" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer" unique_id=192189350]
+[node name="playButtonPrompt" type="RichTextLabel" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer" unique_id=192189350]
 custom_minimum_size = Vector2(64, 0)
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 2
 offset_transform_enabled = true
-offset_transform_position_ratio = Vector2(0.1, -0.05)
+offset_transform_position_ratio = Vector2(0, -0.05)
 mouse_behavior_recursive = 1
 theme = ExtResource("3_cnbw5")
 theme_type_variation = &"inGameLabel"
 theme_override_fonts/normal_font = ExtResource("15_5yagh")
 bbcode_enabled = true
+text = "[font_size=64][char=E03F][/font_size]"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 vertical_alignment = 1
-script = SubResource("GDScript_hhub4")
+script = SubResource("GDScript_efg2m")
 metadata/_edit_use_anchors_ = true
 
-[node name="Toolbar Selector" parent="HUD/Top Area UI/HBoxContainer/Tool Display" unique_id=64663865 instance=ExtResource("18_r6kqb")]
+[node name="Toolbar Selector" type="NinePatchRect" parent="HUD/Top Area UI/HBoxContainer/Tool Display" unique_id=1001855169]
+modulate = Color(1, 1, 1, 0.5019608)
 layout_mode = 1
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 72.0
-offset_bottom = 72.0
-grow_horizontal = 1
-grow_vertical = 1
-offset = Vector2(4, 4)
+anchors_preset = -1
+anchor_left = 0.013
+anchor_top = 0.012
+anchor_right = 0.259
+anchor_bottom = 0.224
+offset_left = 0.13899994
+offset_top = -0.06799984
+offset_right = -0.92300415
+offset_bottom = 0.06399536
+size_flags_horizontal = 0
+size_flags_vertical = 0
+offset_transform_enabled = true
+offset_transform_position = Vector2(-4, -4)
+texture = ExtResource("18_hhub4")
+script = ExtResource("16_hhub4")
+metadata/_edit_use_anchors_ = true
 
 [node name="layersButtonControl" type="Control" parent="HUD/Top Area UI/HBoxContainer" unique_id=958778049]
 layout_mode = 2

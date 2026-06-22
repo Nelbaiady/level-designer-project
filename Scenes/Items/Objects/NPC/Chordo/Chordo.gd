@@ -65,7 +65,7 @@ func setChordoState(newState:chordoStates):
 			animationPlayer.play("folded")
 			chordoState = chordoStates.FOLDED
 			stateTimer = foldedTime
-			await get_tree().physics_frame #wait a frame becuase of visual jank
+			await get_tree().process_frame #wait a frame becuase of visual jank
 			#if we are reversing, return the animation speed to normal and continue
 			#otherwise, teleport to adjust position
 			if animationPlayer.speed_scale < 0:
@@ -80,9 +80,13 @@ func setChordoState(newState:chordoStates):
 				await get_tree().physics_frame
 				await get_tree().physics_frame
 				set_collision_layer_value(1,previousLayer1Value)
-
 			else:
+				var previousLayer1Value = get_collision_layer_value(1)
+				set_collision_layer_value(1,false)
 				teleportChordo()
+				await get_tree().physics_frame
+				await get_tree().physics_frame
+				set_collision_layer_value(1,previousLayer1Value)
 		chordoStates.IDLE:
 			animationPlayer.play("idle")
 			stateTimer = idleTime

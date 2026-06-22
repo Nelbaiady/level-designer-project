@@ -210,6 +210,7 @@ func rpcRequest(params:Dictionary,functionName:String, loadingScreen:=true):
 	if loadingScreen: signalBus.loadingStopped.emit()
 	return response
 
+##creates an HTTPRequest node and then frees it from memory when done, returning the response.
 func newHttpRequest(url:String,headers:PackedStringArray,method:HTTPClient.Method,requestData:String=""):
 	var request = HTTPRequest.new()
 	add_child(request)

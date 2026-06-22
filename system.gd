@@ -25,7 +25,8 @@ func _ready() -> void:
 		get_window().move_to_center()
 	signalBus.togglePause.connect(togglePause)
 	signalBus.genericPopupClosed.connect(func(): popupStack-=1)
-	signalBus.genericPopupOpened.connect(func(): popupStack+=1)
+	signalBus.genericPopupOpened.connect(
+		func(): popupStack+=1)
 
 func togglePause():
 	isPaused = !isPaused
@@ -65,9 +66,15 @@ func _input(event: InputEvent) -> void:
 		if settingChanged: signalBus.updateControlIcons.emit()#make sure to update controller icons
 		if settingChanged: signalBus.inputMethodChanged.emit()#inform other things that the input method changed
 
+##shorter way to create a tween
+func basicTween(object:Node, property:String,value, time=system.uiTweenTime,tweenEase:Tween.EaseType=Tween.EASE_IN,tweenTrans:Tween.TransitionType=Tween.TRANS_CUBIC):
+	var tween = create_tween()
+	tween.set_trans(tweenTrans)
+	tween.set_ease(tweenEase)
+	tween.tween_property(object,property,value,time)
 
 func _physics_process(_delta: float) -> void:
-	if !popupIsOpen and globalEditor.popupIsOpen or popupStack > 0:
+	if !popupIsOpen and (globalEditor.popupIsOpen or popupStack > 0):
 		popupIsOpen = true
 		signalBus.popupsOpened.emit()
 	elif popupIsOpen and !(globalEditor.popupIsOpen or popupStack > 0):

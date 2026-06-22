@@ -505,7 +505,7 @@ sources/2 = SubResource("TileSetAtlasSource_b78su")
 sources/0 = SubResource("TileSetAtlasSource_e50q0")
 
 [node name="Layer" type="Parallax2D" unique_id=1675109972]
-scroll_offset = Vector2(-1, 0)
+scroll_offset = Vector2(1, 0)
 script = ExtResource("1_fifjg")
 index = 1
 

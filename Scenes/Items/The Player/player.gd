@@ -56,6 +56,7 @@ var directionInput = Vector2.ZERO
 
 ##true if the player is inside a hitbox that should damage them
 var isInHitbox := false
+var hitBoxPosition := Vector2(0,0) ##when inside a hitbox keep track of its position for the next damage cycle
 
 #Signals
 ##signal for when the player is bounced
@@ -152,6 +153,7 @@ func attemptToTakeDamage(knockback=Vector2.ZERO):
 func _on_hurtbox_area_2d_area_entered(area: Area2D) -> void:
 	if area.is_in_group("hitbox") and !area.is_in_group("player"):
 		isInHitbox = true
+		hitBoxPosition = area.global_position
 		attemptToTakeDamage(area.global_position)
 		#if invulnerabilityTimer >= invulnerabilityTime:
 			#knockBack(area.global_position)
@@ -162,6 +164,7 @@ func _on_hurtbox_area_2d_area_exited(area: Area2D) -> void:
 		for overlappingArea in $hurtboxArea2D.get_overlapping_areas():
 			if overlappingArea is Area2D:
 				if overlappingArea.is_in_group("hitbox") and !overlappingArea.is_in_group("player"):
+					hitBoxPosition = overlappingArea.global_position
 					hitboxInside = true
 					break
 		if !hitboxInside:

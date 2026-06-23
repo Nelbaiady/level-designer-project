@@ -280,6 +280,7 @@ script = ExtResource("2_sk345")
 index = 6
 
 [node name="Control8" type="Control" parent="Panel/HBoxContainer" unique_id=361986077 node_paths=PackedStringArray("selector")]
+visible = false
 custom_minimum_size = Vector2(64, 64)
 clip_contents = true
 layout_mode = 2
@@ -314,6 +315,7 @@ script = ExtResource("2_sk345")
 index = 7
 
 [node name="Control9" type="Control" parent="Panel/HBoxContainer" unique_id=1074655436 node_paths=PackedStringArray("selector")]
+visible = false
 custom_minimum_size = Vector2(64, 64)
 clip_contents = true
 layout_mode = 2
@@ -348,6 +350,7 @@ script = ExtResource("2_sk345")
 index = 8
 
 [node name="Control10" type="Control" parent="Panel/HBoxContainer" unique_id=921567280 node_paths=PackedStringArray("selector")]
+visible = false
 custom_minimum_size = Vector2(64, 64)
 clip_contents = true
 layout_mode = 2

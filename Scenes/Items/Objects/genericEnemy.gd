@@ -33,6 +33,8 @@ var state = states.IDLE
 @export var canChase := true
 @export var canDie := true
 
+
+
 ##how quickly this creature switches between random states
 var restlessness:float = 1
 
@@ -131,12 +133,16 @@ func setState(newState:states):
 ##makes the object face the direction its supposed to, including sprite and collision
 func orientDirection():
 	#if animationPlayer.flip_h != facingRight:
+
 		for i in flippableAreas:
 			i.scale.x *= 1 if ((i.scale.x<0) and facingRight) or ((i.scale.x>0) and !facingRight) else -1
+	
 		for i in flippablePolygonColliders:
 			i.scale.x *= 1 if ((i.scale.x<0) and facingRight) or ((i.scale.x>0) and !facingRight) else -1
+	
 		for i in flippableSprites:
 			i.flip_h = facingRight
+
 		for i in flippableAnimatedSprites:
 			i.flip_h = facingRight
 
@@ -145,7 +151,7 @@ func mirror():
 	facingRight = !facingRight
 	orientDirection()
 
-
+##this was probably replaced by damage code being player-side instead
 func _on_hit_box_area_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player") and state != states.DYING:
 		pass

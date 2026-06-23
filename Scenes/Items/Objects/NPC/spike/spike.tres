@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="objectItem" format=3 uid="uid://cge5ka3dgyd2w"]
+
+[ext_resource type="Texture2D" uid="uid://cgpp3bd43tmrv" path="res://Scenes/Items/Objects/NPC/spike/spikeIcon.png" id="1_33sds"]
+[ext_resource type="PackedScene" uid="uid://c6hjlen0gmsgj" path="res://Scenes/Items/Objects/NPC/spike/spike.tscn" id="2_33sds"]
+[ext_resource type="Texture2D" uid="uid://c5hobb5xp2do7" path="res://Scenes/Items/Objects/NPC/spike/spikePreviewTexture.png" id="3_fkqru"]
+[ext_resource type="Script" uid="uid://c6m2hjthmh1nv" path="res://Scenes/Items/Objects/object.gd" id="4_l2sdc"]
+
+[resource]
+script = ExtResource("4_l2sdc")
+objectReference = ExtResource("2_33sds")
+icon = ExtResource("1_33sds")
+previewTexture = ExtResource("3_fkqru")
+name = "Spike"
+description = "An indestructible block that deals damage when touched."
+metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

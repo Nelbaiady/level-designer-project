@@ -54,6 +54,9 @@ var bouncedThisFrame:bool = false
 
 var directionInput = Vector2.ZERO
 
+##true if the player is inside a hitbox that should damage them
+var isInHitbox := false
+
 #Signals
 ##signal for when the player is bounced
 signal getBounced(velocity)
@@ -120,7 +123,9 @@ func _physics_process(_delta: float) -> void:
 				invulnerabilityTimer = invulnerabilityTime
 		if globalEditor.level and position.y > globalEditor.level.roomBottom:
 			die()
-	
+	if isInHitbox:
+		attemptToTakeDamage()
+		
 
 ##plays an animation and also plays the reset track (reset no longer happens for now due to bugs)
 func resetPlay(animation:String):
@@ -138,13 +143,30 @@ func chourcCheck():
 			return false
 	return true
 
-
+##checks if the player has invulnerability frames and deals damage if not
+func attemptToTakeDamage(knockback=Vector2.ZERO):
+	if invulnerabilityTimer >= invulnerabilityTime:
+		knockBack(knockback)
+		takeDamage()
 ##Taking damage
 func _on_hurtbox_area_2d_area_entered(area: Area2D) -> void:
 	if area.is_in_group("hitbox") and !area.is_in_group("player"):
-		if invulnerabilityTimer >= invulnerabilityTime:
-			knockBack(area.global_position)
-			takeDamage()
+		isInHitbox = true
+		attemptToTakeDamage(area.global_position)
+		#if invulnerabilityTimer >= invulnerabilityTime:
+			#knockBack(area.global_position)
+			#takeDamage()
+func _on_hurtbox_area_2d_area_exited(area: Area2D) -> void:
+	if area.is_in_group("hitbox") and !area.is_in_group("player"):
+		var hitboxInside = false
+		for overlappingArea in $hurtboxArea2D.get_overlapping_areas():
+			if overlappingArea is Area2D:
+				if overlappingArea.is_in_group("hitbox") and !overlappingArea.is_in_group("player"):
+					hitboxInside = true
+					break
+		if !hitboxInside:
+			isInHitbox = false
+			
 func takeDamage(damage:=1):
 	if stateMachine.state.name!="Dying":
 		##make sure the player isnt invulnerable

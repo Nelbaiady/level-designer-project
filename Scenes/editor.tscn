@@ -170,8 +170,8 @@ func setText():
 	\"Place [font_size=48][char=\",controlMapping.placeItemIcon,\"][/font_size]\\n\"
 	+\"Move Camera [font_size=48][char=\",controlMapping.moveCameraIcon,\"][/font_size]\\n\"
 	+\"Move Cursor [font_size=48][char=\",controlMapping.moveCursorIcon,\"][/font_size]\\n\"
-	+\"Select Tool [font_size=48][char=\",controlMapping.selectToolIcon,\"][/font_size]\\n\"
-	#+\"Select Item [font_size=48][char=\",controlMapping.selectItemIcon,\"][/font_size]\\n\"
+	#+\"Select Tool [font_size=48][char=\",controlMapping.selectToolIcon,\"][/font_size]\\n\"
+	+\"Select Item [font_size=48][char=\",controlMapping.selectItemIcon,\"][/font_size]\\n\"
 	+\"Edit Object [font_size=48][char=\",controlMapping.editObjectIcon,\"][/font_size]\\n\"
 	#+\"[img width=32 height=32]uid://dycbcfmvewimq[/img]\\n\" #EXAMPLE IF I WANT TO INSERT AN IMAGE
 	)
@@ -180,6 +180,7 @@ func setText():
 			\"Undo Place/Erase [font_size=48][char=\",controlMapping.ctrlIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.zIcon,\"][/font_size]\\n\"
 			+\"Redo Place/Erase [font_size=48][char=\",controlMapping.ctrlIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.shiftIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.zIcon,\"][/font_size]\\n\"
 			+\"Clear level [font_size=48][char=\",controlMapping.ctrlIcon,\"][/font_size] + [font_size=48][char=\",controlMapping.delIcon,\"][/font_size]\\n\"
+			+\"Select Item [font_size=48][char=\",controlMapping.selectItemIcon,\"][/font_size]\"
 		)
 	else:
 		text += str(

@@ -46,8 +46,8 @@ enum Tools {place, erase}#, move}
 
 
 func _ready() -> void:
-	itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),preload("uid://cyvppeo275ryt"), preload("uid://hqm7h6yt4hnt"),null,null,null,null]
-	hotbar = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),preload("uid://cyvppeo275ryt"), preload("uid://hqm7h6yt4hnt"),null,null,null,null]
+	itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),preload("uid://cyvppeo275ryt"), preload("uid://hqm7h6yt4hnt"),preload("uid://cge5ka3dgyd2w"),null,null,null]
+	hotbar = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),preload("uid://cyvppeo275ryt"), preload("uid://hqm7h6yt4hnt"),preload("uid://cge5ka3dgyd2w"),null,null,null]
 	for i in itemRoster.size():
 		if itemRoster[i]:
 			itemRoster[i].rosterID = i

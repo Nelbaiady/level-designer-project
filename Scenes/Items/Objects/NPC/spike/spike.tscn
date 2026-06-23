@@ -1,0 +1,104 @@
+[gd_scene format=3 uid="uid://c6hjlen0gmsgj"]
+
+[ext_resource type="Script" uid="uid://bkrnt33wbg25a" path="res://Scenes/Items/Objects/NPC/spike/spike.gd" id="1_d56nv"]
+[ext_resource type="Texture2D" uid="uid://elc7hnj7mldt" path="res://Scenes/Items/Objects/NPC/spike/spike.png" id="2_d56nv"]
+[ext_resource type="PackedScene" uid="uid://c4aci6f2wscx5" path="res://Scenes/Items/Objects/objectMod.tscn" id="6_rdnne"]
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="7_g23fw"]
+[ext_resource type="Resource" uid="uid://bh2hcytk84e13" path="res://Scenes/UI/ObjectProperties/properties/positionProperty.tres" id="8_jrug0"]
+[ext_resource type="Resource" uid="uid://dqbrp3ghialya" path="res://Scenes/UI/ObjectProperties/properties/sizeProperty.tres" id="9_036yo"]
+[ext_resource type="Resource" uid="uid://byn3kv4q02kpl" path="res://Scenes/UI/ObjectProperties/properties/colorProperty.tres" id="10_mntg8"]
+[ext_resource type="Resource" uid="uid://d3y2ia0lj7kk5" path="res://Scenes/UI/ObjectProperties/properties/playerProperties/maxHealthProperty.tres" id="11_qvokd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dff58"]
+
+[sub_resource type="Animation" id="Animation_kbpqm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_q7lup"]
+resource_name = "idle"
+length = 0.5
+loop_mode = 1
+step = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2ppoo"]
+_data = {
+&"RESET": SubResource("Animation_kbpqm"),
+&"idle": SubResource("Animation_q7lup")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5lns4"]
+size = Vector2(80, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7n28d"]
+size = Vector2(72, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wl0qq"]
+size = Vector2(64, 64)
+
+[node name="spike" type="CharacterBody2D" unique_id=1317101315 node_paths=PackedStringArray("animationPlayer") groups=["movables", "solids"]]
+material = SubResource("ShaderMaterial_dff58")
+collision_layer = 129
+collision_mask = 129
+script = ExtResource("1_d56nv")
+animationPlayer = NodePath("AnimationPlayer")
+gravity = 0.0
+canRoam = false
+canChase = false
+canDie = false
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1106682625]
+texture = ExtResource("2_d56nv")
+hframes = 2
+vframes = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2114326542]
+process_mode = 3
+libraries/ = SubResource("AnimationLibrary_2ppoo")
+autoplay = &"idle"
+
+[node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("6_rdnne")]
+position = Vector2(0, -8)
+clickCollision = NodePath("Area2D")
+properties = Array[ExtResource("7_g23fw")]([ExtResource("8_jrug0"), ExtResource("9_036yo"), ExtResource("10_mntg8"), ExtResource("11_qvokd")])
+category = 1
+
+[node name="Area2D" type="Area2D" parent="Object" unique_id=12686494]
+position = Vector2(0, 8)
+
+[node name="clickbox" type="CollisionShape2D" parent="Object/Area2D" unique_id=1321507038]
+shape = SubResource("RectangleShape2D_5lns4")
+
+[node name="hitBoxArea" type="Area2D" parent="." unique_id=421457549 groups=["hitbox"]]
+
+[node name="hitBox" type="CollisionShape2D" parent="hitBoxArea" unique_id=1992963439]
+shape = SubResource("RectangleShape2D_7n28d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=834873578]
+shape = SubResource("RectangleShape2D_wl0qq")
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="body_entered" from="hitBoxArea" to="." method="_on_hit_box_area_body_entered"]

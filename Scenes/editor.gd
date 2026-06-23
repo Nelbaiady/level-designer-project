@@ -72,7 +72,7 @@ func _process(_delta: float) -> void:
 	if clickFrame:
 		clickFrame = false
 	#COMMON CODE FOR EDIT AND PLAY MODE
-	cursorItemIcon.visible = cursorCanvas.cursor.visible and globalEditor.isEditing and !globalEditor.popupIsOpen
+	cursorItemIcon.visible = cursorCanvas.cursor.visible and globalEditor.isEditing and !globalEditor.popupIsOpen and globalEditor.currentTool!=globalEditor.Tools.erase
 	previousCursorPos = cursorParallaxPosition
 	#END OF PHYSICS PROCESS
 

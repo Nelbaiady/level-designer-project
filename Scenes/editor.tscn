@@ -81,6 +81,40 @@ fill_from = Vector2(1, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_06d57"]
 font_color = Color(1, 0.82544345, 0.95291287, 1)
 
+[sub_resource type="GDScript" id="GDScript_1pi8w"]
+resource_name = "brush_prompt"
+script/source = "extends RichTextLabel
+
+func _ready() -> void:
+	signalBus.controlIconsUpdated.connect(setText)
+	
+func setText():
+	if system.isUsingController: hide()
+	else:
+		show()
+		add_theme_font_override(\"normal_font\",controlMapping.currentFont)
+		text = str(
+		\"[font_size=64][char=\",controlMapping.brushIcon,\"][/font_size]\\n\"
+		)
+"
+
+[sub_resource type="GDScript" id="GDScript_dmbb2"]
+resource_name = "eraser_prompt"
+script/source = "extends RichTextLabel
+
+func _ready() -> void:
+	signalBus.controlIconsUpdated.connect(setText)
+	
+func setText():
+	if system.isUsingController: hide()
+	else:
+		show()
+		add_theme_font_override(\"normal_font\",controlMapping.currentFont)
+		text = str(
+		\"[font_size=64][char=\",controlMapping.eraserIcon,\"][/font_size]\\n\"
+		)
+"
+
 [sub_resource type="GDScript" id="GDScript_hhub4"]
 script/source = "extends RichTextLabel
 
@@ -137,7 +171,7 @@ func setText():
 	+\"Move Camera [font_size=48][char=\",controlMapping.moveCameraIcon,\"][/font_size]\\n\"
 	+\"Move Cursor [font_size=48][char=\",controlMapping.moveCursorIcon,\"][/font_size]\\n\"
 	+\"Select Tool [font_size=48][char=\",controlMapping.selectToolIcon,\"][/font_size]\\n\"
-	+\"Select Item [font_size=48][char=\",controlMapping.selectItemIcon,\"][/font_size]\\n\"
+	#+\"Select Item [font_size=48][char=\",controlMapping.selectItemIcon,\"][/font_size]\\n\"
 	+\"Edit Object [font_size=48][char=\",controlMapping.editObjectIcon,\"][/font_size]\\n\"
 	#+\"[img width=32 height=32]uid://dycbcfmvewimq[/img]\\n\" #EXAMPLE IF I WANT TO INSERT AN IMAGE
 	)
@@ -399,6 +433,35 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_1k58v")
 
+[node name="brush prompt" type="RichTextLabel" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/toolButton" unique_id=798635891]
+custom_minimum_size = Vector2(64, 0)
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.109
+anchor_top = 0.0625
+anchor_right = 3.125
+anchor_bottom = 1.0625
+offset_left = 1.0240021
+offset_right = -64.0
+offset_bottom = -32.0
+pivot_offset = Vector2(0, 15)
+size_flags_horizontal = 2
+offset_transform_enabled = true
+offset_transform_position_ratio = Vector2(0.1, -0.05)
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("15_5yagh")
+bbcode_enabled = true
+text = "Q"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+script = SubResource("GDScript_1pi8w")
+metadata/_edit_use_anchors_ = true
+
 [node name="toolButton2" type="Button" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer" unique_id=148248729 node_paths=PackedStringArray("selector")]
 custom_minimum_size = Vector2(64, 64)
 custom_maximum_size = Vector2(64, 64)
@@ -408,6 +471,35 @@ icon_alignment = 1
 script = ExtResource("15_1pi8w")
 tool = 1
 selector = NodePath("../../../../Toolbar Selector")
+
+[node name="eraser prompt" type="RichTextLabel" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/toolButton2" unique_id=1434956775]
+custom_minimum_size = Vector2(64, 0)
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.109
+anchor_top = 0.0625
+anchor_right = 3.125
+anchor_bottom = 1.0625
+offset_left = 1.0240021
+offset_right = -64.0
+offset_bottom = -32.0
+pivot_offset = Vector2(0, 15)
+size_flags_horizontal = 2
+offset_transform_enabled = true
+offset_transform_position_ratio = Vector2(0.1, -0.05)
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("15_5yagh")
+bbcode_enabled = true
+text = "Q"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+script = SubResource("GDScript_dmbb2")
+metadata/_edit_use_anchors_ = true
 
 [node name="tool switch prompt" type="RichTextLabel" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer" unique_id=192189350]
 custom_minimum_size = Vector2(64, 0)

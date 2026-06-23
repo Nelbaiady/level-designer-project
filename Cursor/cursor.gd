@@ -11,11 +11,28 @@ var isSpinBoxing: bool = false
 var screenPosition:Vector2 = Vector2.ZERO ##variable to represent cursor position in screen space
 @onready var cursorSprite: AnimatedSprite2D = $"../AnimatedSprite2D"
 var camPosition : Vector2 ##position of the viewport inf the global world space
-#the below two vars deal with an issue where the browser thinks the actual mouse moved to the position a click was triggered in
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	signalBus.spinboxSpun.connect( spinBoxing )
+	signalBus.spinboxSpun.connect( spinBoxing ) #hide the mouse because the game engine normally hides the regular computer mouse and centers it.
+	signalBus.setCurrentTool.connect(setCursorToolSprite)
+	signalBus.popupsOpened.connect(setCursorSprite.bind(true))
+	signalBus.popupsClosed.connect(setCursorSprite.bind(false))
+
+func setCursorSprite(popupOpened=false):
+	if popupOpened:
+		cursorSprite.animation = "cursor"
+		#cursorSprite.scale = Vector2(0.5,0.5)
+	else:
+		setCursorToolSprite(globalEditor.currentTool)
+func setCursorToolSprite(tool):
+	if tool == globalEditor.Tools.place: 
+		cursorSprite.animation = "brush"
+		#cursorSprite.scale = Vector2.ONE
+	if tool == globalEditor.Tools.erase: 
+		cursorSprite.animation = "eraser"
+		#cursorSprite.scale = Vector2.ONE
+
 func updateCursorPosition(delta):
 	camPosition = Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2
 	if get_viewport().get_camera_2d(): camPosition = get_viewport().get_camera_2d().position 
@@ -64,9 +81,9 @@ func _process(_delta: float) -> void:
 	prioritizeController = system.isUsingController
 	updateCursorPosition(_delta)
 	#cursorSprite.position = get_local_mouse_position() + Vector2(4,8)
-	cursorSprite.position = position-camPosition+Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2 + Vector2(4,8)
+	cursorSprite.position = position-camPosition+Vector2(get_viewport().get_visible_rect().size.x,get_viewport().get_visible_rect().size.y)/2 #+ Vector2(4,8) #idk what this offset was about
 	visible = cursorOnScreen and (globalEditor.isEditing or globalEditor.isObjectBeingEdited or globalEditor.popupIsOpen) and !isSpinBoxing
-	cursorSprite.visible = visible	
+	cursorSprite.visible = visible
 
 func _notification(event):
 	#mouse enters the window
@@ -127,8 +144,11 @@ func getClickPosition():
 func spinBoxing():
 	if Input.is_action_pressed("mouseClickLeft"):
 		isSpinBoxing = true
+
 	
 func _input(event: InputEvent) -> void:
 	if event.is_action_released("mouseClickLeft"):
 		if isSpinBoxing:
 			isSpinBoxing = false
+			#The engine usually makes the mouse visible after spinning a spinbox, so we need to manually hide it immediately as it does that
+			Input.set_mouse_mode.call_deferred(Input.MOUSE_MODE_HIDDEN)

@@ -3,40 +3,106 @@
 [ext_resource type="Script" uid="uid://cvpvq8piasl6l" path="res://Cursor/cursorCanvas.gd" id="1_8eho3"]
 [ext_resource type="Script" uid="uid://nex04i5f5a5f" path="res://Cursor/cursor.gd" id="1_nehsy"]
 [ext_resource type="Script" uid="uid://dwuucav4qid1a" path="res://Cursor/cursorHint.gd" id="3_8eho3"]
+[ext_resource type="Texture2D" uid="uid://dnifqjmmhe2cr" path="res://Cursor/Brush.png" id="3_cw3q1"]
 [ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="3_h5f4s"]
+[ext_resource type="Texture2D" uid="uid://qljadmb2jpv" path="res://Cursor/cursor.png" id="4_iv4uq"]
+[ext_resource type="Texture2D" uid="uid://c1u47d22xaigx" path="res://Cursor/Eraser.png" id="4_ufrvx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_yrxwg"]
 radius = 0.0
 
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_yrxwg"]
-load_path = "res://.godot/imported/cursor.png-81b85aec819db670ac0e28f271710396.ctex"
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1k58v"]
-atlas = SubResource("CompressedTexture2D_yrxwg")
+[sub_resource type="AtlasTexture" id="AtlasTexture_iv4uq"]
+atlas = ExtResource("3_cw3q1")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_l4kvy"]
-atlas = SubResource("CompressedTexture2D_yrxwg")
+[sub_resource type="AtlasTexture" id="AtlasTexture_8pgjs"]
+atlas = ExtResource("3_cw3q1")
 region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_exjlx"]
-atlas = SubResource("CompressedTexture2D_yrxwg")
+[sub_resource type="AtlasTexture" id="AtlasTexture_ib40l"]
+atlas = ExtResource("3_cw3q1")
 region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_64cs3"]
+atlas = ExtResource("3_cw3q1")
+region = Rect2(64, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ufrvx"]
+atlas = ExtResource("4_iv4uq")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dmoy2"]
+atlas = ExtResource("4_iv4uq")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cwmc7"]
+atlas = ExtResource("4_iv4uq")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bsjjw"]
+atlas = ExtResource("4_ufrvx")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sp2d1"]
+atlas = ExtResource("4_ufrvx")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wxop3"]
+atlas = ExtResource("4_ufrvx")
+region = Rect2(0, 64, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jhddf"]
+atlas = ExtResource("4_ufrvx")
+region = Rect2(64, 64, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nfgmo"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_1k58v")
+"texture": SubResource("AtlasTexture_iv4uq")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_l4kvy")
+"texture": SubResource("AtlasTexture_8pgjs")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_exjlx")
+"texture": SubResource("AtlasTexture_ib40l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_64cs3")
 }],
 "loop": 1,
-"name": &"default",
+"name": &"brush",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ufrvx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dmoy2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cwmc7")
+}],
+"loop": 1,
+"name": &"cursor",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bsjjw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sp2d1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wxop3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jhddf")
+}],
+"loop": 1,
+"name": &"eraser",
 "speed": 5.0
 }]
 
@@ -63,14 +129,12 @@ shape = SubResource("CircleShape2D_yrxwg")
 process_mode = 3
 z_index = 215
 z_as_relative = false
-position = Vector2(6, 12)
-scale = Vector2(0.5, 0.5)
 sprite_frames = SubResource("SpriteFrames_nfgmo")
-autoplay = "default"
-frame_progress = 0.9529415
+animation = &"cursor"
+autoplay = "brush"
+offset = Vector2(12, 24)
 
 [node name="canvasSpaceArea" type="Area2D" parent="AnimatedSprite2D" unique_id=843229012 groups=["canvasCursor"]]
-position = Vector2(-12, -24)
 scale = Vector2(2, 2)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D/canvasSpaceArea" unique_id=1194424530]
@@ -86,13 +150,12 @@ anchor_right = 0.312
 anchor_bottom = 0.125
 offset_left = -35.968002
 offset_top = -34.0
-offset_right = 4.0319996
+offset_right = 4.0319977
 offset_bottom = 6.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(20, 20)
 offset_transform_enabled = true
-offset_transform_scale = Vector2(2, 2)
 offset_transform_visual_only = false
 mouse_filter = 2
 mouse_behavior_recursive = 2

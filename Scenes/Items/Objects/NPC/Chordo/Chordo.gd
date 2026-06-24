@@ -29,17 +29,18 @@ func reset():
 	super()
 
 func _physics_process(_delta: float) -> void:
-	velocity.y += gravity if velocity.y<terminalVelocity else 0.0
-	stateTimer -= _delta
-	if stateTimer < 0:
-		if chordoState == chordoStates.IDLE:
-			animationPlayer.play("folding")
-			chordoState = chordoStates.FOLDING
-		if chordoState == chordoStates.FOLDED:
-			animationPlayer.play("unfolding")
-			chordoState = chordoStates.UNFOLDING
-	move_and_slide()
-	pass
+	if state != states.DYING:
+		velocity.y += gravity if velocity.y<terminalVelocity else 0.0
+		stateTimer -= _delta
+		if stateTimer < 0:
+			if chordoState == chordoStates.IDLE:
+				animationPlayer.play("folding")
+				chordoState = chordoStates.FOLDING
+			if chordoState == chordoStates.FOLDED:
+				animationPlayer.play("unfolding")
+				chordoState = chordoStates.UNFOLDING
+		move_and_slide()
+		pass
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	super(anim_name)

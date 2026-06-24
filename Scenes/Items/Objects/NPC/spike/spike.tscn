@@ -74,6 +74,7 @@ canChase = false
 canDie = false
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1106682625]
+use_parent_material = true
 texture = ExtResource("2_d56nv")
 hframes = 2
 vframes = 2

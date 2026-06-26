@@ -340,7 +340,7 @@ script/source = "extends Button
 func _ready() -> void:
 	pressed.connect(signalBus.startTextPopup.emit.bind(\"\"\"
 	A game by Nayer Elbaiady
-	All art, animation, and code was made by human hands
+	All art, animation, and code was made with love by me.
 	
 	Tools used
 	Godot [Game Engine]

@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bbdxc5s178rie" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/arrowLeft.png" id="2_w56ke"]
 [ext_resource type="PackedScene" uid="uid://bqsbb6alvs745" path="res://Scenes/UI/starBar.tscn" id="5_41br5"]
 [ext_resource type="PackedScene" uid="uid://cc0g5proch5e2" path="res://Scenes/UI/misc UI scenes/reviewPanel.tscn" id="6_8a432"]
+[ext_resource type="PackedScene" uid="uid://bdjv0hwp335af" path="res://Scenes/UI/misc UI scenes/hoverHint.tscn" id="6_ukjic"]
 
 [node name="levelDetailsPopup" type="Panel" unique_id=103981226 node_paths=PackedStringArray("closeButton")]
 custom_minimum_size = Vector2(0, 192)
@@ -162,6 +163,7 @@ theme_override_font_sizes/font_size = 40
 text = "Open Level"
 
 [node name="FoldableContainer2" type="FoldableContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer" unique_id=123803705]
+visible = false
 layout_mode = 2
 title = "Level Ratings"
 
@@ -268,6 +270,54 @@ layout_mode = 2
 
 [node name="starBars" type="HBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer" unique_id=771901933]
 layout_mode = 2
+
+[node name="hints" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars" unique_id=1681442468]
+layout_mode = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, -11)
+offset_transform_visual_only = false
+theme_override_constants/separation = 37
+
+[node name="hoverHint" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/hints" unique_id=1987072665 instance=ExtResource("6_ukjic")]
+z_index = 4096
+layout_mode = 2
+isInPopup = true
+direction = 2
+hintText = "How well the character controls. 
+The player's movement parameters should fit the level well and feel good to control."
+
+[node name="hoverHint2" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/hints" unique_id=118201547 instance=ExtResource("6_ukjic")]
+z_index = 4096
+layout_mode = 2
+isInPopup = true
+direction = 2
+hintText = "How good the level looks.
+A level should be decorated well and use appealing or appropriate colors."
+
+[node name="hoverHint3" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/hints" unique_id=1070813513 instance=ExtResource("6_ukjic")]
+z_index = 4096
+layout_mode = 2
+isInPopup = true
+direction = 2
+hintText = "How well the level gradually scales its difficulty.
+A level should generally have a fair difficulty and should not avoid sudden harsh rises or drops in difficulty"
+
+[node name="hoverHint4" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/hints" unique_id=866706533 instance=ExtResource("6_ukjic")]
+z_index = 4096
+layout_mode = 2
+isInPopup = true
+direction = 2
+hintText = "How well a level communicates and telegraphs its mechanics to players.
+A level should gradually introduce ideas like enemies in fair environments 
+and not assume that the player already knows the controls and behavior of certain items."
+
+[node name="hoverHint5" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars/hints" unique_id=1546056861 instance=ExtResource("6_ukjic")]
+z_index = 4096
+layout_mode = 2
+isInPopup = true
+direction = 2
+hintText = "How unique and novel a level is.
+A level should have a unique concept, theme, layout, and feel."
 
 [node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/PanelContainer/ScrollContainer/MarginContainer/VBoxContainer/FoldableContainer/MarginContainer/VBoxContainer/starBars" unique_id=751270038]
 layout_mode = 2

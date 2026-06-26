@@ -31,6 +31,8 @@ func setCursorToolSprite(tool):
 		#cursorSprite.scale = Vector2.ONE
 	if tool == globalEditor.Tools.erase: 
 		cursorSprite.animation = "eraser"
+	if tool == globalEditor.Tools.edit: 
+		cursorSprite.animation = "editTool"
 		#cursorSprite.scale = Vector2.ONE
 
 func updateCursorPosition(delta):

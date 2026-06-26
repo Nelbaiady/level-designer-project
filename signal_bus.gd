@@ -98,7 +98,10 @@ signal genericPopupOpened()##tells the game that a popup has opened, which incre
 @warning_ignore("unused_signal")
 signal genericPopupClosed()##tells the game that a popup has closed, which decrements the popup stack
 
-
+@warning_ignore("unused_signal")
+signal touchStickPressed()
+@warning_ignore("unused_signal")
+signal touchStickReleased()
 
 @warning_ignore("unused_signal")
 signal popupsOpened()##When there was no popup before and a new popup just opened

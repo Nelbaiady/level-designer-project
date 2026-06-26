@@ -117,7 +117,8 @@ func setProperty(property:String, value, tween = false):
 		rootNode.set(property, value )
 
 func clickedOn(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
-	if event is InputEventMouseButton and event.is_action_pressed("mouseClickRight"):
+	##if it was a right click or a left click with the edit tool selected
+	if event is InputEventMouseButton and (event.is_action_pressed("mouseClickRight") or (event.is_action_pressed("mouseClickLeft") and globalEditor.currentTool==globalEditor.Tools.edit)):
 		if globalEditor.isEditing or globalEditor.isObjectBeingEdited:
 			#signalBus.populatePropertiesUI.emit(self)
 			#signalBus.editingObject.emit(globalEditor.itemRoster[rosterID].name,instanceID)

@@ -41,7 +41,7 @@ var isObjectBeingEdited = false
 const PLAYER = preload("uid://ce1i72nmpos1n")
 
 
-enum Tools {place, erase}#, move}
+enum Tools {place, erase, edit}#, move}
 @export var currentTool: Tools
 
 
@@ -149,6 +149,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				signalBus.setCurrentTool.emit(Tools.erase)
 			if event.is_action_pressed("placeTool"):
 				signalBus.setCurrentTool.emit(Tools.place)
+			if event.is_action_pressed("editTool"):
+				signalBus.setCurrentTool.emit(Tools.edit)
 			if event.is_action_pressed("nextTool"):
 				signalBus.setCurrentTool.emit(posmod((currentTool+1),len(Tools)))
 			if event.is_action_pressed("previousTool"):

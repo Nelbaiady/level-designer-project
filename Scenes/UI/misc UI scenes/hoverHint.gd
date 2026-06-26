@@ -3,6 +3,7 @@ class_name HoverHint extends Control
 @export var hintContainer: PanelContainer
 @export var hintTexture: TextureRect
 @export var hint_area_2d: Area2D
+@export var isInPopup: bool = false
 @export var isTitle: bool = false
 
 #enum Directions {TL, T, TR, L, M, R, BL, B, BR}
@@ -36,13 +37,14 @@ func setHintText(newHintText=""):
 
 ##Update the hint label tied to the cursor
 func updateText(newText=""):
+	cursorCanvas.hintContainer.label.text = hintText
 	if newText: #if new text is given
 		cursorCanvas.hintContainer.label.show()
-		cursorCanvas.hintContainer.label.text = hintText
+		#cursorCanvas.hintContainer.label.text = hintText
 		#cursorCanvas.hintContainer.label.text = newText
 	elif hintText: #if new text is not given but there already is a text value
 		cursorCanvas.hintContainer.label.show()
-		cursorCanvas.hintContainer.label.text = hintText
+		#cursorCanvas.hintContainer.label.text = hintText
 	##the next 2 conditions are commented out. they need a rework.
 	#elif hintNode: #if new text is not given but a hint node is given
 		#cursorCanvas.hintContainer.label.hide()
@@ -58,7 +60,7 @@ func checkHover(area:Area2D, entered:=true):
 		if entered: 
 			updateText(hintText)
 			cursorCanvas.hintContainer.setDirection(direction)
-			cursorCanvas.hintContainer.showHint()
+			cursorCanvas.hintContainer.showHint(isInPopup)
 		else: 
 			cursorCanvas.hintContainer.hideHint()
 

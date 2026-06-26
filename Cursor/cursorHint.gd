@@ -15,8 +15,8 @@ func _ready():
 
 var sizeTween:Tween
 
-func showHint():
-	if !system.popupIsOpen:
+func showHint(inPopup:=false):
+	if !system.popupIsOpen or inPopup:
 		hintContainer.scale = Vector2.ZERO
 		hintContainer.show()
 		sizeTween = create_tween()

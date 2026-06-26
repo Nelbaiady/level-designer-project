@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://copjphoootouu" path="res://Scenes/Items/Objects/NPC/Chordo/Chordo.png" id="2_yjys5"]
 [ext_resource type="AudioStream" uid="uid://cnlgq5qtyhoss" path="res://Scenes/Items/Objects/NPC/Chordo/accordion low.wav" id="3_ry1ti"]
 [ext_resource type="AudioStream" uid="uid://bcp8ofevb7grh" path="res://Scenes/Items/Objects/NPC/Chordo/accordion high.wav" id="4_bc6lp"]
+[ext_resource type="Script" uid="uid://bqq2jj1jjla5l" path="res://generic modular scripts/animationPauser.gd" id="5_bc6lp"]
 [ext_resource type="PackedScene" uid="uid://c4aci6f2wscx5" path="res://Scenes/Items/Objects/objectMod.tscn" id="6_7722o"]
 [ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="7_yugh8"]
 [ext_resource type="Resource" uid="uid://bh2hcytk84e13" path="res://Scenes/UI/ObjectProperties/properties/positionProperty.tres" id="8_2ad8w"]
@@ -1574,9 +1575,12 @@ vframes = 6
 frame = 22
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2114326542]
-process_mode = 3
+process_mode = 1
 libraries/ = SubResource("AnimationLibrary_2ppoo")
 autoplay = &"idle"
+
+[node name="Node" type="Node" parent="AnimationPlayer" unique_id=1113302925]
+script = ExtResource("5_bc6lp")
 
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("6_7722o")]
 position = Vector2(0, -8)

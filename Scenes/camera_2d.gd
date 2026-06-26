@@ -29,6 +29,9 @@ func _ready() -> void:
 	signalBus.loadedLevel.connect(refindPlayer)
 	signalBus.shimmyCamera.connect(shimmyOver)
 	signalBus.updateProperty.connect(updateLimit)
+	
+	signalBus.touchStickPressed.connect(touchStickPressed)
+	signalBus.touchStickReleased.connect(touchStickReleased)
 
 ##takes a setProperty signal and updates the bottom limit if the property is 
 func updateLimit(propName, value):
@@ -69,6 +72,10 @@ var inputNegX = 0
 var inputPosY = 0
 var inputNegY = 0
 func _unhandled_input(event: InputEvent) -> void:
+	computeInputVector(event)
+
+##calculate the input vector
+func computeInputVector(event):
 	if !globalEditor.popupIsOpen and globalEditor.isEditing:
 		if event.is_action_pressed("LstickR"):
 			inputPosX = Input.get_action_strength("LstickR")
@@ -90,6 +97,20 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.is_action_released("LstickD"):
 			inputNegY = 0
 		inputVector = Vector2(inputPosX-inputNegX,inputNegY-inputPosY)
+
+##touch screen control
+var touchStickIsPressed := false
+func _process(_delta: float) -> void:
+	if touchStickIsPressed:
+		touchInputVector()
+##moves the camera based on touch input
+func touchInputVector():
+	inputVector = Input.get_vector("LstickL","LstickR","LstickU","LstickD")
+func touchStickPressed():
+	touchStickIsPressed = true
+func touchStickReleased():
+	touchStickIsPressed = false
+	inputVector = Vector2.ZERO
 
 ##for movement in edit mode
 func transLateCamera(direction: Vector2):

@@ -13,6 +13,7 @@ var isUsingController := false
 
 var isWebVersion := OS.has_feature("web")
 var isDesktopVersion := OS.has_feature("windows") or OS.has_feature("macos") or OS.has_feature("linuxbsd")
+var isUsingTouchControls := DisplayServer.is_touchscreen_available()
 
 var popupStack:int = 0
 

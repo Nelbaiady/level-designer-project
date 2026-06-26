@@ -56,7 +56,7 @@ func updateText(newText=""):
 
 ##checks that the thing that just hovered over is the cursor
 func checkHover(area:Area2D, entered:=true):
-	if area.is_in_group("canvasCursor"):
+	if area.is_in_group("canvasCursor") and hint_area_2d.is_visible_in_tree():
 		if entered: 
 			updateText(hintText)
 			cursorCanvas.hintContainer.setDirection(direction)

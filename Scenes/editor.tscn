@@ -115,6 +115,50 @@ func unjump():
 		Input.action_release(\"jump\")
 "
 
+[sub_resource type="GDScript" id="GDScript_fl1sp"]
+resource_name = "undoButton"
+script/source = "extends Button
+
+func _ready() -> void:
+	pressed.connect(system.undoRedo.undo)
+"
+
+[sub_resource type="GDScript" id="GDScript_xpqf3"]
+resource_name = "redoButton"
+script/source = "extends Button
+
+func _ready() -> void:
+	pressed.connect(system.undoRedo.redo)
+"
+
+[sub_resource type="GDScript" id="GDScript_efg2m"]
+resource_name = "playButtonInputPrompt"
+script/source = "extends RichTextLabel
+
+func _ready() -> void:
+	signalBus.controlIconsUpdated.connect(setText)
+	
+func setText():
+	add_theme_font_override(\"normal_font\",controlMapping.currentFont)
+	text = str(
+	\"[font_size=64][char=\",controlMapping.toggleGameModeIcon,\"][/font_size]\\n\"
+	)
+"
+
+[sub_resource type="GDScript" id="GDScript_iis80"]
+resource_name = "pauseButtonInputPrompt"
+script/source = "extends RichTextLabel
+
+func _ready() -> void:
+	signalBus.controlIconsUpdated.connect(setText)
+	
+func setText():
+	add_theme_font_override(\"normal_font\",controlMapping.currentFont)
+	text = str(
+	\"[font_size=64][char=\",controlMapping.pauseIcon,\"][/font_size]\\n\"
+	)
+"
+
 [sub_resource type="GDScript" id="GDScript_1pi8w"]
 resource_name = "brush_prompt"
 script/source = "extends RichTextLabel
@@ -201,56 +245,13 @@ func setText():
 	) if system.isUsingController else \"\"
 "
 
-[sub_resource type="GDScript" id="GDScript_fl1sp"]
-resource_name = "undoButton"
-script/source = "extends Button
-
-func _ready() -> void:
-	pressed.connect(system.undoRedo.undo)
-"
-
-[sub_resource type="GDScript" id="GDScript_xpqf3"]
-resource_name = "redoButton"
-script/source = "extends Button
-
-func _ready() -> void:
-	pressed.connect(system.undoRedo.redo)
-"
-
-[sub_resource type="GDScript" id="GDScript_efg2m"]
-resource_name = "playButtonInputPrompt"
-script/source = "extends RichTextLabel
-
-func _ready() -> void:
-	signalBus.controlIconsUpdated.connect(setText)
-	
-func setText():
-	add_theme_font_override(\"normal_font\",controlMapping.currentFont)
-	text = str(
-	\"[font_size=64][char=\",controlMapping.toggleGameModeIcon,\"][/font_size]\\n\"
-	)
-"
-
-[sub_resource type="GDScript" id="GDScript_iis80"]
-resource_name = "pauseButtonInputPrompt"
-script/source = "extends RichTextLabel
-
-func _ready() -> void:
-	signalBus.controlIconsUpdated.connect(setText)
-	
-func setText():
-	add_theme_font_override(\"normal_font\",controlMapping.currentFont)
-	text = str(
-	\"[font_size=64][char=\",controlMapping.pauseIcon,\"][/font_size]\\n\"
-	)
-"
-
 [sub_resource type="GDScript" id="GDScript_u6te5"]
 resource_name = "mainControlsLabel"
 script/source = "extends RichTextLabel
+@export var margin_container: MarginContainer
 
 func _ready() -> void:
-	visible = !system.isUsingTouchControls
+	margin_container.visible = !system.isUsingTouchControls
 	signalBus.controlIconsUpdated.connect(setText)
 	
 	
@@ -591,199 +592,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Tool Display" type="Control" parent="HUD/Top Area UI/HBoxContainer" unique_id=1510456922]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Top Area UI/HBoxContainer" unique_id=548508693]
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 2
-theme = ExtResource("3_cnbw5")
-
-[node name="Tool Display Margin" type="MarginContainer" parent="HUD/Top Area UI/HBoxContainer/Tool Display" unique_id=2093279320]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.49800003
-anchor_bottom = 0.90000004
-offset_right = 0.09399414
-offset_bottom = -0.1000061
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-metadata/_edit_use_anchors_ = true
-
-[node name="toolsHBoxContainer" type="HBoxContainer" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin" unique_id=2043614111]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-theme_override_constants/separation = 8
-
-[node name="toolsVBoxContainer" type="VBoxContainer" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer" unique_id=503703256]
-layout_mode = 2
-size_flags_horizontal = 0
-
-[node name="brushToolButton" type="Button" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer" unique_id=697370473 node_paths=PackedStringArray("selector")]
-custom_minimum_size = Vector2(64, 64)
-custom_maximum_size = Vector2(64, 64)
-layout_mode = 2
-icon = ExtResource("15_dmbb2")
-icon_alignment = 1
-script = ExtResource("15_1pi8w")
-selector = NodePath("../../../../Toolbar Selector")
-
-[node name="old label (to be removed)" type="Label" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/brushToolButton" unique_id=246481595]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -17.0
-offset_right = 20.0
-offset_bottom = 17.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("4_1k58v")
-
-[node name="brush prompt" type="RichTextLabel" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/brushToolButton" unique_id=798635891]
-custom_minimum_size = Vector2(64, 0)
-clip_contents = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.109
-anchor_top = 0.0625
-anchor_right = 3.125
-anchor_bottom = 1.0625
-offset_left = 1.0240021
-offset_right = -64.0
-offset_bottom = -32.0
-pivot_offset = Vector2(0, 15)
-size_flags_horizontal = 2
-offset_transform_enabled = true
-offset_transform_position_ratio = Vector2(0.1, -0.05)
-mouse_behavior_recursive = 1
-theme = ExtResource("3_cnbw5")
-theme_type_variation = &"inGameLabel"
-theme_override_fonts/normal_font = ExtResource("15_5yagh")
-bbcode_enabled = true
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-vertical_alignment = 1
-script = SubResource("GDScript_1pi8w")
-metadata/_edit_use_anchors_ = true
-
-[node name="eraseToolButton" type="Button" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer" unique_id=148248729 node_paths=PackedStringArray("selector")]
-custom_minimum_size = Vector2(64, 64)
-custom_maximum_size = Vector2(64, 64)
-layout_mode = 2
-icon = ExtResource("18_1l34x")
-icon_alignment = 1
-script = ExtResource("15_1pi8w")
-tool = 1
-selector = NodePath("../../../../Toolbar Selector")
-
-[node name="eraser prompt" type="RichTextLabel" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/eraseToolButton" unique_id=1434956775]
-custom_minimum_size = Vector2(64, 0)
-clip_contents = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.109
-anchor_top = 0.0625
-anchor_right = 3.125
-anchor_bottom = 1.0625
-offset_left = 1.0240021
-offset_right = -64.0
-offset_bottom = -32.0
-pivot_offset = Vector2(0, 15)
-size_flags_horizontal = 2
-offset_transform_enabled = true
-offset_transform_position_ratio = Vector2(0.1, -0.05)
-mouse_behavior_recursive = 1
-theme = ExtResource("3_cnbw5")
-theme_type_variation = &"inGameLabel"
-theme_override_fonts/normal_font = ExtResource("15_5yagh")
-bbcode_enabled = true
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-vertical_alignment = 1
-script = SubResource("GDScript_dmbb2")
-metadata/_edit_use_anchors_ = true
-
-[node name="editToolButton" type="Button" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer" unique_id=348267929 node_paths=PackedStringArray("selector")]
-custom_minimum_size = Vector2(64, 64)
-custom_maximum_size = Vector2(64, 64)
-layout_mode = 2
-icon = ExtResource("24_6rfi4")
-icon_alignment = 1
-script = SubResource("GDScript_u1k11")
-tool = 2
-selector = NodePath("../../../../Toolbar Selector")
-
-[node name="edit tool prompt" type="RichTextLabel" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/editToolButton" unique_id=450435741]
-custom_minimum_size = Vector2(64, 0)
-clip_contents = false
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.109
-anchor_top = 0.0625
-anchor_right = 3.125
-anchor_bottom = 1.0625
-offset_left = 1.0240021
-offset_right = -64.0
-offset_bottom = -32.0
-pivot_offset = Vector2(0, 15)
-size_flags_horizontal = 2
-offset_transform_enabled = true
-offset_transform_position_ratio = Vector2(0.1, -0.05)
-mouse_behavior_recursive = 1
-theme = ExtResource("3_cnbw5")
-theme_type_variation = &"inGameLabel"
-theme_override_fonts/normal_font = ExtResource("15_5yagh")
-bbcode_enabled = true
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-vertical_alignment = 1
-script = SubResource("GDScript_asgqx")
-metadata/_edit_use_anchors_ = true
-
-[node name="tool switch prompt" type="RichTextLabel" parent="HUD/Top Area UI/HBoxContainer/Tool Display/Tool Display Margin/toolsHBoxContainer" unique_id=192189350]
-custom_minimum_size = Vector2(64, 0)
-clip_contents = false
-layout_mode = 2
-size_flags_horizontal = 2
-size_flags_vertical = 4
-offset_transform_enabled = true
-offset_transform_position = Vector2(0, 8)
-offset_transform_position_ratio = Vector2(0.2, 0)
-mouse_behavior_recursive = 1
-theme = ExtResource("3_cnbw5")
-theme_type_variation = &"inGameLabel"
-theme_override_fonts/normal_font = ExtResource("15_5yagh")
-bbcode_enabled = true
-fit_content = true
-scroll_active = false
-autowrap_mode = 0
-vertical_alignment = 1
-script = SubResource("GDScript_hhub4")
-metadata/_edit_use_anchors_ = true
-
-[node name="Toolbar Selector" parent="HUD/Top Area UI/HBoxContainer/Tool Display" unique_id=64663865 instance=ExtResource("18_r6kqb")]
-layout_mode = 1
-anchors_preset = 0
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 72.0
-offset_bottom = 72.0
-grow_horizontal = 1
-grow_vertical = 1
-offset = Vector2(12, 12)
 
 [node name="layersButtonControl" type="Control" parent="HUD/Top Area UI/HBoxContainer" unique_id=958778049]
 layout_mode = 2
@@ -803,7 +614,7 @@ offset_bottom = 72.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 0
-focus_mode = 0
+focus_mode = 3
 theme = ExtResource("3_cnbw5")
 icon = ExtResource("4_i5vsu")
 icon_alignment = 1
@@ -821,7 +632,7 @@ offset_bottom = 72.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 0
-focus_mode = 0
+focus_mode = 3
 theme = ExtResource("3_cnbw5")
 icon = ExtResource("5_efg2m")
 icon_alignment = 1
@@ -849,6 +660,7 @@ theme_override_constants/separation = 16
 
 [node name="undoButton" type="Button" parent="HUD/Top Area UI/menuButtons/MarginContainer/HBoxContainer" unique_id=489689205]
 layout_mode = 2
+focus_mode = 3
 icon = ExtResource("26_u1k11")
 script = SubResource("GDScript_fl1sp")
 
@@ -857,6 +669,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 offset_transform_enabled = true
 offset_transform_scale = Vector2(-1, 1)
+focus_mode = 3
 icon = ExtResource("26_u1k11")
 script = SubResource("GDScript_xpqf3")
 
@@ -957,18 +770,217 @@ offset_right = 8.0
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 2
-mouse_filter = 2
-mouse_behavior_recursive = 1
 script = ExtResource("22_1giqv")
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD/Left Area UI" unique_id=1798674435]
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Left Area UI" unique_id=1352865813]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.1
+
+[node name="Tool Display" type="Control" parent="HUD/Left Area UI" unique_id=1510456922]
+custom_minimum_size = Vector2(0, 256)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+offset_transform_enabled = true
+offset_transform_visual_only = false
+theme = ExtResource("3_cnbw5")
+
+[node name="Tool Display Margin" type="MarginContainer" parent="HUD/Left Area UI/Tool Display" unique_id=2093279320]
+layout_mode = 1
+offset_right = 168.0
+offset_bottom = 232.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="toolsHBoxContainer" type="HBoxContainer" parent="HUD/Left Area UI/Tool Display/Tool Display Margin" unique_id=2043614111]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/separation = 8
+
+[node name="toolsVBoxContainer" type="VBoxContainer" parent="HUD/Left Area UI/Tool Display/Tool Display Margin/toolsHBoxContainer" unique_id=503703256]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="brushToolButton" type="Button" parent="HUD/Left Area UI/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer" unique_id=697370473 node_paths=PackedStringArray("selector")]
+custom_minimum_size = Vector2(64, 64)
+custom_maximum_size = Vector2(64, 64)
+layout_mode = 2
+focus_mode = 3
+icon = ExtResource("15_dmbb2")
+icon_alignment = 1
+script = ExtResource("15_1pi8w")
+selector = NodePath("../../../../Toolbar Selector")
+
+[node name="old label (to be removed)" type="Label" parent="HUD/Left Area UI/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/brushToolButton" unique_id=246481595]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -17.0
+offset_right = 20.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_1k58v")
+
+[node name="brush prompt" type="RichTextLabel" parent="HUD/Left Area UI/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/brushToolButton" unique_id=798635891]
+custom_minimum_size = Vector2(64, 0)
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.109
+anchor_top = 0.0625
+anchor_right = 3.125
+anchor_bottom = 1.0625
+offset_left = 1.0240021
+offset_right = -64.0
+offset_bottom = -32.0
+pivot_offset = Vector2(0, 15)
+size_flags_horizontal = 2
+offset_transform_enabled = true
+offset_transform_position_ratio = Vector2(0.1, -0.05)
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("15_5yagh")
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+script = SubResource("GDScript_1pi8w")
+metadata/_edit_use_anchors_ = true
+
+[node name="eraseToolButton" type="Button" parent="HUD/Left Area UI/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer" unique_id=148248729 node_paths=PackedStringArray("selector")]
+custom_minimum_size = Vector2(64, 64)
+custom_maximum_size = Vector2(64, 64)
+layout_mode = 2
+focus_mode = 3
+icon = ExtResource("18_1l34x")
+icon_alignment = 1
+script = ExtResource("15_1pi8w")
+tool = 1
+selector = NodePath("../../../../Toolbar Selector")
+
+[node name="eraser prompt" type="RichTextLabel" parent="HUD/Left Area UI/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/eraseToolButton" unique_id=1434956775]
+custom_minimum_size = Vector2(64, 0)
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.109
+anchor_top = 0.0625
+anchor_right = 3.125
+anchor_bottom = 1.0625
+offset_left = 1.0240021
+offset_right = -64.0
+offset_bottom = -32.0
+pivot_offset = Vector2(0, 15)
+size_flags_horizontal = 2
+offset_transform_enabled = true
+offset_transform_position_ratio = Vector2(0.1, -0.05)
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("15_5yagh")
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+script = SubResource("GDScript_dmbb2")
+metadata/_edit_use_anchors_ = true
+
+[node name="editToolButton" type="Button" parent="HUD/Left Area UI/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer" unique_id=348267929 node_paths=PackedStringArray("selector")]
+custom_minimum_size = Vector2(64, 64)
+custom_maximum_size = Vector2(64, 64)
+layout_mode = 2
+focus_mode = 3
+icon = ExtResource("24_6rfi4")
+icon_alignment = 1
+script = SubResource("GDScript_u1k11")
+tool = 2
+selector = NodePath("../../../../Toolbar Selector")
+
+[node name="edit tool prompt" type="RichTextLabel" parent="HUD/Left Area UI/Tool Display/Tool Display Margin/toolsHBoxContainer/toolsVBoxContainer/editToolButton" unique_id=450435741]
+custom_minimum_size = Vector2(64, 0)
+clip_contents = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.109
+anchor_top = 0.0625
+anchor_right = 3.125
+anchor_bottom = 1.0625
+offset_left = 1.0240021
+offset_right = -64.0
+offset_bottom = -32.0
+pivot_offset = Vector2(0, 15)
+size_flags_horizontal = 2
+offset_transform_enabled = true
+offset_transform_position_ratio = Vector2(0.1, -0.05)
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("15_5yagh")
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+script = SubResource("GDScript_asgqx")
+metadata/_edit_use_anchors_ = true
+
+[node name="tool switch prompt" type="RichTextLabel" parent="HUD/Left Area UI/Tool Display/Tool Display Margin/toolsHBoxContainer" unique_id=192189350]
+custom_minimum_size = Vector2(64, 0)
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, 8)
+offset_transform_position_ratio = Vector2(0.2, 0)
+mouse_behavior_recursive = 1
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_fonts/normal_font = ExtResource("15_5yagh")
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+script = SubResource("GDScript_hhub4")
+metadata/_edit_use_anchors_ = true
+
+[node name="Toolbar Selector" parent="HUD/Left Area UI/Tool Display" unique_id=64663865 instance=ExtResource("18_r6kqb")]
+layout_mode = 1
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 72.0
+offset_bottom = 72.0
+grow_horizontal = 1
+grow_vertical = 1
+offset = Vector2(12, 12)
+
+[node name="editModeControlsPromptsMarginContainer" type="MarginContainer" parent="HUD/Left Area UI" unique_id=1798674435]
 layout_mode = 2
 size_flags_vertical = 6
 mouse_filter = 2
 mouse_behavior_recursive = 1
 theme_override_constants/margin_left = 8
 
-[node name="editModeControlsPrompt" type="RichTextLabel" parent="HUD/Left Area UI/MarginContainer" unique_id=1133048131]
+[node name="editModeControlsPrompt" type="RichTextLabel" parent="HUD/Left Area UI/editModeControlsPromptsMarginContainer" unique_id=1133048131 node_paths=PackedStringArray("margin_container")]
 clip_contents = false
 layout_mode = 2
 size_flags_horizontal = 3
@@ -978,11 +990,19 @@ mouse_behavior_recursive = 1
 theme = ExtResource("3_cnbw5")
 theme_type_variation = &"inGameLabel"
 bbcode_enabled = true
+text = "
+"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
 script = SubResource("GDScript_u6te5")
+margin_container = NodePath("..")
 metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="HUD/Left Area UI" unique_id=1984443480]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
 
 [node name="PlayModeHud" type="HBoxContainer" parent="HUD" unique_id=653226853]
 clip_contents = true
@@ -1088,7 +1108,6 @@ text = "[font_size=64][char=E0C5][/font_size]"
 scroll_active = false
 horizontal_alignment = 1
 script = SubResource("GDScript_iis80")
-metadata/_edit_use_anchors_ = true
 
 [node name="pauseButton2" type="TouchScreenButton" parent="HUD/PlayModeHud/pauseButtonMarginContainer/pauseButton" unique_id=1190748998]
 position = Vector2(32, 32)
@@ -1287,6 +1306,7 @@ size_flags_vertical = 8
 
 [node name="UnpauseButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Unpause" unique_id=1821917658]
 layout_mode = 2
+focus_mode = 3
 theme_override_font_sizes/font_size = 32
 text = "Unpause"
 
@@ -1301,12 +1321,14 @@ layout_mode = 2
 [node name="SignInButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer" unique_id=1207319776]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 3
 theme_override_font_sizes/font_size = 32
 text = "Sign In"
 
 [node name="SignUpButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/Login/HBoxContainer" unique_id=106990226]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 3
 theme_override_font_sizes/font_size = 32
 text = "Sign Up"
 
@@ -1317,6 +1339,7 @@ size_flags_vertical = 8
 
 [node name="uploadButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/uploadLevel" unique_id=710410053]
 layout_mode = 2
+focus_mode = 3
 theme_override_font_sizes/font_size = 32
 text = "Upload Level"
 
@@ -1327,6 +1350,7 @@ size_flags_vertical = 8
 
 [node name="BrowseLevelsButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/BrowseLevels" unique_id=957855919]
 layout_mode = 2
+focus_mode = 3
 theme_override_font_sizes/font_size = 32
 text = "Browse Levels"
 
@@ -1337,6 +1361,7 @@ size_flags_vertical = 8
 
 [node name="LoadLevelByIDButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevelByID" unique_id=1611144296]
 layout_mode = 2
+focus_mode = 3
 theme_override_font_sizes/font_size = 32
 text = "Find Level by ID"
 
@@ -1347,6 +1372,7 @@ size_flags_vertical = 8
 
 [node name="SaveLevelButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/SaveLevel" unique_id=1316137415]
 layout_mode = 2
+focus_mode = 3
 theme_override_font_sizes/font_size = 32
 text = "Save Level"
 
@@ -1357,6 +1383,7 @@ size_flags_vertical = 8
 
 [node name="LoadLevelButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/LoadLevel" unique_id=1263896398]
 layout_mode = 2
+focus_mode = 3
 theme_override_font_sizes/font_size = 32
 text = "Load Level"
 
@@ -1368,6 +1395,7 @@ size_flags_vertical = 8
 
 [node name="DownloadLevelButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/editModePauseVBoxContainer/DownloadLevel" unique_id=332347246]
 layout_mode = 2
+focus_mode = 3
 theme_override_font_sizes/font_size = 32
 text = "Download Level File"
 
@@ -1386,6 +1414,7 @@ size_flags_vertical = 8
 
 [node name="UnpauseButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer/Unpause" unique_id=612162770]
 layout_mode = 2
+focus_mode = 3
 theme_override_font_sizes/font_size = 32
 text = "Unpause"
 
@@ -1396,15 +1425,16 @@ size_flags_vertical = 8
 
 [node name="ExitPlayModeButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer/playModePauseVBoxContainer/ExitPlayMode" unique_id=129747225]
 layout_mode = 2
+focus_mode = 3
 theme_override_font_sizes/font_size = 32
 text = "Exit Play Mode"
 
-[node name="creditsButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer" unique_id=339155498 node_paths=PackedStringArray("credits")]
+[node name="creditsButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer" unique_id=339155498]
 layout_mode = 2
+focus_mode = 3
 theme_override_font_sizes/font_size = 20
 text = "Credits"
 script = SubResource("GDScript_dvhrk")
-credits = NodePath("")
 
 [node name="LoadingPanel" type="Panel" parent="HUD" unique_id=1046265247 node_paths=PackedStringArray("loadingLabel")]
 visible = false
@@ -1649,6 +1679,7 @@ theme_override_constants/margin_bottom = 24
 [node name="cancelButton" type="Button" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/cancelButtonContainer" unique_id=995163819]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 3
 theme_override_font_sizes/font_size = 24
 text = "Cancel"
 
@@ -1663,6 +1694,7 @@ theme_override_constants/margin_bottom = 24
 [node name="confirmButton" type="Button" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/confirmButtonContainer" unique_id=166694240]
 layout_mode = 2
 size_flags_horizontal = 3
+focus_mode = 3
 theme_override_font_sizes/font_size = 24
 text = "Confirm"
 

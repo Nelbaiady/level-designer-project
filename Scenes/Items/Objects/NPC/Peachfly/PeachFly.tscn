@@ -224,6 +224,7 @@ script = ExtResource("1_ujknv")
 gravity = 0.0
 canRoam = false
 canChase = false
+canMoveAndSlide = false
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1050462499]
 process_mode = 3

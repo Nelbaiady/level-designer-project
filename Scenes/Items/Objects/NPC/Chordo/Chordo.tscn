@@ -1483,7 +1483,7 @@ tracks/21/path = NodePath("jumpPointArea/jumpPointShape4:disabled")
 tracks/21/interp = 1
 tracks/21/loop_wrap = true
 tracks/21/keys = {
-"times": PackedFloat32Array(0, 0.33333334, 0.4166667),
+"times": PackedFloat32Array(0, 0.25, 0.33333334),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
 "values": [true, true, false]
@@ -1597,64 +1597,56 @@ position = Vector2(4, -8)
 polygon = PackedVector2Array(60, 136, 56, -24, 24, -52, -32, -52, -64, -24, -68, 136, -132, 136, -132, -56, -36, -120, 28, -120, 124, -56, 124, 136)
 
 [node name="jumpPointArea" parent="." unique_id=1963504617 instance=ExtResource("12_w2bbf")]
+visible = false
 position = Vector2(0, 8)
 
 [node name="jumpPointShape1" type="CollisionPolygon2D" parent="jumpPointArea" unique_id=259541569]
-visible = false
 polygon = PackedVector2Array(-128, 48, -128, 64, -64, 64, -64, 48)
 disabled = true
 
 [node name="jumpPointShape2" type="CollisionPolygon2D" parent="jumpPointArea" unique_id=2067342590]
-visible = false
-polygon = PackedVector2Array(-32, -144, -32, -128, -128, -64, -128, -84)
+polygon = PackedVector2Array(-32, -144, -32, -128, -28, -72, -72, -44, -72, 56, -120, 56, -112, -64, -128, -64, -128, -84)
 disabled = true
 
 [node name="jumpPointShape3" type="CollisionShape2D" parent="jumpPointArea" unique_id=110112160]
-visible = false
 position = Vector2(0, -136)
 shape = SubResource("RectangleShape2D_wm4yp")
 disabled = true
 
 [node name="jumpPointShape4" type="CollisionPolygon2D" parent="jumpPointArea" unique_id=309445891]
-visible = false
-polygon = PackedVector2Array(32, -144, 128, -84, 128, -64, 32, -128)
+polygon = PackedVector2Array(32, -144, 128, -84, 128, -64, 112, -64, 120, 56, 72, 56, 72, -44, 32, -76, 32, -128)
 disabled = true
 
 [node name="jumpPointShape5" type="CollisionPolygon2D" parent="jumpPointArea" unique_id=1654935149]
-visible = false
 position = Vector2(192, 0)
 polygon = PackedVector2Array(-128, 48, -128, 64, -64, 64, -64, 48)
 disabled = true
 
 [node name="hitBoxArea" type="Area2D" parent="." unique_id=421457549 groups=["hitbox"]]
+visible = false
 position = Vector2(0, 16)
 
 [node name="hitbox1" type="CollisionPolygon2D" parent="hitBoxArea" unique_id=72214966]
-visible = false
 position = Vector2(4, -24)
 polygon = PackedVector2Array(-68, 72, -68, 140, -132, 140, -132, 72)
 disabled = true
 
 [node name="hitbox2" type="CollisionPolygon2D" parent="hitBoxArea" unique_id=1240214789]
-visible = false
 position = Vector2(4, -24)
-polygon = PackedVector2Array(-32, -48, -68, -20, -68, 72, -132, 72, -132, -60, -36, -120)
+polygon = PackedVector2Array(-32, -48, -68, -20, -68, 72, -132, 72, -124, -68, -36, -116)
 disabled = true
 
 [node name="hitbox3" type="CollisionPolygon2D" parent="hitBoxArea" unique_id=2105627786]
-visible = false
 position = Vector2(4, -24)
-polygon = PackedVector2Array(60, -24, 24, -48, -32, -48, -68, -24, -132, -56, -36, -120, 28, -120, 124, -56)
+polygon = PackedVector2Array(60, -24, 24, -48, -32, -48, -68, -24, -124, -68, -36, -116, 28, -116, 116, -68)
 disabled = true
 
 [node name="hitbox4" type="CollisionPolygon2D" parent="hitBoxArea" unique_id=1066529858]
-visible = false
 position = Vector2(4, -24)
-polygon = PackedVector2Array(60, 72, 60, -20, 24, -48, 28, -120, 124, -60, 124, 72)
+polygon = PackedVector2Array(60, 72, 60, -20, 24, -48, 28, -116, 116, -68, 124, 72)
 disabled = true
 
 [node name="hitbox5" type="CollisionPolygon2D" parent="hitBoxArea" unique_id=182595419]
-visible = false
 position = Vector2(4, -24)
 polygon = PackedVector2Array(60, 140, 60, 72, 124, 72, 124, 140)
 disabled = true
@@ -1666,21 +1658,21 @@ disabled = true
 
 [node name="Collision2" type="CollisionPolygon2D" parent="." unique_id=1063568601]
 visible = false
-polygon = PackedVector2Array(-28, -64, -68, -32, -68, 64, -124, 64, -116, -64, -32, -120)
+polygon = PackedVector2Array(-28, -64, -68, -32, -68, 64, -124, 64, -112, -76, -32, -120)
 disabled = true
 
 [node name="Collision3" type="CollisionPolygon2D" parent="." unique_id=68860385]
 visible = false
 rotation = 3.1415927
 scale = Vector2(1, -1)
-polygon = PackedVector2Array(28.000006, -63.999996, -27.999994, -64, -68, -32.000008, -115.99999, -64.00001, -31.999989, -120, 32.00001, -120, 116.00001, -63.99999, 68, -31.999994)
+polygon = PackedVector2Array(28.000006, -63.999996, -27.999994, -64, -68, -32.000008, -111.99999, -76.00001, -31.999989, -120, 32.00001, -120, 112.00001, -75.99999, 68, -31.999994)
 disabled = true
 
 [node name="Collision4" type="CollisionPolygon2D" parent="." unique_id=274048935]
 visible = false
 rotation = -3.1415925
 scale = Vector2(1, -1)
-polygon = PackedVector2Array(-27.99999, -64.00001, -67.99999, -32.00001, -68.00001, 63.99999, -124.00001, 63.99998, -115.99999, -64.000015, -31.999983, -120.00001)
+polygon = PackedVector2Array(-27.99999, -64.00001, -67.99999, -32.00001, -68.00001, 63.99999, -124.00001, 63.99998, -111.999985, -76.000015, -31.999983, -120.00001)
 disabled = true
 
 [node name="Collision5" type="CollisionPolygon2D" parent="." unique_id=2085337652]

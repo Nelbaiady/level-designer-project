@@ -271,7 +271,6 @@ func webRequest(url:String,headers:PackedStringArray,method:HTTPClient.Method,re
 
 
 func uploadLevel(levelName=""):
-	await ensureValidSession()
 	if isSessionValid():
 		if !levelName:
 			signalBus.startTextEditPopup.emit("Enter name for your level")

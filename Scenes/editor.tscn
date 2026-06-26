@@ -43,6 +43,7 @@
 [ext_resource type="Script" uid="uid://4d4lvimt45o2" path="res://Scenes/UI/HUD/playModeTopArea.gd" id="23_6utg8"]
 [ext_resource type="Texture2D" uid="uid://cwyr5ryafwsh5" path="res://Cursor/editToolIcon.png" id="24_6rfi4"]
 [ext_resource type="Script" uid="uid://bn7di1w6byqsp" path="res://Scenes/UI/HUD/healthBar.gd" id="24_yoksu"]
+[ext_resource type="Texture2D" uid="uid://c5um3humeyb0f" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/return.png" id="26_u1k11"]
 [ext_resource type="PackedScene" uid="uid://bdjv0hwp335af" path="res://Scenes/UI/misc UI scenes/hoverHint.tscn" id="28_5yagh"]
 [ext_resource type="Texture2D" uid="uid://6gm883uevw3b" path="res://Scenes/UI/basic Icons/eyecon.png" id="34_aco8m"]
 [ext_resource type="Script" uid="uid://dgatxrxnoehsi" path="res://Scenes/UI/password_line_edit.gd" id="35_lo3ql"]
@@ -200,6 +201,22 @@ func setText():
 	) if system.isUsingController else \"\"
 "
 
+[sub_resource type="GDScript" id="GDScript_fl1sp"]
+resource_name = "undoButton"
+script/source = "extends Button
+
+func _ready() -> void:
+	pressed.connect(system.undoRedo.undo)
+"
+
+[sub_resource type="GDScript" id="GDScript_xpqf3"]
+resource_name = "redoButton"
+script/source = "extends Button
+
+func _ready() -> void:
+	pressed.connect(system.undoRedo.redo)
+"
+
 [sub_resource type="GDScript" id="GDScript_efg2m"]
 resource_name = "playButtonInputPrompt"
 script/source = "extends RichTextLabel
@@ -315,11 +332,38 @@ font_color = Color(1, 0.94914633, 0.8754653, 1)
 outline_size = 22
 outline_color = Color(0.08620561, 0.2337417, 0.4919721, 1)
 
+[sub_resource type="GDScript" id="GDScript_dvhrk"]
+resource_name = "creditsButton"
+script/source = "extends Button
+@export var credits: RichTextLabel
+
+func _ready() -> void:
+	pressed.connect(signalBus.startTextPopup.emit.bind(\"\"\"
+	A game by Nayer Elbaiady
+	All art, animation, and code was made by human hands
+	
+	Tools used
+	Godot [Game Engine]
+	Supabase [Backend]
+	Brevo [SMTP]
+	Krita [Art and Animation]
+	Inkscape [UI Icons]
+	LabChirp [Sound Effects]
+	Cakewalk Sonar [Also Sound Effects]
+	
+	Special Thanks
+	Kenney [Kenney icons]
+	Youssef Elgeresy [Chourc idea]
+	Amy Wagdy [Bao name idea]
+	\"\"\"))
+"
+
 [sub_resource type="LabelSettings" id="LabelSettings_efg2m"]
-font_size = 14
+font_size = 18
 font_color = Color(1, 1, 1, 0.7529412)
 
 [sub_resource type="LabelSettings" id="LabelSettings_u6te5"]
+font_size = 20
 font_color = Color(1, 0.3019608, 0.37254903, 1)
 
 [node name="Editor" type="Node" unique_id=1408597539]
@@ -481,14 +525,14 @@ floor_snap_length = 12.0
 custom_minimum_size = Vector2(128, 128)
 custom_maximum_size = Vector2(128, 128)
 anchors_preset = -1
-anchor_left = 0.72800004
-anchor_top = 0.65800005
-anchor_right = 0.795
-anchor_bottom = 0.785
-offset_left = 130.23987
-offset_top = -14.640076
-offset_right = 129.59998
-offset_bottom = -23.800049
+anchor_left = 0.79600006
+anchor_top = 0.64400005
+anchor_right = 0.86200005
+anchor_bottom = 0.763
+offset_left = -0.32006836
+offset_top = 0.47991943
+offset_right = 0.95996094
+offset_bottom = -0.040039063
 grow_horizontal = 0
 grow_vertical = 0
 pivot_offset = Vector2(64, 64)
@@ -784,12 +828,53 @@ icon_alignment = 1
 
 [node name="Hotbar" parent="HUD/Top Area UI" unique_id=1476390264 instance=ExtResource("2_32ik4")]
 layout_mode = 2
+size_flags_stretch_ratio = 0.0
 mouse_filter = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="menuButtons" type="HBoxContainer" parent="HUD/Top Area UI" unique_id=294669773]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD/Top Area UI/menuButtons" unique_id=2121867814]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 32
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/Top Area UI/menuButtons/MarginContainer" unique_id=821191241]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 16
+
+[node name="undoButton" type="Button" parent="HUD/Top Area UI/menuButtons/MarginContainer/HBoxContainer" unique_id=489689205]
+layout_mode = 2
+icon = ExtResource("26_u1k11")
+script = SubResource("GDScript_fl1sp")
+
+[node name="redoButton" type="Button" parent="HUD/Top Area UI/menuButtons/MarginContainer/HBoxContainer" unique_id=1080613563]
+layout_mode = 2
+size_flags_horizontal = 4
+offset_transform_enabled = true
+offset_transform_scale = Vector2(-1, 1)
+icon = ExtResource("26_u1k11")
+script = SubResource("GDScript_xpqf3")
+
+[node name="undoButtonMarginContainer" type="MarginContainer" parent="HUD/Top Area UI/menuButtons/MarginContainer" unique_id=535629442]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+
+[node name="redoButtonMarginContainer" type="MarginContainer" parent="HUD/Top Area UI/menuButtons/MarginContainer" unique_id=962514792]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
 
 [node name="playButtonMarginContainer" type="MarginContainer" parent="HUD/Top Area UI/menuButtons" unique_id=1636623915]
 layout_mode = 2
@@ -1314,6 +1399,13 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Exit Play Mode"
 
+[node name="creditsButton" type="Button" parent="HUD/PausePanel/MarginContainer/PauseVBoxContainer" unique_id=339155498 node_paths=PackedStringArray("credits")]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Credits"
+script = SubResource("GDScript_dvhrk")
+credits = NodePath("")
+
 [node name="LoadingPanel" type="Panel" parent="HUD" unique_id=1046265247 node_paths=PackedStringArray("loadingLabel")]
 visible = false
 z_index = 4096
@@ -1361,6 +1453,7 @@ uppercase = true
 
 [node name="TextEditPopup" type="Control" parent="HUD" unique_id=38263661 node_paths=PackedStringArray("lineEdit", "emailLineEdit", "passwordLineEdit", "label", "cancelButtonContainer", "cancelButton", "confirmButton", "lineEditContainer", "authFieldsContainer", "errorLabel")]
 visible = false
+z_index = 192
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -1369,6 +1462,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
+theme = ExtResource("3_cnbw5")
 script = ExtResource("11_af0oh")
 lineEdit = NodePath("PanelContainer/MarginContainer/VBoxContainer/LineEditContainer/LineEdit")
 emailLineEdit = NodePath("PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/emailMarginContainer/emailVBoxContainer/emailLineEditContainer/emailLineEdit")
@@ -1381,16 +1475,26 @@ lineEditContainer = NodePath("PanelContainer/MarginContainer/VBoxContainer/LineE
 authFieldsContainer = NodePath("PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer")
 errorLabel = NodePath("PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/errorLabel")
 
+[node name="Panel" type="Panel" parent="HUD/TextEditPopup" unique_id=537607643]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"subPanel"
+
 [node name="PanelContainer" type="PanelContainer" parent="HUD/TextEditPopup" unique_id=2047174232]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.25
-anchor_top = 0.25
-anchor_right = 0.75
-anchor_bottom = 0.75
+anchor_left = 0.16666667
+anchor_top = 0.14629629
+anchor_right = 0.8333333
+anchor_bottom = 0.8537037
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("3_cnbw5")
+metadata/_edit_use_anchors_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer" unique_id=85910485]
 layout_mode = 2
@@ -1413,15 +1517,19 @@ autowrap_mode = 2
 [node name="authFieldsContainer" type="VBoxContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer" unique_id=822196114]
 visible = false
 layout_mode = 2
+size_flags_vertical = 2
+theme_override_constants/separation = 8
 
 [node name="warningLabel" type="Label" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer" unique_id=622141568]
 layout_mode = 2
+size_flags_vertical = 8
 text = "Note: You are entirely responsible for remembering your credentials."
 label_settings = SubResource("LabelSettings_efg2m")
 horizontal_alignment = 1
 
 [node name="emailMarginContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer" unique_id=81469742]
 layout_mode = 2
+size_flags_vertical = 6
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 32
@@ -1431,7 +1539,7 @@ theme_override_constants/margin_bottom = 5
 layout_mode = 2
 
 [node name="emailLabel" type="Label" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/emailMarginContainer/emailVBoxContainer" unique_id=706812714]
-custom_minimum_size = Vector2(96, 0)
+custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
 text = "Email"
 
@@ -1442,10 +1550,15 @@ size_flags_vertical = 3
 size_flags_stretch_ratio = 0.48
 
 [node name="emailLineEdit" type="LineEdit" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/emailMarginContainer/emailVBoxContainer/emailLineEditContainer" unique_id=1150022256]
+custom_minimum_size = Vector2(0, 64)
+custom_maximum_size = Vector2(-1, 64)
 layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 24
 
 [node name="passwordMarginContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer" unique_id=1862476985]
 layout_mode = 2
+size_flags_vertical = 2
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 32
@@ -1455,7 +1568,7 @@ theme_override_constants/margin_bottom = 5
 layout_mode = 2
 
 [node name="passwordLabel" type="Label" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/passwordMarginContainer/passwordVBoxContainer" unique_id=83735595]
-custom_minimum_size = Vector2(96, 0)
+custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
 text = "Password"
 
@@ -1469,8 +1582,12 @@ size_flags_stretch_ratio = 0.48
 layout_mode = 2
 
 [node name="passwordLineEdit" type="LineEdit" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/authFieldsContainer/passwordMarginContainer/passwordVBoxContainer/passwordLineEditContainer/HBoxContainer" unique_id=808644637 node_paths=PackedStringArray("password_hide_toggler")]
+custom_minimum_size = Vector2(0, 64)
+custom_maximum_size = Vector2(-1, 64)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 24
 secret = true
 icon_expand_mode = 2
 right_icon_scale = 0.72
@@ -1495,6 +1612,8 @@ text = "ERROR"
 label_settings = SubResource("LabelSettings_u6te5")
 
 [node name="LineEditContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer" unique_id=1784808162]
+visible = false
+custom_maximum_size = Vector2(-1, 86)
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.48
@@ -1505,8 +1624,10 @@ theme_override_constants/margin_bottom = 5
 
 [node name="LineEdit" type="LineEdit" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/LineEditContainer" unique_id=2066967567]
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
 
 [node name="ButtonsMarginContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer" unique_id=1674105826]
+custom_maximum_size = Vector2(-1, 192)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 32
@@ -1521,7 +1642,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 24
@@ -1529,6 +1649,7 @@ theme_override_constants/margin_bottom = 24
 [node name="cancelButton" type="Button" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/cancelButtonContainer" unique_id=995163819]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
 text = "Cancel"
 
 [node name="confirmButtonContainer" type="MarginContainer" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer" unique_id=1211649265]
@@ -1537,12 +1658,12 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 24
 
 [node name="confirmButton" type="Button" parent="HUD/TextEditPopup/PanelContainer/MarginContainer/VBoxContainer/ButtonsMarginContainer/HBoxContainer/confirmButtonContainer" unique_id=166694240]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
 text = "Confirm"
 
 [connection signal="canceled" from="FileDialog" to="SaveLoadManager" method="_on_file_dialog_canceled"]

@@ -36,6 +36,39 @@ content_margin_right = 8.0
 content_margin_bottom = 8.0
 bg_color = Color(0.013933979, 0.16410321, 0.22551477, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dvhrk"]
+bg_color = Color(0.38039216, 0.49019608, 0.6313726, 0.7529412)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u3g8d"]
+bg_color = Color(0.47108346, 0.57420754, 0.7151063, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+corner_detail = 16
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gfp2n"]
+bg_color = Color(0.5672485, 0.6893722, 0.82439834, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+corner_detail = 16
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k5b6m"]
+bg_color = Color(0.5063073, 0.61580986, 0.80051035, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+corner_detail = 16
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_olyxf"]
 bg_color = Color(0.40392157, 0.7176471, 0.8862745, 0.2509804)
 corner_radius_bottom_right = 16
@@ -55,10 +88,16 @@ Label/colors/font_shadow_color = Color(0, 0, 0, 0)
 Label/constants/outline_size = 16
 Label/font_sizes/font_size = 24
 Panel/styles/panel = ExtResource("3_2725r")
-PanelContainer/styles/panel = ExtResource("1_ten13")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_dvhrk")
+SpinBox/constants/buttons_width = 32
 SpinBoxInnerLineEdit/base_type = &"LineEdit"
 SpinBoxInnerLineEdit/constants/minimum_character_width = 3
 SpinBoxInnerLineEdit/font_sizes/font_size = 14
+VScrollBar/constants/padding_left = 8
+VScrollBar/constants/padding_right = 8
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_u3g8d")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_gfp2n")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_k5b6m")
 buttonPanel/base_type = &"Panel"
 buttonPanel/styles/panel = ExtResource("2_hi8js")
 hotbarButton/styles/disabled = ExtResource("1_ten13")

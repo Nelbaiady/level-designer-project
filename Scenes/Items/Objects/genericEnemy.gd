@@ -33,6 +33,7 @@ var state = states.IDLE
 @export var canChase := true
 @export var canDie := true
 
+@export var canMoveAndSlide := true
 
 
 ##how quickly this creature switches between random states
@@ -111,7 +112,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			roamTimer+=delta
 		
-		move_and_slide()
+		if canMoveAndSlide: move_and_slide()
 
 ##transitions to another state
 func setState(newState:states):

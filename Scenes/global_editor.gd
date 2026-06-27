@@ -44,10 +44,9 @@ const PLAYER = preload("uid://ce1i72nmpos1n")
 enum Tools {place, erase, edit}#, move}
 @export var currentTool: Tools
 
-
 func _ready() -> void:
-	itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),preload("uid://cyvppeo275ryt"), preload("uid://hqm7h6yt4hnt"),preload("uid://cge5ka3dgyd2w")]#,null,null,null]
-	hotbar = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),preload("uid://cyvppeo275ryt"), preload("uid://hqm7h6yt4hnt"),preload("uid://cge5ka3dgyd2w")]#,null,null,null]
+	itemRoster = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),preload("uid://cyvppeo275ryt"), preload("uid://hqm7h6yt4hnt"),preload("uid://cge5ka3dgyd2w"),preload("uid://dug1wvhavc7eo")]#,null,null,null]
+	hotbar = [preload("uid://bs8fbynxqm6wr"), preload("uid://c2d008ix6upm5"),preload("uid://vwukdhi6nhpd"),preload("uid://c3h8se4533jvh"),preload("uid://cyvppeo275ryt"), preload("uid://hqm7h6yt4hnt"),preload("uid://cge5ka3dgyd2w"),preload("uid://dug1wvhavc7eo")]#,null,null,null]
 	for i in itemRoster.size():
 		if itemRoster[i]:
 			itemRoster[i].rosterID = i

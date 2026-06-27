@@ -33,6 +33,8 @@ var state = states.IDLE
 @export var canChase := true
 @export var canDie := true
 
+#other configurable properties
+@export var isWinCondition := false ##if killing this enemy wins the level
 @export var canMoveAndSlide := true
 
 
@@ -172,6 +174,7 @@ func die():
 	targetSpeed = 0
 	animationPlayer.speed_scale = 1
 	(func(): process_mode = Node.PROCESS_MODE_DISABLED).call_deferred()
+	if isWinCondition: signalBus.winLevel.emit()
 
 var chaseTarget = null
 func _on_vision_area_body_entered(body: Node2D) -> void:

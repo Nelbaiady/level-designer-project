@@ -9,12 +9,13 @@
 [ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="7_yugh8"]
 [ext_resource type="Resource" uid="uid://bh2hcytk84e13" path="res://Scenes/UI/ObjectProperties/properties/positionProperty.tres" id="8_2ad8w"]
 [ext_resource type="Resource" uid="uid://dqbrp3ghialya" path="res://Scenes/UI/ObjectProperties/properties/sizeProperty.tres" id="9_cdh0m"]
-[ext_resource type="Resource" uid="uid://ctn8bw7ogsoo3" path="res://Scenes/UI/ObjectProperties/properties/facingRight.tres" id="9_te1wg"]
-[ext_resource type="Resource" uid="uid://occw34kb4nrh" path="res://Scenes/UI/ObjectProperties/properties/specificProperties/idleTime.tres" id="10_6udu4"]
+[ext_resource type="Resource" uid="uid://ctn8bw7ogsoo3" path="res://Scenes/UI/ObjectProperties/properties/facingRightProperty.tres" id="9_te1wg"]
+[ext_resource type="Resource" uid="uid://occw34kb4nrh" path="res://Scenes/UI/ObjectProperties/properties/specificProperties/idleTimeProperty.tres" id="10_6udu4"]
 [ext_resource type="Resource" uid="uid://byn3kv4q02kpl" path="res://Scenes/UI/ObjectProperties/properties/colorProperty.tres" id="10_civf8"]
 [ext_resource type="Resource" uid="uid://d3y2ia0lj7kk5" path="res://Scenes/UI/ObjectProperties/properties/playerProperties/maxHealthProperty.tres" id="11_2vcqh"]
-[ext_resource type="Resource" uid="uid://xu8sqkrjxxou" path="res://Scenes/UI/ObjectProperties/properties/specificProperties/foldedTime.tres" id="11_qdh6j"]
+[ext_resource type="Resource" uid="uid://xu8sqkrjxxou" path="res://Scenes/UI/ObjectProperties/properties/specificProperties/foldedTimeProperty.tres" id="11_qdh6j"]
 [ext_resource type="PackedScene" uid="uid://citpxoeau101h" path="res://Scenes/Items/Objects/Modular Additions/jump_point_area.tscn" id="12_w2bbf"]
+[ext_resource type="Resource" uid="uid://cqqw0ne2el4ny" path="res://Scenes/UI/ObjectProperties/properties/isWinConditionProperty.tres" id="15_3w2ga"]
 
 [sub_resource type="Animation" id="Animation_dff58"]
 length = 0.001
@@ -1585,7 +1586,7 @@ script = ExtResource("5_bc6lp")
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("6_7722o")]
 position = Vector2(0, -8)
 clickCollision = NodePath("Area2D")
-properties = Array[ExtResource("7_yugh8")]([ExtResource("8_2ad8w"), ExtResource("9_cdh0m"), ExtResource("10_civf8"), ExtResource("11_2vcqh"), ExtResource("9_te1wg"), ExtResource("10_6udu4"), ExtResource("11_qdh6j")])
+properties = Array[ExtResource("7_yugh8")]([ExtResource("8_2ad8w"), ExtResource("9_cdh0m"), ExtResource("10_civf8"), ExtResource("11_2vcqh"), ExtResource("9_te1wg"), ExtResource("10_6udu4"), ExtResource("11_qdh6j"), ExtResource("15_3w2ga")])
 category = 1
 
 [node name="Area2D" type="Area2D" parent="Object" unique_id=12686494]

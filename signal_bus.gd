@@ -38,6 +38,8 @@ signal startEditMode()##when switching to edit mode
 signal startPlayMode()##when switching to play mode
 @warning_ignore("unused_signal")
 signal reloadPlayer()##destroy the player and recreate them to reset properties. This emits after a level has loaded.
+@warning_ignore("unused_signal")
+signal winLevel()##when the player meets a condition to win the level
 
 
 #signals for editing properties
@@ -74,7 +76,7 @@ signal deleteLayer(layerID)##signal for deleting a layer
 @warning_ignore("unused_signal")
 signal updateLayerUI()##signal for changing layer
 
-#specific stuff
+#specific edge cases
 @warning_ignore("unused_signal")
 signal spinboxSpun()##when a spinbox with a specific script is spin, it emits this
 @warning_ignore("unused_signal")
@@ -98,11 +100,13 @@ signal genericPopupOpened()##tells the game that a popup has opened, which incre
 @warning_ignore("unused_signal")
 signal genericPopupClosed()##tells the game that a popup has closed, which decrements the popup stack
 
+#touch controls
 @warning_ignore("unused_signal")
 signal touchStickPressed()
 @warning_ignore("unused_signal")
 signal touchStickReleased()
 
+#popups in general
 @warning_ignore("unused_signal")
 signal popupsOpened()##When there was no popup before and a new popup just opened
 @warning_ignore("unused_signal")

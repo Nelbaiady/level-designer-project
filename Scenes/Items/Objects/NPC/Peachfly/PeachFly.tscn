@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://bh2hcytk84e13" path="res://Scenes/UI/ObjectProperties/properties/positionProperty.tres" id="8_rrf35"]
 [ext_resource type="Resource" uid="uid://dqbrp3ghialya" path="res://Scenes/UI/ObjectProperties/properties/sizeProperty.tres" id="9_pr883"]
 [ext_resource type="Resource" uid="uid://byn3kv4q02kpl" path="res://Scenes/UI/ObjectProperties/properties/colorProperty.tres" id="10_3usmo"]
+[ext_resource type="Resource" uid="uid://cqqw0ne2el4ny" path="res://Scenes/UI/ObjectProperties/properties/isWinConditionProperty.tres" id="10_f3f51"]
 [ext_resource type="Resource" uid="uid://d3y2ia0lj7kk5" path="res://Scenes/UI/ObjectProperties/properties/playerProperties/maxHealthProperty.tres" id="11_6ohcq"]
 [ext_resource type="PackedScene" uid="uid://citpxoeau101h" path="res://Scenes/Items/Objects/Modular Additions/jump_point_area.tscn" id="12_jiakl"]
 
@@ -240,7 +241,7 @@ vframes = 3
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("6_a76qt")]
 position = Vector2(0, -8)
 clickCollision = NodePath("Area2D")
-properties = Array[ExtResource("7_qy1fl")]([ExtResource("8_rrf35"), ExtResource("9_pr883"), ExtResource("10_3usmo"), ExtResource("11_6ohcq")])
+properties = Array[ExtResource("7_qy1fl")]([ExtResource("8_rrf35"), ExtResource("9_pr883"), ExtResource("10_3usmo"), ExtResource("11_6ohcq"), ExtResource("10_f3f51")])
 category = 1
 
 [node name="Area2D" type="Area2D" parent="Object" unique_id=12686494]

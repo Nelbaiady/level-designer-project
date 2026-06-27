@@ -12,6 +12,7 @@
 [ext_resource type="Resource" uid="uid://dqbrp3ghialya" path="res://Scenes/UI/ObjectProperties/properties/sizeProperty.tres" id="9_2ppoo"]
 [ext_resource type="Resource" uid="uid://byn3kv4q02kpl" path="res://Scenes/UI/ObjectProperties/properties/colorProperty.tres" id="10_g72bb"]
 [ext_resource type="Resource" uid="uid://d3y2ia0lj7kk5" path="res://Scenes/UI/ObjectProperties/properties/playerProperties/maxHealthProperty.tres" id="11_defcg"]
+[ext_resource type="Resource" uid="uid://cqqw0ne2el4ny" path="res://Scenes/UI/ObjectProperties/properties/isWinConditionProperty.tres" id="12_q7lup"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dff58"]
 
@@ -398,7 +399,7 @@ autoplay = "idle"
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_myemf")]
 position = Vector2(0, -8)
 clickCollision = NodePath("Area2D")
-properties = Array[ExtResource("7_dff58")]([ExtResource("8_q7lup"), ExtResource("9_2ppoo"), ExtResource("10_g72bb"), ExtResource("11_defcg")])
+properties = Array[ExtResource("7_dff58")]([ExtResource("8_q7lup"), ExtResource("9_2ppoo"), ExtResource("10_g72bb"), ExtResource("11_defcg"), ExtResource("12_q7lup")])
 category = 1
 
 [node name="Area2D" type="Area2D" parent="Object" unique_id=12686494]

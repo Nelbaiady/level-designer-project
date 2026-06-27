@@ -280,7 +280,6 @@ script = ExtResource("2_sk345")
 index = 6
 
 [node name="Control8" type="Control" parent="Panel/HBoxContainer" unique_id=361986077 node_paths=PackedStringArray("selector")]
-visible = false
 custom_minimum_size = Vector2(64, 64)
 clip_contents = true
 layout_mode = 2

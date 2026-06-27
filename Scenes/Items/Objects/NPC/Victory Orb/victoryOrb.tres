@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="objectItem" format=3 uid="uid://dug1wvhavc7eo"]
+
+[ext_resource type="Texture2D" uid="uid://vdkjj3m26s40" path="res://Scenes/Items/Objects/NPC/Victory Orb/trophyOrbPlaceholder.png" id="1_i4es5"]
+[ext_resource type="PackedScene" uid="uid://be1qex6xqskaw" path="res://Scenes/Items/Objects/NPC/Victory Orb/victoryOrb.tscn" id="2_qudoa"]
+[ext_resource type="Script" uid="uid://c6m2hjthmh1nv" path="res://Scenes/Items/Objects/object.gd" id="4_ybk8s"]
+
+[resource]
+script = ExtResource("4_ybk8s")
+objectReference = ExtResource("2_qudoa")
+icon = ExtResource("1_i4es5")
+previewTexture = ExtResource("1_i4es5")
+name = "victoryOrb"
+description = "Collect this orb, and you win!"
+metadata/_custom_type_script = "uid://c6m2hjthmh1nv"

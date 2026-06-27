@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://fij4t53a7ga"]
 
+[ext_resource type="Texture2D" uid="uid://d4iwnsxrj5ebe" path="res://Scenes/UI/basic Icons/Kenney Game Icons/PNG/White/1x/star.png" id="1_rxv7m"]
+
 [sub_resource type="Curve" id="Curve_22uvg"]
 _data = [Vector2(0.7606491, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 2
@@ -28,6 +30,9 @@ tangential_accel_min = -2.2351742e-06
 tangential_accel_max = -2.2351742e-06
 damping_min = 100.00001
 damping_max = 100.00001
+use_scale_3d = true
+scale_3d_min = Vector3(-0.2, -0.2, -0.2)
+scale_3d_max = Vector3(0.5, 0.5, 0.5)
 scale_max = 8.0
 color = Color(18.892157, 18.892157, 18.892157, 1)
 color_ramp = SubResource("GradientTexture1D_pp2e7")
@@ -37,7 +42,9 @@ hue_variation_max = 0.99999994
 
 [node name="celebrationParticles" type="GPUParticles2D" unique_id=331650802]
 emitting = false
-amount = 128
+amount = 512
+texture = ExtResource("1_rxv7m")
+lifetime = 3.0
 one_shot = true
 speed_scale = 2.0
 local_coords = true

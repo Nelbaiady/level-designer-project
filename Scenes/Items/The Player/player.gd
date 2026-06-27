@@ -62,6 +62,9 @@ var hitBoxPosition := Vector2(0,0) ##when inside a hitbox keep track of its posi
 ##signal for when the player is bounced
 signal getBounced(velocity)
 
+#animation related
+@export var victory_message: PanelContainer
+
 
 func _ready() -> void:
 	add_child( coyoteTimer )
@@ -70,6 +73,7 @@ func _ready() -> void:
 	getBounced.connect(bounce)
 	signalBus.startEditMode.connect(enterEditState)
 	signalBus.startPlayMode.connect(enterPlayState)
+	signalBus.winLevel.connect(win)
 
 func bounce(bounceVelocity):
 	if !bouncedThisFrame:
@@ -93,6 +97,7 @@ func enterPlayState():
 ##resets stats when transitioning between edit/play modes
 func reset():
 	visible = true
+	victory_message.hide()
 	coyoteTimer.stop()
 	jumpBufferTimer.stop()
 	jumpsLeft=0
@@ -185,9 +190,14 @@ func knockBack(sourceLocation:Vector2, power=1000):
 	##knock the player away from the source (plus a corrective y value to make sure the player isnt knocked into the air for no reason)
 	velocity = ((position-sourceLocation).normalized() + Vector2(0,0.5)) * power 
 func die():
-	if stateMachine.state.name!="Dying":
+	if stateMachine.state.name not in ["Winning", "Dying"]:
 		visible = true
 		stateMachine._transitionToNextState("Dying")
+		
+func win():
+	if stateMachine.state.name not in ["Winning", "Dying"]:
+		visible = true
+		stateMachine._transitionToNextState("Winning")
 
 #func _process(delta: float) -> void:
 	#print("coyote and jbuffer and jumpsLeft: ",!coyoteTimer.is_stopped(),"   ",!jumpBufferTimer.is_stopped(),"   ",jumpsLeft)

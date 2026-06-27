@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://de12sfrbh1lj5" path="res://Scenes/Items/The Player/crouched.gd" id="11_meww7"]
 [ext_resource type="Script" uid="uid://bylgiwn4q2lxv" path="res://Scenes/Items/The Player/states/chourced.gd" id="12_8pi6c"]
 [ext_resource type="Script" uid="uid://dxw0j6wgiic50" path="res://Scenes/Items/The Player/states/running.gd" id="12_6170r"]
+[ext_resource type="Script" uid="uid://c3xoadlt1pl3a" path="res://Scenes/Items/The Player/states/crawling.gd" id="12_f834k"]
 [ext_resource type="Script" uid="uid://cptwhnytq7o3u" path="res://Scenes/Items/The Player/states/dying.gd" id="15_k1ypc"]
 [ext_resource type="Script" uid="uid://dhspkhb3hamjx" path="res://Scenes/Items/The Player/states/winning.gd" id="16_55agj"]
 [ext_resource type="Script" uid="uid://buaworiou3jpd" path="res://Scenes/Items/The Player/playerBounceHitbox.gd" id="16_k1ypc"]
@@ -232,6 +233,75 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [ExtResource("2_k1a7i")]
+}
+
+[sub_resource type="Animation" id="Animation_mai4b"]
+resource_name = "crawl"
+
+[sub_resource type="Animation" id="Animation_f834k"]
+resource_name = "crouched"
+length = 0.625
+loop_mode = 1
+step = 0.125
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(2.4622886),
+"update": 0,
+"values": [Vector2(1, 0.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:texture")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_k1a7i")]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Sprite2D:hframes")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [3]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sprite2D:vframes")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Sprite2D:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4]
 }
 
 [sub_resource type="Animation" id="Animation_meww7"]
@@ -927,6 +997,8 @@ tracks/9/keys = {
 _data = {
 &"RESET": SubResource("Animation_kvi7n"),
 &"chourcing": SubResource("Animation_jkifv"),
+&"crawl": SubResource("Animation_mai4b"),
+&"crouched": SubResource("Animation_f834k"),
 &"crouching": SubResource("Animation_meww7"),
 &"die": SubResource("Animation_55agj"),
 &"idle": SubResource("Animation_l5y80"),
@@ -1027,6 +1099,9 @@ script = ExtResource("9_p02g4")
 [node name="Crouched" type="Node" parent="StateMachine" unique_id=1513378023]
 script = ExtResource("11_meww7")
 
+[node name="Crawling" type="Node" parent="StateMachine" unique_id=557769906]
+script = ExtResource("12_f834k")
+
 [node name="Chourced" type="Node" parent="StateMachine" unique_id=1757473699]
 script = ExtResource("12_8pi6c")
 
@@ -1095,7 +1170,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="victoryParticles" parent="." unique_id=331650802 instance=ExtResource("19_73c0q")]
-emitting = false
 
 [connection signal="animation_finished" from="AnimationPlayer" to="StateMachine/Rising" method="_on_animation_player_animation_finished"]
 [connection signal="animation_finished" from="AnimationPlayer" to="StateMachine/Dying" method="_on_animation_player_animation_finished"]

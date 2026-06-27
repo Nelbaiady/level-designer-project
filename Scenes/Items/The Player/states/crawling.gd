@@ -1,13 +1,10 @@
 #CROUCHED STATE
 extends PlayerState
 
-func enter(_previous_state_path: String, data := {}) -> void:
-	if data.has("wasCrawling"):
-		if data["wasCrawling"]: player.playAnim("crouched")
-		#else: player.playAnim("crouched")
-	else: player.playAnim("crouching")
-	if !player.animationPlayer.animation_finished.is_connected(crouchTransition):
-		player.animationPlayer.animation_finished.connect(crouchTransition)
+func enter(_previous_state_path: String, _data := {}) -> void:
+	player.playAnim("crawl")
+	#if !player.animationPlayer.animation_finished.is_connected(crouchTransition):
+		#player.animationPlayer.animation_finished.connect(crouchTransition)
 	#if !player.uncrouchChecker. is_connected(crouchTransition):
 		#player.animationPlayer.animation_finished.connect(crouchTransition)
 	player.mainCollision.disabled=true
@@ -15,18 +12,19 @@ func enter(_previous_state_path: String, data := {}) -> void:
 
 func physics_update(delta: float) -> void:
 	player.velocity.y += player.gravity * player.gravityMult * delta
-	player.velocity = Vector2(move_toward(player.velocity.x,0,player.deceleration*delta),player.velocity.y)
+	player.velocity = Vector2(move_toward(player.velocity.x,player.directionInput.x * player.topRunSpeed/2,player.acceleration*delta),player.velocity.y)
 	#player.velocity = Vector2(move_toward(player.velocity.x,player.directionInput.x * player.topRunSpeed,player.acceleration*delta),player.velocity.y)
 	player.move_and_slide()
 
 	if !player.is_on_floor():
 		finished.emit(FALLING,{"fell":true})
-	elif player.directionInput.y >= player.crouchInputThreshold and unCrouchCheck():
+	elif player.directionInput.y >= player.crouchInputThreshold:
 		#perform the check inside so as not to check every frame.
-		finished.emit(IDLE)
-		player.animationPlayer.play("unCrouching")
-	elif player.directionInput.x != 0 and player.canCrawl:
-		finished.emit(CRAWLING)
+		if unCrouchCheck():
+			finished.emit(IDLE)
+			player.animationPlayer.play("unCrouching")
+	elif player.directionInput.x == 0 and player.canCrouch:
+		finished.emit(CROUCHED,{"wasCrawling":true})
 	player.tryToJump()
 ##checks if the player can uncrouch by making sure there are no solid objects above the player
 func unCrouchCheck():
@@ -41,6 +39,4 @@ func exit() -> void:
 
 func crouchTransition(anim:String):
 	if anim=="unCrouching":
-		player.playAnim("idle")
-	if anim=="crouching":
-		player.playAnim("crouched")
+		player.animationPlayer.play("idle")

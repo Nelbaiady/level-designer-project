@@ -11,7 +11,8 @@ func _ready() -> void:
 	,preload("uid://dx4l3tqek45ja") #jump buffer
 	,preload("uid://7hr3aqaumfr2") #can Crouch
 	,preload("uid://utkx0vgp3gc5") #can Chourc
-	#,preload("uid://bethifqoxndpo") #can Crawl
+	,preload("uid://bethifqoxndpo") #can Crawl
+	,preload("uid://djjsjtfxnkktd") #can Walljump
 	,preload("uid://do5ll6ym26tfy") #acceleration
 	,preload("uid://bt3t4oe46o4a8") #top running speed
 	,preload("uid://d3y2ia0lj7kk5") #max health

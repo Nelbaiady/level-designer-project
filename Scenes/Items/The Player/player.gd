@@ -39,9 +39,10 @@ var jumpBufferTimer : Timer = Timer.new()
 
 @export var canCrouch := true
 @export var canChourc := false
-@export var canCrawl := true
+@export var canCrawl := false
+@export var canWallJump := false
 @export var fallingGravityMult : float = 3
-@export var crouchInputThreshold : float = -0.8
+@export var crouchInputThreshold : float = -0.5
 
 #Variables that change during gameplay
 var gravityMult : float = 1
@@ -174,7 +175,7 @@ func _on_hurtbox_area_2d_area_exited(area: Area2D) -> void:
 					break
 		if !hitboxInside:
 			isInHitbox = false
-			
+
 func takeDamage(damage:=1):
 	if stateMachine.state.name!="Dying":
 		##make sure the player isnt invulnerable
@@ -215,6 +216,7 @@ func tryToJump(fell=false, bounced=false):
 			if jumpBuffer > 0:
 				jumpBufferTimer.one_shot = true
 				jumpBufferTimer.start(jumpBuffer)
+
 ##restores jumps left to maxJumps
 func refreshJumps():
 	jumpsLeft = maxJumps

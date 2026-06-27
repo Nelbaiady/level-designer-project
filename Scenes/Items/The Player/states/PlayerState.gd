@@ -7,6 +7,8 @@ const FALLING = "Falling"
 const CROUCHED = "Crouched"
 const CHOURCED = "Chourced"
 const DYING = "Dying"
+const WINNING = "Winning"
+const CRAWLING = "Crawling"
 
 var player: Player
 

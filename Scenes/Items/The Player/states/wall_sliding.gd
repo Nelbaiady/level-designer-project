@@ -1,4 +1,4 @@
-#FALLING STATE
+#WALL SLIDING STATE
 extends PlayerState
 var fell = false
 var bounced = false
@@ -6,11 +6,10 @@ var bounced = false
 var gravityMultTween:Tween
 
 func enter(_previous_state_path: String, _data := {}) -> void:
-	#fell = false
-	#bounced = false
-	player.resetPlay("jumped")
-	
+	player.faceDirection(player.wallDirection)
+	player.resetPlay("wallSlide")
 	player.gravityMult = 1
+	#player.velocity.y = 0
 	#player.gravityMult = player.fallingGravityMult
 	
 	
@@ -25,32 +24,27 @@ func enter(_previous_state_path: String, _data := {}) -> void:
 			if !player.is_on_floor():
 				player.refreshCoyoteTime()
 func physics_update(delta: float) -> void:
+	#print("oh")
 	#increase gravity over time so the player falls faster, but doesnt feel like the fall is sudden (due to high initial acceleration)
-	player.gravityMult = move_toward(player.gravityMult, player.fallingGravityMult,delta*16)
-	#if player.velocity.y < player.terminalVelocity:
+	player.gravityMult = move_toward(player.gravityMult, 0.5,delta*12)
+	
+	player.velocity.y = move_toward(player.velocity.y,int(player.terminalVelocity/3),delta*2000)
+	
+	#if player.velocity.y < player.terminalVelocity/2:
 		#player.velocity.y += player.gravity * player.gravityMult * delta  
 	#else: 
-		#player.velocity.y = player.terminalVelocity
-	player.applyGravity(delta)
+		#player.velocity.y = player.terminalVelocity/2
 
-	#player.velocity = Vector2(move_toward(player.velocity.x,player.directionInput.x * player.topRunSpeed,player.acceleration*delta),player.velocity.y)
-	#var xAcceleration = player.airDeceleration if player.directionInput.x
-	var targetXacceleration = player.airDeceleration if player.directionInput.x==0 else player.airAcceleration 
-	var targetXvelocity = player.directionInput.x * player.topRunSpeed
-	#print(xAcceleration)
-	player.velocity.x = move_toward(player.velocity.x,targetXvelocity,targetXacceleration*delta)
-	
-	
+	player.velocity = Vector2(move_toward(player.velocity.x,player.directionInput.x * player.topRunSpeed,player.acceleration*delta),player.velocity.y)
 	player.move_and_slide()
 	
 	if player.is_on_floor():
 		finished.emit(IDLE)
-	elif player.velocity.y < 0:
+	if player.velocity.y < 0:
 		finished.emit(RISING)
-	elif player.canWallJump and player.checkWall():
-		#if player.wallJumping: 
-		finished.emit(WALLSLIDING)
-	player.tryToJump(fell, bounced)
+	if !player.checkWall():
+		finished.emit(FALLING)
+	player.tryToJump(fell, bounced, true, true)
 	
 #func exit() -> void:
 	#player.gravityMult = 1

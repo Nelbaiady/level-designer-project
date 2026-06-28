@@ -10,6 +10,7 @@
 [ext_resource type="Resource" uid="uid://dt3gvme5p3joj" path="res://Scenes/UI/ObjectProperties/properties/rotationProperty.tres" id="7_vmnu4"]
 [ext_resource type="Resource" uid="uid://bimwvakfjiujp" path="res://Scenes/UI/ObjectProperties/properties/powerProperty.tres" id="8_vclpx"]
 [ext_resource type="PackedScene" uid="uid://citpxoeau101h" path="res://Scenes/Items/Objects/Modular Additions/jump_point_area.tscn" id="10_vclpx"]
+[ext_resource type="AudioStream" uid="uid://ida245s4vu0n" path="res://audio/sfx/spring.ogg" id="11_wnvis"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_n374f"]
 size = Vector2(64, 64)
@@ -77,12 +78,13 @@ size = Vector2(64, 32)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3rwud"]
 size = Vector2(64, 24)
 
-[node name="Spring" type="RigidBody2D" unique_id=741611201 groups=["solids"]]
+[node name="Spring" type="RigidBody2D" unique_id=741611201 node_paths=PackedStringArray("audio_stream_player_2d") groups=["solids"]]
 collision_layer = 129
 collision_mask = 129
 input_pickable = true
 freeze = true
 script = ExtResource("1_3rwud")
+audio_stream_player_2d = NodePath("AudioStreamPlayer2D")
 
 [node name="Object" parent="." unique_id=1400891492 node_paths=PackedStringArray("clickCollision") instance=ExtResource("2_n374f")]
 clickCollision = NodePath("Area2D2")
@@ -120,5 +122,8 @@ isPlayerOnly = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="jumpPointArea" unique_id=556810360]
 position = Vector2(0, -20)
 shape = SubResource("RectangleShape2D_3rwud")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=2120275001]
+stream = ExtResource("11_wnvis")
 
 [connection signal="animation_finished" from="Sprite2D/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

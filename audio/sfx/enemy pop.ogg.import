@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b66u4srl4sxp8"
+path="res://.godot/imported/enemy pop.ogg-6da0d6e2d01318aa5009f01f43ada4f1.oggvorbisstr"
+
+[deps]
+
+source_file="res://audio/sfx/enemy pop.ogg"
+dest_files=["res://.godot/imported/enemy pop.ogg-6da0d6e2d01318aa5009f01f43ada4f1.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

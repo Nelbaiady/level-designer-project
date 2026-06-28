@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ce6sbd3rxhd7v"
-path="res://.godot/imported/victoryOrb icon.png-3e273a311f926d0b8fb832ff3a69e955.ctex"
+uid="uid://n2b6g7rqwxp3"
+path="res://.godot/imported/VictoryOrbPreview.png-f9dfe32f86851953e02872c9af85e9c7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Items/Objects/NPC/Victory Orb/victoryOrb icon.png"
-dest_files=["res://.godot/imported/victoryOrb icon.png-3e273a311f926d0b8fb832ff3a69e955.ctex"]
+source_file="res://Scenes/Items/Objects/NPC/Victory Orb/VictoryOrbPreview.png"
+dest_files=["res://.godot/imported/VictoryOrbPreview.png-f9dfe32f86851953e02872c9af85e9c7.ctex"]
 
 [params]
 

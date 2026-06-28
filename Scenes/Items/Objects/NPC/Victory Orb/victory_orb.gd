@@ -10,7 +10,7 @@ func _ready() -> void:
 func finishedEmitting():
 	sprite_2d.show()
 	
-func bodyEntered(body:CharacterBody2D):
+func bodyEntered(body):
 	if body is Player:#.is_in_group("player"):
 		sprite_2d.hide()
 		body.win()

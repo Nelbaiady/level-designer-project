@@ -6,8 +6,10 @@ func enter(_previous_state_path: String, _data := {}) -> void:
 	player.resetPlay("run")
 
 func physics_update(delta: float) -> void:
-	player.velocity.y += player.gravity * player.gravityMult * delta
-	player.velocity = Vector2(move_toward(player.velocity.x,player.directionInput.x * player.topRunSpeed,player.acceleration*delta),player.velocity.y)
+	#player.velocity.y += player.gravity * player.gravityMult * delta
+	player.applyGravity(delta)
+	#player.velocity = Vector2(move_toward(player.velocity.x,player.directionInput.x * player.topRunSpeed,player.acceleration*delta),player.velocity.y)
+	player.velocity.x = move_toward(player.velocity.x,player.directionInput.x * player.topRunSpeed,player.acceleration*delta)
 	player.move_and_slide()
 
 	if !player.is_on_floor():

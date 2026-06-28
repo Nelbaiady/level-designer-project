@@ -6,8 +6,8 @@
 [resource]
 script = ExtResource("1_q7q6x")
 codeName = "acceleration"
-displayName = "Running Acceleration"
-description = "How fast you speed up when on the ground."
+displayName = "Ground Acceleration"
+description = "How fast the player speeds up when on the ground."
 uiNode = ExtResource("2_0rmhu")
 defaultValue = 4000.0
 step = 1.0

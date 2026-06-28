@@ -7,7 +7,7 @@
 script = ExtResource("1_ixdnv")
 codeName = "deceleration"
 displayName = "Ground Deceleration"
-description = "How fast the player slows down."
+description = "How fast the player slows down when on the ground."
 uiNode = ExtResource("2_wkinn")
 defaultValue = 4000.0
 step = 1.0

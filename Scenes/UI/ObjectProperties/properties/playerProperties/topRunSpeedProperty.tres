@@ -7,8 +7,7 @@
 script = ExtResource("1_4jbgr")
 codeName = "topRunSpeed"
 displayName = "Running Top Speed"
-description = "The maximum run speed the player has 
-when on the ground."
+description = "The maximum run speed the player can reach"
 uiNode = ExtResource("2_hqe8r")
 defaultValue = 700.0
 step = 1.0

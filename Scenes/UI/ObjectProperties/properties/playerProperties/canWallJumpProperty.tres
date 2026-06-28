@@ -7,6 +7,7 @@
 script = ExtResource("1_etdxy")
 codeName = "canWallJump"
 displayName = "Wall Jump"
-description = "When enabled, allows the player to jump off walls."
+description = "When enabled, allows the player to jump off walls.
+When falling and stuck to a wall, the player will slide down it, at which point they can press the jump button to jump off it."
 uiNode = ExtResource("2_yl2rg")
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

@@ -8,6 +8,10 @@ class_name GenericEnemy extends CharacterBody2D
 @export var flippableSprites:Array[Sprite2D] = []
 #@export var animatedSprite: AnimatedSprite2D
 
+var audioPlayer: AudioStreamPlayer2D
+const ENEMY_POP = preload("uid://b66u4srl4sxp8")
+
+
 var roamTime : float = 0
 var roamTimer:float = 0
 
@@ -45,6 +49,9 @@ var restlessness:float = 1
 signal jumpedOn()
 
 func _ready() -> void:
+	audioPlayer = AudioStreamPlayer2D.new()
+	add_child(audioPlayer)
+	audioPlayer.process_mode = Node.PROCESS_MODE_PAUSABLE
 	signalBus.startEditMode.connect(reset)
 	signalBus.startPlayMode.connect(reset)
 	jumpedOn.connect(getJumpedOn)
@@ -160,15 +167,19 @@ func _on_hit_box_area_body_entered(body: Node2D) -> void:
 		pass
 
 func getJumpedOn(_player:Player, _area:Area2D):
-		takeDamage()
+		takeDamage(1,"jumpedOn")
 
-func takeDamage(damage=1):
+func takeDamage(damage=1, cause="jumpedOn"):
 	if canDie:
 		currentHealth-=damage
 		if currentHealth<=0:
-			die()
+			die(cause)
 
-func die():
+func die(cause="jumpedOn"):
+	if cause=="jumpedOn":
+		audioPlayer.stream = ENEMY_POP
+		audioPlayer.play()
+		audioPlayer.stream_paused = false
 	setState(states.DYING)
 	velocity.x = 0
 	targetSpeed = 0

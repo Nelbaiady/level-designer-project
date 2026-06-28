@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://be1qex6xqskaw"]
 
 [ext_resource type="Script" uid="uid://ew33mtlibaon" path="res://Scenes/Items/Objects/NPC/Victory Orb/victory_orb.gd" id="1_muagy"]
-[ext_resource type="Texture2D" uid="uid://vdkjj3m26s40" path="res://Scenes/Items/Objects/NPC/Victory Orb/trophyOrbPlaceholder.png" id="3_ldjmx"]
+[ext_resource type="Texture2D" uid="uid://dmr0pgcawsdgm" path="res://Scenes/Items/Objects/NPC/Victory Orb/victoryOrb.png" id="2_i82t5"]
 [ext_resource type="PackedScene" uid="uid://c4aci6f2wscx5" path="res://Scenes/Items/Objects/objectMod.tscn" id="4_12a7s"]
 
 [sub_resource type="Animation" id="Animation_f3f51"]
@@ -16,7 +16,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("3_ldjmx")]
+"values": [ExtResource("2_i82t5")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -40,7 +40,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [1]
+"values": [4]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -52,7 +52,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [1]
+"values": [3]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -69,9 +69,9 @@ tracks/4/keys = {
 
 [sub_resource type="Animation" id="Animation_70ptt"]
 resource_name = "idle"
-length = 1.5000083
+length = 1.1
 loop_mode = 1
-step = 0.083333336
+step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -82,7 +82,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("3_ldjmx")]
+"values": [ExtResource("2_i82t5")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -91,10 +91,10 @@ tracks/1/path = NodePath("Sprite2D:frame")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65000004, 0.70000005, 0.75, 0.8, 0.85, 0.9, 0.95, 0.99999994, 1.05),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": []
+"values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -106,7 +106,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [1]
+"values": [4]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -118,7 +118,7 @@ tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [1]
+"values": [3]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -127,7 +127,7 @@ tracks/4/path = NodePath("Sprite2D:offset")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.33333334, 0.75, 1.1666666, 1.5),
+"times": PackedFloat32Array(0, 0.25, 0.55, 0.85, 1.1),
 "transitions": PackedFloat32Array(2, 0.5, 2, 0.5, 207.93658),
 "update": 0,
 "values": [Vector2(0, 4), Vector2(0, 0), Vector2(0, -4), Vector2(0, 0), Vector2(0, 4)]
@@ -140,7 +140,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wl0qq"]
-radius = 20.0
+radius = 48.0
 
 [sub_resource type="Curve" id="Curve_dvhrk"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.6447368, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -187,7 +187,9 @@ autoplay = &"idle"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=420001091]
 use_parent_material = true
-texture = ExtResource("3_ldjmx")
+texture = ExtResource("2_i82t5")
+hframes = 4
+vframes = 3
 
 [node name="Object" parent="." unique_id=766181706 node_paths=PackedStringArray("clickCollision") instance=ExtResource("4_12a7s")]
 clickCollision = NodePath("Area2D")
@@ -200,7 +202,6 @@ description = "Collect this thing and you win!"
 shape = SubResource("CircleShape2D_wl0qq")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=184538206]
-visible = false
 priority = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=793809315]

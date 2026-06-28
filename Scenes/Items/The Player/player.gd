@@ -7,6 +7,11 @@ class_name Player extends CharacterBody2D
 @onready var chourcCollision: CollisionPolygon2D = $PlayerChourcCollision
 @onready var uncrouchChecker: Area2D = $uncrouchChecker
 @onready var chourcChecker: Area2D = $chourcChecker
+
+@export var left_wall_checker: RayCast2D
+@export var right_wall_checker: RayCast2D
+
+
 @onready var stateMachine: StateMachine = $StateMachine
 @onready var playerProperties: PlayerProperties = $playerProperties
 #@onready var audioStreamPlayer: AudioStreamPlayer2D = $AudioStreamPlayer2D
@@ -24,10 +29,10 @@ const ouchSFX = preload("uid://bfdulbl1auotk")
 @export var gravity : int = 2400
 @export var terminalVelocity : int = 2000
 @export var topRunSpeed : int = 700
-@export var acceleration : int = 6000
-@export var deceleration : int = 4000
-@export var airAcceleration : int = 4000
-@export var airDeceleration : int = 4000
+@export var acceleration : int = 3000
+@export var deceleration : int = 3000
+@export var airAcceleration : int = 5000
+@export var airDeceleration : int = 500
 
 @export var jumpPower : int = 1000
 @export var maxJumps : int = 1 ##how many times the player can jump before landing
@@ -38,9 +43,9 @@ var coyoteTimer : Timer = Timer.new()
 var jumpBufferTimer : Timer = Timer.new()
 
 @export var canCrouch := true
-@export var canChourc := false
-@export var canCrawl := false
-@export var canWallJump := false
+@export var canChourc := true
+@export var canCrawl := true
+@export var canWallJump := true
 @export var fallingGravityMult : float = 3
 @export var crouchInputThreshold : float = -0.5
 
@@ -49,11 +54,13 @@ var gravityMult : float = 1
 var currentHealth: int = maxHealth
 
 var jumping:bool = false
+var wallJumping:bool = false
 #var bounced:bool = false
 ##make sure the player cannot bounce on multiple things in the same frame
 var bouncedThisFrame:bool = false
 
 var directionInput = Vector2.ZERO
+var opposingInput := false ##true if the direction being input on the x axis is the opposite of the velocity direction
 
 ##true if the player is inside a hitbox that should damage them
 var isInHitbox := false
@@ -75,6 +82,7 @@ func _ready() -> void:
 	signalBus.startEditMode.connect(enterEditState)
 	signalBus.startPlayMode.connect(enterPlayState)
 	signalBus.winLevel.connect(win)
+	
 
 func bounce(bounceVelocity):
 	if !bouncedThisFrame:
@@ -107,7 +115,21 @@ func reset():
 	signalBus.updatePlayerHealth.emit()
 	invulnerabilityTimer = invulnerabilityTime
 	gravityMult = 1
-	
+
+var isWalled:=false
+var wallDirection:=false
+func checkWall():
+	if left_wall_checker.get_collider():
+		isWalled = true
+		wallDirection=false
+		return true
+	elif right_wall_checker.get_collider():
+		isWalled = true
+		wallDirection=true
+		return true
+	else: isWalled = false
+	return false
+
 func _physics_process(_delta: float) -> void:
 	if !globalEditor.isEditing:
 		if stateMachine.state.name in ["Dying"]:
@@ -117,7 +139,14 @@ func _physics_process(_delta: float) -> void:
 			bouncedThisFrame = false
 			##Either mode
 			directionInput = (Input.get_vector("LstickL","LstickR","LstickD","LstickU") + Input.get_vector("dpadL","dpadR","dpadD","dpadU")).limit_length(1) 
-			if !globalEditor.isEditing:
+			
+			opposingInput = directionInput.x>0 and velocity.x<0 or directionInput.x<0 and velocity.x>0
+			#print(deceleratingInput)
+			
+			#if !globalEditor.isEditing:
+				#if directionInput.x < 0: sprite.flip_h = true 
+				#if directionInput.x > 0: sprite.flip_h = false
+			if !wallJumping and stateMachine.state.name != PlayerState.WALLSLIDING:
 				if directionInput.x < 0: sprite.flip_h = true 
 				if directionInput.x > 0: sprite.flip_h = false
 				
@@ -203,15 +232,27 @@ func win():
 #func _process(delta: float) -> void:
 	#print("coyote and jbuffer and jumpsLeft: ",!coyoteTimer.is_stopped(),"   ",!jumpBufferTimer.is_stopped(),"   ",jumpsLeft)
 
+func applyGravity(delta, targetSpeed=terminalVelocity):
+	if velocity.y < targetSpeed:
+		velocity.y += gravity * gravityMult * delta  
+	else: 
+		velocity.y = targetSpeed
+	#velocity.y += gravity * gravityMult * delta
+
+func mirror():
+	sprite.flip_h = !sprite.flip_h
+func faceDirection(dir=true):
+	sprite.flip_h = !dir
+
 ##repeatable function that checks if the player can jump
-func tryToJump(fell=false, bounced=false):
+func tryToJump(fell:=false, bounced:=false,freeJump:=false,wallJumped:=false):
 	if Input.is_action_just_pressed("jump") or (!jumpBufferTimer.is_stopped() and Input.is_action_pressed("jump")):
-		if (((is_on_floor() or (!fell and !bounced)) and jumpsLeft>0) or ((fell and !coyoteTimer.is_stopped()) or jumpsLeft>1)):
-			jumpsLeft-=1
+		if (((is_on_floor() or (!fell and !bounced)) and jumpsLeft>0) or ((fell and !coyoteTimer.is_stopped()) or jumpsLeft>1)) or freeJump:
+			if !freeJump: jumpsLeft-=1
 			coyoteTimer.stop()
 			jumpBufferTimer.stop()
 			playSound(jumpSFX)
-			stateMachine.state.finished.emit(stateMachine.state.RISING,{"jumped":true,"fell":fell, "bounced":bounced})
+			stateMachine.state.finished.emit(stateMachine.state.RISING,{"jumped":true,"fell":fell, "bounced":bounced, "wallJumped":wallJumped})
 		elif Input.is_action_just_pressed("jump") and !is_on_floor():
 			if jumpBuffer > 0:
 				jumpBufferTimer.one_shot = true
@@ -220,6 +261,7 @@ func tryToJump(fell=false, bounced=false):
 ##restores jumps left to maxJumps
 func refreshJumps():
 	jumpsLeft = maxJumps
+
 ##starts the coyote timer
 func refreshCoyoteTime():
 	if coyoteTime > 0:

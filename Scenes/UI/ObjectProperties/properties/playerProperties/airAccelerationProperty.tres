@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ObjectProperty" format=3 uid="uid://dnja1xc6q17tr"]
+
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="1_425yk"]
+[ext_resource type="PackedScene" uid="uid://bydj3gco3u5wr" path="res://Scenes/UI/ObjectProperties/propertyUIelements/number_property_editor.tscn" id="2_i6400"]
+
+[resource]
+script = ExtResource("1_425yk")
+codeName = "airAcceleration"
+displayName = "Air Acceleration"
+description = "How fast the player speeds up when in the air."
+uiNode = ExtResource("2_i6400")
+defaultValue = 4000.0
+step = 1.0
+hasMin = true
+metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

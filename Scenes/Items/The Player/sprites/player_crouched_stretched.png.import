@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dd4y6yq0jtdut"
-path="res://.godot/imported/victoryOrbIdle.png-7f852c0d4d585220fce5a1691cc8fe97.ctex"
+uid="uid://dtxi33yb8n5yj"
+path="res://.godot/imported/player_crouched_stretched.png-c08611de5ac46563d4421a34f8f159ff.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Items/Objects/NPC/Victory Orb/victoryOrbIdle.png"
-dest_files=["res://.godot/imported/victoryOrbIdle.png-7f852c0d4d585220fce5a1691cc8fe97.ctex"]
+source_file="res://Scenes/Items/The Player/sprites/player_crouched_stretched.png"
+dest_files=["res://.godot/imported/player_crouched_stretched.png-c08611de5ac46563d4421a34f8f159ff.ctex"]
 
 [params]
 

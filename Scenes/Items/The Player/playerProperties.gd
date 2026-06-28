@@ -5,6 +5,7 @@ func _ready() -> void:
 	preload("uid://bh2hcytk84e13") #position
 	,preload("uid://dqbrp3ghialya") #size/scale
 	,preload("uid://byn3kv4q02kpl") #color/modulate
+	,preload("uid://d3y2ia0lj7kk5") #max health
 	,preload("uid://bts6u1j5o4xl8") #jump power
 	,preload("uid://hjumgb2dqxve") #max jumps
 	,preload("uid://cf7n3dro2vyxa") #coyote time
@@ -13,9 +14,11 @@ func _ready() -> void:
 	,preload("uid://utkx0vgp3gc5") #can Chourc
 	,preload("uid://bethifqoxndpo") #can Crawl
 	,preload("uid://djjsjtfxnkktd") #can Walljump
-	,preload("uid://do5ll6ym26tfy") #acceleration
+	,preload("uid://do5ll6ym26tfy") #ground acceleration
+	,preload("uid://d7aufjc2xj1h") #ground deceleration
+	,preload("uid://dnja1xc6q17tr") #air acceleration
+	,preload("uid://0t11uijfcnfp") #air deceleration
 	,preload("uid://bt3t4oe46o4a8") #top running speed
-	,preload("uid://d3y2ia0lj7kk5") #max health
 	]
 	
 	signalBus.reloadPlayer.connect(loadPlayerProperties)

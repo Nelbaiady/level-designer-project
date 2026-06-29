@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://pdtxvwe1ga7q"
+path="res://.godot/imported/2D Platformaker victory.ogg-fc801abb190efe3d0906473998028a9b.oggvorbisstr"
+
+[deps]
+
+source_file="res://audio/Jingles/2D Platformaker victory.ogg"
+dest_files=["res://.godot/imported/2D Platformaker victory.ogg-fc801abb190efe3d0906473998028a9b.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

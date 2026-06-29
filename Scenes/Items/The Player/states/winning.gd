@@ -1,10 +1,10 @@
 extends PlayerState
 
-const deathSound = preload("uid://8xb1en7en8gg")
+const winSound = preload("uid://pdtxvwe1ga7q")
 
 func enter(_previous_state_path: String, _data := {}) -> void:
 	player.resetPlay("win")
-	#player.playSound(deathSound)
+	player.playSound(winSound,0)
 
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:

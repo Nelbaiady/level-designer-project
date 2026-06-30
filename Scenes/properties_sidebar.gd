@@ -6,11 +6,19 @@ const HOVER_HINT = preload("uid://bdjv0hwp335af")
 @export var propertiesList: VBoxContainer
 @export var titleHint: HoverHint
 
+#for cursor changing
+@export var thing_name_panel_container: PanelContainer
+@export var properties_panel: Panel
+
 func _physics_process(_delta: float) -> void:
-	if propertiesList.get_global_rect().has_point(cursorCanvas.cursor.cursorSprite.position) and globalEditor.isObjectBeingEdited:
+	#if propertiesList.get_global_rect().has_point(cursorCanvas.cursor.cursorSprite.position) and globalEditor.isObjectBeingEdited:
+	if ( (cursorIsOver(thing_name_panel_container) or cursorIsOver(properties_panel)) and globalEditor.isObjectBeingEdited ) or !globalEditor.isEditing:
 		cursorCanvas.cursor.setCursorSprite(true)
 	elif !system.popupIsOpen:
 		cursorCanvas.cursor.setCursorToolSprite(globalEditor.currentTool)
+
+func cursorIsOver(node:Node):
+	return node.get_global_rect().has_point(cursorCanvas.cursor.cursorSprite.position)
 
 func _ready() -> void:
 	#globalEditor.propertiesSidebar = self

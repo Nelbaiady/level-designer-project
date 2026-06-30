@@ -12,6 +12,7 @@ jump button just before landing, the
 player will jump again, even if the jump
 button was pressed too early."
 uiNode = ExtResource("2_feil3")
-step = 0.05
+step = 0.005
+arrowStep = 0.025
 hasMin = true
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

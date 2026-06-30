@@ -109,6 +109,7 @@ func parseLevelToJson():
 			levelSaveStruct["rooms"][roomIndex]["bgColor1"] = var_to_str(globalEditor.level.bgColor1)
 			levelSaveStruct["rooms"][roomIndex]["bgColor2"] = var_to_str(globalEditor.level.bgColor2)
 			
+			levelSaveStruct["version"] = ProjectSettings.get_setting("application/config/version", "0")
 	levelSaveStruct.playerProperties = var_to_str(globalEditor.playerProperties)
 	return levelSaveStruct
 

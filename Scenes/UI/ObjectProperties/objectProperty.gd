@@ -10,6 +10,7 @@ class_name ObjectProperty extends Resource
 @export var minValue: float# = -999999999999.0
 @export var maxValue: float# = 999999999999.0
 @export var step: float
+@export var arrowStep: float = 1
 #Whether the min or max values are in effect
 @export var hasMin: bool = false
 @export var hasMax: bool = false

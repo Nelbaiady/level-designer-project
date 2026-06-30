@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://dl6ck2tmwtmxy" path="res://Scenes/Items/The Player/states/editing.gd" id="10_qsa3t"]
 [ext_resource type="Texture2D" uid="uid://b3buh8c8rvxa5" path="res://Scenes/Items/The Player/sprites/player_wallslide.png" id="10_suyfb"]
 [ext_resource type="Script" uid="uid://de12sfrbh1lj5" path="res://Scenes/Items/The Player/crouched.gd" id="11_meww7"]
+[ext_resource type="Texture2D" uid="uid://ctmtijdwmiy7h" path="res://Scenes/Items/The Player/sprites/victory.png" id="12_4pv47"]
 [ext_resource type="Script" uid="uid://bylgiwn4q2lxv" path="res://Scenes/Items/The Player/states/chourced.gd" id="12_8pi6c"]
 [ext_resource type="Script" uid="uid://dxw0j6wgiic50" path="res://Scenes/Items/The Player/states/running.gd" id="12_6170r"]
 [ext_resource type="Script" uid="uid://c3xoadlt1pl3a" path="res://Scenes/Items/The Player/states/crawling.gd" id="12_f834k"]
@@ -23,10 +24,20 @@
 [ext_resource type="Script" uid="uid://cptwhnytq7o3u" path="res://Scenes/Items/The Player/states/dying.gd" id="15_k1ypc"]
 [ext_resource type="Script" uid="uid://dhspkhb3hamjx" path="res://Scenes/Items/The Player/states/winning.gd" id="16_55agj"]
 [ext_resource type="Script" uid="uid://buaworiou3jpd" path="res://Scenes/Items/The Player/playerBounceHitbox.gd" id="16_k1ypc"]
-[ext_resource type="Theme" uid="uid://crsgo6pa7nv5x" path="res://Scenes/UI/ObjectProperties/theme/UItheme.tres" id="18_1vflh"]
 [ext_resource type="PackedScene" uid="uid://fij4t53a7ga" path="res://shaders and effects/celebration_particles.tscn" id="19_73c0q"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_jkifv"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8pi6c"]
+radius = 28.0
+height = 80.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_meww7"]
+size = Vector2(64, 28)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gntrk"]
+radius = 31.9
+height = 80.0
 
 [sub_resource type="Animation" id="Animation_kvi7n"]
 length = 0.001
@@ -129,7 +140,7 @@ tracks/7/keys = {
 tracks/8/type = "value"
 tracks/8/imported = false
 tracks/8/enabled = true
-tracks/8/path = NodePath("victoryMessage:visible")
+tracks/8/path = NodePath("victoryParticles:emitting")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
@@ -141,38 +152,15 @@ tracks/8/keys = {
 tracks/9/type = "value"
 tracks/9/imported = false
 tracks/9/enabled = true
-tracks/9/path = NodePath("victoryMessage:modulate")
+tracks/9/path = NodePath(".:victory_message_control")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-tracks/10/type = "value"
-tracks/10/imported = false
-tracks/10/enabled = true
-tracks/10/path = NodePath("victoryMessage:offset_transform_position")
-tracks/10/interp = 1
-tracks/10/loop_wrap = true
-tracks/10/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0, 0)]
-}
-tracks/11/type = "value"
-tracks/11/imported = false
-tracks/11/enabled = true
-tracks/11/path = NodePath("victoryParticles:emitting")
-tracks/11/interp = 1
-tracks/11/loop_wrap = true
-tracks/11/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [false]
+"values": [Object(Control,"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":2,"auto_translate_mode":0,"editor_description":"","visible":false,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"oversampling_with_scale":0,"light_mask":1,"visibility_layer":1,"z_index":64,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"custom_minimum_size":Vector2(0, 0),"custom_maximum_size":Vector2(-1, -1),"propagate_maximum_size":false,"clip_contents":false,"layout_mode":3,"anchors_preset":8,"anchor_left":0.5,"anchor_top":0.5,"anchor_right":0.5,"anchor_bottom":0.5,"offset_left":0.0,"offset_top":-86.0,"offset_right":0.0,"offset_bottom":-86.0,"grow_horizontal":2,"grow_vertical":2,"rotation":0.0,"scale":Vector2(1, 1),"pivot_offset":Vector2(0, 0),"pivot_offset_ratio":Vector2(0.5, 0.5),"size_flags_horizontal":3,"size_flags_vertical":3,"size_flags_stretch_ratio":1.0,"offset_transform_enabled":false,"offset_transform_position":Vector2(0, 0),"offset_transform_position_ratio":Vector2(0, 0),"offset_transform_scale":Vector2(1, 1),"offset_transform_rotation":0.0,"offset_transform_pivot":Vector2(0, 0),"offset_transform_pivot_ratio":Vector2(0.5, 0.5),"offset_transform_visual_only":true,"localize_numeral_system":true,"layout_direction":0,"translation_context":&"","tooltip_text":"","tooltip_auto_translate_mode":0,"focus_neighbor_left":NodePath(""),"focus_neighbor_top":NodePath(""),"focus_neighbor_right":NodePath(""),"focus_neighbor_bottom":NodePath(""),"focus_next":NodePath(""),"focus_previous":NodePath(""),"focus_mode":0,"focus_behavior_recursive":0,"mouse_filter":0,"mouse_behavior_recursive":0,"mouse_force_pass_scroll_events":true,"mouse_default_cursor_shape":0,"shortcut_context":null,"accessibility_name":"","accessibility_description":"","accessibility_live":0,"accessibility_controls_nodes":Array[NodePath]([]),"accessibility_described_by_nodes":Array[NodePath]([]),"accessibility_labeled_by_nodes":Array[NodePath]([]),"accessibility_flow_to_nodes":Array[NodePath]([]),"theme":null,"theme_type_variation":&"","script":null)
+]
 }
 
 [sub_resource type="Animation" id="Animation_jkifv"]
@@ -1004,7 +992,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [ExtResource("2_k1a7i")]
+"values": [ExtResource("12_4pv47")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -1016,7 +1004,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [3]
+"values": [5]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -1028,7 +1016,7 @@ tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [2]
+"values": [4]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -1037,10 +1025,10 @@ tracks/3/path = NodePath("Sprite2D:frame")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.06666667, 0.13333334, 0.20000002, 0.26666668, 0.33333337, 0.40000004, 0.4666667, 0.53333336, 0.6, 0.6666667, 0.73333335, 0.8, 0.8666667, 0.9333334, 1, 1.0666667, 1.1333334, 1.2, 1.2666667, 1.3333334, 1.3666667, 1.4333334, 1.4666667, 1.5333333, 1.5999999, 1.6666666, 1.7333332, 1.8, 1.8666667, 1.9333334, 1.9999999, 2.0666666, 2.1333332, 2.2000003, 2.266667, 2.3333335, 2.4, 2.4666667, 2.5333333, 2.6, 2.6666665, 2.7333336, 2.8000002, 2.8666668, 2.9333334),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0]
+"values": [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 3, 4, 5, 3, 4, 5, 3, 6, 7, 9, 10, 11, 12, 13, 14, 15, 17, 16, 14, 15, 17, 16, 14, 15, 17, 16, 14, 15, 17, 16, 14, 15, 17, 16, 14]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -1069,46 +1057,10 @@ tracks/5/keys = {
 tracks/6/type = "value"
 tracks/6/imported = false
 tracks/6/enabled = true
-tracks/6/path = NodePath("victoryMessage:visible")
+tracks/6/path = NodePath("victoryParticles:emitting")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.36666667, 3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [true, true, false]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("victoryMessage:modulate")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.36666667, 1.2333331),
-"transitions": PackedFloat32Array(1, 0.25, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("victoryMessage:offset_transform_position")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.36666667, 1.2333331),
-"transitions": PackedFloat32Array(1, 0.25, 1),
-"update": 0,
-"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -30)]
-}
-tracks/9/type = "value"
-tracks/9/imported = false
-tracks/9/enabled = true
-tracks/9/path = NodePath("victoryParticles:emitting")
-tracks/9/interp = 1
-tracks/9/loop_wrap = true
-tracks/9/keys = {
 "times": PackedFloat32Array(0, 0.13333333),
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
@@ -1134,24 +1086,12 @@ _data = {
 &"win": SubResource("Animation_73c0q")
 }
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8pi6c"]
-radius = 28.0
-height = 80.0
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_meww7"]
-size = Vector2(64, 28)
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gntrk"]
-radius = 31.9
-height = 80.0
-
-[node name="Player" type="CharacterBody2D" unique_id=668648745 node_paths=PackedStringArray("left_wall_checker", "right_wall_checker", "victory_message") groups=["movables", "player", "solids"]]
+[node name="Player" type="CharacterBody2D" unique_id=668648745 node_paths=PackedStringArray("left_wall_checker", "right_wall_checker") groups=["movables", "player", "solids"]]
 physics_interpolation_mode = 1
 material = SubResource("ShaderMaterial_jkifv")
 script = ExtResource("1_e8vge")
 left_wall_checker = NodePath("leftWallChecker")
 right_wall_checker = NodePath("rightWallChecker")
-victory_message = NodePath("victoryMessage")
 
 [node name="playerProperties" type="Node2D" parent="." unique_id=1069572556]
 script = ExtResource("6_mpkmv")
@@ -1209,6 +1149,28 @@ scale = Vector2(0.96, 0.96)
 polygon = PackedVector2Array(32, 9, 32, 41, 25, 45.833332, -25, 45.833332, -32, 41, -32, 9)
 disabled = true
 
+[node name="hurtboxArea2D" type="Area2D" parent="." unique_id=416494424 groups=["hurtbox", "player"]]
+collision_layer = 129
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="hurtboxArea2D" unique_id=1089155609]
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_8pi6c")
+
+[node name="jumpSourceArea2D" type="Area2D" parent="." unique_id=992519540 groups=["hitbox", "jumpSource", "player"]]
+collision_layer = 129
+collision_mask = 129
+script = ExtResource("16_k1ypc")
+
+[node name="jumpSource" type="CollisionShape2D" parent="jumpSourceArea2D" unique_id=511544400]
+position = Vector2(0, 38)
+shape = SubResource("RectangleShape2D_meww7")
+
+[node name="clickBoxArea" type="Area2D" parent="." unique_id=1804344304]
+
+[node name="clickBox" type="CollisionShape2D" parent="clickBoxArea" unique_id=829997929]
+position = Vector2(0, 9)
+shape = SubResource("CapsuleShape2D_gntrk")
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2057835058]
 process_mode = 3
 libraries/ = SubResource("AnimationLibrary_ay8ch")
@@ -1253,61 +1215,10 @@ script = ExtResource("15_k1ypc")
 [node name="Winning" type="Node" parent="StateMachine" unique_id=1398638476]
 script = ExtResource("16_55agj")
 
-[node name="hurtboxArea2D" type="Area2D" parent="." unique_id=416494424 groups=["hurtbox", "player"]]
-collision_layer = 129
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="hurtboxArea2D" unique_id=1089155609]
-position = Vector2(0, 4)
-shape = SubResource("CapsuleShape2D_8pi6c")
-
-[node name="jumpSourceArea2D" type="Area2D" parent="." unique_id=992519540 groups=["hitbox", "jumpSource", "player"]]
-collision_layer = 129
-collision_mask = 129
-script = ExtResource("16_k1ypc")
-
-[node name="jumpSource" type="CollisionShape2D" parent="jumpSourceArea2D" unique_id=511544400]
-position = Vector2(0, 38)
-shape = SubResource("RectangleShape2D_meww7")
-
-[node name="clickBoxArea" type="Area2D" parent="." unique_id=1804344304]
-
-[node name="clickBox" type="CollisionShape2D" parent="clickBoxArea" unique_id=829997929]
-position = Vector2(0, 9)
-shape = SubResource("CapsuleShape2D_gntrk")
-
-[node name="victoryMessage" type="PanelContainer" parent="." unique_id=1533530530]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -128.0
-offset_top = -72.0
-offset_right = 128.0
-offset_bottom = -8.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(128, 0)
-size_flags_horizontal = 6
-size_flags_vertical = 6
-offset_transform_enabled = true
-theme = ExtResource("18_1vflh")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="victoryMessage" unique_id=1365645424]
-layout_mode = 2
-theme = ExtResource("18_1vflh")
-theme_type_variation = &"inGameLabel"
-theme_override_font_sizes/normal_font_size = 32
-text = "Stage Clear!"
-fit_content = true
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="victoryParticles" parent="." unique_id=331650802 instance=ExtResource("19_73c0q")]
 
+[connection signal="area_entered" from="hurtboxArea2D" to="." method="_on_hurtbox_area_2d_area_entered"]
+[connection signal="area_exited" from="hurtboxArea2D" to="." method="_on_hurtbox_area_2d_area_exited"]
 [connection signal="animation_finished" from="AnimationPlayer" to="StateMachine/Rising" method="_on_animation_player_animation_finished"]
 [connection signal="animation_finished" from="AnimationPlayer" to="StateMachine/Dying" method="_on_animation_player_animation_finished"]
 [connection signal="animation_finished" from="AnimationPlayer" to="StateMachine/Winning" method="_on_animation_player_animation_finished"]
-[connection signal="area_entered" from="hurtboxArea2D" to="." method="_on_hurtbox_area_2d_area_entered"]
-[connection signal="area_exited" from="hurtboxArea2D" to="." method="_on_hurtbox_area_2d_area_exited"]

@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://dqbrp3ghialya" path="res://Scenes/UI/ObjectProperties/properties/sizeProperty.tres" id="5_wnvis"]
 [ext_resource type="Resource" uid="uid://byn3kv4q02kpl" path="res://Scenes/UI/ObjectProperties/properties/colorProperty.tres" id="6_yfou2"]
 [ext_resource type="Resource" uid="uid://dt3gvme5p3joj" path="res://Scenes/UI/ObjectProperties/properties/rotationProperty.tres" id="7_vmnu4"]
-[ext_resource type="Resource" uid="uid://bimwvakfjiujp" path="res://Scenes/UI/ObjectProperties/properties/powerProperty.tres" id="8_vclpx"]
+[ext_resource type="Resource" uid="uid://bimwvakfjiujp" path="res://Scenes/UI/ObjectProperties/properties/bouncinessMultProperty.tres" id="8_vclpx"]
 [ext_resource type="PackedScene" uid="uid://citpxoeau101h" path="res://Scenes/Items/Objects/Modular Additions/jump_point_area.tscn" id="10_vclpx"]
 [ext_resource type="AudioStream" uid="uid://ida245s4vu0n" path="res://audio/sfx/spring.ogg" id="11_wnvis"]
 

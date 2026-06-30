@@ -17,7 +17,10 @@ func physics_update(delta: float) -> void:
 	player.move_and_slide()
 
 	if !player.is_on_floor():
-		finished.emit(FALLING,{"fell":true,"justStarted":justStarted})
+		if player.velocity.y >= 0:
+			finished.emit(FALLING,{"fell":true,"justStarted":justStarted})
+		else:
+			finished.emit(RISING,{"fell":true,"justStarted":justStarted})
 	elif player.directionInput.y < player.crouchInputThreshold and player.canCrouch:
 		finished.emit(CROUCHED)
 	elif player.directionInput.y > -player.crouchInputThreshold and player.canChourc and player.chourcCheck():
@@ -27,3 +30,4 @@ func physics_update(delta: float) -> void:
 	player.tryToJump()
 	
 	justStarted = false
+	

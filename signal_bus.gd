@@ -40,7 +40,8 @@ signal startPlayMode()##when switching to play mode
 signal reloadPlayer()##destroy the player and recreate them to reset properties. This emits after a level has loaded.
 @warning_ignore("unused_signal")
 signal winLevel()##when the player meets a condition to win the level
-
+@warning_ignore("unused_signal")
+signal wonLevel()##emitted once the player wins
 
 #signals for editing properties
 @warning_ignore("unused_signal")

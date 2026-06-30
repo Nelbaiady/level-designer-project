@@ -24,11 +24,10 @@ func enter(_previous_state_path: String, _data := {}) -> void:
 			if !player.is_on_floor():
 				player.refreshCoyoteTime()
 func physics_update(delta: float) -> void:
-	#print("oh")
 	#increase gravity over time so the player falls faster, but doesnt feel like the fall is sudden (due to high initial acceleration)
 	player.gravityMult = move_toward(player.gravityMult, 0.5,delta*12)
 	
-	player.velocity.y = move_toward(player.velocity.y,int(player.terminalVelocity/3),delta*2000)
+	player.velocity.y = move_toward(player.velocity.y,float(player.terminalVelocity)/3,delta*2000)
 	
 	#if player.velocity.y < player.terminalVelocity/2:
 		#player.velocity.y += player.gravity * player.gravityMult * delta  

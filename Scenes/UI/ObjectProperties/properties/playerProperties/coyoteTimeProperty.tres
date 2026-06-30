@@ -9,8 +9,9 @@ codeName = "coyoteTime"
 displayName = "Coyote Time"
 description = "Give the player a grace period when 
 they fall off a cliff where they can jump
-in midair, just like a certain character."
+in midair, just like a certain cartoon character."
 uiNode = ExtResource("2_5px5a")
-step = 0.05
+step = 0.005
+arrowStep = 0.025
 hasMin = true
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

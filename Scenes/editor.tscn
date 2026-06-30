@@ -55,6 +55,115 @@ duration = 0.2
 transition = 7
 ease = 1
 
+[sub_resource type="Animation" id="Animation_u1k11"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("victoryMessage:offset_transform_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("victoryMessage:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("victoryMessage:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_asgqx"]
+resource_name = "victoryMessage"
+length = 3.0000034897957
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("victoryMessage:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.33333334, 1.2333333, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [true, true, true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("victoryMessage:offset_transform_position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.33333334, 1.2333333),
+"transitions": PackedFloat32Array(1, 0.25, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 0), Vector2(0, -320)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("victoryMessage:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.33333334, 1.2333333),
+"transitions": PackedFloat32Array(1, 0.25, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_50fx4"]
+_data = {
+&"RESET": SubResource("Animation_u1k11"),
+&"victoryMessage": SubResource("Animation_asgqx")
+}
+
 [sub_resource type="Gradient" id="Gradient_u6te5"]
 colors = PackedColorArray(0.7688883, 0.7455368, 0.9951721, 1, 0.9697817, 0.8099847, 1, 1)
 
@@ -448,10 +557,50 @@ hidden_files_toggle_enabled = false
 file_filter_toggle_enabled = false
 folder_creation_enabled = false
 
-[node name="Level" type="Node2D" parent="." unique_id=827656185 node_paths=PackedStringArray("roomManager")]
+[node name="Level" type="Node2D" parent="." unique_id=827656185 node_paths=PackedStringArray("roomManager", "victory_canvas", "victory_message_animation_player")]
 position = Vector2(-1, 0)
 script = ExtResource("2_24ceq")
 roomManager = NodePath("roomManager")
+victory_canvas = NodePath("victoryCanvas")
+victory_message_animation_player = NodePath("victoryCanvas/victoryMessageAnimationPlayer")
+
+[node name="victoryCanvas" type="CanvasLayer" parent="Level" unique_id=1604696618]
+
+[node name="victoryMessageAnimationPlayer" type="AnimationPlayer" parent="Level/victoryCanvas" unique_id=41304787]
+libraries/ = SubResource("AnimationLibrary_50fx4")
+
+[node name="victoryMessage" type="PanelContainer" parent="Level/victoryCanvas" unique_id=502933309]
+visible = false
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(256, 128)
+custom_maximum_size = Vector2(256, 128)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -64.0
+offset_right = 128.0
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+offset_transform_enabled = true
+theme = ExtResource("3_cnbw5")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Level/victoryCanvas/victoryMessage" unique_id=1105637000]
+use_parent_material = true
+layout_mode = 2
+theme = ExtResource("3_cnbw5")
+theme_type_variation = &"inGameLabel"
+theme_override_font_sizes/normal_font_size = 32
+text = "Stage Clear!"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="roomManager" type="Node2D" parent="Level" unique_id=565230703 node_paths=PackedStringArray("bottomTexture", "skyTexture", "roomBottomIndicator")]
 position = Vector2(0, 720)
@@ -1115,7 +1264,7 @@ shape = SubResource("RectangleShape2D_wl0qq")
 visibility_mode = 1
 script = SubResource("GDScript_hppm4")
 
-[node name="PropertiesSidebar" type="Control" parent="HUD" unique_id=1003501295 node_paths=PackedStringArray("propertiesList", "titleHint")]
+[node name="PropertiesSidebar" type="Control" parent="HUD" unique_id=1003501295 node_paths=PackedStringArray("propertiesList", "titleHint", "thing_name_panel_container", "properties_panel")]
 layout_mode = 3
 anchor_left = 1.0
 anchor_top = 0.1
@@ -1125,10 +1274,14 @@ offset_right = 640.0
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 8
+mouse_filter = 1
+mouse_behavior_recursive = 1
 theme = ExtResource("3_cnbw5")
 script = ExtResource("3_exjlx")
 propertiesList = NodePath("VBoxContainer/PropertiesPanel/ScrollContainer/Properties")
 titleHint = NodePath("VBoxContainer/propertiesEditingLabelPanel/ThingNamePanelContainer/ThingNameMarginContainer/ThingNameRow/hoverHint")
+thing_name_panel_container = NodePath("VBoxContainer/propertiesEditingLabelPanel/ThingNamePanelContainer")
+properties_panel = NodePath("VBoxContainer/PropertiesPanel")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/PropertiesSidebar" unique_id=1673332840]
 layout_mode = 1
@@ -1137,6 +1290,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+mouse_behavior_recursive = 1
 theme_override_constants/separation = 0
 
 [node name="propertiesEditingLabelPanel" type="Panel" parent="HUD/PropertiesSidebar/VBoxContainer" unique_id=1522755482]
@@ -1144,6 +1299,8 @@ self_modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_vertical = 3
 size_flags_stretch_ratio = 0.15
+mouse_filter = 2
+mouse_behavior_recursive = 1
 theme = ExtResource("3_cnbw5")
 
 [node name="ThingNamePanelContainer" type="PanelContainer" parent="HUD/PropertiesSidebar/VBoxContainer/propertiesEditingLabelPanel" unique_id=207308021]
@@ -1159,6 +1316,7 @@ offset_top = -47.666668
 grow_horizontal = 0
 grow_vertical = 0
 pivot_offset = Vector2(2, 27.42667)
+mouse_behavior_recursive = 2
 theme_type_variation = &"tab"
 
 [node name="ThingNameMarginContainer" type="MarginContainer" parent="HUD/PropertiesSidebar/VBoxContainer/propertiesEditingLabelPanel/ThingNamePanelContainer" unique_id=1533983739]
@@ -1188,6 +1346,7 @@ script = ExtResource("4_l4kvy")
 [node name="PropertiesPanel" type="Panel" parent="HUD/PropertiesSidebar/VBoxContainer" unique_id=1949280062]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_behavior_recursive = 2
 theme = ExtResource("3_cnbw5")
 
 [node name="closeButton" type="Button" parent="HUD/PropertiesSidebar/VBoxContainer/PropertiesPanel" unique_id=600812247]

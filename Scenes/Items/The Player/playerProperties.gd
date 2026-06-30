@@ -14,10 +14,12 @@ func _ready() -> void:
 	,preload("uid://utkx0vgp3gc5") #can Chourc
 	,preload("uid://bethifqoxndpo") #can Crawl
 	,preload("uid://djjsjtfxnkktd") #can Walljump
+	,preload("uid://3itggkf5ouqt") #weight
 	,preload("uid://do5ll6ym26tfy") #ground acceleration
 	,preload("uid://d7aufjc2xj1h") #ground deceleration
 	,preload("uid://dnja1xc6q17tr") #air acceleration
 	,preload("uid://0t11uijfcnfp") #air deceleration
+	,preload("uid://dwohwqh1lckob") #terminal velocity
 	,preload("uid://bt3t4oe46o4a8") #top running speed
 	]
 	

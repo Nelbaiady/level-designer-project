@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ObjectProperty" format=3 uid="uid://3itggkf5ouqt"]
+
+[ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="1_6jfwp"]
+[ext_resource type="PackedScene" uid="uid://bydj3gco3u5wr" path="res://Scenes/UI/ObjectProperties/propertyUIelements/number_property_editor.tscn" id="2_ox5vk"]
+
+[resource]
+script = ExtResource("1_6jfwp")
+codeName = "gravity"
+displayName = "weight"
+description = "How strong the pull of gravity is.
+This is measured in pixels per frame."
+uiNode = ExtResource("2_ox5vk")
+step = 1.0
+arrowStep = 100.0
+hasMin = true
+metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

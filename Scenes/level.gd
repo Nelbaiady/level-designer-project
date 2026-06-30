@@ -12,6 +12,8 @@ var bgColor1:Color = Color(0.97, 0.81, 1.0)
 var bgColor2:Color = Color(0.769, 0.746, 0.995)
 
 @export var roomManager:RoomManager ##manages room
+@export var victory_canvas: CanvasLayer
+@export var victory_message_animation_player: AnimationPlayer
 
 #var rooms = [{"layers":{0:{"objects":{}} ,1:{"objects":{}}}  }]
 var rooms = [{ "layers":{} }]
@@ -32,6 +34,11 @@ func updateRoomProperties():
 	roomManager.setProperty("bgColor2",bgColor2,true)
 
 func _ready() -> void:
+	signalBus.wonLevel.connect(victory_message_animation_player.set.bind("current_animation","victoryMessage"))
+	signalBus.wonLevel.connect(victory_message_animation_player.play)
+	signalBus.startEditMode.connect(victory_canvas.hide)
+	signalBus.startPlayMode.connect(victory_canvas.hide)
+	
 #	find all layers and store them in the layers dictionary
 	collectChildren()
 	

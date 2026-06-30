@@ -12,4 +12,5 @@ course. The camera will not cross this
 line, and the player will die if they fall into it."
 uiNode = ExtResource("2_fe17a")
 step = 1.0
+arrowStep = 20.0
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

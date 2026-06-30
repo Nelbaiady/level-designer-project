@@ -12,5 +12,6 @@ button is held down."
 uiNode = ExtResource("2_eu0ky")
 defaultValue = 1000
 step = 1.0
+arrowStep = 100.0
 hasMin = true
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

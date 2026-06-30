@@ -11,6 +11,7 @@ func enter(_previous_state_path: String, _data := {}) -> void:
 	player.resetPlay("rising")
 	player.gravityMult = 1
 	
+	
 	if _data.has("bounced"):
 		bounced = _data["bounced"]
 	if bounced and _data.has("bounceVelocity"): 
@@ -26,7 +27,7 @@ func enter(_previous_state_path: String, _data := {}) -> void:
 		if _data["wallJumped"]:
 			player.faceDirection(!player.wallDirection)
 			player.wallJumping = true
-			player.velocity.x = -player.jumpPower/2 if player.wallDirection else player.jumpPower/2
+			player.velocity.x = float(-player.jumpPower)/2 if player.wallDirection else float(player.jumpPower)/2
 func physics_update(delta: float) -> void:
 	#player.velocity.y += player.gravity * player.gravityMult * delta
 	player.applyGravity(delta)
@@ -44,6 +45,7 @@ func physics_update(delta: float) -> void:
 	player.move_and_slide()
 	
 	if player.is_on_floor():
+		player.velocity.y=0 #if the velocity isnt zeroed, the player wouldve left the idle state immediately
 		finished.emit(IDLE)
 	if player.velocity.y > 0:
 		finished.emit(FALLING,{"jumped":jumped,"bounced":bounced,"fell":fell})

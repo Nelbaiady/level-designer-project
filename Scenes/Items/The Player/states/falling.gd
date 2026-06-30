@@ -37,15 +37,13 @@ func physics_update(delta: float) -> void:
 	#var xAcceleration = player.airDeceleration if player.directionInput.x
 	var targetXacceleration = player.airDeceleration if player.directionInput.x==0 else player.airAcceleration 
 	var targetXvelocity = player.directionInput.x * player.topRunSpeed
-	#print(xAcceleration)
 	player.velocity.x = move_toward(player.velocity.x,targetXvelocity,targetXacceleration*delta)
 	
 	
 	player.move_and_slide()
-	
 	if player.is_on_floor():
 		finished.emit(IDLE)
-	elif player.velocity.y < 0:
+	elif player.velocity.y < 0 and !player.is_on_floor():
 		finished.emit(RISING)
 	elif player.canWallJump and player.checkWall():
 		#if player.wallJumping: 

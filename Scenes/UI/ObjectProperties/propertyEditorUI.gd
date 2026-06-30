@@ -52,6 +52,7 @@ func propertyReady():
 			#i.allow_lesser = !hasMin
 			i.allow_greater = !property.hasMax
 			i.allow_lesser = !property.hasMin
+			i.custom_arrow_step = property.arrowStep
 #	prevent these things from being selectable
 	for i in valueNodes:
 		if i is SpinBox:
@@ -60,7 +61,8 @@ func propertyReady():
 	if property.step != 0:
 		for i in valueNodes:
 			#i.custom_arrow_step = step
-			i.custom_arrow_step = property.step
+			#i.custom_arrow_step = property.step
+			i.step = property.step
 
 func updateValue():
 	valueNodes[0] = value

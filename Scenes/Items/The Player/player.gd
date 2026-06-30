@@ -70,8 +70,9 @@ var hitBoxPosition := Vector2(0,0) ##when inside a hitbox keep track of its posi
 ##signal for when the player is bounced
 signal getBounced(velocity)
 
-#animation related
-@export var victory_message: PanelContainer
+##animation related
+#@export var victory_message: PanelContainer
+#@export var victory_message_control: Control
 
 
 func _ready() -> void:
@@ -83,11 +84,13 @@ func _ready() -> void:
 	signalBus.startPlayMode.connect(enterPlayState)
 	signalBus.winLevel.connect(win)
 	
+	await signalBus.onLevelReady
+	await get_tree().process_frame
 
 func bounce(bounceVelocity):
 	if !bouncedThisFrame:
 		bouncedThisFrame = true
-		refreshJumps()
+		refreshJumps(-1)
 		stateMachine._transitionToNextState("Rising",{"bounced":true,"bounceVelocity":bounceVelocity})
 		velocity = bounceVelocity
 
@@ -106,7 +109,7 @@ func enterPlayState():
 ##resets stats when transitioning between edit/play modes
 func reset():
 	visible = true
-	victory_message.hide()
+	#victory_message.hide()
 	coyoteTimer.stop()
 	jumpBufferTimer.stop()
 	jumpsLeft=0
@@ -130,9 +133,11 @@ func checkWall():
 	else: isWalled = false
 	return false
 
+var immovableStates = ["Dying", "Winning"]
+
 func _physics_process(_delta: float) -> void:
 	if !globalEditor.isEditing:
-		if stateMachine.state.name in ["Dying"]:
+		if stateMachine.state.name in immovableStates:
 			bouncedThisFrame = true #make sure the player cannot bounce
 		#code that is common between most states
 		else:
@@ -141,7 +146,6 @@ func _physics_process(_delta: float) -> void:
 			directionInput = (Input.get_vector("LstickL","LstickR","LstickD","LstickU") + Input.get_vector("dpadL","dpadR","dpadD","dpadU")).limit_length(1) 
 			
 			opposingInput = directionInput.x>0 and velocity.x<0 or directionInput.x<0 and velocity.x>0
-			#print(deceleratingInput)
 			
 			#if !globalEditor.isEditing:
 				#if directionInput.x < 0: sprite.flip_h = true 
@@ -206,7 +210,7 @@ func _on_hurtbox_area_2d_area_exited(area: Area2D) -> void:
 			isInHitbox = false
 
 func takeDamage(damage:=1):
-	if stateMachine.state.name!="Dying":
+	if stateMachine.state.name not in immovableStates:
 		##make sure the player isnt invulnerable
 		currentHealth -= damage
 		if currentHealth<0: currentHealth = 0
@@ -220,17 +224,14 @@ func knockBack(sourceLocation:Vector2, power=1000):
 	##knock the player away from the source (plus a corrective y value to make sure the player isnt knocked into the air for no reason)
 	velocity = ((position-sourceLocation).normalized() + Vector2(0,0.5)) * power 
 func die():
-	if stateMachine.state.name not in ["Winning", "Dying"]:
+	if stateMachine.state.name not in immovableStates:
 		visible = true
 		stateMachine._transitionToNextState("Dying")
 		
 func win():
-	if stateMachine.state.name not in ["Winning", "Dying"]:
+	if stateMachine.state.name not in immovableStates:
 		visible = true
 		stateMachine._transitionToNextState("Winning")
-
-#func _process(delta: float) -> void:
-	#print("coyote and jbuffer and jumpsLeft: ",!coyoteTimer.is_stopped(),"   ",!jumpBufferTimer.is_stopped(),"   ",jumpsLeft)
 
 func applyGravity(delta, targetSpeed=terminalVelocity):
 	if velocity.y < targetSpeed:
@@ -247,7 +248,7 @@ func faceDirection(dir=true):
 ##repeatable function that checks if the player can jump
 func tryToJump(fell:=false, bounced:=false,freeJump:=false,wallJumped:=false):
 	if Input.is_action_just_pressed("jump") or (!jumpBufferTimer.is_stopped() and Input.is_action_pressed("jump")):
-		if (((is_on_floor() or (!fell and !bounced)) and jumpsLeft>0) or ((fell and !coyoteTimer.is_stopped()) or jumpsLeft>1)) or freeJump:
+		if (((is_on_floor() or !fell) and jumpsLeft>0) or ((fell and !coyoteTimer.is_stopped()) or jumpsLeft>1)) or freeJump:
 			if !freeJump: jumpsLeft-=1
 			coyoteTimer.stop()
 			jumpBufferTimer.stop()
@@ -259,8 +260,8 @@ func tryToJump(fell:=false, bounced:=false,freeJump:=false,wallJumped:=false):
 				jumpBufferTimer.start(jumpBuffer)
 
 ##restores jumps left to maxJumps
-func refreshJumps():
-	jumpsLeft = maxJumps
+func refreshJumps(offset=0):
+	jumpsLeft = maxJumps+offset
 
 ##starts the coyote timer
 func refreshCoyoteTime():

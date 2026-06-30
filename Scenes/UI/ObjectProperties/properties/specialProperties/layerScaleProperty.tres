@@ -10,4 +10,5 @@ displayName = "Scroll"
 uiNode = ExtResource("2_s6rbs")
 defaultValue = 1.0
 maxValue = 9999999999999.0
+arrowStep = 0.1
 metadata/_custom_type_script = "uid://dy7t0qj6i3yv5"

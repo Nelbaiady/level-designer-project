@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://dy7t0qj6i3yv5" path="res://Scenes/UI/ObjectProperties/objectProperty.gd" id="7_yugh8"]
 [ext_resource type="Resource" uid="uid://bh2hcytk84e13" path="res://Scenes/UI/ObjectProperties/properties/positionProperty.tres" id="8_2ad8w"]
 [ext_resource type="Resource" uid="uid://dqbrp3ghialya" path="res://Scenes/UI/ObjectProperties/properties/sizeProperty.tres" id="9_cdh0m"]
-[ext_resource type="Resource" uid="uid://ctn8bw7ogsoo3" path="res://Scenes/UI/ObjectProperties/properties/facingRightProperty.tres" id="9_te1wg"]
+[ext_resource type="Resource" uid="uid://ctn8bw7ogsoo3" path="res://Scenes/UI/ObjectProperties/properties/isFacingRightProperty.tres" id="9_te1wg"]
 [ext_resource type="Resource" uid="uid://occw34kb4nrh" path="res://Scenes/UI/ObjectProperties/properties/specificProperties/idleTimeProperty.tres" id="10_6udu4"]
 [ext_resource type="Resource" uid="uid://byn3kv4q02kpl" path="res://Scenes/UI/ObjectProperties/properties/colorProperty.tres" id="10_civf8"]
 [ext_resource type="Resource" uid="uid://d3y2ia0lj7kk5" path="res://Scenes/UI/ObjectProperties/properties/playerProperties/maxHealthProperty.tres" id="11_2vcqh"]
@@ -1573,7 +1573,7 @@ texture = ExtResource("2_yjys5")
 offset = Vector2(0, -128)
 hframes = 6
 vframes = 6
-frame = 22
+frame = 33
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2114326542]
 process_mode = 1
@@ -1598,7 +1598,6 @@ position = Vector2(4, -8)
 polygon = PackedVector2Array(60, 136, 56, -24, 24, -52, -32, -52, -64, -24, -68, 136, -132, 136, -132, -56, -36, -120, 28, -120, 124, -56, 124, 136)
 
 [node name="jumpPointArea" parent="." unique_id=1963504617 instance=ExtResource("12_w2bbf")]
-visible = false
 position = Vector2(0, 8)
 
 [node name="jumpPointShape1" type="CollisionPolygon2D" parent="jumpPointArea" unique_id=259541569]
